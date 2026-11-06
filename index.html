@@ -211,6 +211,75 @@ form.exp input,form.exp select{border:1px solid var(--line);border-radius:7px;ba
 /* touch devices: 16px inputs stop iPad/iPhone auto-zoom, which is what makes the page jump while typing */
 html{-webkit-text-size-adjust:100%}
 @media (pointer:coarse){input,textarea,select{font-size:16px!important}.icon-btn{padding:4px 8px}button,input,select,summary{touch-action:manipulation}}
+/* cover */
+.hero{position:relative;height:clamp(130px,20vw,230px);margin-left:calc(var(--rail-w) + env(safe-area-inset-left,0px));background:var(--calm-soft);overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.hero-btns{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:14px;z-index:1;display:flex;gap:6px;opacity:0;transition:opacity .15s}
+.hero:hover .hero-btns,.hero-btns:focus-within{opacity:1}
+@media (hover:none){.hero-btns{opacity:1}}
+.hero-btns button{border:0;border-radius:7px;padding:5px 11px;font-size:12.5px;cursor:pointer;background:rgba(255,255,255,.82);color:#222;backdrop-filter:blur(6px)}
+.wp-modal{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.35);display:grid;place-items:center;padding:16px}
+.wp-modal[hidden]{display:none}
+.wp-box{background:var(--surface);color:var(--fg);border-radius:14px;padding:18px;width:min(880px,100%);max-height:86vh;overflow:auto}
+.wp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.wp-item{position:relative;border-radius:9px;overflow:hidden;border:2px solid transparent}
+.wp-item.on{border-color:var(--accent)}
+.wp-pick{display:block;width:100%;padding:0;border:0;background:none;cursor:pointer;text-align:left}
+.wp-pick img{width:100%;aspect-ratio:16/7;object-fit:cover;display:block}
+.wp-pick span{display:block;font-size:12.5px;padding:4px 6px;color:var(--muted)}
+.wp-del{position:absolute;top:4px;right:4px;background:rgba(255,255,255,.85);color:#222}
+.wp-up{display:grid;place-items:center;min-height:90px;border:1.5px dashed var(--line);color:var(--muted);font-size:13px;cursor:pointer}
+@media (max-width:700px){.wrap{padding-top:20px}}
+/* calendar marks */
+.mark{font-size:11.5px;border-radius:4px;padding:0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:grab;display:block}
+.mark.deadline{color:var(--hot);background:var(--hot-soft);border-left:2px solid var(--hot)}
+.mark.event{color:var(--accent);background:var(--accent-soft);border-left:2px solid var(--accent)}
+.legend{display:flex;gap:6px;align-items:center}
+.legend .mark{display:inline-block;cursor:default}
+.lg-done{font-size:11.5px;color:var(--good)}
+.cell .ln{cursor:grab}
+.cell.drop{outline:2px dashed var(--accent);outline-offset:-2px}
+.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:760px){.detail-grid{grid-template-columns:1fr}}
+.detail-grid h3{font-size:13.5px;margin:0 0 6px;color:var(--muted);font-weight:500}
+.cal-detail .item{align-items:center}
+.cal-detail .item .mark{display:inline-block;cursor:default}
+input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);font-size:11.5px;padding:1px 4px;color:var(--muted);width:auto}
+/* gym */
+.gym-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:5px 14px;cursor:pointer;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.chip-add{margin:0}.chip-add input{width:10em}
+.gym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start}
+.gcard{padding:12px 14px}
+.g-h{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:4px}
+.g-h h3{margin:0;font-size:15px}
+.g-h .cnt{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.g-h .sp{flex:1}
+.ghost-card{background:transparent;border-style:dashed}
+.exl{list-style:none;margin:0;padding:0}
+.ex{border-bottom:1px solid var(--line)}
+.ex:last-child{border-bottom:0}
+.ex-sum{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:8px 2px;cursor:pointer;text-align:left;flex-wrap:wrap}
+.ex-sum .tw{color:var(--muted);font-size:11px;transition:transform .12s}
+.ex.open .ex-sum .tw{transform:rotate(90deg)}
+.ex-name{font-weight:500;flex:1;min-width:8em}
+.ex-target{font-family:var(--f-mono);font-size:12px;color:var(--fg);background:var(--calm-soft);border-radius:5px;padding:1px 6px}
+.ex-last{font-family:var(--f-mono);font-size:11.5px;color:var(--good)}
+.ex-body{padding:2px 2px 12px 18px;display:flex;flex-direction:column;gap:10px}
+.ex-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ex-fields label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted)}
+.ex-fields input,.ex-log input{border:1px solid var(--line);border-radius:7px;background:var(--bg);padding:5px 7px;min-width:0;width:100%}
+.ex-log{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr)) auto;gap:6px;align-items:center}
+.ex-log .lg{font-size:12px;color:var(--muted)}
+.ex-log .primary{padding:5px 12px}
+@media (max-width:520px){.ex-log{grid-template-columns:repeat(3,minmax(0,1fr))}.ex-log .lg{grid-column:1/-1}.ex-log .primary{grid-column:1/-1}}
+.ex-hist h4{margin:0 0 4px;font-size:12px;color:var(--muted);font-weight:500}
+.ex-hist table{border-collapse:collapse;width:100%;font-family:var(--f-mono);font-size:12.5px}
+.ex-hist td{padding:3px 6px;border-bottom:1px solid var(--line)}
+.ex-hist td:last-child{text-align:right;width:2em}
 /* edit mode */
 .edit-bar{background:var(--accent-soft);color:var(--accent)}
 [data-tk][contenteditable]{outline:1px dashed var(--accent);outline-offset:2px;border-radius:3px;cursor:text;min-width:1em;display:inline-block}
@@ -223,6 +292,8 @@ html{-webkit-text-size-adjust:100%}
 <aside class="side" id="side" aria-label="目錄"><div class="side-scroll" id="sideInner"></div></aside>
 <button class="menu-btn" id="menuBtn" aria-label="目錄" aria-controls="side"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 <div class="scrim" id="scrim" hidden></div>
+<div class="hero" id="hero"><img id="heroImg" alt=""><div class="hero-btns" id="heroBtns"></div></div>
+<div class="wp-modal" id="wpModal" hidden></div>
 <div class="wrap">
   <header class="top">
     <h1 id="pageTitle">HOME</h1>
@@ -244,6 +315,13 @@ html{-webkit-text-size-adjust:100%}
 const I18N = {
   zh: {
     app_title:"HOME", edit_btn:"編輯文字", edit_on:"編輯中", edit_hint:"編輯模式：點任何標題或灰色小字直接修改，按 Enter 或點別處儲存。清空就會恢復預設。", edit_saved:"文字已更新",
+    nav_gym:"健身計劃", src_gym:"健身", k_deadline:"截止日", k_event:"重大事件", marks_title:"截止日與重大事件", marks_empty:"這天沒有標記。",
+    ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
+    wp_change:"更換桌布", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
+    gym_sub:"點動作展開，可以記錄每次的組數、重量和 RPE", gym_add_routine:"＋ 新增課表", gym_add_group:"＋ 新增分組，例如「胸」（Enter）", gym_add_ex:"＋ 新增動作（Enter）",
+    gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
+    gym_history:"最近紀錄", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
+    gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
     nav_home:"待辦", nav_review:"每日檢討", nav_money:"記帳",
     grp_pages:"頁面", grp_sections:"本頁段落", grp_switch:"切換",
     sec_overview:"總覽", sec_tasks:"Tasks", sec_week:"每日清單", sec_cal:"完成月曆",
@@ -293,6 +371,13 @@ const I18N = {
   },
   en: {
     app_title:"HOME", edit_btn:"Edit text", edit_on:"On", edit_hint:"Edit mode: click any heading or grey caption to change it. Press Enter or click elsewhere to save. Clear it to restore the default.", edit_saved:"Text updated",
+    nav_gym:"Workout plan", src_gym:"Workout", k_deadline:"Deadline", k_event:"Key event", marks_title:"Deadlines & key events", marks_empty:"Nothing marked.",
+    ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
+    wp_change:"Change cover", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
+    gym_sub:"Open an exercise to log sets, weight and RPE", gym_add_routine:"+ New routine", gym_add_group:"+ New group, e.g. Chest (Enter)", gym_add_ex:"+ New exercise (Enter)",
+    gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_sets:"Sets×reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
+    gym_history:"Recent", gym_no_history:"No logs yet. Log one after training to compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
+    gym_logged:"Logged", gym_need:"Fill in sets or weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
     nav_home:"To-dos", nav_review:"Daily review", nav_money:"Expenses",
     grp_pages:"PAGES", grp_sections:"ON THIS PAGE", grp_switch:"SWITCHES",
     sec_overview:"Overview", sec_tasks:"Tasks", sec_week:"Daily lists", sec_cal:"Done calendar",
@@ -345,6 +430,7 @@ const BUCKETS = ["urgent","nagging","later"];
 const DEFAULT_SETTINGS = {projects:["計量論文","商業競賽","IMM報告","其他"], pinned:["計量論文","商業競賽","IMM報告"], categories:["餐飲","交通","學習","娛樂","日用","房租","其他"], incomeCategories:["薪水","家裡","獎學金","其他"]};
 
 const ICON = {
+  gym:'<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/>',
   home:'<path d="M4 6h16M4 12h16M4 18h10"/><path d="M18 16l2 2 3-4"/>',
   review:'<path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h8M8 18h5"/>',
   money:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 15h2"/>',
@@ -361,7 +447,7 @@ const ICON = {
 const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
-  calMonth: ymd(new Date()).slice(0,7), calSel: null, viewStart: addDays(ymd(new Date()),-1),
+  calMonth: ymd(new Date()).slice(0,7), calSel: null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpBusy:false, confirmDel:null, viewStart: addDays(ymd(new Date()),-1),
   tasks:{}, days:{}, expenses:{}, settings:null,
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
@@ -405,6 +491,8 @@ function allTasks(){ const ids=new Set(Object.keys(S.tasks)); for (const p of pe
 function hasDay(ds){ return pending.has("days/"+ds) || !!S.days[ds]; }
 function allDayKeys(){ const k=new Set(Object.keys(S.days)); for (const p of pending.keys()) if (p.startsWith("days/")) k.add(p.slice(5)); return [...k]; }
 function day(date){ return pending.get("days/"+date) || S.days[date] || {date, items:[], projects:[], review:{}, mood:0}; }
+function ev(id){ return pending.get("events/"+id) || S.events[id]; }
+function allEvents(){ const ids=new Set(Object.keys(S.events)); for (const p of pending.keys()) if (p.startsWith("events/")) ids.add(p.slice(7)); return [...ids].map(ev).filter(Boolean); }
 function month(m){ return pending.get("expenses/"+m) || S.expenses[m] || {month:m, entries:[]}; }
 function dayStats(d){ const all=[...(d.items||[]), ...(d.projects||[]).flatMap(p=>p.items)]; return {n:all.length, k:all.filter(i=>i.d).length}; }
 
@@ -423,10 +511,10 @@ async function flush(path){
     else toast(T("save_fail", e && e.message || e));
   } finally { inflight.delete(path); }
 }
-function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (path==="settings/main") S.settings=body; }
+function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; }
 async function remove(path){
   pending.delete(path); clearTimeout(timers.get(path));
-  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id];
+  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id];
   if (db) { try { await db.doc(path).delete(); } catch(e){ toast(T("del_fail")); } }
 }
 
@@ -449,7 +537,8 @@ function render(){
   const eb=document.getElementById("editBar"); eb.hidden=!S.edit; eb.textContent=T("edit_hint");
   document.getElementById("pageTitle").innerHTML = S.tab==="home" ? L("app_title") : L("nav_"+S.tab);
   const n=new Date(); document.getElementById("todayLabel").textContent = T("today_label", n.getFullYear(), n.getMonth()+1, n.getDate(), T("wd")[n.getDay()]);
-  v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : viewMoney();
+  v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : viewMoney();
+  renderHero();
   document.querySelectorAll("[data-keep-scroll]").forEach(el=>{ if (sx[el.dataset.keepScroll]!=null) el.scrollLeft=sx[el.dataset.keepScroll]; });
   document.getElementById("sideInner").scrollTop = ss;
   v.style.minHeight=""; if (Math.abs(window.scrollY-wy)>1) window.scrollTo(0,wy);
@@ -465,7 +554,7 @@ function renderSide(){
   document.getElementById("sideInner").innerHTML = `
     <div class="brand"><span class="mark">H</span><span class="lbl">${L("app_title")}</span></div>
     <div class="grp"><span class="lbl">${L("grp_pages")}</span></div>
-    ${page("home")}${page("review")}${page("money")}
+    ${page("home")}${page("gym")}${page("review")}${page("money")}
     ${S.tab==="home" ? `<div class="grp"><span class="lbl">${L("grp_sections")}</span></div>
       ${sec("s-overview","overview",T("sec_overview"))}${sec("s-tasks","tasks",T("sec_tasks"))}${sec("s-week","week",T("sec_week"))}${sec("s-cal","cal",T("sec_cal"))}` : ""}
     <div class="grp"><span class="lbl">${L("grp_switch")}</span></div>
@@ -602,36 +691,172 @@ function viewWeek(){
 /* how many day columns fit: 3 on a laptop, 2 on a tablet, 1 on a phone */
 function visibleDays(){ return 5; }
 
-/* everything finished, keyed by the date it was checked off */
+/* everything finished, keyed by the date it was checked off. Each entry knows how to move itself. */
 function doneByDate(tasks){
   const by={}; const push=(ds,x)=>(by[ds]=by[ds]||[]).push(x);
   allDayKeys().forEach(ds=>{ const d=day(ds);
-    (d.items||[]).forEach(it=>{ if(it.d) push(it.dn||ds, {t:it.t, src:T("src_todo")}); });
-    (d.projects||[]).forEach(p=>p.items.forEach(it=>{ if(it.d) push(it.dn||ds, {t:it.t, src:p.name}); })); });
-  tasks.forEach(x=>{ if(!x.done) return; const ds = x.doneAt ? ymd(new Date(x.doneAt)) : x.due; if (ds) push(ds, {t:x.title, src:T("src_board")}); });
+    (d.items||[]).forEach(it=>{ if(it.d) push(it.dn||ds, {t:it.t, src:T("src_todo"), drag:{k:"dd",date:ds,pi:-1,id:it.id}}); });
+    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(it.d) push(it.dn||ds, {t:it.t, src:p.name, drag:{k:"dd",date:ds,pi,id:it.id}}); })); });
+  tasks.forEach(x=>{ if(!x.done) return; const ds = x.doneAt ? ymd(new Date(x.doneAt)) : x.due; if (ds) push(ds, {t:x.title, src:T("src_board"), drag:{k:"dt",id:x.id}}); });
+  gymEntries().forEach(e=>push(e.date, {t:e.exName, src:T("src_gym"), drag:{k:"gl",month:e.date.slice(0,7),id:e.id}}));
   return by;
 }
+/* deadlines and big events: separate from to-dos. Task-board due dates count as deadlines too. */
+function marksByDate(tasks){
+  const by={}; const push=(ds,x)=>(by[ds]=by[ds]||[]).push(x);
+  allEvents().forEach(e=>push(e.date, {t:e.title, kind:e.kind, id:e.id, drag:{k:"ev",id:e.id}}));
+  tasks.forEach(x=>{ if(!x.done && x.due) push(x.due, {t:x.title, kind:"deadline", fromTask:true, drag:{k:"due",id:x.id}}); });
+  return by;
+}
+const dragAttr = d => `draggable="true" data-drag="${esc(JSON.stringify(d))}"`;
 function viewDoneCalendar(tasks){
   const [y,m]=S.calMonth.split("-").map(Number);
   const cells=[]; let ds=mondayOf(new Date(y,m-1,1));
   do { for (let i=0;i<7;i++){ cells.push(ds); ds=addDays(ds,1); } } while (parse(ds).getMonth()===m-1);
-  const by=doneByDate(tasks), t=today();
+  const by=doneByDate(tasks), mk=marksByDate(tasks), t=today();
   const total=Object.entries(by).filter(([k])=>k.startsWith(S.calMonth)).reduce((s,[,v])=>s+v.length,0);
-  const sel=S.calSel, selList=sel?(by[sel]||[]):[];
+  const sel=S.calSel;
+  const pill = x => `<span class="mark ${x.kind}" ${dragAttr(x.drag)} title="${esc((x.kind==="deadline"?T("k_deadline"):T("k_event"))+" · "+x.t)}">${x.kind==="deadline"?"⚑":"★"} ${esc(x.t)}</span>`;
   return `<section class="block" id="s-cal">
     <div class="sec-h"><h2>${L("sec_cal")} · ${T("cal_title",y,m)}</h2><span class="sub">${T("cal_month_total",total)}</span><span class="sp"></span>
+      <span class="legend"><span class="mark deadline">⚑ ${T("k_deadline")}</span><span class="mark event">★ ${T("k_event")}</span><span class="lg-done">✓ ${T("done")}</span></span>
       <button class="ghost" data-act="calmonth" data-n="-1" aria-label="${T("prev_month")}">←</button><button class="ghost" data-act="calmonth" data-n="0">${T("this_month")}</button><button class="ghost" data-act="calmonth" data-n="1" aria-label="${T("next_month")}">→</button></div>
     <div class="cal">${T("wd_mon_first").map(w=>`<div class="wh">${w}</div>`).join("")}
-    ${cells.map(c=>{ const list=by[c]||[];
-      return `<button class="cell ${parse(c).getMonth()!==m-1?"out":""} ${c===t?"today":""} ${list.length?"has":""} ${c===sel?"sel":""}" data-act="cal-sel" data-date="${c}" aria-label="${c}">
+    ${cells.map(c=>{ const list=by[c]||[], marks=mk[c]||[];
+      return `<div role="button" tabindex="0" class="cell ${parse(c).getMonth()!==m-1?"out":""} ${c===t?"today":""} ${list.length?"has":""} ${c===sel?"sel":""}" data-act="cal-sel" data-drop-date="${c}" data-date="${c}" aria-label="${c}">
         <span class="n"><span>${parse(c).getDate()}</span>${list.length?`<em>✓${list.length}</em>`:""}</span>
-        ${list.slice(0,4).map(x=>`<span class="ln">${esc(x.t)}</span>`).join("")}${list.length>4?`<span class="more">+${list.length-4}</span>`:""}
-      </button>`; }).join("")}
+        ${marks.map(pill).join("")}
+        ${list.slice(0,4).map(x=>`<span class="ln" ${dragAttr(x.drag)} title="${esc(x.t)}">${esc(x.t)}</span>`).join("")}${list.length>4?`<span class="more">+${list.length-4}</span>`:""}
+      </div>`; }).join("")}
     </div>
-    ${sel?`<div class="card cal-detail"><div class="sec-h"><h2>${T("cal_detail",md(sel)+" "+dow(sel))}</h2><span class="sp"></span><button class="icon-btn" data-act="cal-sel" data-date="${sel}" aria-label="close">✕</button></div>
-      ${selList.length?`<ul class="list">${selList.map(x=>`<li class="item done"><span class="t" style="text-decoration:none;color:var(--fg)">✓ ${esc(x.t)}</span><span class="src">${esc(x.src)}</span></li>`).join("")}</ul>`:`<p class="empty">${T("cal_empty_day")}</p>`}</div>`
-      :`<p class="sub" style="margin-top:8px">${L("cal_note")}</p>`}
+    ${sel?calDetail(sel, by[sel]||[], mk[sel]||[]):`<p class="sub" style="margin-top:8px">${L("cal_note")}</p>`}
   </section>`;
+}
+function calDetail(sel, list, marks){
+  const mv = d => `<input type="date" class="mv" value="${sel}" data-act="mv-date" data-drag="${esc(JSON.stringify(d))}" title="${T("move_date")}" aria-label="${T("move_date")}">`;
+  return `<div class="card cal-detail"><div class="sec-h"><h2>${md(sel)} ${dow(sel)}</h2><span class="sp"></span><button class="icon-btn" data-act="cal-sel" data-date="${sel}" aria-label="close">✕</button></div>
+    <div class="detail-grid">
+      <div><h3>${L("marks_title")}</h3>
+        ${marks.length?`<ul class="list">${marks.map(x=>`<li class="item"><span class="mark ${x.kind}">${x.kind==="deadline"?"⚑":"★"}</span><span class="t">${esc(x.t)}${x.fromTask?` <small class="src">${T("src_board")}</small>`:""}</span>${mv(x.drag)}${x.fromTask?"":`<button class="icon-btn" data-act="ev-del" data-id="${x.id}" title="${T("del")}">✕</button>`}</li>`).join("")}</ul>`:`<p class="empty mini">${T("marks_empty")}</p>`}
+        <form class="add" data-act="ev-add" data-date="${sel}">
+          <select id="ev-kind" class="psel"><option value="deadline">⚑ ${T("k_deadline")}</option><option value="event">★ ${T("k_event")}</option></select>
+          <input type="text" id="ev-title" placeholder="${T("ev_ph")}" autocomplete="off">
+        </form>
+      </div>
+      <div><h3>${T("cal_detail",md(sel))}</h3>
+        ${list.length?`<ul class="list">${list.map(x=>`<li class="item"><span class="t">✓ ${esc(x.t)}</span><span class="src">${esc(x.src)}</span>${mv(x.drag)}</li>`).join("")}</ul>`:`<p class="empty mini">${T("cal_empty_day")}</p>`}
+      </div>
+    </div>
+    <p class="sub" style="margin:10px 0 0">${T("drag_hint")}</p></div>`;
+}
+/* move anything shown on the calendar to another date */
+function moveTo(d, date){
+  if (!date) return;
+  if (d.k==="ev"){ const e=ev(d.id); if(e) save("events/"+e.id,{...e,date},50); }
+  else if (d.k==="due"){ const t=task(d.id); if(t) save("tasks/"+t.id,{...t,due:date},50); }
+  else if (d.k==="dt"){ const t=task(d.id); if(t) save("tasks/"+t.id,{...t,doneAt:parse(date).getTime()+12*36e5},50); }
+  else if (d.k==="dd"){ const x=dayCopy(d.date), it=listOf(x,+d.pi).find(i=>i.id===d.id); if(it){ it.dn=date; save("days/"+x.date,x,50); } }
+  else if (d.k==="gl"){ const from=gymMonth(d.month), e=from.entries.find(x=>x.id===d.id); if(!e) return;
+    const a=clone(from); a.entries=a.entries.filter(x=>x.id!==d.id);
+    if (date.slice(0,7)===d.month){ a.entries.push({...e,date}); save("gymlog/"+d.month,a,50); }
+    else { save("gymlog/"+d.month,a,50); const b=clone(gymMonth(date.slice(0,7))); b.entries.push({...e,date}); save("gymlog/"+date.slice(0,7),b,50); } }
+  S.calSel=date; render(); toast(T("moved",md(date)));
+}
+
+/* ---------- GYM ---------- */
+function gymPlan(){ return pending.get("gym/plan") || S.gymPlan || {routines:[]}; }
+function gymMonth(m){ return pending.get("gymlog/"+m) || S.gymlog[m] || {month:m, entries:[]}; }
+function gymEntries(){ const ks=new Set(Object.keys(S.gymlog)); for (const p of pending.keys()) if (p.startsWith("gymlog/")) ks.add(p.slice(7)); return [...ks].flatMap(k=>gymMonth(k).entries); }
+function savePlan(pl){ save("gym/plan", pl, 300); }
+function viewGym(){
+  const pl=gymPlan(), rs=pl.routines;
+  if (!S.gymR || !rs.some(r=>r.id===S.gymR)) S.gymR = rs[0]?.id || null;
+  const r=rs.find(x=>x.id===S.gymR);
+  const all=gymEntries(), t=today();
+  const hist=exId=>all.filter(e=>e.exId===exId).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:(b.ts||0)-(a.ts||0));
+  const todayN=all.filter(e=>e.date===t).length;
+  const chips=rs.map(x=>`<button class="chip" data-act="gym-r" data-id="${x.id}" aria-pressed="${x.id===S.gymR}">${esc(x.name)}</button>`).join("");
+  const exRow=(g,x)=>{ const h=hist(x.id), last=h[0], open=!!S.gymOpen[x.id];
+    return `<li class="ex ${open?"open":""}">
+      <button class="ex-sum" data-act="gym-open" data-id="${x.id}" aria-expanded="${open}"><span class="tw">▸</span><span class="ex-name">${esc(x.name)}</span>
+        ${x.target?`<span class="ex-target">${esc(x.target)}</span>`:""}
+        ${last?`<span class="ex-last" title="${T("gym_last")}">${md(last.date)} · ${esc([last.sets,last.weight].filter(Boolean).join(" · "))}</span>`:""}</button>
+      ${open?`<div class="ex-body">
+        <div class="ex-fields">
+          <label>${T("gym_target")}<input type="text" id="gt-${x.id}" value="${esc(x.target||"")}" placeholder="${T("gym_target_ph")}" data-act="gym-field" data-g="${g.id}" data-x="${x.id}" data-f="target" autocomplete="off"></label>
+          <label>${T("gym_note")}<input type="text" id="gn-${x.id}" value="${esc(x.note||"")}" placeholder="${T("gym_note_ph")}" data-act="gym-field" data-g="${g.id}" data-x="${x.id}" data-f="note" autocomplete="off"></label>
+        </div>
+        <form class="ex-log" data-act="gym-log" data-x="${x.id}" data-name="${esc(x.name)}">
+          <span class="lg">${T("gym_log")}</span>
+          <input type="text" id="gls-${x.id}" placeholder="${T("gym_sets")}" value="${esc(last?.sets||"")}" autocomplete="off">
+          <input type="text" id="glw-${x.id}" placeholder="${T("gym_weight")}" value="${esc(last?.weight||"")}" autocomplete="off">
+          <input type="text" id="glr-${x.id}" placeholder="${T("gym_rpe")}" autocomplete="off">
+          <button class="primary" type="submit">${T("gym_save")}</button>
+        </form>
+        <div class="ex-hist"><h4>${T("gym_history")}</h4>
+          ${h.length?`<table><tbody>${h.slice(0,6).map(e=>`<tr><td>${md(e.date)}</td><td>${esc(e.sets||"")}</td><td>${esc(e.weight||"")}</td><td>${e.rpe?"RPE "+esc(e.rpe):""}</td><td><button class="icon-btn" data-act="gym-log-del" data-month="${e.date.slice(0,7)}" data-id="${e.id}" title="${T("del")}">✕</button></td></tr>`).join("")}</tbody></table>`:`<p class="empty mini">${T("gym_no_history")}</p>`}
+        </div>
+        <button class="ghost mini" data-act="gym-ex-del" data-g="${g.id}" data-x="${x.id}">${T("gym_del_ex")}</button>
+      </div>`:""}
+    </li>`; };
+  const groups = r ? r.groups.map(g=>`<div class="card gcard">
+      <div class="g-h"><h3>${esc(g.name)}</h3><span class="cnt">${g.ex.length}</span><span class="sp"></span><button class="icon-btn" data-act="gym-g-del" data-g="${g.id}" title="${T("del")}">✕</button></div>
+      <ul class="exl">${g.ex.map(x=>exRow(g,x)).join("")}</ul>
+      <form class="add" data-act="gym-ex-add" data-g="${g.id}"><input type="text" id="gx-${g.id}" placeholder="${T("gym_add_ex")}" autocomplete="off"></form>
+    </div>`).join("") : "";
+  return `<div class="gym-top">
+      <div class="chips">${chips}<form class="add chip-add" data-act="gym-r-add"><input type="text" id="gym-r-new" placeholder="${T("gym_add_routine")}" autocomplete="off"></form></div>
+      <span class="sub">${T("gym_today_count",todayN)}</span>
+    </div>
+    ${r?`<div class="sec-h"><h2>${esc(r.name)}</h2><span class="sub">${L("gym_sub")}</span><span class="sp"></span>
+        <button class="ghost mini" data-act="gym-r-del" data-id="${r.id}">${S.confirmDel===r.id?T("confirm_del"):T("gym_del_routine")}</button></div>
+      <div class="gym-grid">${groups}
+        <div class="card gcard ghost-card"><form class="add" data-act="gym-g-add"><input type="text" id="gym-g-new" placeholder="${T("gym_add_group")}" autocomplete="off"></form>
+        ${r.groups.length?"":`<p class="empty mini">${T("gym_empty")}</p>`}</div>
+      </div>`:`<p class="empty">${T("gym_none")}</p>`}`;
+}
+function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
+
+/* ---------- covers & tint ---------- */
+const WPS = [{"file": "bg/01.jpg", "name": "冰河谷", "hue": 197, "sat": 33}, {"file": "bg/02.jpg", "name": "晨光", "hue": 19, "sat": 38}, {"file": "bg/03.jpg", "name": "霧林", "hue": 142, "sat": 20}, {"file": "bg/04.jpg", "name": "暮色", "hue": 300, "sat": 26}, {"file": "bg/05.jpg", "name": "秋嶺", "hue": 26, "sat": 47}, {"file": "bg/06.jpg", "name": "星夜", "hue": 218, "sat": 56}, {"file": "bg/07.jpg", "name": "湖光", "hue": 198, "sat": 25}, {"file": "bg/08.jpg", "name": "雪原", "hue": 206, "sat": 17}, {"file": "bg/09.jpg", "name": "碧湖黃昏", "hue": 178, "sat": 31}, {"file": "bg/10.jpg", "name": "薰衣草霧", "hue": 260, "sat": 22}];
+const WP_DEFAULT = {home:"bg/01.jpg", review:"bg/03.jpg", money:"bg/07.jpg", gym:"bg/05.jpg"};
+function wpList(){ return [...WPS.map(w=>({...w, src:w.file})), ...((settings().customWps)||[]).map(w=>({...w, src:w.url, file:w.url, custom:true}))]; }
+function wpFor(tab){ const key=((settings().wp)||{})[tab] || WP_DEFAULT[tab] || WPS[0].file; return wpList().find(w=>w.file===key) || {...WPS[0], src:WPS[0].file}; }
+const tintEl=document.createElement("style"); document.body.appendChild(tintEl);
+function applyTint(h,s){
+  const sl=Math.max(10,Math.min(30,s*0.75)), sa=Math.max(30,Math.min(55,s+12)), q=sl*0.6;
+  const Lt=`--bg:hsl(${h} ${sl}% 97%);--surface:hsl(${h} ${q}% 99.4%);--line:hsl(${h} ${q}% 87.5%);--rail:hsl(${h} ${sl}% 94%);--accent:hsl(${h} ${sa}% 33%);--accent-soft:hsl(${h} ${sa}% 92%);--calm-soft:hsl(${h} ${q}% 92.5%);--muted:hsl(${h} 9% 41%);--fg:hsl(${h} 18% 13%);`;
+  const Dk=`--bg:hsl(${h} 14% 9.5%);--surface:hsl(${h} 13% 12.5%);--line:hsl(${h} 11% 21%);--rail:hsl(${h} 14% 10.5%);--accent:hsl(${h} ${sa}% 72%);--accent-soft:hsl(${h} 28% 19%);--calm-soft:hsl(${h} 10% 16%);--muted:hsl(${h} 9% 64%);--fg:hsl(${h} 12% 91%);`;
+  tintEl.textContent=`:root{${Lt}}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){${Dk}}}:root[data-theme="dark"]{${Dk}}`;
+}
+function renderHero(){
+  const w=wpFor(S.tab), img=document.getElementById("heroImg");
+  if (img.getAttribute("src")!==w.src) img.setAttribute("src", w.src);
+  applyTint(w.hue, w.sat);
+  document.getElementById("heroBtns").innerHTML=`<button data-act="wp-open">${T("wp_change")}</button><button data-act="wp-next">${T("wp_random")}</button>`;
+  const m=document.getElementById("wpModal");
+  m.hidden=!S.wpOpen;
+  if (S.wpOpen){ const cur=wpFor(S.tab).file;
+    m.innerHTML=`<div class="wp-box" role="dialog" aria-modal="true" aria-label="${T("wp_title")}">
+      <div class="sec-h"><h2>${T("wp_title")}</h2><span class="sp"></span><button class="icon-btn" data-act="wp-close" aria-label="close">✕</button></div>
+      <p class="sub" style="margin:0 0 12px">${T("wp_hint")}</p>
+      <div class="wp-grid">${wpList().map(x=>`<div class="wp-item ${x.file===cur?"on":""}"><button class="wp-pick" data-act="wp-pick" data-file="${esc(x.file)}" aria-label="${esc(x.name)}"><img src="${esc(x.src)}" alt="" loading="lazy"><span>${esc(x.name)}</span></button>${x.custom?`<button class="icon-btn wp-del" data-act="wp-del" data-file="${esc(x.file)}" title="${T("del")}">✕</button>`:""}</div>`).join("")}
+        <label class="wp-item wp-up"><input type="file" accept="image/*" id="wpFile" hidden><span>${S.wpBusy?T("wp_uploading"):"＋ "+T("wp_upload")}</span></label>
+      </div></div>`; }
+}
+function setWp(file){ const st=clone(settings()); st.wp={...(st.wp||{}), [S.tab]:file}; save("settings/main",st,50); render(); }
+function hueOf(src){ return new Promise(res=>{ const im=new Image(); im.onload=()=>{ try{ const c=document.createElement("canvas"); c.width=60; c.height=24; const x=c.getContext("2d"); x.drawImage(im,0,0,60,24); const d=x.getImageData(0,0,60,24).data; let sx=0,sy=0,ws=0,ss=0;
+  for(let i=0;i<d.length;i+=4){ const r=d[i]/255,g=d[i+1]/255,b=d[i+2]/255, mx=Math.max(r,g,b), mn=Math.min(r,g,b), s=mx?(mx-mn)/mx:0; let h=0; if(mx!==mn){ h= mx===r?((g-b)/(mx-mn))%6 : mx===g?(b-r)/(mx-mn)+2 : (r-g)/(mx-mn)+4; h*=60; } const w=s*mx+0.001; sx+=Math.cos(h*Math.PI/180)*w; sy+=Math.sin(h*Math.PI/180)*w; ss+=s*w; ws+=w; }
+  res({hue:Math.round((Math.atan2(sy,sx)*180/Math.PI+360)%360), sat:Math.round(ss/ws*100)}); }catch(e){ res({hue:210,sat:20}); } }; im.onerror=()=>res({hue:210,sat:20}); im.src=src; }); }
+async function uploadWp(file){
+  let assets=null; try{ assets=await window.claude?.use?.("assets"); }catch(e){}
+  if (!assets){ toast(T("wp_no_upload")); return; }
+  S.wpBusy=true; render();
+  try { const a=await assets.upload(file); const c=await hueOf(a.url);
+    const st=clone(settings()); st.customWps=[...(st.customWps||[]), {id:a.id, url:a.url, name:file.name.replace(/\.[^.]+$/,"").slice(0,20), hue:c.hue, sat:c.sat}];
+    st.wp={...(st.wp||{}), [S.tab]:a.url}; save("settings/main",st,50);
+  } catch(e){ toast(T("wp_upload_fail")); }
+  S.wpBusy=false; render();
 }
 
 /* ---------- REVIEW ---------- */
@@ -720,6 +945,24 @@ document.addEventListener("submit", e=>{
     const st=clone(settings()); st.pinned=[...pinned()];
     if(!st.projects.includes(n)){ st.projects.push(n); st.pinned.push(n); save("settings/main",st,50); }
     inp.value=""; render();
+  } else if (act==="ev-add"){
+    const inp=document.getElementById("ev-title"), title=inp.value.trim(); if(!title) return;
+    const id=uid(); save("events/"+id,{id,date:f.dataset.date,title,kind:document.getElementById("ev-kind").value},50); inp.value=""; render();
+  } else if (act==="gym-r-add"){
+    const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return;
+    const pl=clone(gymPlan()), id=uid(); pl.routines.push({id,name:n,groups:[]}); savePlan(pl); S.gymR=id; inp.value=""; render();
+  } else if (act==="gym-g-add"){
+    const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return; inp.value="";
+    planEdit((pl,r)=>r.groups.push({id:uid(),name:n,ex:[]}));
+  } else if (act==="gym-ex-add"){
+    const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return; inp.value="";
+    planEdit((pl,r)=>r.groups.find(g=>g.id===f.dataset.g).ex.push({id:uid(),name:n,target:"",note:""}));
+  } else if (act==="gym-log"){
+    const x=f.dataset.x, v=k=>document.getElementById(k+x).value.trim();
+    const sets=v("gls-"), weight=v("glw-"), rpe=v("glr-"); if(!sets && !weight){ toast(T("gym_need")); return; }
+    const t=today(), m=clone(gymMonth(t.slice(0,7)));
+    m.entries.push({id:uid(),date:t,routineId:S.gymR,exId:x,exName:f.dataset.name,sets,weight,rpe,ts:Date.now()});
+    save("gymlog/"+t.slice(0,7),m,50); document.activeElement && document.activeElement.blur(); toast(T("gym_logged")); render();
   } else if (act==="exp-add"){
     const amt=parseFloat(document.getElementById("exp-amt").value); if (!(amt>0)) { toast(T("need_amt")); return; }
     const date=document.getElementById("exp-date").value || today(), mkey=date.slice(0,7), m=clone(month(mkey));
@@ -737,6 +980,19 @@ document.addEventListener("click", e=>{
   const act=b.dataset.act;
   if (act==="nav") setTab(b.dataset.tab);
   else if (act==="jump"){ const el=document.getElementById(b.dataset.to); setSide(false); el && el.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth", block:"start"}); }
+  else if (act==="ev-del"){ remove("events/"+b.dataset.id); render(); toast(T("deleted")); }
+  else if (act==="gym-r"){ S.gymR=b.dataset.id; S.confirmDel=null; render(); }
+  else if (act==="gym-open"){ S.gymOpen[b.dataset.id]=!S.gymOpen[b.dataset.id]; render(); }
+  else if (act==="gym-r-del"){ if (S.confirmDel!==b.dataset.id){ S.confirmDel=b.dataset.id; render(); return; } S.confirmDel=null; const pl=clone(gymPlan()); pl.routines=pl.routines.filter(r=>r.id!==b.dataset.id); savePlan(pl); S.gymR=null; render(); toast(T("deleted")); }
+  else if (act==="gym-g-del"){ planEdit((pl,r)=>{ r.groups=r.groups.filter(g=>g.id!==b.dataset.g); }); }
+  else if (act==="gym-ex-del"){ planEdit((pl,r)=>{ const g=r.groups.find(g=>g.id===b.dataset.g); g.ex=g.ex.filter(x=>x.id!==b.dataset.x); }); }
+  else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
+  else if (act==="wp-open"){ S.wpOpen=true; render(); }
+  else if (act==="wp-close"){ S.wpOpen=false; render(); }
+  else if (act==="wp-pick"){ S.wpOpen=false; setWp(b.dataset.file); }
+  else if (act==="wp-next"){ const l=wpList(), cur=wpFor(S.tab).file, opts=l.filter(w=>w.file!==cur); setWp(opts[Math.floor(Math.random()*opts.length)].file); }
+  else if (act==="wp-del"){ const st=clone(settings()); const w=(st.customWps||[]).find(x=>x.url===b.dataset.file); st.customWps=(st.customWps||[]).filter(x=>x.url!==b.dataset.file); for (const k in (st.wp||{})) if (st.wp[k]===b.dataset.file) delete st.wp[k]; save("settings/main",st,50); render();
+    (async()=>{ try{ const a=await window.claude?.use?.("assets"); if(a && w && w.id) await a.delete(w.id); }catch(e){} })(); }
   else if (act==="edit"){ S.edit=!S.edit; render(); }
   else if (act==="lang"){ S.lang = S.lang==="zh"?"en":"zh"; lsSet("home.lang",S.lang); render(); }
   else if (act==="theme"){ S.theme = {system:"light", light:"dark", dark:"system"}[S.theme]; lsSet("home.theme",S.theme); applyTheme(); render(); }
@@ -772,6 +1028,9 @@ document.addEventListener("change", e=>{
   if (act==="task-toggle"){ const t={...task(el.dataset.id), done:el.checked, doneAt:el.checked?Date.now():null}; save("tasks/"+t.id,t,50); render(); }
   else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked; it.dn=el.checked?today():null; save("days/"+d.date,d,300); render(); }
   else if (act==="proj-add"){ const name=el.value; if (!name) return; if (name==="__new"){ el.value=""; askNewProject(el.dataset.date, el); return; } addProj(el.dataset.date, name); }
+  else if (act==="mv-date"){ try{ moveTo(JSON.parse(el.dataset.drag), el.value); }catch(_){} }
+  else if (act==="gym-field"){ const v=el.value.trim(); const pl=clone(gymPlan()), r=pl.routines.find(x=>x.id===S.gymR), x=r.groups.find(g=>g.id===el.dataset.g).ex.find(x=>x.id===el.dataset.x); if ((x[el.dataset.f]||"")!==v){ x[el.dataset.f]=v; savePlan(pl); } }
+  else if (el.id==="wpFile" && el.files && el.files[0]){ uploadWp(el.files[0]); }
   else if (act==="pin"){ const st=clone(settings()), s=new Set(pinned()); el.checked?s.add(el.dataset.name):s.delete(el.dataset.name); st.pinned=st.projects.filter(p=>s.has(p)); save("settings/main",st,50); render(); }
   else if (act==="rv-date"){ if (el.value){ S.reviewDate=el.value; render(); } }
 });
@@ -808,6 +1067,15 @@ document.addEventListener("focusout", e=>{
   save("settings/main", st, 50); toast(T("edit_saved")); setTimeout(()=>{ if(!isTyping()) render(); },0);
 }, true);
 
+/* drag calendar items onto another date */
+let calDrag=null;
+document.addEventListener("dragstart", e=>{ const el=e.target.closest&&e.target.closest("[data-drag]"); if(!el) return; try{ calDrag=JSON.parse(el.dataset.drag); }catch(_){ calDrag=null; } e.dataTransfer.effectAllowed="move"; try{e.dataTransfer.setData("text/plain","x");}catch(_){} });
+document.addEventListener("dragover", e=>{ const c=calDrag && e.target.closest && e.target.closest("[data-drop-date]"); if(!c) return; e.preventDefault(); document.querySelectorAll(".cell.drop").forEach(x=>x!==c&&x.classList.remove("drop")); c.classList.add("drop"); });
+document.addEventListener("drop", e=>{ const c=calDrag && e.target.closest && e.target.closest("[data-drop-date]"); if(!c) return; e.preventDefault(); const d=calDrag; calDrag=null; moveTo(d, c.dataset.dropDate); });
+document.addEventListener("dragend", ()=>{ calDrag=null; document.querySelectorAll(".cell.drop").forEach(x=>x.classList.remove("drop")); });
+document.addEventListener("keydown", e=>{ const c=e.target; if ((e.key==="Enter"||e.key===" ") && c.getAttribute && c.getAttribute("role")==="button" && c.dataset.act){ e.preventDefault(); c.click(); } if (e.key==="Escape" && S.wpOpen){ S.wpOpen=false; render(); } });
+document.getElementById("wpModal").addEventListener("click", e=>{ if (e.target.id==="wpModal"){ S.wpOpen=false; render(); } });
+
 /* drag tasks between buckets */
 let dragId=null;
 document.addEventListener("dragstart", e=>{ const li=e.target.closest&&e.target.closest("[data-task]"); if(!li) return; dragId=li.dataset.task; e.dataTransfer.effectAllowed="move"; try{e.dataTransfer.setData("text/plain",dragId);}catch(_){} });
@@ -823,12 +1091,13 @@ function banner(msg){ const b=document.getElementById("banner"); b.textContent=m
   try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch(e){ db=null; }
   if (!db){ banner(T("offline")); return; }
   for (const p of pending.keys()) flush(p);
-  const waiting=new Set(["tasks","days","expenses","settings"]);
+  const waiting=new Set(["tasks","days","expenses","settings","events","gymlog","gym"]);
   const timer=setTimeout(()=>{ if (waiting.size) banner(T("loading")); }, 10000);
   const done=(k,snap)=>{ if (!snap.metadata.fromCache){ waiting.delete(k); if (!waiting.size){ clearTimeout(timer); banner(""); } } };
   const fail=k=>e=>{ waiting.delete(k); if (e.code!=="revoked") banner(T("disconnected",e.code)); };
   const sub=(name)=>db.collection(name).onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S[name]=o; done(name,snap); softRender(); }, fail(name));
-  sub("tasks"); sub("days"); sub("expenses");
+  sub("tasks"); sub("days"); sub("expenses"); sub("events"); sub("gymlog");
+  db.doc("gym/plan").onSnapshot(s=>{ S.gymPlan=s.exists?s.data():null; done("gym",s); softRender(); }, fail("gym"));
   db.doc("settings/main").onSnapshot(s=>{ S.settings=s.exists?s.data():null; done("settings",s); softRender(); }, fail("settings"));
 })();
 })();
