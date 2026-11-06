@@ -102,9 +102,12 @@ ul.list{list-style:none;margin:0;padding:0}
 .add input[type=date]{flex:0 0 auto;width:auto;font-size:12px;color:var(--muted)}
 .done-toggle{font-size:12px;color:var(--muted);background:none;border:0;cursor:pointer;padding:6px 2px 0}
 /* week */
-.week{display:grid;grid-template-columns:repeat(var(--days,3),minmax(0,1fr));gap:16px;align-items:start}
-@media (max-width:1000px){.week{--days:2}}
-@media (max-width:640px){.week{--days:1}}
+/* five wide day columns; the row scrolls sideways instead of squeezing them */
+.week{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(360px,1fr);gap:16px;align-items:start;overflow-x:auto;padding-bottom:12px;overscroll-behavior-x:contain;scrollbar-width:auto;scrollbar-color:var(--muted) var(--calm-soft)}
+.week::-webkit-scrollbar{height:10px}
+.week::-webkit-scrollbar-track{background:var(--calm-soft);border-radius:5px}
+.week::-webkit-scrollbar-thumb{background:var(--muted);border-radius:5px}
+@media (max-width:640px){.week{grid-auto-columns:86vw}}
 .day{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
 .day.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
 .day-h{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:6px}
@@ -592,13 +595,12 @@ function viewWeek(){
       <div class="sec-h"><h2>${md(days[0])} ~ ${md(days[days.length-1])}</h2><span class="sp"></span>
         <button class="ghost" data-act="days" data-n="-1" aria-label="${T("prev_day")}">←</button><button class="ghost" data-act="days" data-n="0">${T("today")}</button><button class="ghost" data-act="days" data-n="1" aria-label="${T("next_day")}">→</button></div>
       ${car.length?`<p class="sub" style="margin:-4px 0 10px">${L("carry_note")}</p>`:""}
-      <div class="week" data-keep-scroll="week">${dayCols}</div>
+      <div class="week" data-keep-scroll="week" tabindex="0">${dayCols}</div>
     </section>`;
 }
 
 /* how many day columns fit: 3 on a laptop, 2 on a tablet, 1 on a phone */
-function visibleDays(){ return innerWidth<=640 ? 1 : innerWidth<=1000 ? 2 : 3; }
-let lastNd=0; addEventListener("resize", ()=>{ const n=visibleDays(); if (n!==lastNd){ lastNd=n; softRender(); } });
+function visibleDays(){ return 5; }
 
 /* everything finished, keyed by the date it was checked off */
 function doneByDate(tasks){
@@ -744,7 +746,7 @@ document.addEventListener("click", e=>{
   else if (act==="show-done"){ S.showDone[b.dataset.bucket]=!S.showDone[b.dataset.bucket]; render(); }
   else if (act==="it-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date), l=listOf(d,+b.dataset.pi); l.splice(l.findIndex(i=>i.id===b.dataset.id),1); save("days/"+d.date,d,300); render(); }
   else if (act==="proj-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date); d.projects.splice(+b.dataset.pi,1); save("days/"+d.date,d,300); render(); }
-  else if (act==="days"){ const n=+b.dataset.n; S.viewStart = n===0 ? addDays(today(), visibleDays()>1?-1:0) : addDays(S.viewStart,n); render(); }
+  else if (act==="days"){ const n=+b.dataset.n; S.viewStart = n===0 ? addDays(today(),-1) : addDays(S.viewStart,n); render._scrolled=false; render(); }
   else if (act==="week"){ const n=+b.dataset.n; S.weekStart=n===0?mondayOf(new Date()):addDays(S.weekStart,n); render._scrolled=n!==0; render(); }
   else if (act==="calmonth"){ const n=+b.dataset.n; if(n===0) S.calMonth=today().slice(0,7); else { const d=parse(S.calMonth+"-01"); d.setMonth(d.getMonth()+n); S.calMonth=ymd(d).slice(0,7); } S.calSel=null; render(); }
   else if (act==="cal-sel"){ S.calSel = S.calSel===b.dataset.date ? null : b.dataset.date; render(); }
@@ -815,7 +817,6 @@ document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closes
 document.addEventListener("dragend", ()=>{ dragId=null; document.querySelectorAll(".col.drop").forEach(x=>x.classList.remove("drop")); });
 
 /* ---------- boot ---------- */
-lastNd=visibleDays(); if (lastNd===1) S.viewStart=today();
 render();
 function banner(msg){ const b=document.getElementById("banner"); b.textContent=msg; b.hidden=!msg; }
 (async () => {
