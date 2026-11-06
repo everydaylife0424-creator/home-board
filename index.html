@@ -268,6 +268,19 @@ html{-webkit-text-size-adjust:100%}
 .cell .ln{cursor:grab}
 .cell.drop{outline:2px dashed var(--accent);outline-offset:-2px}
 .cal{position:relative}
+.gsums{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.gsum{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13px}
+.gsum .dot{width:9px;height:9px;border-radius:50%;background:hsl(var(--h) 60% 50%)}
+.gchip{display:flex;justify-content:space-between;gap:4px;font-size:11.5px;line-height:1.5;padding:0 5px;border-radius:4px;background:hsl(var(--h,0) var(--gs,0%) 50% / .18);border-left:3px solid hsl(var(--h,0) var(--gs,0%) 50%);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.gchip[style]{--gs:60%}
+.gchip b{font-weight:500;font-family:var(--f-mono);opacity:.75}
+.cell.gcell{height:84px}
+.cell.gcell.trained{background:linear-gradient(var(--accent-soft),var(--accent-soft)) top/100% 3px no-repeat, var(--surface)}
+.cell.gcell.sel{background:var(--accent-soft)}
+.gday{margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.gday h4{margin:10px 0 4px}.gday h4 .gchip{display:inline-flex;font-size:12.5px}
+.gday table{width:100%;border-collapse:collapse;font-size:13px}.gday td{padding:3px 6px;border-top:1px solid var(--line)}
+@media (max-width:700px){.cell.gcell{height:52px}.cell .gchip{font-size:0;height:6px;padding:0;border-left-width:0;background:hsl(var(--h,0) var(--gs,0%) 50%)}.gday td:nth-child(5){display:none}}
 .cell{height:118px;min-height:0;overflow:hidden}
 @media (max-width:700px){.cell{height:60px}}
 .cal-pop{position:absolute;z-index:15;width:min(360px,92vw);max-height:min(460px,70vh);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 36px rgba(0,0,0,.16)}
@@ -378,7 +391,7 @@ const I18N = {
     ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
     wp_change:"更換桌布", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"刪除這張卡片", sl_title:"輸入以篩選，↑↓ 選擇，Enter 確認", sl_none:"沒有符合的指令", sl_clear:"取消這個指令", sl_todo:"待辦事項", sl_heading:"標題", sl_text:"文字（不打勾）", sl_divider:"分隔線", sl_tomorrow:"明天", sl_to_day:d=>`加到 ${d}`, sl_board:n=>`加到任務板：${n}`, sl_proj:n=>`新增專案區塊：${n}`, sl_review:"打開這天的每日檢討", sl_today:"截止日設為今天", sl_nextweek:"截止日設為下週一", sl_due_set:d=>`截止日：${d}`, sl_marked:"已標記在月曆上", sl_to_board:"已加到任務板", sl_added_to:d=>`已加到 ${d}`, cm_del_item:t=>`刪除「${t}」`, cm_add_item:"新增事項（Enter）", cm_add_item_to:n=>`新增事項到「${n}」`, cm_del_sec:n=>`刪除這天的「${n}」區塊`, cm_unpin:n=>`「${n}」不再每天自動出現`, cm_unpinned:"已取消自動出現，可在專案設定改回來", cm_add_sec:"新增專案區塊", cm_add_card:"加回卡片", cm_all_shown:"所有卡片都已顯示", cm_reset:"恢復預設卡片", cm_row_empty:"這排沒有卡片，在這裡按右鍵可以加回來。", cm_del_col:n=>`刪除「${n}」這欄`, cm_add_col:"新增一欄", cm_col_ph:"欄名，按 Enter", cm_last_col:"至少要留一欄", cm_col_deleted:n=>`已刪除，裡面的任務移到「${n}」`, cm_del_day:d=>`刪除 ${d} 這張卡片`, cm_day_first:d=>`刪除後會在最後補上 ${d}。月曆上的紀錄不會消失。`, cm_add_day:"新增日期卡片", cm_pick_day:"選一天", cm_add:"新增", cm_day_max:"最多 7 天，再新增會刪掉最早的那天。", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
     gym_sub:"點動作展開，可以記錄每次的組數、重量和 RPE", gym_add_routine:"＋ 新增課表", gym_add_group:"＋ 新增分組，例如「胸」（Enter）", gym_add_ex:"＋ 新增動作（Enter）",
-    gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_date:"日期", gym_new:"新→舊", gym_old:"舊→新", gym_sort_desc:"目前由新到舊，點一下改成由舊到新", gym_sort_asc:"目前由舊到新，點一下改成由新到舊", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
+    gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_date:"日期", gcal_title:"健身月曆", gcal_sub:"只顯示健身紀錄，和主畫面月曆分開", gcal_month:(n,d)=>`本月 ${d} 天 · ${n} 筆`, gcal_last:"上次", gcal_ago:n=>n===0?"今天":`${n} 天前`, gcal_never:"還沒練", gcal_times:n=>`本月 ${n} 次`, gcal_day_empty:"這天沒有健身紀錄", gcal_other:"其他", gcal_rest:n=>`已休息 ${n} 天`, gym_new:"新→舊", gym_old:"舊→新", gym_sort_desc:"目前由新到舊，點一下改成由舊到新", gym_sort_asc:"目前由舊到新，點一下改成由新到舊", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
     gym_history:"紀錄", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
     nav_home:"待辦", nav_review:"每日檢討", nav_money:"記帳",
@@ -435,7 +448,7 @@ const I18N = {
     ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
     wp_change:"Change cover", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"Delete this card", sl_title:"Type to filter, ↑↓ to choose, Enter to pick", sl_none:"No matching command", sl_clear:"Cancel this command", sl_todo:"To-do", sl_heading:"Heading", sl_text:"Text (no checkbox)", sl_divider:"Divider", sl_tomorrow:"Tomorrow", sl_to_day:d=>`Add to ${d}`, sl_board:n=>`Add to board: ${n}`, sl_proj:n=>`Add section: ${n}`, sl_review:"Open this day’s review", sl_today:"Due today", sl_nextweek:"Due next Monday", sl_due_set:d=>`Due: ${d}`, sl_marked:"Marked on the calendar", sl_to_board:"Added to the task board", sl_added_to:d=>`Added to ${d}`, cm_del_item:t=>`Delete “${t}”`, cm_add_item:"Add an item (Enter)", cm_add_item_to:n=>`Add an item to “${n}”`, cm_del_sec:n=>`Remove the “${n}” section from this day`, cm_unpin:n=>`Stop showing “${n}” every day`, cm_unpinned:"It won’t appear automatically now. Change it back in Project settings.", cm_add_sec:"Add a project section", cm_add_card:"Add a card back", cm_all_shown:"All cards are showing", cm_reset:"Restore default cards", cm_row_empty:"No cards here. Right-click to add them back.", cm_del_col:n=>`Delete the “${n}” column`, cm_add_col:"Add a column", cm_col_ph:"Column name, press Enter", cm_last_col:"Keep at least one column", cm_col_deleted:n=>`Deleted. Its tasks moved to “${n}”.`, cm_del_day:d=>`Delete the ${d} card`, cm_day_first:d=>`${d} will be added at the end. Calendar records stay.`, cm_add_day:"Add a day card", cm_pick_day:"Pick a day", cm_add:"Add", cm_day_max:"Up to 7 days. Adding more removes the earliest.", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
     gym_sub:"Open an exercise to log sets, weight and RPE", gym_add_routine:"+ New routine", gym_add_group:"+ New group, e.g. Chest (Enter)", gym_add_ex:"+ New exercise (Enter)",
-    gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_date:"Date", gym_new:"Newest", gym_old:"Oldest", gym_sort_desc:"Newest first. Click for oldest first", gym_sort_asc:"Oldest first. Click for newest first", gym_sets:"Sets×reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
+    gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_date:"Date", gcal_title:"Training calendar", gcal_sub:"Gym records only, separate from the main calendar", gcal_month:(n,d)=>`This month: ${d} days · ${n} sets logged`, gcal_last:"Last", gcal_ago:n=>n===0?"today":`${n}d ago`, gcal_never:"not yet", gcal_times:n=>`${n}× this month`, gcal_day_empty:"No gym records this day", gcal_other:"Other", gcal_rest:n=>`${n} rest days so far`, gym_new:"Newest", gym_old:"Oldest", gym_sort_desc:"Newest first. Click for oldest first", gym_sort_asc:"Oldest first. Click for newest first", gym_sets:"Sets×reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
     gym_history:"Records", gym_no_history:"No logs yet. Log one after training to compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
     gym_logged:"Logged", gym_need:"Fill in sets or weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
     nav_home:"To-dos", nav_review:"Daily review", nav_money:"Expenses",
@@ -507,7 +520,7 @@ const ICON = {
 const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
-  calMonth: ymd(new Date()).slice(0,7), calSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, cm:null, gymAsc:(()=>{ try{ return localStorage.getItem("home.gymAsc")==="1"; }catch(_){ return false; } })(), wpBusy:false, confirmDel:null,
+  calMonth: ymd(new Date()).slice(0,7), calSel: null, gcalMonth: ymd(new Date()).slice(0,7), gcalSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, cm:null, gymAsc:(()=>{ try{ return localStorage.getItem("home.gymAsc")==="1"; }catch(_){ return false; } })(), wpBusy:false, confirmDel:null,
   tasks:{}, days:{}, expenses:{}, settings:null,
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
@@ -532,6 +545,7 @@ function ymd(d){ const z=n=>String(n).padStart(2,"0"); return d.getFullYear()+"-
 function parse(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
 function addDays(s,n){ const d=parse(s); d.setDate(d.getDate()+n); return ymd(d); }
 function mondayOf(d){ const x=new Date(d); const w=(x.getDay()+6)%7; x.setDate(x.getDate()-w); return ymd(x); }
+function daysBetween(a,b){ return Math.round((parse(b)-parse(a))/864e5); }
 function md(s){ const d=parse(s); return (d.getMonth()+1)+"/"+d.getDate(); }
 function dow(s){ return T("dow", T("wd")[parse(s).getDay()]); }
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
@@ -779,7 +793,6 @@ function doneByDate(tasks){
     (d.items||[]).forEach(it=>{ if(it.d) push(it.dn||ds, {t:it.t, src:T("src_todo"), drag:{k:"dd",date:ds,pi:-1,id:it.id}}); });
     (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(it.d) push(it.dn||ds, {t:it.t, src:p.name, drag:{k:"dd",date:ds,pi,id:it.id}}); })); });
   tasks.forEach(x=>{ if(!x.done) return; const ds = x.doneAt ? ymd(new Date(x.doneAt)) : x.due; if (ds) push(ds, {t:x.title, src:T("src_board"), drag:{k:"dt",id:x.id}}); });
-  gymEntries().forEach(e=>push(e.date, {t:e.exName, src:T("src_gym"), drag:{k:"gl",month:e.date.slice(0,7),id:e.id}}));
   return by;
 }
 /* deadlines and key events that Adam marks himself (right-click a date) */
@@ -953,7 +966,42 @@ function viewGym(){
       <div class="gym-grid">${groups}
         <div class="card gcard ghost-card"><form class="add" data-act="gym-g-add"><input type="text" id="gym-g-new" placeholder="${T("gym_add_group")}" autocomplete="off"></form>
         ${r.groups.length?"":`<p class="empty mini">${T("gym_empty")}</p>`}</div>
-      </div>`:`<p class="empty">${T("gym_none")}</p>`}`;
+      </div>`:`<p class="empty">${T("gym_none")}</p>`}
+    ${viewGymCal(rs, all)}`;
+}
+/* training calendar: gym records only, its own month, not tied to the main calendar */
+const GHUES=[212,145,28,330,265,180,52,0];
+function viewGymCal(rs, all){
+  const [y,m]=S.gcalMonth.split("-").map(Number), t=today();
+  const cells=[]; let ds=mondayOf(new Date(y,m-1,1));
+  do { for (let i=0;i<7;i++){ cells.push(ds); ds=addDays(ds,1); } } while (parse(ds).getMonth()===m-1);
+  const exR={}; rs.forEach(r=>r.groups.forEach(g=>g.ex.forEach(x=>exR[x.id]=r.id)));
+  const rid=e=>rs.some(r=>r.id===e.routineId)?e.routineId:(exR[e.exId]||"_");
+  const hue=id=>{ const i=rs.findIndex(r=>r.id===id); return i<0?null:GHUES[i%GHUES.length]; };
+  const rname=id=>rs.find(r=>r.id===id)?.name||T("gcal_other");
+  const by={}; all.forEach(e=>{ const d=(by[e.date]=by[e.date]||{}); const k=rid(e); (d[k]=d[k]||[]).push(e); });
+  const chip=(k,n)=>{ const h=hue(k); return `<span class="gchip" ${h==null?"":`style="--h:${h}"`} title="${esc(rname(k))} · ${n}">${esc(rname(k))}<b>${n}</b></span>`; };
+  const mine=Object.keys(by).filter(d=>d.startsWith(S.gcalMonth)), mN=mine.reduce((s,d)=>s+Object.values(by[d]).flat().length,0);
+  const days=Object.keys(by).filter(d=>d<=t).sort(), lastAny=days[days.length-1];
+  const sum=rs.map(r=>{ const ds=Object.keys(by).filter(d=>by[d][r.id]&&d<=t).sort(), last=ds[ds.length-1], n=mine.filter(d=>by[d][r.id]).length;
+    return `<div class="gsum" style="--h:${hue(r.id)}"><span class="dot"></span><b>${esc(r.name)}</b><span class="sub">${last?`${T("gcal_last")} ${md(last)} · ${T("gcal_ago",daysBetween(last,t))}`:T("gcal_never")}</span><span class="sub">${T("gcal_times",n)}</span></div>`; }).join("");
+  const sel=S.gcalSel, sd=sel&&by[sel];
+  return `<section class="block" id="s-gcal">
+    <div class="sec-h"><h2>${L("gcal_title")} · ${T("cal_title",y,m)}</h2><span class="sub">${T("gcal_month",mN,mine.length)}${lastAny&&lastAny<t?` · ${T("gcal_rest",daysBetween(lastAny,t))}`:""}</span><span class="sp"></span>
+      <button class="ghost" data-act="gcalmonth" data-n="-1" aria-label="${T("prev_month")}">←</button><button class="ghost" data-act="gcalmonth" data-n="0">${T("this_month")}</button><button class="ghost" data-act="gcalmonth" data-n="1" aria-label="${T("next_month")}">→</button></div>
+    ${rs.length?`<div class="gsums">${sum}</div>`:""}
+    <div class="cal gcal">${T("wd_mon_first").map(w=>`<div class="wh">${w}</div>`).join("")}
+    ${cells.map(c=>{ const d=by[c]||{}, ks=Object.keys(d), n=ks.reduce((s,k)=>s+d[k].length,0);
+      return `<div role="button" tabindex="0" class="cell gcell ${parse(c).getMonth()!==m-1?"out":""} ${c===t?"today":""} ${n?"trained":""} ${c===sel?"sel":""}" data-act="gcal-sel" data-date="${c}" data-drop-date="${c}" aria-label="${c}">
+        <span class="n"><span>${parse(c).getDate()}</span></span>
+        ${ks.slice(0,3).map(k=>chip(k,d[k].length)).join("")}${ks.length>3?`<span class="more">+${ks.length-3}</span>`:""}
+      </div>`; }).join("")}
+    </div>
+    ${sel?`<div class="gday"><div class="pop-h"><b>${md(sel)} ${dow(sel)}</b><span class="sp"></span><button class="icon-btn" data-act="gcal-sel" data-date="${sel}" aria-label="close">✕</button></div>
+      ${sd?Object.keys(sd).map(k=>`<h4>${chip(k,sd[k].length)}</h4><table><tbody>${sd[k].map(e=>`<tr><td>${esc(e.exName)}</td><td>${esc(e.sets||"")}</td><td>${esc(e.weight||"")}</td><td>${esc(e.rpe?"RPE "+e.rpe:"")}</td><td><input type="date" class="mv" value="${e.date}" data-act="mv-date" data-drag="${esc(JSON.stringify({k:"gl",month:e.date.slice(0,7),id:e.id}))}" aria-label="${T("move_date")}"></td></tr>`).join("")}</tbody></table>`).join(""):`<p class="empty mini">${T("gcal_day_empty")}</p>`}
+    </div>`:""}
+    <p class="sub" style="margin-top:8px">${L("gcal_sub")}</p>
+  </section>`;
 }
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
 
@@ -1176,6 +1224,8 @@ document.addEventListener("click", e=>{
   else if (act==="proj-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date); d.projects.splice(+b.dataset.pi,1); save("days/"+d.date,d,300); render(); }
   else if (act==="days"){ const n=+b.dataset.n; render._scrolled=false; saveDayCards(n===0 ? dayDefault() : dayCards().map(d=>addDays(d,n))); }
   else if (act==="week"){ const n=+b.dataset.n; S.weekStart=n===0?mondayOf(new Date()):addDays(S.weekStart,n); render._scrolled=n!==0; render(); }
+  else if (act==="gcalmonth"){ const n=+b.dataset.n; if(n===0) S.gcalMonth=today().slice(0,7); else { const d=parse(S.gcalMonth+"-01"); d.setMonth(d.getMonth()+n); S.gcalMonth=ymd(d).slice(0,7); } S.gcalSel=null; render(); }
+  else if (act==="gcal-sel"){ S.gcalSel = S.gcalSel===b.dataset.date ? null : b.dataset.date; render(); }
   else if (act==="calmonth"){ const n=+b.dataset.n; if(n===0) S.calMonth=today().slice(0,7); else { const d=parse(S.calMonth+"-01"); d.setMonth(d.getMonth()+n); S.calMonth=ymd(d).slice(0,7); } S.calSel=null; render(); }
   else if (act==="cal-sel"){ if (e.target.closest("#calPop") && !e.target.closest(".icon-btn")) return; S.ctx=null; S.calSel = S.calSel===b.dataset.date ? null : b.dataset.date; render(); }
   else if (act==="proj-remove"){ const st=clone(settings()); st.projects=st.projects.filter(p=>p!==b.dataset.name); st.pinned=pinned().filter(p=>p!==b.dataset.name); save("settings/main",st,50); render(); }
@@ -1249,7 +1299,7 @@ document.addEventListener("keydown", e=>{ const c=e.target; if ((e.key==="Enter"
 document.getElementById("wpModal").addEventListener("click", e=>{ if (e.target.id==="wpModal"){ S.wpOpen=false; render(); } });
 
 /* right-click a calendar date to mark it; click elsewhere or Esc closes menus */
-document.addEventListener("contextmenu", e=>{ const c=e.target.closest && e.target.closest(".cell[data-drop-date]"); if(!c) return; e.preventDefault();
+document.addEventListener("contextmenu", e=>{ const c=e.target.closest && e.target.closest(".cell[data-drop-date]"); if(!c || c.classList.contains("gcell")) return; e.preventDefault();
   const g=document.getElementById("calGrid").getBoundingClientRect(); S.calSel=null; S.ctx={date:c.dataset.dropDate, x:Math.round(e.clientX-g.left), y:Math.round(e.clientY-g.top)}; render(); });
 document.addEventListener("pointerdown", e=>{ if (S.ctx && !e.target.closest("#ctxMenu")){ S.ctx=null; render(); return; }
   if (S.calSel && !e.target.closest("#calPop") && !e.target.closest(".cell")){ S.calSel=null; setTimeout(render,0); } });
