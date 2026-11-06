@@ -274,6 +274,8 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
 .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .chip{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:5px 14px;cursor:pointer;font-size:14px}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.chip[draggable]{cursor:grab}.chip.dragging{opacity:.4}
+.chip.ins-l{box-shadow:-3px 0 0 var(--accent)}.chip.ins-r{box-shadow:3px 0 0 var(--accent)}
 .chip-add{margin:0}.chip-add input{width:10em}
 .gym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start}
 .gcard{padding:12px 14px}
@@ -820,7 +822,7 @@ function viewGym(){
   const all=gymEntries(), t=today();
   const hist=exId=>all.filter(e=>e.exId===exId).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:(b.ts||0)-(a.ts||0));
   const todayN=all.filter(e=>e.date===t).length;
-  const chips=rs.map(x=>`<button class="chip" data-act="gym-r" data-id="${x.id}" aria-pressed="${x.id===S.gymR}">${esc(x.name)}</button>`).join("");
+  const chips=rs.map(x=>`<button class="chip" data-act="gym-r" data-id="${x.id}" data-rt="${x.id}" draggable="true" aria-pressed="${x.id===S.gymR}">${esc(x.name)}</button>`).join("");
   const exRow=(g,x)=>{ const h=hist(x.id), last=h[0], open=!!S.gymOpen[x.id];
     return `<li class="ex ${open?"open":""}">
       <button class="ex-sum" data-act="gym-open" data-id="${x.id}" aria-expanded="${open}"><span class="tw">▸</span><span class="ex-name">${esc(x.name)}</span>
@@ -1132,6 +1134,17 @@ document.addEventListener("keydown", e=>{ if (e.key==="Escape" && (S.ctx||S.calS
 
 /* drag tasks between buckets */
 let dragId=null;
+/* drag routine chips to reorder */
+let rtDrag=null;
+const rtSide=(c,e)=>{ const b=c.getBoundingClientRect(); return e.clientX<b.left+b.width/2?"l":"r"; };
+const rtClear=()=>document.querySelectorAll(".chip.ins-l,.chip.ins-r,.chip.dragging").forEach(x=>x.classList.remove("ins-l","ins-r","dragging"));
+document.addEventListener("dragstart", e=>{ const c=e.target.closest&&e.target.closest("[data-rt]"); if(!c) return; rtDrag=c.dataset.rt; c.classList.add("dragging"); e.dataTransfer.effectAllowed="move"; try{e.dataTransfer.setData("text/plain",rtDrag);}catch(_){} });
+document.addEventListener("dragover", e=>{ const c=rtDrag && e.target.closest && e.target.closest("[data-rt]"); if(!c) return; e.preventDefault(); document.querySelectorAll(".chip.ins-l,.chip.ins-r").forEach(x=>x.classList.remove("ins-l","ins-r")); if(c.dataset.rt!==rtDrag) c.classList.add("ins-"+rtSide(c,e)); });
+document.addEventListener("drop", e=>{ const c=rtDrag && e.target.closest && e.target.closest("[data-rt]"); if(!c) return; e.preventDefault();
+  const from=rtDrag, to=c.dataset.rt, side=rtSide(c,e); rtDrag=null; rtClear(); if(from===to) return;
+  const pl=clone(gymPlan()), rs=pl.routines, i=rs.findIndex(r=>r.id===from); if(i<0) return; const [m]=rs.splice(i,1);
+  let j=rs.findIndex(r=>r.id===to); if(j<0) return; if(side==="r") j++; rs.splice(j,0,m); savePlan(pl); render(); });
+document.addEventListener("dragend", ()=>{ rtDrag=null; rtClear(); });
 document.addEventListener("dragstart", e=>{ const li=e.target.closest&&e.target.closest("[data-task]"); if(!li) return; dragId=li.dataset.task; e.dataTransfer.effectAllowed="move"; try{e.dataTransfer.setData("text/plain",dragId);}catch(_){} });
 document.addEventListener("dragover", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(!c||!dragId) return; e.preventDefault(); document.querySelectorAll(".col.drop").forEach(x=>x!==c&&x.classList.remove("drop")); c.classList.add("drop"); });
 document.addEventListener("dragleave", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(c && !c.contains(e.relatedTarget)) c.classList.remove("drop"); });
