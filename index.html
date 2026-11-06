@@ -218,6 +218,17 @@ html{-webkit-text-size-adjust:100%}
 .hero-btns{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:14px;z-index:1;display:flex;gap:6px;opacity:0;transition:opacity .15s}
 .hero:hover .hero-btns,.hero-btns:focus-within{opacity:1}
 @media (hover:none){.hero-btns{opacity:1}}
+.hero.adjusting .hero-btns{opacity:1}.hero.adjusting img{cursor:grab;touch-action:none;user-select:none;-webkit-user-drag:none}.hero.adjusting img:active{cursor:grabbing}.hero.adjusting::after{display:none}
+.hero-hint{align-self:center;font-size:12.5px;padding:5px 10px;border-radius:7px;background:rgba(0,0,0,.45);color:#fff}
+.hero-btns button.on{background:var(--accent);color:#fff}
+.gev{display:block;font-size:12px;line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 5px;margin:1px 0;border-radius:4px;background:hsl(217 70% 95%);color:hsl(217 55% 32%)}
+.gev b{font-weight:600}.gev.holiday{background:transparent;color:var(--muted);padding-left:0}
+.cal-pop .gev{display:inline-block;flex:0 0 auto;margin-right:6px}
+:root[data-theme="dark"] .gev{background:hsl(217 30% 22%);color:hsl(217 70% 85%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gev{background:hsl(217 30% 22%);color:hsl(217 70% 85%)}}
+.gc-st{font-size:12px;color:var(--muted);margin-left:10px;display:inline-flex;align-items:center;gap:5px}.gc-st.warn{color:hsl(20 70% 42%)}
+.gdot{width:7px;height:7px;border-radius:50%;background:hsl(217 70% 55%);display:inline-block}
+.gc-chk{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);margin-top:6px;width:100%}
 .hero-btns button{border:0;border-radius:7px;padding:5px 11px;font-size:12.5px;cursor:pointer;background:rgba(255,255,255,.82);color:#222;backdrop-filter:blur(6px)}
 .wp-modal{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.35);display:grid;place-items:center;padding:16px}
 .wp-modal[hidden]{display:none}
@@ -343,7 +354,7 @@ const I18N = {
     pop_no_review:"這天沒有寫檢討。", pop_open_review:"打開這天的每日檢討", ctx_deadline:"標記截止日", ctx_event:"標記重大事件",
     nav_gym:"健身計劃", src_gym:"健身", k_deadline:"截止日", k_event:"重大事件", marks_title:"截止日與重大事件", marks_empty:"這天沒有標記。",
     ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
-    wp_change:"更換桌布", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
+    wp_change:"更換桌布", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
     gym_sub:"點動作展開，可以記錄每次的組數、重量和 RPE", gym_add_routine:"＋ 新增課表", gym_add_group:"＋ 新增分組，例如「胸」（Enter）", gym_add_ex:"＋ 新增動作（Enter）",
     gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
     gym_history:"最近紀錄", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
@@ -400,7 +411,7 @@ const I18N = {
     pop_no_review:"No review written this day.", pop_open_review:"Open this day's review", ctx_deadline:"Mark a deadline", ctx_event:"Mark a key event",
     nav_gym:"Workout plan", src_gym:"Workout", k_deadline:"Deadline", k_event:"Key event", marks_title:"Deadlines & key events", marks_empty:"Nothing marked.",
     ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
-    wp_change:"Change cover", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
+    wp_change:"Change cover", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
     gym_sub:"Open an exercise to log sets, weight and RPE", gym_add_routine:"+ New routine", gym_add_group:"+ New group, e.g. Chest (Enter)", gym_add_ex:"+ New exercise (Enter)",
     gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_sets:"Sets×reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
     gym_history:"Recent", gym_no_history:"No logs yet. Log one after training to compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
@@ -474,7 +485,7 @@ const ICON = {
 const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
-  calMonth: ymd(new Date()).slice(0,7), calSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpBusy:false, confirmDel:null, viewStart: addDays(ymd(new Date()),-1),
+  calMonth: ymd(new Date()).slice(0,7), calSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, wpBusy:false, confirmDel:null, viewStart: addDays(ymd(new Date()),-1),
   tasks:{}, days:{}, expenses:{}, settings:null,
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
@@ -736,32 +747,76 @@ function marksByDate(tasks){
   return by;
 }
 const dragAttr = d => `draggable="true" data-drag="${esc(JSON.stringify(d))}"`;
+/* ---------- Google Calendar (read; optional write when marking) ---------- */
+const GC="Google Calendar", GC_CALS=[{id:null, kind:"own"}, {id:"zh-tw.taiwan#holiday@group.v.calendar.google.com", kind:"holiday"}];
+const G={mcp:undefined, range:null, unsub:[], data:{}, err:null, busy:false};
+async function gcMcp(){ if (G.mcp===undefined){ try{ G.mcp = await window.claude?.use?.("mcp") || null; }catch(e){ G.mcp=null; } } return G.mcp; }
+function gcEvDates(ev){ const s=ev.start||{}, e=ev.end||{};
+  if (s.date){ const out=[]; let d=s.date; const end=e.date||addDays(s.date,1); for(let i=0;i<62 && d<end;i++){ out.push(d); d=addDays(d,1); } return out; }
+  if (s.dateTime) return [ymd(new Date(s.dateTime))]; return []; }
+function gcByDate(){ const by={};
+  for (const [k,list] of Object.entries(G.data)) for (const ev of list){ if(ev.status==="cancelled") continue;
+    const tm = ev.start?.dateTime ? new Date(ev.start.dateTime).toTimeString().slice(0,5) : "";
+    for (const d of gcEvDates(ev)) (by[d]=by[d]||[]).push({t:ev.summary||T("gc_untitled"), tm, link:ev.htmlLink, kind:k.startsWith("holiday")?"holiday":"own"}); }
+  for (const k in by) by[k].sort((a,b)=>(a.kind==="holiday"?-1:0)-(b.kind==="holiday"?-1:0) || a.tm.localeCompare(b.tm));
+  return by; }
+function gcErrKind(e){ const c=e&&e.code; return ["needs_reauth","server_not_connected","selection_required","server_not_found"].includes(c)?"conn" : c==="approval_required"||c==="not_in_manifest"||c==="consent_required"?"perm" : ["not_granted","capability_disabled","capability_removed"].includes(c)?"off" : "fail"; }
+async function gcWatch(from, to){
+  const key=from+"|"+to; if (G.range===key) return; G.range=key;
+  const m=await gcMcp(); if (!m || G.range!==key) return;
+  G.unsub.forEach(u=>{ try{u();}catch(_){} }); G.unsub=[]; G.data={};
+  GC_CALS.forEach(c=>{ const input={startTime:from+"T00:00:00", endTime:to+"T00:00:00", pageSize:250, orderBy:"startTime"}; if(c.id) input.calendarId=c.id;
+    const k=c.kind+":"+(c.id||"primary");
+    G.unsub.push(m.watchTool(GC,"list_events",input, ev=>{
+      if (ev.type==="data"){ G.data[k]=(ev.result.payload&&ev.result.payload.events)||[]; G.err=null; }
+      else { const kd=gcErrKind(ev.error); if (kd!=="fail") delete G.data[k]; if (c.kind==="own" || kd!=="fail") G.err=kd; }
+      softRender(); }, {refetchInterval:300000, cache:{staleTime:60000, gcTime:3600000}})); });
+}
+async function gcAllow(){ const m=await gcMcp(); if(!m) return; G.busy=true; render();
+  try{ await m.callTool(GC,"list_events",{pageSize:1}); G.err=null; const r=G.range; G.range=null; const [a,b]=r.split("|"); await gcWatch(a,b); }
+  catch(e){ G.err=gcErrKind(e); } G.busy=false; render(); }
+async function gcCreate(date, title, kind){ const m=await gcMcp(); if(!m) { toast(T("gc_off")); return null; }
+  try{ const r=await m.callTool(GC,"create_event",{summary:(kind==="deadline"?"⚑ ":"★ ")+title, allDay:true, startTime:date+"T00:00:00", endTime:addDays(date,1)+"T00:00:00", description:"HOME"});
+    try{ await m.invalidate(GC,"list_events"); }catch(_){}
+    toast(T("gc_added")); return (r.payload&&r.payload.id)||null; }
+  catch(e){ const k=gcErrKind(e); toast(k==="conn"?T("gc_conn"):k==="perm"?T("gc_perm"):T("gc_add_fail")); return null; } }
+/* a mark also sent to Google shows once, as the mark */
+function gcDedup(gl, marks){ const own=new Set(marks.map(x=>(x.kind==="deadline"?"⚑ ":"★ ")+x.t)); return gl.filter(x=>!own.has(x.t)); }
+function gcStatus(){
+  if (G.mcp===null || G.err==="off") return "";
+  if (G.err==="conn") return `<span class="gc-st warn">${T("gc_conn")}</span>`;
+  if (G.err==="perm") return `<button class="ghost mini" data-act="gc-allow" ${G.busy?"disabled":""}>${T("gc_allow")}</button>`;
+  if (G.err==="fail") return `<span class="gc-st warn">${T("gc_fail")}</span>`;
+  return Object.keys(G.data).length?`<span class="gc-st"><i class="gdot"></i>${T("gc_on")}</span>`:"";
+}
+function gcPref(v){ try{ if(v===undefined) return localStorage.getItem("home.gcAlso")==="1"; localStorage.setItem("home.gcAlso", v?"1":"0"); }catch(_){ return false; } }
 function viewDoneCalendar(tasks){
   const [y,m]=S.calMonth.split("-").map(Number);
   const cells=[]; let ds=mondayOf(new Date(y,m-1,1));
   do { for (let i=0;i<7;i++){ cells.push(ds); ds=addDays(ds,1); } } while (parse(ds).getMonth()===m-1);
-  const by=doneByDate(tasks), mk=marksByDate(tasks), t=today();
+  const by=doneByDate(tasks), mk=marksByDate(tasks), gc=gcByDate(), t=today();
+  gcWatch(cells[0], addDays(cells[cells.length-1],1));
   const total=Object.entries(by).filter(([k])=>k.startsWith(S.calMonth)).reduce((s,[,v])=>s+v.length,0);
   const sel=S.calSel;
   const pill = x => `<span class="mark ${x.kind}" ${dragAttr(x.drag)} title="${esc((x.kind==="deadline"?T("k_deadline"):T("k_event"))+" · "+x.t)}">${x.kind==="deadline"?"⚑":"★"} ${esc(x.t)}</span>`;
   return `<section class="block" id="s-cal">
-    <div class="sec-h"><h2>${L("sec_cal")} · ${T("cal_title",y,m)}</h2><span class="sub">${T("cal_month_total",total)}</span><span class="sp"></span>
+    <div class="sec-h"><h2>${L("sec_cal")} · ${T("cal_title",y,m)}</h2><span class="sub">${T("cal_month_total",total)}</span>${gcStatus()}<span class="sp"></span>
       <button class="ghost" data-act="calmonth" data-n="-1" aria-label="${T("prev_month")}">←</button><button class="ghost" data-act="calmonth" data-n="0">${T("this_month")}</button><button class="ghost" data-act="calmonth" data-n="1" aria-label="${T("next_month")}">→</button></div>
     <div class="cal" id="calGrid">${T("wd_mon_first").map(w=>`<div class="wh">${w}</div>`).join("")}
-    ${cells.map(c=>{ const list=by[c]||[], marks=mk[c]||[];
+    ${cells.map(c=>{ const list=by[c]||[], marks=mk[c]||[], gl=gcDedup(gc[c]||[], marks);
       return `<div role="button" tabindex="0" class="cell ${parse(c).getMonth()!==m-1?"out":""} ${c===t?"today":""} ${list.length?"has":""} ${c===sel?"sel":""}" data-act="cal-sel" data-drop-date="${c}" data-date="${c}" aria-label="${c}">
         <span class="n"><span>${parse(c).getDate()}</span>${list.length?`<em>✓${list.length}</em>`:""}</span>
-        ${(()=>{ const cap=3, shown=marks.slice(0,cap), room=cap-shown.length, more=marks.length-shown.length+Math.max(0,list.length-room);
-          return shown.map(pill).join("") + list.slice(0,room).map(x=>`<span class="ln" ${dragAttr(x.drag)} title="${esc(x.t)}">${esc(x.t)}</span>`).join("") + (more>0?`<span class="more">+${more}</span>`:""); })()}
+        ${(()=>{ const cap=3, shown=marks.slice(0,cap), gs=gl.slice(0,cap-shown.length), room=cap-shown.length-gs.length, more=marks.length+gl.length-shown.length-gs.length+Math.max(0,list.length-room);
+          return shown.map(pill).join("") + gs.map(x=>`<span class="gev ${x.kind}" title="${esc((x.tm?x.tm+" ":"")+x.t)}">${x.tm?`<b>${x.tm}</b> `:""}${esc(x.t)}</span>`).join("") + list.slice(0,room).map(x=>`<span class="ln" ${dragAttr(x.drag)} title="${esc(x.t)}">${esc(x.t)}</span>`).join("") + (more>0?`<span class="more">+${more}</span>`:""); })()}
       </div>`; }).join("")}
-      ${sel?calDetail(sel, by[sel]||[], mk[sel]||[]):""}
+      ${sel?calDetail(sel, by[sel]||[], mk[sel]||[], gcDedup(gc[sel]||[], mk[sel]||[])):""}
       ${S.ctx?ctxMenu():""}
     </div>
     <p class="sub" style="margin-top:8px">${L("cal_note")}</p>
   </section>`;
 }
 /* small window for one day: marks, what got done, and that day's review */
-function calDetail(sel, list, marks){
+function calDetail(sel, list, marks, gl=[]){
   const mv = d => `<input type="date" class="mv" value="${sel}" data-act="mv-date" data-drag="${esc(JSON.stringify(d))}" title="${T("move_date")}" aria-label="${T("move_date")}">`;
   const d=day(sel), r=d.review||{}, st=dayStats(d);
   const snip=[["f_done",r.done],["f_improve",r.improve],["f_tomorrow",r.tomorrow],["f_free",r.free]].filter(([,v])=>v&&v.trim());
@@ -769,6 +824,7 @@ function calDetail(sel, list, marks){
     <div class="pop-h"><b>${md(sel)} ${dow(sel)}</b>${d.mood?`<span class="pop-mood">${T("mood_label")} ${d.mood}/5</span>`:""}<span class="sp"></span><button class="icon-btn" data-act="cal-sel" data-date="${sel}" aria-label="close">✕</button></div>
     <div class="pop-body">
       ${marks.length?`<ul class="list">${marks.map(x=>`<li class="item"><span class="mark ${x.kind}">${x.kind==="deadline"?"⚑":"★"}</span><span class="t">${esc(x.t)}</span>${mv(x.drag)}<button class="icon-btn" data-act="ev-del" data-id="${x.id}" title="${T("del")}">✕</button></li>`).join("")}</ul>`:""}
+      ${gl.length?`<h4>${T("gc_title")}</h4><ul class="list">${gl.map(x=>`<li class="item"><span class="gev ${x.kind}">${x.tm||T("gc_allday")}</span><span class="t">${esc(x.t)}</span>${x.link?`<a class="src" href="${esc(x.link)}" target="_blank" rel="noopener">${T("gc_open")} ↗</a>`:""}</li>`).join("")}</ul>`:""}
       <h4>${T("cal_detail",md(sel))}${st.n?` <span class="sub">· ${T("day_done",st.k,st.n)}</span>`:""}</h4>
       ${list.length?`<ul class="list">${list.map(x=>`<li class="item"><span class="t">✓ ${esc(x.t)}</span><span class="src">${esc(x.src)}</span>${mv(x.drag)}</li>`).join("")}</ul>`:`<p class="empty mini">${T("cal_empty_day")}</p>`}
       <h4>${T("nav_review")}</h4>
@@ -782,7 +838,7 @@ function ctxMenu(){
   const c=S.ctx;
   return `<div class="ctx" id="ctxMenu" style="left:${c.x}px;top:${c.y}px" role="menu">
     <div class="ctx-h">${md(c.date)} ${dow(c.date)}</div>
-    ${c.kind?`<form class="add" data-act="ev-add" data-date="${c.date}" data-kind="${c.kind}"><span class="mark ${c.kind}">${c.kind==="deadline"?"⚑":"★"}</span><input type="text" id="ev-title" placeholder="${T("ev_ph")}" autocomplete="off"></form>`
+    ${c.kind?`<form class="add" data-act="ev-add" data-date="${c.date}" data-kind="${c.kind}"><span class="mark ${c.kind}">${c.kind==="deadline"?"⚑":"★"}</span><input type="text" id="ev-title" placeholder="${T("ev_ph")}" autocomplete="off">${G.mcp&&G.err!=="off"?`<label class="gc-chk"><input type="checkbox" id="ev-gc" ${gcPref()?"checked":""}> ${T("gc_also")}</label>`:""}</form>`
       :`<button role="menuitem" data-act="ctx-kind" data-kind="deadline"><span class="mark deadline">⚑</span> ${T("ctx_deadline")}</button>
         <button role="menuitem" data-act="ctx-kind" data-kind="event"><span class="mark event">★</span> ${T("ctx_event")}</button>`}
   </div>`;
@@ -865,8 +921,8 @@ function viewGym(){
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
 
 /* ---------- covers & tint ---------- */
-const WPS = [{"file": "bg/01.jpg", "name": "冰河谷", "hue": 197, "sat": 33}, {"file": "bg/02.jpg", "name": "晨光", "hue": 19, "sat": 38}, {"file": "bg/03.jpg", "name": "霧林", "hue": 142, "sat": 20}, {"file": "bg/04.jpg", "name": "暮色", "hue": 300, "sat": 26}, {"file": "bg/05.jpg", "name": "秋嶺", "hue": 26, "sat": 47}, {"file": "bg/06.jpg", "name": "星夜", "hue": 218, "sat": 56}, {"file": "bg/07.jpg", "name": "湖光", "hue": 198, "sat": 25}, {"file": "bg/08.jpg", "name": "雪原", "hue": 206, "sat": 17}, {"file": "bg/09.jpg", "name": "碧湖黃昏", "hue": 178, "sat": 31}, {"file": "bg/10.jpg", "name": "薰衣草霧", "hue": 260, "sat": 22}, {"file": "bg/11.jpg", "name": "楓湖", "hue": 14, "sat": 40, "pos": 74}, {"file": "bg/12.jpg", "name": "雪峰", "hue": 210, "sat": 24, "pos": 36}, {"file": "bg/13.jpg", "name": "海岸晨霧", "hue": 200, "sat": 16, "pos": 45}, {"file": "bg/14.jpg", "name": "海峽秋色", "hue": 205, "sat": 34, "pos": 50}, {"file": "bg/15.jpg", "name": "城市雲海", "hue": 212, "sat": 16, "pos": 78}];
-const WP_DEFAULT = {home:"bg/01.jpg", review:"bg/03.jpg", money:"bg/07.jpg", gym:"bg/05.jpg"};
+const WPS = [{"file": "bg/11.jpg", "name": "楓湖", "hue": 14, "sat": 40, "pos": 74}, {"file": "bg/12.jpg", "name": "雪峰", "hue": 210, "sat": 24, "pos": 36}, {"file": "bg/13.jpg", "name": "海岸晨霧", "hue": 200, "sat": 16, "pos": 45}, {"file": "bg/14.jpg", "name": "海峽秋色", "hue": 205, "sat": 34, "pos": 50}, {"file": "bg/15.jpg", "name": "城市雲海", "hue": 212, "sat": 16, "pos": 78}].map(w=>({...w, thumb:w.file.replace("bg/","bg/t/")}));
+const WP_DEFAULT = {home:"bg/11.jpg", review:"bg/13.jpg", money:"bg/14.jpg", gym:"bg/12.jpg"};
 function wpList(){ return [...WPS.map(w=>({...w, src:w.file})), ...((settings().customWps)||[]).map(w=>({...w, src:w.url, file:w.url, custom:true}))]; }
 function wpFor(tab){ const key=((settings().wp)||{})[tab] || WP_DEFAULT[tab] || WPS[0].file; return wpList().find(w=>w.file===key) || {...WPS[0], src:WPS[0].file}; }
 const tintEl=document.createElement("style"); document.body.appendChild(tintEl);
@@ -878,19 +934,24 @@ function applyTint(h,s){
 }
 function renderHero(){
   const w=wpFor(S.tab), img=document.getElementById("heroImg");
-  if (img.getAttribute("src")!==w.src) img.setAttribute("src", w.src); img.style.objectPosition=`50% ${w.pos??50}%`;
+  if (img.getAttribute("src")!==w.src) img.setAttribute("src", w.src);
+  const ps = S.wpAdj ? S.wpAdj.pos : wpPos(w); img.style.objectPosition=`${ps[0]}% ${ps[1]}%`;
+  document.getElementById("hero").classList.toggle("adjusting", !!S.wpAdj);
   applyTint(w.hue, w.sat);
-  document.getElementById("heroBtns").innerHTML=`<button data-act="wp-open">${T("wp_change")}</button><button data-act="wp-next">${T("wp_random")}</button>`;
+  document.getElementById("heroBtns").innerHTML = S.wpAdj
+    ? `<span class="hero-hint">${T("wp_adjust_hint")}</span><button data-act="wp-adj-cancel">${T("wp_adjust_cancel")}</button><button class="on" data-act="wp-adj-save">${T("wp_adjust_done")}</button>`
+    : `<button data-act="wp-adj">${T("wp_adjust")}</button><button data-act="wp-open">${T("wp_change")}</button><button data-act="wp-next">${T("wp_random")}</button>`;
   const m=document.getElementById("wpModal");
   m.hidden=!S.wpOpen;
   if (S.wpOpen){ const cur=wpFor(S.tab).file;
     m.innerHTML=`<div class="wp-box" role="dialog" aria-modal="true" aria-label="${T("wp_title")}">
       <div class="sec-h"><h2>${T("wp_title")}</h2><span class="sp"></span><button class="icon-btn" data-act="wp-close" aria-label="close">✕</button></div>
       <p class="sub" style="margin:0 0 12px">${T("wp_hint")}</p>
-      <div class="wp-grid">${wpList().map(x=>`<div class="wp-item ${x.file===cur?"on":""}"><button class="wp-pick" data-act="wp-pick" data-file="${esc(x.file)}" aria-label="${esc(x.name)}"><img src="${esc(x.src)}" alt="" loading="lazy"><span>${esc(x.name)}</span></button>${x.custom?`<button class="icon-btn wp-del" data-act="wp-del" data-file="${esc(x.file)}" title="${T("del")}">✕</button>`:""}</div>`).join("")}
+      <div class="wp-grid">${wpList().map(x=>`<div class="wp-item ${x.file===cur?"on":""}"><button class="wp-pick" data-act="wp-pick" data-file="${esc(x.file)}" aria-label="${esc(x.name)}"><img src="${esc(x.thumb||x.src)}" alt="" loading="lazy"><span>${esc(x.name)}</span></button>${x.custom?`<button class="icon-btn wp-del" data-act="wp-del" data-file="${esc(x.file)}" title="${T("del")}">✕</button>`:""}</div>`).join("")}
         <label class="wp-item wp-up"><input type="file" accept="image/*" id="wpFile" hidden><span>${S.wpBusy?T("wp_uploading"):"＋ "+T("wp_upload")}</span></label>
       </div></div>`; }
 }
+function wpPos(w){ const o=((settings().wpPos)||{})[w.file]; return o || [50, w.pos??50]; }
 function setWp(file){ const st=clone(settings()); st.wp={...(st.wp||{}), [S.tab]:file}; save("settings/main",st,50); render(); }
 function hueOf(src){ return new Promise(res=>{ const im=new Image(); im.onload=()=>{ try{ const c=document.createElement("canvas"); c.width=60; c.height=24; const x=c.getContext("2d"); x.drawImage(im,0,0,60,24); const d=x.getImageData(0,0,60,24).data; let sx=0,sy=0,ws=0,ss=0;
   for(let i=0;i<d.length;i+=4){ const r=d[i]/255,g=d[i+1]/255,b=d[i+2]/255, mx=Math.max(r,g,b), mn=Math.min(r,g,b), s=mx?(mx-mn)/mx:0; let h=0; if(mx!==mn){ h= mx===r?((g-b)/(mx-mn))%6 : mx===g?(b-r)/(mx-mn)+2 : (r-g)/(mx-mn)+4; h*=60; } const w=s*mx+0.001; sx+=Math.cos(h*Math.PI/180)*w; sy+=Math.sin(h*Math.PI/180)*w; ss+=s*w; ws+=w; }
@@ -994,7 +1055,10 @@ document.addEventListener("submit", e=>{
     inp.value=""; render();
   } else if (act==="ev-add"){
     const inp=document.getElementById("ev-title"), title=inp.value.trim(); if(!title) return;
-    const id=uid(); save("events/"+id,{id,date:f.dataset.date,title,kind:f.dataset.kind||"deadline"},50); inp.value=""; S.ctx=null; render();
+    const id=uid(), kind=f.dataset.kind||"deadline", date=f.dataset.date, cb=document.getElementById("ev-gc"), toG=!!(cb&&cb.checked);
+    if (cb) gcPref(toG);
+    save("events/"+id,{id,date,title,kind},50); inp.value=""; S.ctx=null; render();
+    if (toG) gcCreate(date,title,kind).then(gid=>{ if(gid){ const e=(S.events||{})[id]||{id,date,title,kind}; save("events/"+id,{...e,gcalId:gid},50); } });
   } else if (act==="gym-r-add"){
     const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return;
     const pl=clone(gymPlan()), id=uid(); pl.routines.push({id,name:n,groups:[]}); savePlan(pl); S.gymR=id; inp.value=""; render();
@@ -1036,6 +1100,10 @@ document.addEventListener("click", e=>{
   else if (act==="gym-g-del"){ planEdit((pl,r)=>{ r.groups=r.groups.filter(g=>g.id!==b.dataset.g); }); }
   else if (act==="gym-ex-del"){ planEdit((pl,r)=>{ const g=r.groups.find(g=>g.id===b.dataset.g); g.ex=g.ex.filter(x=>x.id!==b.dataset.x); }); }
   else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
+  else if (act==="gc-allow"){ gcAllow(); }
+  else if (act==="wp-adj"){ S.wpAdj={pos:[...wpPos(wpFor(S.tab))]}; render(); }
+  else if (act==="wp-adj-cancel"){ S.wpAdj=null; render(); }
+  else if (act==="wp-adj-save"){ const w=wpFor(S.tab), st=clone(settings()); st.wpPos={...(st.wpPos||{}), [w.file]:S.wpAdj.pos.map(v=>Math.round(v*10)/10)}; S.wpAdj=null; save("settings/main",st,50); render(); }
   else if (act==="wp-open"){ S.wpOpen=true; render(); }
   else if (act==="wp-close"){ S.wpOpen=false; render(); }
   else if (act==="wp-pick"){ S.wpOpen=false; setWp(b.dataset.file); }
@@ -1134,6 +1202,16 @@ document.addEventListener("keydown", e=>{ if (e.key==="Escape" && (S.ctx||S.calS
 
 /* drag tasks between buckets */
 let dragId=null;
+/* drag the cover image to choose which part shows */
+let wpDrag=null;
+document.addEventListener("pointerdown", e=>{ if(!S.wpAdj || e.target.id!=="heroImg") return; e.preventDefault();
+  const img=e.target, hw=img.clientWidth, hh=img.clientHeight, nw=img.naturalWidth||1, nh=img.naturalHeight||1, sc=Math.max(hw/nw, hh/nh);
+  wpDrag={x:e.clientX, y:e.clientY, p:[...S.wpAdj.pos], ox:nw*sc-hw, oy:nh*sc-hh, img}; img.setPointerCapture?.(e.pointerId); });
+document.addEventListener("pointermove", e=>{ if(!wpDrag) return; const d=wpDrag, cl=v=>Math.max(0,Math.min(100,v));
+  const x = d.ox>1 ? cl(d.p[0]-(e.clientX-d.x)/d.ox*100) : d.p[0], y = d.oy>1 ? cl(d.p[1]-(e.clientY-d.y)/d.oy*100) : d.p[1];
+  S.wpAdj.pos=[x,y]; d.img.style.objectPosition=`${x}% ${y}%`; });
+document.addEventListener("pointerup", ()=>{ wpDrag=null; });
+document.addEventListener("pointercancel", ()=>{ wpDrag=null; });
 /* drag routine chips to reorder */
 let rtDrag=null;
 const rtSide=(c,e)=>{ const b=c.getBoundingClientRect(); return e.clientX<b.left+b.width/2?"l":"r"; };
