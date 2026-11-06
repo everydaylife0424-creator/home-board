@@ -354,6 +354,10 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
 /* edit mode */
 .edit-bar{background:var(--accent-soft);color:var(--accent)}
 [data-tk][contenteditable]{outline:1px dashed var(--accent);outline-offset:2px;border-radius:3px;cursor:text;min-width:1em;display:inline-block}
+.unote{white-space:pre-wrap;margin:10px 0;color:var(--fg);font-size:14.5px;line-height:1.6}
+.unote[contenteditable]{outline:1px dashed var(--accent);outline-offset:2px;border-radius:3px;cursor:text;min-height:1.6em}
+.unote[contenteditable]:focus{outline-style:solid;background:var(--accent-soft)}
+.unote[contenteditable]:empty::before{content:attr(data-ph);color:var(--muted)}
 [data-tk][contenteditable]:focus{outline-style:solid;background:var(--accent-soft)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:7px 14px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30}
 .toast.on{opacity:1}
@@ -385,7 +389,7 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
    ===================================================================== */
 const I18N = {
   zh: {
-    app_title:"HOME", edit_btn:"編輯文字", edit_on:"編輯中", edit_hint:"編輯模式：點任何標題或灰色小字直接修改，按 Enter 或點別處儲存。清空就會恢復預設。", edit_saved:"文字已更新",
+    app_title:"HOME", edit_btn:"編輯文字", edit_on:"編輯中", edit_hint:"編輯模式：點任何標題或灰色小字直接修改，按 Enter 或點別處儲存。清空就會恢復預設。右鍵文字框可刪除，右鍵空白處可新增文字框。", edit_saved:"文字已更新", tx_del:t=>`✕ 刪除文字框「${t}」`, tx_add:"＋ 在這裡新增文字框", tx_restore:"還原刪除的文字框", tx_ph:"輸入文字…", tx_deleted:"已刪除文字框，右鍵空白處可還原", tx_note:"文字框",
     pop_no_review:"這天沒有寫檢討。", pop_open_review:"打開這天的每日檢討", ctx_deadline:"標記截止日", ctx_event:"標記重大事件",
     nav_gym:"健身計劃", src_gym:"健身", k_deadline:"截止日", k_event:"重大事件", marks_title:"截止日與重大事件", marks_empty:"這天沒有標記。",
     ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
@@ -442,7 +446,7 @@ const I18N = {
     loading:"資料還在載入，畫面可能不是最新的。", disconnected:c=>`資料連線中斷（${c}），請重新整理頁面。`,
   },
   en: {
-    app_title:"HOME", edit_btn:"Edit text", edit_on:"On", edit_hint:"Edit mode: click any heading or grey caption to change it. Press Enter or click elsewhere to save. Clear it to restore the default.", edit_saved:"Text updated",
+    app_title:"HOME", edit_btn:"Edit text", edit_on:"On", edit_hint:"Edit mode: click any heading or grey caption to change it. Press Enter or click elsewhere to save. Clear it to restore the default. Right-click a text box to delete it, or empty space to add one.", edit_saved:"Text updated", tx_del:t=>`✕ Delete text box “${t}”`, tx_add:"＋ Add a text box here", tx_restore:"Restore deleted text", tx_ph:"Type here…", tx_deleted:"Text box deleted. Right-click empty space to restore it", tx_note:"Text box",
     pop_no_review:"No review written this day.", pop_open_review:"Open this day's review", ctx_deadline:"Mark a deadline", ctx_event:"Mark a key event",
     nav_gym:"Workout plan", src_gym:"Workout", k_deadline:"Deadline", k_event:"Key event", marks_title:"Deadlines & key events", marks_empty:"Nothing marked.",
     ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
@@ -535,7 +539,7 @@ function T(k, ...a){ const o = (settings().texts||{})[S.lang]; if (o && typeof o
   const v = (I18N[S.lang]||I18N.zh)[k] ?? I18N.zh[k] ?? k; return typeof v==="function" ? v(...a) : v; }
 
 /* editable text: wraps a label so edit mode can change it in place */
-function L(k, ...a){ const v=T(k,...a), d=a.length?((I18N[S.lang]||I18N.zh)[k]):null; return `<span data-tk="${k}"${typeof d==="function"?` data-def="${esc(d(...a))}"`:""}${S.edit?' contenteditable="plaintext-only" spellcheck="false"':""}>${esc(v)}</span>`; }
+function L(k, ...a){ if ((settings().hideTk||{})[k]) return ""; const v=T(k,...a), d=a.length?((I18N[S.lang]||I18N.zh)[k]):null; return `<span data-tk="${k}"${typeof d==="function"?` data-def="${esc(d(...a))}"`:""}${S.edit?' contenteditable="plaintext-only" spellcheck="false"':""}>${esc(v)}</span>`; }
 
 let db = null;
 const pending = new Map(), timers = new Map(), inflight = new Set();
@@ -612,6 +616,7 @@ function render(){
   document.getElementById("pageTitle").innerHTML = S.tab==="home" ? L("app_title") : L("nav_"+S.tab);
   const n=new Date(); document.getElementById("todayLabel").textContent = T("today_label", n.getFullYear(), n.getMonth()+1, n.getDate(), T("wd")[n.getDay()]);
   v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : viewMoney();
+  injectNotes(v);
   renderHero();
   if (S.tab==="home") positionPop();
   if (!S.cm) renderCm();
@@ -1203,6 +1208,11 @@ document.addEventListener("click", e=>{
   else if (act==="cm-day-del"){ const list=dayCards(), d=b.dataset.date; let next=list.filter(x=>x!==d); if (d===list[0] && list.length) next.push(addDays(list[list.length-1],1)); S.cm=null; saveDayCards(next.length?next:dayDefault()); }
   else if (act==="cm-sec-add"){ addProj(b.dataset.date, b.dataset.name); }
   else if (act==="cm-unpin"){ const st=clone(settings()); st.pinned=pinned().filter(p=>p!==b.dataset.name); save("settings/main",st,50); render(); toast(T("cm_unpinned")); }
+  else if (act==="tx-hide"){ const st=clone(settings()); st.hideTk={...(st.hideTk||{}), [b.dataset.key]:true}; S.cm=null; save("settings/main",st,50); render(); toast(T("tx_deleted")); }
+  else if (act==="tx-unhide"){ const st=clone(settings()); st.hideTk={...(st.hideTk||{})}; delete st.hideTk[b.dataset.key]; S.cm=null; save("settings/main",st,50); render(); }
+  else if (act==="tx-note-del"){ const st=clone(settings()); st.notes=(st.notes||[]).filter(n=>n.id!==b.dataset.id); S.cm=null; save("settings/main",st,50); render(); }
+  else if (act==="tx-add"){ const c=S.cm; if(!c) return; const id=uid(); const st=clone(settings()); st.notes=[...(st.notes||[]), {id, tab:S.tab, at:c.at, text:""}]; S.cm=null; save("settings/main",st,0); render();
+    setTimeout(()=>{ const el=document.querySelector(`.unote[data-note="${id}"]`); if (el) el.focus(); },30); }
   else if (act==="cm-day-add"){ S.cm=null; saveDayCards([...dayCards(), b.dataset.date]); }
   else if (act==="wp-adj"){ S.wpAdj={pos:[...wpPos(wpFor(S.tab))]}; render(); }
   else if (act==="wp-adj-cancel"){ S.wpAdj=null; render(); }
@@ -1399,9 +1409,44 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
     if (c.id) h+=btn("cm-day-del",`✕ ${T("cm_del_day", md(c.id))}`,`data-date="${c.id}"`)+(c.id===list[0]?`<p class="empty mini">${T("cm_day_first", md(nx))}</p>`:"");
     h+=`<div class="ctx-h">${T("cm_add_day")}</div>`+btn("cm-day-add",`＋ ${md(nx)} ${dow(nx)}`,`data-date="${nx}"`)+`<form class="add" data-act="cm-day-pick"><input type="date" id="cm-day-date" aria-label="${T("cm_pick_day")}"><button class="ghost mini" type="submit">${T("cm_add")}</button></form>`
       + (list.length>=DAY_MAX?`<p class="empty mini">${T("cm_day_max")}</p>`:""); }
+  else if (c.row==="txt"){
+    if (c.tk) h+=btn("tx-hide", T("tx_del", esc(c.title)), `data-key="${esc(c.tk)}"`);
+    else if (c.note) h+=btn("tx-note-del", T("tx_del", esc(c.title)), `data-id="${esc(c.note)}"`);
+    else { h+=btn("tx-add", T("tx_add"));
+      const hid=Object.keys(settings().hideTk||{}); if (hid.length) h+=`<div class="ctx-h">${T("tx_restore")}</div>`+hid.map(k=>btn("tx-unhide","↺ "+esc(T(k)),`data-key="${esc(k)}"`)).join(""); } }
   cmEl.innerHTML=h; cmEl.hidden=false;
   const w=cmEl.offsetWidth, hh=cmEl.offsetHeight; cmEl.style.left=Math.max(8,Math.min(c.x, innerWidth-w-8))+"px"; cmEl.style.top=Math.max(8,Math.min(c.y, innerHeight-hh-8))+"px";
 }
+/* free text boxes: settings.notes [{id, tab, at, text}], placed after the page block "at" */
+function blockKey(v, el){ const kids=[...v.children]; const i=kids.indexOf(el); return el.id ? "#"+el.id : "i"+i; }
+function injectNotes(v){
+  const ns=(settings().notes||[]).filter(n=>n.tab===S.tab); if (!ns.length) return;
+  const kids=[...v.children];
+  ns.forEach(n=>{ const p=document.createElement("p"); p.className="unote"; p.dataset.note=n.id; p.textContent=n.text||"";
+    if (S.edit){ p.contentEditable="plaintext-only"; p.spellcheck=false; p.dataset.ph=T("tx_ph"); }
+    let at=null; if (n.at && n.at[0]==="#") at=kids.find(k=>k.id===n.at.slice(1)); else if (n.at) at=kids[+n.at.slice(1)];
+    // keep notes after earlier notes placed at the same block
+    if (at){ let ref=at; while (ref.nextSibling && ref.nextSibling.classList && ref.nextSibling.classList.contains("unote")) ref=ref.nextSibling; ref.after(p); }
+    else if (n.at==="top") v.prepend(p); else v.appendChild(p); });
+}
+document.addEventListener("focusout", e=>{ const el=e.target; if (!el.classList || !el.classList.contains("unote") || !el.isContentEditable) return;
+  const id=el.dataset.note, v=el.innerText.replace(/\n+$/,""); const st=clone(settings()); const n=(st.notes||[]).find(x=>x.id===id); if (!n) return;
+  if (!v.trim()){ st.notes=st.notes.filter(x=>x.id!==id); save("settings/main",st,50); setTimeout(()=>{ if(!isTyping()) render(); },0); return; }
+  if (n.text===v) return; n.text=v; save("settings/main",st,50); toast(T("edit_saved")); }, true);
+/* edit mode: right-click a text box to delete it, empty space to add one */
+document.addEventListener("contextmenu", e=>{
+  const t=e.target; if (!S.edit || !t.closest || t.closest("#cmenu")) return;
+  const v=document.getElementById("view"), hero=t.closest("#heroTitle,.hero,header");
+  const tk=t.closest("[data-tk]"), note=t.closest(".unote");
+  let c=null;
+  if (tk && !(settings().hideTk||{})[tk.dataset.tk]) c={tk:tk.dataset.tk, title:(tk.textContent||"").slice(0,24)};
+  else if (note) c={note:note.dataset.note, title:(note.textContent||T("tx_note")).slice(0,24)};
+  else if (v.contains(t) && !t.closest("input,textarea,select,button,a,li,img,summary,.cell,.chip,[data-drag],[contenteditable],table")){
+    let el=t; while (el && el.parentElement!==v) el=el.parentElement;
+    c={at: el ? blockKey(v, el.classList.contains("unote")?(el.previousElementSibling||el):el) : "end"}; }
+  else if (hero && !t.closest("input,button,a")) c={at:"top"};
+  else if (t===document.body || t===document.documentElement || t===v.parentElement) c={at:"end"};
+  if (!c) return; e.preventDefault(); e.stopPropagation(); S.ctx=null; S.cm={row:"txt", x:e.clientX, y:e.clientY, sy:scrollY, ...c}; renderCm(); }, true);
 document.addEventListener("contextmenu", e=>{
   const t=e.target; if (!t.closest || S.tab!=="home" || S.edit) return;
   if (t.closest("#s-cal") || t.closest("#cmenu") || t.closest("input,textarea,select,[contenteditable]")) return;
