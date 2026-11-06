@@ -1,0 +1,16 @@
+{
+  "name": "HOME",
+  "short_name": "HOME",
+  "description": "Adam 的待辦、每日檢討、健身與記帳",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f7f5",
+  "theme_color": "#1d2124",
+  "lang": "zh-Hant",
+  "icons": [
+    {"src": "icons/192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icons/512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icons/mask512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

@@ -1,5 +1,21 @@
 <title>Adam 的 HOME</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<script>
+/* Standalone app (GitHub Pages): sign in with Google, store data in Firestore (fb.js), installable with offline cache.
+   Inside claude.ai none of this runs and the page uses Claude's own storage. */
+if (/\.github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname)) {
+  window.HOME_READY = new Promise(r => { window.HOME_RESOLVE = r; });
+  const add = (tag, attrs) => { const e = document.createElement(tag); Object.assign(e, attrs); document.head.appendChild(e); };
+  add("link", { rel: "manifest", href: "manifest.webmanifest" });
+  add("link", { rel: "apple-touch-icon", href: "icons/180.png" });
+  add("meta", { name: "apple-mobile-web-app-capable", content: "yes" });
+  add("meta", { name: "mobile-web-app-capable", content: "yes" });
+  add("meta", { name: "apple-mobile-web-app-title", content: "HOME" });
+  add("meta", { name: "theme-color", content: "#1d2124" });
+  add("script", { type: "module", src: "fb.js" });
+  if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -389,7 +405,7 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
    ===================================================================== */
 const I18N = {
   zh: {
-    app_title:"HOME", edit_btn:"編輯文字", edit_on:"編輯中", edit_hint:"編輯模式：點任何標題或灰色小字直接修改，按 Enter 或點別處儲存。清空就會恢復預設。右鍵文字框可刪除，右鍵空白處可新增文字框。", edit_saved:"文字已更新", tx_del:t=>`✕ 刪除文字框「${t}」`, tx_add:"＋ 在這裡新增文字框", tx_restore:"還原刪除的文字框", tx_ph:"輸入文字…", tx_deleted:"已刪除文字框，右鍵空白處可還原", tx_note:"文字框",
+    app_title:"HOME", edit_btn:"編輯文字", signout:"登出", edit_on:"編輯中", edit_hint:"編輯模式：點任何標題或灰色小字直接修改，按 Enter 或點別處儲存。清空就會恢復預設。右鍵文字框可刪除，右鍵空白處可新增文字框。", edit_saved:"文字已更新", tx_del:t=>`✕ 刪除文字框「${t}」`, tx_add:"＋ 在這裡新增文字框", tx_restore:"還原刪除的文字框", tx_ph:"輸入文字…", tx_deleted:"已刪除文字框，右鍵空白處可還原", tx_note:"文字框",
     pop_no_review:"這天沒有寫檢討。", pop_open_review:"打開這天的每日檢討", ctx_deadline:"標記截止日", ctx_event:"標記重大事件",
     nav_gym:"健身計劃", src_gym:"健身", k_deadline:"截止日", k_event:"重大事件", marks_title:"截止日與重大事件", marks_empty:"這天沒有標記。",
     ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
@@ -446,7 +462,7 @@ const I18N = {
     loading:"資料還在載入，畫面可能不是最新的。", disconnected:c=>`資料連線中斷（${c}），請重新整理頁面。`,
   },
   en: {
-    app_title:"HOME", edit_btn:"Edit text", edit_on:"On", edit_hint:"Edit mode: click any heading or grey caption to change it. Press Enter or click elsewhere to save. Clear it to restore the default. Right-click a text box to delete it, or empty space to add one.", edit_saved:"Text updated", tx_del:t=>`✕ Delete text box “${t}”`, tx_add:"＋ Add a text box here", tx_restore:"Restore deleted text", tx_ph:"Type here…", tx_deleted:"Text box deleted. Right-click empty space to restore it", tx_note:"Text box",
+    app_title:"HOME", edit_btn:"Edit text", signout:"Sign out", edit_on:"On", edit_hint:"Edit mode: click any heading or grey caption to change it. Press Enter or click elsewhere to save. Clear it to restore the default. Right-click a text box to delete it, or empty space to add one.", edit_saved:"Text updated", tx_del:t=>`✕ Delete text box “${t}”`, tx_add:"＋ Add a text box here", tx_restore:"Restore deleted text", tx_ph:"Type here…", tx_deleted:"Text box deleted. Right-click empty space to restore it", tx_note:"Text box",
     pop_no_review:"No review written this day.", pop_open_review:"Open this day's review", ctx_deadline:"Mark a deadline", ctx_event:"Mark a key event",
     nav_gym:"Workout plan", src_gym:"Workout", k_deadline:"Deadline", k_event:"Key event", marks_title:"Deadlines & key events", marks_empty:"Nothing marked.",
     ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
@@ -519,6 +535,7 @@ const ICON = {
   theme:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
   pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  out:'<path d="M14 5H6v14h8M10 12h10M17 9l3 3-3 3"/>',
 };
 
 const S = {
@@ -642,7 +659,8 @@ function renderSide(){
     <button class="navb" data-act="lang">${svg("lang")}<span class="lbl">${L("lang_btn")}</span></button>
     <button class="navb" data-act="theme">${svg("theme")}<span class="lbl">${L("theme_btn")}</span><span class="val lbl">${themeName}</span></button>
     <button class="navb" data-act="toggle-settings" aria-pressed="${S.showSettings}">${svg("gear")}<span class="lbl">${L("proj_settings")}</span></button>
-    <button class="navb" data-act="edit" aria-pressed="${S.edit}" ${S.edit?'aria-current="page"':""}>${svg("pen")}<span class="lbl">${T("edit_btn")}</span>${S.edit?`<span class="val lbl">${T("edit_on")}</span>`:""}</button>`;
+    <button class="navb" data-act="edit" aria-pressed="${S.edit}" ${S.edit?'aria-current="page"':""}>${svg("pen")}<span class="lbl">${T("edit_btn")}</span>${S.edit?`<span class="val lbl">${T("edit_on")}</span>`:""}</button>
+    ${window.HOME_ACCOUNT?`<button class="navb" data-act="signout" title="${esc(window.HOME_ACCOUNT.email||"")}">${svg("out")}<span class="lbl">${T("signout")}</span><span class="val lbl">${esc((window.HOME_ACCOUNT.email||"").split("@")[0])}</span></button>`:""}`;
   document.getElementById("side").setAttribute("aria-label", T("menu"));
 }
 const side=document.getElementById("side"), scrim=document.getElementById("scrim");
@@ -1223,6 +1241,7 @@ document.addEventListener("click", e=>{
   else if (act==="wp-next"){ const l=wpList(), cur=wpFor(S.tab).file, opts=l.filter(w=>w.file!==cur); setWp(opts[Math.floor(Math.random()*opts.length)].file); }
   else if (act==="wp-del"){ const st=clone(settings()); const w=(st.customWps||[]).find(x=>x.url===b.dataset.file); st.customWps=(st.customWps||[]).filter(x=>x.url!==b.dataset.file); for (const k in (st.wp||{})) if (st.wp[k]===b.dataset.file) delete st.wp[k]; save("settings/main",st,50); render();
     (async()=>{ try{ const a=await window.claude?.use?.("assets"); if(a && w && w.id) await a.delete(w.id); }catch(e){} })(); }
+  else if (act==="signout"){ if (window.HOME_ACCOUNT) window.HOME_ACCOUNT.signOut(); }
   else if (act==="edit"){ S.edit=!S.edit; render(); }
   else if (act==="lang"){ S.lang = S.lang==="zh"?"en":"zh"; lsSet("home.lang",S.lang); render(); }
   else if (act==="theme"){ S.theme = {system:"light", light:"dark", dark:"system"}[S.theme]; lsSet("home.theme",S.theme); applyTheme(); render(); }
@@ -1487,6 +1506,7 @@ document.addEventListener("dragend", ()=>{ dragId=null; document.querySelectorAl
 render();
 function banner(msg){ const b=document.getElementById("banner"); b.textContent=msg; b.hidden=!msg; }
 (async () => {
+  if (window.HOME_READY){ await window.HOME_READY; render(); }
   try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch(e){ db=null; }
   if (!db){ banner(T("offline")); return; }
   for (const p of pending.keys()) flush(p);
