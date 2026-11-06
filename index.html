@@ -102,7 +102,9 @@ ul.list{list-style:none;margin:0;padding:0}
 .add input[type=date]{flex:0 0 auto;width:auto;font-size:12px;color:var(--muted)}
 .done-toggle{font-size:12px;color:var(--muted);background:none;border:0;cursor:pointer;padding:6px 2px 0}
 /* week */
-.week{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);gap:14px;overflow-x:auto;padding-bottom:10px;overscroll-behavior-x:contain}
+.week{display:grid;grid-template-columns:repeat(var(--days,3),minmax(0,1fr));gap:16px;align-items:start}
+@media (max-width:1000px){.week{--days:2}}
+@media (max-width:640px){.week{--days:1}}
 .day{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
 .day.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
 .day-h{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:6px}
@@ -123,27 +125,6 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .mini{font-size:12.5px}
 .progress{height:4px;border-radius:2px;background:var(--calm-soft);overflow:hidden;margin:2px 0 6px}
 .progress i{display:block;height:100%;background:var(--good)}
-/* compact day columns: one line per item, full text on hover */
-.day{padding:10px 12px}
-.day .item{padding:2px 2px;align-items:center;font-size:14px}
-.day .item input[type=checkbox]{margin-top:0}
-.day .item .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.day .acts{flex:none}
-.day-h .rv-link{margin-left:auto;font-size:14px}
-.day-h .badge+.rv-link{margin-left:4px}
-.day details.proj{margin-top:4px}
-.day details.proj summary{font-size:13px;color:var(--muted);padding:2px}
-.day details.proj .inner{padding-left:10px}
-details.carry{background:var(--warn-soft);border-radius:7px;padding:2px 8px;margin-bottom:6px}
-details.carry summary{cursor:pointer;font-size:13px;color:var(--warn);list-style:none;display:flex;gap:6px;align-items:center;padding:3px 0}
-details.carry summary::-webkit-details-marker{display:none}
-details.carry summary::before{content:"▸";font-size:11px;transition:transform .12s;display:inline-block}
-details.carry[open] summary::before{transform:rotate(90deg)}
-details.carry .cnt{font-family:var(--f-mono);font-size:11px}
-details.carry .item:hover{background:transparent}
-.ptag{font-size:11px;color:var(--muted);margin-right:5px}
-.day form.add{margin-top:4px;align-items:center}
-.psel{border:0;background:var(--calm-soft);color:var(--muted);border-radius:6px;font-size:12px;padding:2px 4px;max-width:7.5em}
 .carry-tag{font-family:var(--f-mono);font-size:10.5px;color:var(--warn);background:var(--warn-soft);border-radius:4px;padding:0 5px;margin-top:3px;white-space:nowrap}
 .settings-panel{margin-bottom:16px}
 .settings-panel .prow{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
@@ -262,7 +243,7 @@ const I18N = {
     app_title:"HOME", edit_btn:"編輯文字", edit_on:"編輯中", edit_hint:"編輯模式：點任何標題或灰色小字直接修改，按 Enter 或點別處儲存。清空就會恢復預設。", edit_saved:"文字已更新",
     nav_home:"待辦", nav_review:"每日檢討", nav_money:"記帳",
     grp_pages:"頁面", grp_sections:"本頁段落", grp_switch:"切換",
-    sec_overview:"總覽", sec_tasks:"Tasks", sec_week:"本週", sec_cal:"完成月曆",
+    sec_overview:"總覽", sec_tasks:"Tasks", sec_week:"每日清單", sec_cal:"完成月曆",
     lang_btn:"切換成 English", theme_btn:"主題", theme_system:"跟隨系統", theme_light:"淺色", theme_dark:"深色",
     proj_settings:"專案設定", menu:"目錄",
     b_urgent:"超級逼人", b_nagging:"如鯁在喉", b_later:"目前不重要也不在乎",
@@ -278,7 +259,7 @@ const I18N = {
     prev_week:"上週", this_week:"本週", next_week:"下週",
     carry_note:"今天欄位裡標著黃色日期的，是之前還沒完成、自動延續過來的項目。勾掉就會一起更新原本那天。",
     carry_from:d=>`從 ${d} 延續`,
-    todo_ph:"＋ To-do", p_general:"一般", prog:n=>`${n}進度`, remove_block:"移除此區塊",
+    todo_ph:"＋ To-do", prog:n=>`${n}進度`, remove_block:"移除此區塊",
     add_proj:"＋ 專案進度", new_proj:"新增專案…", new_proj_ph:"專案名稱，Enter 確認",
     write_review:"寫檢討", today_badge:"今天",
     settings_hint:"勾選「每天自動出現」的專案，每一天都會自動有這個進度區塊，不用再手動建立。",
@@ -311,7 +292,7 @@ const I18N = {
     app_title:"HOME", edit_btn:"Edit text", edit_on:"On", edit_hint:"Edit mode: click any heading or grey caption to change it. Press Enter or click elsewhere to save. Clear it to restore the default.", edit_saved:"Text updated",
     nav_home:"To-dos", nav_review:"Daily review", nav_money:"Expenses",
     grp_pages:"PAGES", grp_sections:"ON THIS PAGE", grp_switch:"SWITCHES",
-    sec_overview:"Overview", sec_tasks:"Tasks", sec_week:"This week", sec_cal:"Done calendar",
+    sec_overview:"Overview", sec_tasks:"Tasks", sec_week:"Daily lists", sec_cal:"Done calendar",
     lang_btn:"切換成中文", theme_btn:"Theme", theme_system:"System", theme_light:"Light", theme_dark:"Dark",
     proj_settings:"Projects", menu:"Menu",
     b_urgent:"Super urgent", b_nagging:"Nagging", b_later:"Not important now",
@@ -327,7 +308,7 @@ const I18N = {
     prev_week:"Last week", this_week:"This week", next_week:"Next week",
     carry_note:"Items in today's column with a yellow date are unfinished items carried over automatically. Checking one also checks it on its original day.",
     carry_from:d=>`Carried from ${d}`,
-    todo_ph:"+ To-do", p_general:"General", prog:n=>`${n} progress`, remove_block:"Remove section",
+    todo_ph:"+ To-do", prog:n=>`${n} progress`, remove_block:"Remove section",
     add_proj:"+ Project section", new_proj:"New project…", new_proj_ph:"Project name, press Enter",
     write_review:"Review", today_badge:"Today",
     settings_hint:"Projects marked “Show every day” get their own section on every day automatically.",
@@ -377,9 +358,9 @@ const ICON = {
 const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
-  calMonth: ymd(new Date()).slice(0,7), calSel: null,
+  calMonth: ymd(new Date()).slice(0,7), calSel: null, viewStart: addDays(ymd(new Date()),-1),
   tasks:{}, days:{}, expenses:{}, settings:null,
-  showDone:{}, expType:"out", showSettings:false, edit:false, addProj:{}, carryOpen:false,
+  showDone:{}, expType:"out", showSettings:false, edit:false,
 };
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
 function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
@@ -573,42 +554,51 @@ function settingsPanel(){
 }
 
 function viewWeek(){
-  const days=Array.from({length:7},(_,i)=>addDays(S.weekStart,i));
-  const projOpts=settings().projects, t=today();
+  const nd=visibleDays(), days=Array.from({length:nd},(_,i)=>addDays(S.viewStart,i));
+  const projOpts=settings().projects, pins=pinned(), t=today();
   const car=days.includes(t) ? carried() : [];
-  const itemLi=(it,date,pi,tag)=>`<li class="item ${it.d?"done":""}" title="${esc(it.t)}">
+  const itemLi=(it,date,pi,tag)=>`<li class="item ${it.d?"done":""}">
       <input type="checkbox" ${it.d?"checked":""} data-act="it-toggle" data-date="${date}" data-pi="${pi}" data-id="${it.id}" aria-label="${T("done")}">
       <span class="t">${esc(it.t)}</span>${tag?`<span class="carry-tag" title="${esc(T("carry_from",date))}">${md(date)}</span>`:""}
       <span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>`;
+  const addForm=(date,name)=>`<form class="add" data-act="it-add" data-date="${date}" ${name?`data-proj="${esc(name)}"`:""}><input type="text" id="add-${date}-${name?hash(name):"_"}" placeholder="${T("todo_ph")}" autocomplete="off"></form>`;
   const dayCols=days.map(date=>{
-    const d=day(date), td=date===t;
-    const projs=(d.projects||[]).map((p,pi)=>{ if(!p.items.length) return "";
-      const k=p.items.filter(i=>i.d).length;
-      return `<details class="proj" ${p.open!==false?"open":""} data-date="${date}" data-pi="${pi}">
-        <summary>${esc(p.name)} <span class="cnt">${k}/${p.items.length}</span><button class="icon-btn" data-act="proj-del" data-date="${date}" data-pi="${pi}" title="${T("remove_block")}">✕</button></summary>
-        <ul class="list inner">${p.items.map(it=>itemLi(it,date,pi)).join("")}</ul></details>`; }).join("");
-    const carBox = td && car.length ? `<details class="carry" ${S.carryOpen?"open":""} data-act="carry-box">
-        <summary>${T("ov_carry")} <span class="cnt">${car.length}</span></summary>
-        <ul class="list">${car.map(c=>itemLi(c.it,c.date,c.pi,false).replace('<span class="t">',`<span class="t">${c.proj?`<small class="ptag">${esc(c.proj)}</small>`:""}`).replace('title="',`title="${md(c.date)} · `)).join("")}</ul></details>` : "";
-    const sel=S.addProj[date]||"";
+    const d=day(date), td=date===t, myCar=td?car:[];
+    const secs=(d.projects||[]).map((p,pi)=>({name:p.name,pi,p}));
+    const names=new Set(secs.map(s=>s.name));
+    if (date>=t) pins.forEach(n=>{ if(!names.has(n)){ names.add(n); secs.push({name:n,pi:null}); } });
+    myCar.forEach(c=>{ if(c.proj && !names.has(c.proj)){ names.add(c.proj); secs.push({name:c.proj,pi:null}); } });
+    const projs=secs.map(s=>{
+      const own=s.p?s.p.items:[], extra=myCar.filter(c=>c.proj===s.name);
+      const n=own.length+extra.length, k=own.filter(i=>i.d).length;
+      const open=s.p ? s.p.open!==false : (date===t || extra.length>0);
+      return `<details class="proj ${s.p?"":"virtual"}" ${open?"open":""} data-date="${date}" ${s.p?`data-pi="${s.pi}"`:""}>
+        <summary>${esc(T("prog",s.name))} <span class="cnt">${k}/${n}</span>${s.p?`<button class="icon-btn" data-act="proj-del" data-date="${date}" data-pi="${s.pi}" title="${T("remove_block")}">✕</button>`:""}</summary>
+        <div class="inner">${n?`<div class="progress"><i style="width:${k/n*100}%"></i></div>`:""}<ul class="list">${extra.map(c=>itemLi(c.it,c.date,c.pi,true)).join("")}${own.map(it=>itemLi(it,date,s.pi)).join("")}</ul>${addForm(date,s.name)}</div>
+      </details>`;
+    }).join("");
+    const topCar=myCar.filter(c=>!c.proj);
     return `<div class="day ${td?"today":""}">
-      <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}
-        <button class="icon-btn rv-link" data-act="go-review" data-date="${date}" title="${T("write_review")}">✎</button></div>
-      ${carBox}
-      <ul class="list">${(d.items||[]).map(it=>itemLi(it,date,-1)).join("")}</ul>
+      <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}</div>
+      <ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(d.items||[]).map(it=>itemLi(it,date,-1)).join("")}</ul>${addForm(date)}
       ${projs}
-      <form class="add" data-act="it-add" data-date="${date}">
-        <input type="text" id="add-${date}" placeholder="${T("todo_ph")}" autocomplete="off">
-        <select class="psel" id="addp-${date}" data-act="add-proj-pick" data-date="${date}" aria-label="${T("add_proj")}"><option value="">${T("p_general")}</option>${projOpts.map(p=>`<option ${p===sel?"selected":""}>${esc(p)}</option>`).join("")}</select>
-      </form>
+      <div class="day-foot">
+        <select data-act="proj-add" data-date="${date}" aria-label="${T("add_proj")}"><option value="">${T("add_proj")}</option>${projOpts.filter(p=>!names.has(p)).map(p=>`<option>${esc(p)}</option>`).join("")}<option value="__new">${T("new_proj")}</option></select>
+        <button class="ghost mini" data-act="go-review" data-date="${date}">${L("write_review")}</button>
+      </div>
     </div>`;
   }).join("");
   return `<section class="block" id="s-week">
-      <div class="sec-h"><h2>${md(S.weekStart)} ~ ${md(addDays(S.weekStart,6))}</h2><span class="sp"></span>
-        <button class="ghost" data-act="week" data-n="-7" aria-label="${T("prev_week")}">←</button><button class="ghost" data-act="week" data-n="0">${T("this_week")}</button><button class="ghost" data-act="week" data-n="7" aria-label="${T("next_week")}">→</button></div>
+      <div class="sec-h"><h2>${md(days[0])} ~ ${md(days[days.length-1])}</h2><span class="sp"></span>
+        <button class="ghost" data-act="days" data-n="-1" aria-label="${T("prev_day")}">←</button><button class="ghost" data-act="days" data-n="0">${T("today")}</button><button class="ghost" data-act="days" data-n="1" aria-label="${T("next_day")}">→</button></div>
+      ${car.length?`<p class="sub" style="margin:-4px 0 10px">${L("carry_note")}</p>`:""}
       <div class="week" data-keep-scroll="week">${dayCols}</div>
     </section>`;
 }
+
+/* how many day columns fit: 3 on a laptop, 2 on a tablet, 1 on a phone */
+function visibleDays(){ return innerWidth<=640 ? 1 : innerWidth<=1000 ? 2 : 3; }
+let lastNd=0; addEventListener("resize", ()=>{ const n=visibleDays(); if (n!==lastNd){ lastNd=n; softRender(); } });
 
 /* everything finished, keyed by the date it was checked off */
 function doneByDate(tasks){
@@ -720,7 +710,7 @@ document.addEventListener("submit", e=>{
     inp.value=""; due.value=""; render();
   } else if (act==="it-add"){
     const inp=f.querySelector("input"), t=inp.value.trim(); if (!t) return;
-    const d=dayCopy(f.dataset.date), name=f.dataset.proj || (f.querySelector("select")||{}).value || ""; let list=d.items;
+    const d=dayCopy(f.dataset.date), name=f.dataset.proj; let list=d.items;
     if (name){ let p=d.projects.find(x=>x.name===name); if(!p){ p={name,open:true,items:[]}; d.projects.push(p); } list=p.items; }
     list.push({id:uid(), t, d:false}); save("days/"+d.date, d, 300); inp.value=""; render();
   } else if (act==="proj-new"){
@@ -754,6 +744,7 @@ document.addEventListener("click", e=>{
   else if (act==="show-done"){ S.showDone[b.dataset.bucket]=!S.showDone[b.dataset.bucket]; render(); }
   else if (act==="it-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date), l=listOf(d,+b.dataset.pi); l.splice(l.findIndex(i=>i.id===b.dataset.id),1); save("days/"+d.date,d,300); render(); }
   else if (act==="proj-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date); d.projects.splice(+b.dataset.pi,1); save("days/"+d.date,d,300); render(); }
+  else if (act==="days"){ const n=+b.dataset.n; S.viewStart = n===0 ? addDays(today(), visibleDays()>1?-1:0) : addDays(S.viewStart,n); render(); }
   else if (act==="week"){ const n=+b.dataset.n; S.weekStart=n===0?mondayOf(new Date()):addDays(S.weekStart,n); render._scrolled=n!==0; render(); }
   else if (act==="calmonth"){ const n=+b.dataset.n; if(n===0) S.calMonth=today().slice(0,7); else { const d=parse(S.calMonth+"-01"); d.setMonth(d.getMonth()+n); S.calMonth=ymd(d).slice(0,7); } S.calSel=null; render(); }
   else if (act==="cal-sel"){ S.calSel = S.calSel===b.dataset.date ? null : b.dataset.date; render(); }
@@ -780,7 +771,6 @@ document.addEventListener("change", e=>{
   else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked; it.dn=el.checked?today():null; save("days/"+d.date,d,300); render(); }
   else if (act==="proj-add"){ const name=el.value; if (!name) return; if (name==="__new"){ el.value=""; askNewProject(el.dataset.date, el); return; } addProj(el.dataset.date, name); }
   else if (act==="pin"){ const st=clone(settings()), s=new Set(pinned()); el.checked?s.add(el.dataset.name):s.delete(el.dataset.name); st.pinned=st.projects.filter(p=>s.has(p)); save("settings/main",st,50); render(); }
-  else if (act==="add-proj-pick"){ S.addProj[el.dataset.date]=el.value; const i=document.getElementById("add-"+el.dataset.date); i&&i.focus(); }
   else if (act==="rv-date"){ if (el.value){ S.reviewDate=el.value; render(); } }
 });
 function addProj(date,name){ const d=dayCopy(date); if(!d.projects.some(p=>p.name===name)) d.projects.push({name,open:true,items:[]}); save("days/"+date,d,50); render(); setTimeout(()=>{ const i=document.getElementById(`add-${date}-${hash(name)}`); i&&i.focus(); },0); }
@@ -793,8 +783,7 @@ function askNewProject(date, sel){
   i.addEventListener("blur", ()=>setTimeout(()=>{ if(document.body.contains(f)) render(); },150));
 }
 document.addEventListener("toggle", e=>{
-  const dt=e.target; if (dt.matches && dt.matches("details.carry")) { S.carryOpen=dt.open; return; }
-  if (!dt.matches || !dt.matches("details.proj")) return;
+  const dt=e.target; if (!dt.matches || !dt.matches("details.proj")) return;
   const d=dayCopy(dt.dataset.date), p=d.projects[+dt.dataset.pi]; if (!p) return;
   if ((p.open!==false)===dt.open) return;
   p.open=dt.open; save("days/"+d.date,d,800);
@@ -826,6 +815,7 @@ document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closes
 document.addEventListener("dragend", ()=>{ dragId=null; document.querySelectorAll(".col.drop").forEach(x=>x.classList.remove("drop")); });
 
 /* ---------- boot ---------- */
+lastNd=visibleDays(); if (lastNd===1) S.viewStart=today();
 render();
 function banner(msg){ const b=document.getElementById("banner"); b.textContent=msg; b.hidden=!msg; }
 (async () => {
