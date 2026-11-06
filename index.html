@@ -921,8 +921,8 @@ function viewGym(){
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
 
 /* ---------- covers & tint ---------- */
-const WPS = [{"file": "bg/16.jpg", "name": "海峽電塔", "hue": 208, "sat": 34, "pos": 45}, {"file": "bg/11.jpg", "name": "楓湖", "hue": 14, "sat": 40, "pos": 74}, {"file": "bg/12.jpg", "name": "雪峰", "hue": 210, "sat": 24, "pos": 36}, {"file": "bg/13.jpg", "name": "海岸晨霧", "hue": 200, "sat": 16, "pos": 45}, {"file": "bg/14.jpg", "name": "海峽秋色", "hue": 205, "sat": 34, "pos": 50}, {"file": "bg/15.jpg", "name": "城市雲海", "hue": 212, "sat": 16, "pos": 78}].map(w=>({...w, thumb:w.file.replace("bg/","bg/t/")}));
-const WP_DEFAULT = {home:"bg/16.jpg", review:"bg/13.jpg", money:"bg/14.jpg", gym:"bg/12.jpg"};
+const WPS = [{"file": "bg/16.jpg", "name": "海峽電塔", "hue": 208, "sat": 34, "pos": 45}, {"file": "bg/17.jpg", "name": "海邊屋頂", "hue": 205, "sat": 28, "pos": 40}, {"file": "bg/18.jpg", "name": "紅燈塔", "hue": 210, "sat": 34, "pos": 50}, {"file": "bg/11.jpg", "name": "楓湖", "hue": 14, "sat": 40, "pos": 74}].map(w=>({...w, thumb:w.file.replace("bg/","bg/t/")}));
+const WP_DEFAULT = {home:"bg/16.jpg", review:"bg/17.jpg", money:"bg/18.jpg", gym:"bg/11.jpg"};
 function wpList(){ return [...WPS.map(w=>({...w, src:w.file})), ...((settings().customWps)||[]).map(w=>({...w, src:w.url, file:w.url, custom:true}))]; }
 function wpFor(tab){ const key=((settings().wp)||{})[tab] || WP_DEFAULT[tab] || WPS[0].file; return wpList().find(w=>w.file===key) || {...WPS[0], src:WPS[0].file}; }
 const tintEl=document.createElement("style"); document.body.appendChild(tintEl);
