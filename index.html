@@ -240,6 +240,29 @@ html{-webkit-text-size-adjust:100%}
 .lg-done{font-size:11.5px;color:var(--good)}
 .cell .ln{cursor:grab}
 .cell.drop{outline:2px dashed var(--accent);outline-offset:-2px}
+.cal{position:relative}
+.cell{height:118px;min-height:0;overflow:hidden}
+@media (max-width:700px){.cell{height:60px}}
+.cal-pop{position:absolute;z-index:15;width:min(360px,92vw);max-height:min(460px,70vh);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 36px rgba(0,0,0,.16)}
+.pop-h{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.pop-h b{font-family:var(--f-mono);font-size:15px}
+.pop-mood{font-size:12px;color:var(--muted)}
+.pop-h .sp{flex:1}
+.pop-body{overflow:auto;padding:6px 12px 10px}
+.pop-body h4{font-size:12.5px;color:var(--muted);font-weight:500;margin:10px 0 4px}
+.pop-body .item{align-items:center;font-size:14px}
+.pop-body .mark{display:inline-block;cursor:default}
+.pop-rv{margin:0 0 6px;font-size:13.5px;line-height:1.5;overflow-wrap:anywhere}
+.pop-rv small{display:block;color:var(--muted);font-size:11.5px}
+.pop-foot{padding:8px 12px;border-top:1px solid var(--line);display:flex;gap:6px;align-items:center}
+.pop-foot .primary{padding:6px 12px;font-size:13px}
+@media (max-width:700px){.cal-pop{position:fixed;left:50%!important;top:50%!important;transform:translate(-50%,-50%)}}
+.ctx{position:absolute;z-index:16;min-width:190px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.16);padding:6px;display:flex;flex-direction:column;gap:2px}
+.ctx-h{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding:2px 8px 4px}
+.ctx button{display:flex;gap:8px;align-items:center;border:0;background:none;text-align:left;padding:7px 8px;border-radius:7px;cursor:pointer;font-size:13.5px}
+.ctx button:hover{background:var(--calm-soft)}
+.ctx .mark{display:inline-block;cursor:default}
+.ctx form{padding:2px 4px;align-items:center}
 .detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 @media (max-width:760px){.detail-grid{grid-template-columns:1fr}}
 .detail-grid h3{font-size:13.5px;margin:0 0 6px;color:var(--muted);font-weight:500}
@@ -315,6 +338,7 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
 const I18N = {
   zh: {
     app_title:"HOME", edit_btn:"編輯文字", edit_on:"編輯中", edit_hint:"編輯模式：點任何標題或灰色小字直接修改，按 Enter 或點別處儲存。清空就會恢復預設。", edit_saved:"文字已更新",
+    pop_no_review:"這天沒有寫檢討。", pop_open_review:"打開這天的每日檢討", ctx_deadline:"標記截止日", ctx_event:"標記重大事件",
     nav_gym:"健身計劃", src_gym:"健身", k_deadline:"截止日", k_event:"重大事件", marks_title:"截止日與重大事件", marks_empty:"這天沒有標記。",
     ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
     wp_change:"更換桌布", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
@@ -346,7 +370,7 @@ const I18N = {
     settings_hint:"勾選「每天自動出現」的專案，每一天都會自動有這個進度區塊，不用再手動建立。",
     pin_lbl:"每天自動出現", proj_remove_title:"從清單移除（不影響已記錄的內容）", proj_new_ph:"＋ 新增專案（Enter）",
     cal_title:(y,m)=>`${y} 年 ${m} 月`, prev_month:"上個月", this_month:"本月", next_month:"下個月",
-    cal_note:"勾掉的 to-do 和任務會自動記在完成那天。點日期可以看當天完成的全部項目。",
+    cal_note:"勾掉的 to-do 和任務會自動記在完成那天。點日期看當天詳情，按右鍵可以標記截止日或重大事件，項目可以拖到其他日期。",
     cal_detail:d=>`${d} 完成的事`, cal_empty_day:"這天沒有完成紀錄。", src_board:"任務板", src_todo:"To-do",
     cal_month_total:n=>`本月完成 ${n} 項`,
     prev_day:"前一天", next_day:"後一天", today:"今天",
@@ -371,6 +395,7 @@ const I18N = {
   },
   en: {
     app_title:"HOME", edit_btn:"Edit text", edit_on:"On", edit_hint:"Edit mode: click any heading or grey caption to change it. Press Enter or click elsewhere to save. Clear it to restore the default.", edit_saved:"Text updated",
+    pop_no_review:"No review written this day.", pop_open_review:"Open this day's review", ctx_deadline:"Mark a deadline", ctx_event:"Mark a key event",
     nav_gym:"Workout plan", src_gym:"Workout", k_deadline:"Deadline", k_event:"Key event", marks_title:"Deadlines & key events", marks_empty:"Nothing marked.",
     ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
     wp_change:"Change cover", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
@@ -402,7 +427,7 @@ const I18N = {
     settings_hint:"Projects marked “Show every day” get their own section on every day automatically.",
     pin_lbl:"Show every day", proj_remove_title:"Remove from list (keeps what you already logged)", proj_new_ph:"+ New project (Enter)",
     cal_title:(y,m)=>`${new Date(y,m-1,1).toLocaleString("en",{month:"long"})} ${y}`, prev_month:"Previous", this_month:"This month", next_month:"Next",
-    cal_note:"Checked to-dos and tasks land on the day you finished them. Click a date to see everything you finished that day.",
+    cal_note:"Checked to-dos and tasks land on the day you finished them. Click a date for details, right-click to mark a deadline or key event, drag items to move them.",
     cal_detail:d=>`Finished on ${d}`, cal_empty_day:"Nothing finished this day.", src_board:"Task board", src_todo:"To-do",
     cal_month_total:n=>`${n} done this month`,
     prev_day:"Previous day", next_day:"Next day", today:"Today",
@@ -447,7 +472,7 @@ const ICON = {
 const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
-  calMonth: ymd(new Date()).slice(0,7), calSel: null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpBusy:false, confirmDel:null, viewStart: addDays(ymd(new Date()),-1),
+  calMonth: ymd(new Date()).slice(0,7), calSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpBusy:false, confirmDel:null, viewStart: addDays(ymd(new Date()),-1),
   tasks:{}, days:{}, expenses:{}, settings:null,
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
@@ -539,6 +564,7 @@ function render(){
   const n=new Date(); document.getElementById("todayLabel").textContent = T("today_label", n.getFullYear(), n.getMonth()+1, n.getDate(), T("wd")[n.getDay()]);
   v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : viewMoney();
   renderHero();
+  if (S.tab==="home") positionPop();
   document.querySelectorAll("[data-keep-scroll]").forEach(el=>{ if (sx[el.dataset.keepScroll]!=null) el.scrollLeft=sx[el.dataset.keepScroll]; });
   document.getElementById("sideInner").scrollTop = ss;
   v.style.minHeight=""; if (Math.abs(window.scrollY-wy)>1) window.scrollTo(0,wy);
@@ -701,11 +727,10 @@ function doneByDate(tasks){
   gymEntries().forEach(e=>push(e.date, {t:e.exName, src:T("src_gym"), drag:{k:"gl",month:e.date.slice(0,7),id:e.id}}));
   return by;
 }
-/* deadlines and big events: separate from to-dos. Task-board due dates count as deadlines too. */
+/* deadlines and key events that Adam marks himself (right-click a date) */
 function marksByDate(tasks){
   const by={}; const push=(ds,x)=>(by[ds]=by[ds]||[]).push(x);
   allEvents().forEach(e=>push(e.date, {t:e.title, kind:e.kind, id:e.id, drag:{k:"ev",id:e.id}}));
-  tasks.forEach(x=>{ if(!x.done && x.due) push(x.due, {t:x.title, kind:"deadline", fromTask:true, drag:{k:"due",id:x.id}}); });
   return by;
 }
 const dragAttr = d => `draggable="true" data-drag="${esc(JSON.stringify(d))}"`;
@@ -719,35 +744,55 @@ function viewDoneCalendar(tasks){
   const pill = x => `<span class="mark ${x.kind}" ${dragAttr(x.drag)} title="${esc((x.kind==="deadline"?T("k_deadline"):T("k_event"))+" · "+x.t)}">${x.kind==="deadline"?"⚑":"★"} ${esc(x.t)}</span>`;
   return `<section class="block" id="s-cal">
     <div class="sec-h"><h2>${L("sec_cal")} · ${T("cal_title",y,m)}</h2><span class="sub">${T("cal_month_total",total)}</span><span class="sp"></span>
-      <span class="legend"><span class="mark deadline">⚑ ${T("k_deadline")}</span><span class="mark event">★ ${T("k_event")}</span><span class="lg-done">✓ ${T("done")}</span></span>
       <button class="ghost" data-act="calmonth" data-n="-1" aria-label="${T("prev_month")}">←</button><button class="ghost" data-act="calmonth" data-n="0">${T("this_month")}</button><button class="ghost" data-act="calmonth" data-n="1" aria-label="${T("next_month")}">→</button></div>
-    <div class="cal">${T("wd_mon_first").map(w=>`<div class="wh">${w}</div>`).join("")}
+    <div class="cal" id="calGrid">${T("wd_mon_first").map(w=>`<div class="wh">${w}</div>`).join("")}
     ${cells.map(c=>{ const list=by[c]||[], marks=mk[c]||[];
       return `<div role="button" tabindex="0" class="cell ${parse(c).getMonth()!==m-1?"out":""} ${c===t?"today":""} ${list.length?"has":""} ${c===sel?"sel":""}" data-act="cal-sel" data-drop-date="${c}" data-date="${c}" aria-label="${c}">
         <span class="n"><span>${parse(c).getDate()}</span>${list.length?`<em>✓${list.length}</em>`:""}</span>
-        ${marks.map(pill).join("")}
-        ${list.slice(0,4).map(x=>`<span class="ln" ${dragAttr(x.drag)} title="${esc(x.t)}">${esc(x.t)}</span>`).join("")}${list.length>4?`<span class="more">+${list.length-4}</span>`:""}
+        ${(()=>{ const cap=3, shown=marks.slice(0,cap), room=cap-shown.length, more=marks.length-shown.length+Math.max(0,list.length-room);
+          return shown.map(pill).join("") + list.slice(0,room).map(x=>`<span class="ln" ${dragAttr(x.drag)} title="${esc(x.t)}">${esc(x.t)}</span>`).join("") + (more>0?`<span class="more">+${more}</span>`:""); })()}
       </div>`; }).join("")}
+      ${sel?calDetail(sel, by[sel]||[], mk[sel]||[]):""}
+      ${S.ctx?ctxMenu():""}
     </div>
-    ${sel?calDetail(sel, by[sel]||[], mk[sel]||[]):`<p class="sub" style="margin-top:8px">${L("cal_note")}</p>`}
+    <p class="sub" style="margin-top:8px">${L("cal_note")}</p>
   </section>`;
 }
+/* small window for one day: marks, what got done, and that day's review */
 function calDetail(sel, list, marks){
   const mv = d => `<input type="date" class="mv" value="${sel}" data-act="mv-date" data-drag="${esc(JSON.stringify(d))}" title="${T("move_date")}" aria-label="${T("move_date")}">`;
-  return `<div class="card cal-detail"><div class="sec-h"><h2>${md(sel)} ${dow(sel)}</h2><span class="sp"></span><button class="icon-btn" data-act="cal-sel" data-date="${sel}" aria-label="close">✕</button></div>
-    <div class="detail-grid">
-      <div><h3>${L("marks_title")}</h3>
-        ${marks.length?`<ul class="list">${marks.map(x=>`<li class="item"><span class="mark ${x.kind}">${x.kind==="deadline"?"⚑":"★"}</span><span class="t">${esc(x.t)}${x.fromTask?` <small class="src">${T("src_board")}</small>`:""}</span>${mv(x.drag)}${x.fromTask?"":`<button class="icon-btn" data-act="ev-del" data-id="${x.id}" title="${T("del")}">✕</button>`}</li>`).join("")}</ul>`:`<p class="empty mini">${T("marks_empty")}</p>`}
-        <form class="add" data-act="ev-add" data-date="${sel}">
-          <select id="ev-kind" class="psel"><option value="deadline">⚑ ${T("k_deadline")}</option><option value="event">★ ${T("k_event")}</option></select>
-          <input type="text" id="ev-title" placeholder="${T("ev_ph")}" autocomplete="off">
-        </form>
-      </div>
-      <div><h3>${T("cal_detail",md(sel))}</h3>
-        ${list.length?`<ul class="list">${list.map(x=>`<li class="item"><span class="t">✓ ${esc(x.t)}</span><span class="src">${esc(x.src)}</span>${mv(x.drag)}</li>`).join("")}</ul>`:`<p class="empty mini">${T("cal_empty_day")}</p>`}
-      </div>
+  const d=day(sel), r=d.review||{}, st=dayStats(d);
+  const snip=[["f_done",r.done],["f_improve",r.improve],["f_tomorrow",r.tomorrow],["f_free",r.free]].filter(([,v])=>v&&v.trim());
+  return `<div class="cal-pop" id="calPop" role="dialog" aria-label="${md(sel)}">
+    <div class="pop-h"><b>${md(sel)} ${dow(sel)}</b>${d.mood?`<span class="pop-mood">${T("mood_label")} ${d.mood}/5</span>`:""}<span class="sp"></span><button class="icon-btn" data-act="cal-sel" data-date="${sel}" aria-label="close">✕</button></div>
+    <div class="pop-body">
+      ${marks.length?`<ul class="list">${marks.map(x=>`<li class="item"><span class="mark ${x.kind}">${x.kind==="deadline"?"⚑":"★"}</span><span class="t">${esc(x.t)}</span>${mv(x.drag)}<button class="icon-btn" data-act="ev-del" data-id="${x.id}" title="${T("del")}">✕</button></li>`).join("")}</ul>`:""}
+      <h4>${T("cal_detail",md(sel))}${st.n?` <span class="sub">· ${T("day_done",st.k,st.n)}</span>`:""}</h4>
+      ${list.length?`<ul class="list">${list.map(x=>`<li class="item"><span class="t">✓ ${esc(x.t)}</span><span class="src">${esc(x.src)}</span>${mv(x.drag)}</li>`).join("")}</ul>`:`<p class="empty mini">${T("cal_empty_day")}</p>`}
+      <h4>${T("nav_review")}</h4>
+      ${snip.length?snip.map(([k,v])=>`<p class="pop-rv"><small>${T(k)}</small>${esc(v.length>120?v.slice(0,120)+"…":v)}</p>`).join(""):`<p class="empty mini">${T("pop_no_review")}</p>`}
     </div>
-    <p class="sub" style="margin:10px 0 0">${T("drag_hint")}</p></div>`;
+    <div class="pop-foot"><button class="ghost" data-act="pop-mark" data-kind="deadline" data-date="${sel}" title="${T("ctx_deadline")}">⚑</button><button class="ghost" data-act="pop-mark" data-kind="event" data-date="${sel}" title="${T("ctx_event")}">★</button><span class="sp"></span><button class="primary" data-act="go-review" data-date="${sel}">${T("pop_open_review")} →</button></div>
+  </div>`;
+}
+/* right-click a date: mark a deadline or key event */
+function ctxMenu(){
+  const c=S.ctx;
+  return `<div class="ctx" id="ctxMenu" style="left:${c.x}px;top:${c.y}px" role="menu">
+    <div class="ctx-h">${md(c.date)} ${dow(c.date)}</div>
+    ${c.kind?`<form class="add" data-act="ev-add" data-date="${c.date}" data-kind="${c.kind}"><span class="mark ${c.kind}">${c.kind==="deadline"?"⚑":"★"}</span><input type="text" id="ev-title" placeholder="${T("ev_ph")}" autocomplete="off"></form>`
+      :`<button role="menuitem" data-act="ctx-kind" data-kind="deadline"><span class="mark deadline">⚑</span> ${T("ctx_deadline")}</button>
+        <button role="menuitem" data-act="ctx-kind" data-kind="event"><span class="mark event">★</span> ${T("ctx_event")}</button>`}
+  </div>`;
+}
+function positionPop(){
+  const pop=document.getElementById("calPop"), grid=document.getElementById("calGrid");
+  if (pop && grid){ const cell=grid.querySelector(`.cell[data-date="${S.calSel}"]`);
+    if (cell){ const gw=grid.clientWidth, pw=pop.offsetWidth; let left=cell.offsetLeft+cell.offsetWidth+8; if (left+pw>gw) left=cell.offsetLeft-pw-8; if (left<0) left=Math.max(0,(gw-pw)/2);
+      let top=cell.offsetTop; const maxTop=grid.clientHeight-pop.offsetHeight; if (top>maxTop) top=Math.max(0,maxTop);
+      pop.style.left=left+"px"; pop.style.top=top+"px"; } }
+  const m=document.getElementById("ctxMenu");
+  if (m && grid){ const gw=grid.clientWidth; if (m.offsetLeft+m.offsetWidth>gw) m.style.left=Math.max(0,gw-m.offsetWidth)+"px"; const i=m.querySelector("input"); if(i && document.activeElement!==i) i.focus(); }
 }
 /* move anything shown on the calendar to another date */
 function moveTo(d, date){
@@ -947,7 +992,7 @@ document.addEventListener("submit", e=>{
     inp.value=""; render();
   } else if (act==="ev-add"){
     const inp=document.getElementById("ev-title"), title=inp.value.trim(); if(!title) return;
-    const id=uid(); save("events/"+id,{id,date:f.dataset.date,title,kind:document.getElementById("ev-kind").value},50); inp.value=""; render();
+    const id=uid(); save("events/"+id,{id,date:f.dataset.date,title,kind:f.dataset.kind||"deadline"},50); inp.value=""; S.ctx=null; render();
   } else if (act==="gym-r-add"){
     const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return;
     const pl=clone(gymPlan()), id=uid(); pl.routines.push({id,name:n,groups:[]}); savePlan(pl); S.gymR=id; inp.value=""; render();
@@ -980,6 +1025,8 @@ document.addEventListener("click", e=>{
   const act=b.dataset.act;
   if (act==="nav") setTab(b.dataset.tab);
   else if (act==="jump"){ const el=document.getElementById(b.dataset.to); setSide(false); el && el.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth", block:"start"}); }
+  else if (act==="pop-mark"){ const pop=document.getElementById("calPop"); S.ctx={date:b.dataset.date, kind:b.dataset.kind, x:pop?pop.offsetLeft+12:0, y:pop?pop.offsetTop+pop.offsetHeight-60:0}; S.calSel=null; render(); }
+  else if (act==="ctx-kind"){ S.ctx={...S.ctx, kind:b.dataset.kind}; render(); }
   else if (act==="ev-del"){ remove("events/"+b.dataset.id); render(); toast(T("deleted")); }
   else if (act==="gym-r"){ S.gymR=b.dataset.id; S.confirmDel=null; render(); }
   else if (act==="gym-open"){ S.gymOpen[b.dataset.id]=!S.gymOpen[b.dataset.id]; render(); }
@@ -1005,7 +1052,7 @@ document.addEventListener("click", e=>{
   else if (act==="days"){ const n=+b.dataset.n; S.viewStart = n===0 ? addDays(today(),-1) : addDays(S.viewStart,n); render._scrolled=false; render(); }
   else if (act==="week"){ const n=+b.dataset.n; S.weekStart=n===0?mondayOf(new Date()):addDays(S.weekStart,n); render._scrolled=n!==0; render(); }
   else if (act==="calmonth"){ const n=+b.dataset.n; if(n===0) S.calMonth=today().slice(0,7); else { const d=parse(S.calMonth+"-01"); d.setMonth(d.getMonth()+n); S.calMonth=ymd(d).slice(0,7); } S.calSel=null; render(); }
-  else if (act==="cal-sel"){ S.calSel = S.calSel===b.dataset.date ? null : b.dataset.date; render(); }
+  else if (act==="cal-sel"){ if (e.target.closest("#calPop") && !e.target.closest(".icon-btn")) return; S.ctx=null; S.calSel = S.calSel===b.dataset.date ? null : b.dataset.date; render(); }
   else if (act==="proj-remove"){ const st=clone(settings()); st.projects=st.projects.filter(p=>p!==b.dataset.name); st.pinned=pinned().filter(p=>p!==b.dataset.name); save("settings/main",st,50); render(); }
   else if (act==="go-review"){ S.reviewDate=b.dataset.date; setTab("review"); }
   else if (act==="rv-day"){ const n=+b.dataset.n; S.reviewDate=n===0?today():addDays(S.reviewDate,n); render(); }
@@ -1075,6 +1122,13 @@ document.addEventListener("drop", e=>{ const c=calDrag && e.target.closest && e.
 document.addEventListener("dragend", ()=>{ calDrag=null; document.querySelectorAll(".cell.drop").forEach(x=>x.classList.remove("drop")); });
 document.addEventListener("keydown", e=>{ const c=e.target; if ((e.key==="Enter"||e.key===" ") && c.getAttribute && c.getAttribute("role")==="button" && c.dataset.act){ e.preventDefault(); c.click(); } if (e.key==="Escape" && S.wpOpen){ S.wpOpen=false; render(); } });
 document.getElementById("wpModal").addEventListener("click", e=>{ if (e.target.id==="wpModal"){ S.wpOpen=false; render(); } });
+
+/* right-click a calendar date to mark it; click elsewhere or Esc closes menus */
+document.addEventListener("contextmenu", e=>{ const c=e.target.closest && e.target.closest(".cell[data-drop-date]"); if(!c) return; e.preventDefault();
+  const g=document.getElementById("calGrid").getBoundingClientRect(); S.calSel=null; S.ctx={date:c.dataset.dropDate, x:Math.round(e.clientX-g.left), y:Math.round(e.clientY-g.top)}; render(); });
+document.addEventListener("pointerdown", e=>{ if (S.ctx && !e.target.closest("#ctxMenu")){ S.ctx=null; render(); return; }
+  if (S.calSel && !e.target.closest("#calPop") && !e.target.closest(".cell")){ S.calSel=null; setTimeout(render,0); } });
+document.addEventListener("keydown", e=>{ if (e.key==="Escape" && (S.ctx||S.calSel)){ S.ctx=null; S.calSel=null; render(); } });
 
 /* drag tasks between buckets */
 let dragId=null;
