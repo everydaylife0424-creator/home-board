@@ -73,7 +73,11 @@ section.block{margin-bottom:34px;scroll-margin-top:calc(16px + env(safe-area-ins
 .ghost{border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:4px 10px;font-size:13px;cursor:pointer;color:var(--muted)}
 .ghost:hover{color:var(--fg);border-color:var(--muted)}
 /* urgency board */
-.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.board{display:grid;grid-template-columns:repeat(var(--ncol,3),minmax(0,1fr));gap:16px}
+@media (min-width:861px){.board[style*="--ncol:4"],.board[style*="--ncol:5"],.board[style*="--ncol:6"]{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
+.col.custom .dot{background:var(--muted)}
+.ctx.cm{position:fixed;z-index:60;min-width:200px;max-width:280px}
+.ctx.cm .add{display:flex;gap:6px;align-items:center}
 @media (max-width:860px){.board{grid-template-columns:1fr}}
 .col{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px 10px;min-width:0}
 .col.drop{border-color:var(--accent);background:var(--accent-soft)}
@@ -354,7 +358,7 @@ const I18N = {
     pop_no_review:"這天沒有寫檢討。", pop_open_review:"打開這天的每日檢討", ctx_deadline:"標記截止日", ctx_event:"標記重大事件",
     nav_gym:"健身計劃", src_gym:"健身", k_deadline:"截止日", k_event:"重大事件", marks_title:"截止日與重大事件", marks_empty:"這天沒有標記。",
     ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
-    wp_change:"更換桌布", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
+    wp_change:"更換桌布", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"刪除這張卡片", cm_add_card:"加回卡片", cm_all_shown:"所有卡片都已顯示", cm_reset:"恢復預設卡片", cm_row_empty:"這排沒有卡片，在這裡按右鍵可以加回來。", cm_del_col:n=>`刪除「${n}」這欄`, cm_add_col:"新增一欄", cm_col_ph:"欄名，按 Enter", cm_last_col:"至少要留一欄", cm_col_deleted:n=>`已刪除，裡面的任務移到「${n}」`, cm_del_day:d=>`刪除 ${d} 這張卡片`, cm_day_first:d=>`刪除後會在最後補上 ${d}。月曆上的紀錄不會消失。`, cm_add_day:"新增日期卡片", cm_pick_day:"選一天", cm_add:"新增", cm_day_max:"最多 7 天，再新增會刪掉最早的那天。", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
     gym_sub:"點動作展開，可以記錄每次的組數、重量和 RPE", gym_add_routine:"＋ 新增課表", gym_add_group:"＋ 新增分組，例如「胸」（Enter）", gym_add_ex:"＋ 新增動作（Enter）",
     gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
     gym_history:"最近紀錄", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
@@ -411,7 +415,7 @@ const I18N = {
     pop_no_review:"No review written this day.", pop_open_review:"Open this day's review", ctx_deadline:"Mark a deadline", ctx_event:"Mark a key event",
     nav_gym:"Workout plan", src_gym:"Workout", k_deadline:"Deadline", k_event:"Key event", marks_title:"Deadlines & key events", marks_empty:"Nothing marked.",
     ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
-    wp_change:"Change cover", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
+    wp_change:"Change cover", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"Delete this card", cm_add_card:"Add a card back", cm_all_shown:"All cards are showing", cm_reset:"Restore default cards", cm_row_empty:"No cards here. Right-click to add them back.", cm_del_col:n=>`Delete the “${n}” column`, cm_add_col:"Add a column", cm_col_ph:"Column name, press Enter", cm_last_col:"Keep at least one column", cm_col_deleted:n=>`Deleted. Its tasks moved to “${n}”.`, cm_del_day:d=>`Delete the ${d} card`, cm_day_first:d=>`${d} will be added at the end. Calendar records stay.`, cm_add_day:"Add a day card", cm_pick_day:"Pick a day", cm_add:"Add", cm_day_max:"Up to 7 days. Adding more removes the earliest.", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
     gym_sub:"Open an exercise to log sets, weight and RPE", gym_add_routine:"+ New routine", gym_add_group:"+ New group, e.g. Chest (Enter)", gym_add_ex:"+ New exercise (Enter)",
     gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_sets:"Sets×reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
     gym_history:"Recent", gym_no_history:"No logs yet. Log one after training to compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
@@ -485,7 +489,7 @@ const ICON = {
 const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
-  calMonth: ymd(new Date()).slice(0,7), calSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, wpBusy:false, confirmDel:null, viewStart: addDays(ymd(new Date()),-1),
+  calMonth: ymd(new Date()).slice(0,7), calSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, cm:null, wpBusy:false, confirmDel:null,
   tasks:{}, days:{}, expenses:{}, settings:null,
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
@@ -500,7 +504,7 @@ function T(k, ...a){ const o = (settings().texts||{})[S.lang]; if (o && typeof o
   const v = (I18N[S.lang]||I18N.zh)[k] ?? I18N.zh[k] ?? k; return typeof v==="function" ? v(...a) : v; }
 
 /* editable text: wraps a label so edit mode can change it in place */
-function L(k){ return `<span data-tk="${k}"${S.edit?' contenteditable="plaintext-only" spellcheck="false"':""}>${esc(T(k))}</span>`; }
+function L(k, ...a){ const v=T(k,...a), d=a.length?((I18N[S.lang]||I18N.zh)[k]):null; return `<span data-tk="${k}"${typeof d==="function"?` data-def="${esc(d(...a))}"`:""}${S.edit?' contenteditable="plaintext-only" spellcheck="false"':""}>${esc(v)}</span>`; }
 
 let db = null;
 const pending = new Map(), timers = new Map(), inflight = new Set();
@@ -578,6 +582,7 @@ function render(){
   v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : viewMoney();
   renderHero();
   if (S.tab==="home") positionPop();
+  if (!S.cm) renderCm();
   document.querySelectorAll("[data-keep-scroll]").forEach(el=>{ if (sx[el.dataset.keepScroll]!=null) el.scrollLeft=sx[el.dataset.keepScroll]; });
   document.getElementById("sideInner").scrollTop = ss;
   v.style.minHeight=""; if (Math.abs(window.scrollY-wy)>1) window.scrollTo(0,wy);
@@ -617,19 +622,36 @@ function dueBadge(due){
   const diff=(parse(due)-parse(today()))/864e5;
   return `<span class="due ${diff<=2?"soon":""}" title="${esc(due)}">${diff<0?T("late"):""}${md(due)}</span>`;
 }
+/* ---------- cards: which ones show, kept in settings/main ---------- */
+function bucketList(){ const b=settings().buckets; return (b&&b.length)?b:BUCKETS.map(id=>({id})); }
+function bName(b){ return b.name || T("b_"+b.id); }
+function ovDefault(){ return ["today","week",...pinned().map(p=>"proj:"+p),"due","carry"]; }
+function ovCards(){ return settings().ovCards || ovDefault(); }
+function ovAll(){ return ["today","week",...settings().projects.map(p=>"proj:"+p),"due","carry"]; }
+function ovLabel(id){ return id.startsWith("proj:")?T("ov_proj",id.slice(5)):T({today:"ov_today",week:"ov_week",due:"ov_due",carry:"ov_carry"}[id]); }
+const DAY_MAX=7;
+function dayDefault(){ const t=today(); return [-1,0,1,2,3].map(i=>addDays(t,i)); }
+/* the day cards: what was saved, plus one more card at the end for every day that has passed since, keeping at most 7 */
+function dayCards(){ const st=settings().dayCards; if(!st || !st.list || !st.list.length) return dayDefault();
+  let list=[...new Set(st.list)].sort(); const passed=Math.max(0,Math.round((parse(today())-parse(st.at||today()))/864e5));
+  for (let i=0;i<Math.min(passed,DAY_MAX);i++) list.push(addDays(list[list.length-1],1));
+  return list.slice(-DAY_MAX); }
+function saveDayCards(list){ const st=clone(settings()); list=[...new Set(list)].sort(); if(list.length>DAY_MAX) list=list.slice(-DAY_MAX);
+  st.dayCards = list.length?{list, at:today()}:null; save("settings/main",st,50); render(); }
 function viewHome(){
   const tasks = allTasks().sort((a,b)=>(a.done-b.done)||((a.due||"9999")<(b.due||"9999")?-1:(a.due||"9999")>(b.due||"9999")?1:0)||(a.createdAt||0)-(b.createdAt||0));
-  const cols = BUCKETS.map(bk=>{
-    const mine=tasks.filter(t=>t.bucket===bk), open=mine.filter(t=>!t.done), done=mine.filter(t=>t.done), show=S.showDone[bk];
+  const bl=bucketList(), ids=new Set(bl.map(b=>b.id)), home=bl[0].id;
+  const cols = bl.map(B=>{ const bk=B.id;
+    const mine=tasks.filter(t=>(ids.has(t.bucket)?t.bucket:home)===bk), open=mine.filter(t=>!t.done), done=mine.filter(t=>t.done), show=S.showDone[bk];
     const li = t => `<li class="item ${t.done?"done":""}" draggable="true" data-task="${t.id}">
         <input type="checkbox" ${t.done?"checked":""} data-act="task-toggle" data-id="${t.id}" aria-label="${T("done")}">
         <span class="t">${esc(t.title)}</span>${dueBadge(t.due)}
         <span class="acts">
-          ${BUCKETS.filter(b=>b!==bk).map(b=>`<button class="icon-btn" data-act="task-move" data-id="${t.id}" data-to="${b}" title="${esc(T("move_to",T("b_"+b)))}">${T("mv_"+b)}</button>`).join("")}
+          ${bl.filter(b=>b.id!==bk).map(b=>`<button class="icon-btn" data-act="task-move" data-id="${t.id}" data-to="${b.id}" title="${esc(T("move_to",bName(b)))}">${b.name?esc("→"+b.name.slice(0,2)):T("mv_"+b.id)}</button>`).join("")}
           <button class="icon-btn" data-act="task-del" data-id="${t.id}" title="${T("del")}">✕</button>
         </span></li>`;
-    return `<div class="col ${bk}" data-bucket="${bk}">
-      <div class="col-h"><span class="dot"></span><b>${L("b_"+bk)}</b><span class="n">${open.length}</span></div>
+    return `<div class="col ${B.name?"custom":bk}" data-bucket="${bk}">
+      <div class="col-h"><span class="dot"></span><b>${B.name?esc(B.name):L("b_"+bk)}</b><span class="n">${open.length}</span></div>
       <ul class="list">${open.map(li).join("") || `<li class="empty mini">${T("empty_col")}</li>`}</ul>
       <form class="add" data-act="task-add" data-bucket="${bk}">
         <input type="text" id="add-task-${bk}" placeholder="${T("add_enter")}" autocomplete="off">
@@ -643,7 +665,7 @@ function viewHome(){
     ${S.showSettings?settingsPanel():""}
     <section class="block" id="s-tasks">
       <div class="sec-h"><h2>${L("sec_tasks")}</h2><span class="sub">${L("tasks_sub")}</span></div>
-      <div class="board">${cols}</div>
+      <div class="board" style="--ncol:${bl.length}">${cols}</div>
     </section>
     ${viewWeek()}
     ${viewDoneCalendar(tasks)}`;
@@ -667,13 +689,16 @@ function overview(tasks){
   const overdue=open.filter(x=>x.due && x.due<t).length, soon=open.filter(x=>x.due && x.due>=t && (parse(x.due)-parse(t))/864e5<=3).length;
   const bar=(k,n)=>`<div class="progress"><i style="width:${n?k/n*100:0}%"></i></div>`;
   const tn=ts.n+car.length, tk=ts.k;
-  return `<div class="overview">
-    <div class="ov ${tn&&tk===tn?"ok":""}"><div class="k">${L("ov_today")}</div><div class="v">${tk}<small>/${tn}</small></div>${bar(tk,tn)}</div>
-    <div class="ov"><div class="k">${L("ov_week")}</div><div class="v">${wk_}<small>/${wn}</small></div>${bar(wk_,wn)}</div>
-    ${Object.entries(per).map(([p,s])=>`<div class="ov"><div class="k">${esc(T("ov_proj",p))}</div><div class="v">${s.k}<small>/${s.n}</small></div>${bar(s.k,s.n)}</div>`).join("")}
-    <div class="ov ${overdue?"alert":""}"><div class="k">${L("ov_due")}</div><div class="v">${overdue}<small> / ${soon}</small></div></div>
-    <div class="ov ${car.length?"alert":""}"><div class="k">${L("ov_carry")}</div><div class="v">${car.length}<small>${T("unit_items")}</small></div></div>
-  </div>`;
+  const projStat=name=>{ let n=0,k=0; wk.forEach(ds=>{ if(!hasDay(ds)) return; (day(ds).projects||[]).forEach(p=>{ if(p.name!==name) return; n+=p.items.length; k+=p.items.filter(i=>i.d).length; }); }); return {n,k}; };
+  const card=id=>{
+    if (id==="today") return `<div class="ov ${tn&&tk===tn?"ok":""}" data-card="today"><div class="k">${L("ov_today")}</div><div class="v">${tk}<small>/${tn}</small></div>${bar(tk,tn)}</div>`;
+    if (id==="week") return `<div class="ov" data-card="week"><div class="k">${L("ov_week")}</div><div class="v">${wk_}<small>/${wn}</small></div>${bar(wk_,wn)}</div>`;
+    if (id==="due") return `<div class="ov ${overdue?"alert":""}" data-card="due"><div class="k">${L("ov_due")}</div><div class="v">${overdue}<small> / ${soon}</small></div></div>`;
+    if (id==="carry") return `<div class="ov ${car.length?"alert":""}" data-card="carry"><div class="k">${L("ov_carry")}</div><div class="v">${car.length}<small>${T("unit_items")}</small></div></div>`;
+    if (id.startsWith("proj:")){ const nm=id.slice(5), st=per[nm]||projStat(nm); return `<div class="ov" data-card="${esc(id)}"><div class="k">${esc(T("ov_proj",nm))}</div><div class="v">${st.k}<small>/${st.n}</small></div>${bar(st.k,st.n)}</div>`; }
+    return ""; };
+  const list=ovCards();
+  return `<div class="overview" data-row="ov">${list.map(card).join("") || `<p class="empty mini">${T("cm_row_empty")}</p>`}</div>`;
 }
 
 function settingsPanel(){
@@ -685,7 +710,7 @@ function settingsPanel(){
 }
 
 function viewWeek(){
-  const nd=visibleDays(), days=Array.from({length:nd},(_,i)=>addDays(S.viewStart,i));
+  const days=dayCards();
   const projOpts=settings().projects, pins=pinned(), t=today();
   const car=days.includes(t) ? carried() : [];
   const itemLi=(it,date,pi,tag)=>`<li class="item ${it.d?"done":""}">
@@ -709,7 +734,7 @@ function viewWeek(){
       </details>`;
     }).join("");
     const topCar=myCar.filter(c=>!c.proj);
-    return `<div class="day ${td?"today":""}">
+    return `<div class="day ${td?"today":""}" data-day="${date}">
       <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}</div>
       <ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(d.items||[]).map(it=>itemLi(it,date,-1)).join("")}</ul>${addForm(date)}
       ${projs}
@@ -720,15 +745,13 @@ function viewWeek(){
     </div>`;
   }).join("");
   return `<section class="block" id="s-week">
-      <div class="sec-h"><h2>${md(days[0])} ~ ${md(days[days.length-1])}</h2><span class="sp"></span>
+      <div class="sec-h"><h2>${L("week_title", md(days[0]), md(days[days.length-1]))}</h2><span class="sp"></span>
         <button class="ghost" data-act="days" data-n="-1" aria-label="${T("prev_day")}">←</button><button class="ghost" data-act="days" data-n="0">${T("today")}</button><button class="ghost" data-act="days" data-n="1" aria-label="${T("next_day")}">→</button></div>
       ${car.length?`<p class="sub" style="margin:-4px 0 10px">${L("carry_note")}</p>`:""}
       <div class="week" data-keep-scroll="week" tabindex="0">${dayCols}</div>
     </section>`;
 }
 
-/* how many day columns fit: 3 on a laptop, 2 on a tablet, 1 on a phone */
-function visibleDays(){ return 5; }
 
 /* everything finished, keyed by the date it was checked off. Each entry knows how to move itself. */
 function doneByDate(tasks){
@@ -1053,6 +1076,10 @@ document.addEventListener("submit", e=>{
     const st=clone(settings()); st.pinned=[...pinned()];
     if(!st.projects.includes(n)){ st.projects.push(n); st.pinned.push(n); save("settings/main",st,50); }
     inp.value=""; render();
+  } else if (act==="cm-col-add"){
+    const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return; const st=clone(settings()); st.buckets=[...bucketList(), {id:uid(), name:n}]; S.cm=null; save("settings/main",st,50); render();
+  } else if (act==="cm-day-pick"){
+    const v=f.querySelector("input").value; if(!v) return; S.cm=null; saveDayCards([...dayCards(), v]);
   } else if (act==="ev-add"){
     const inp=document.getElementById("ev-title"), title=inp.value.trim(); if(!title) return;
     const id=uid(), kind=f.dataset.kind||"deadline", date=f.dataset.date, cb=document.getElementById("ev-gc"), toG=!!(cb&&cb.checked);
@@ -1101,6 +1128,14 @@ document.addEventListener("click", e=>{
   else if (act==="gym-ex-del"){ planEdit((pl,r)=>{ const g=r.groups.find(g=>g.id===b.dataset.g); g.ex=g.ex.filter(x=>x.id!==b.dataset.x); }); }
   else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
   else if (act==="gc-allow"){ gcAllow(); }
+  else if (act==="cm-ov-del"){ const st=clone(settings()); st.ovCards=ovCards().filter(x=>x!==b.dataset.id); S.cm=null; save("settings/main",st,50); render(); }
+  else if (act==="cm-ov-add"){ const st=clone(settings()); st.ovCards=[...ovCards().filter(x=>x!==b.dataset.id), b.dataset.id]; S.cm=null; save("settings/main",st,50); render(); }
+  else if (act==="cm-ov-reset"){ const st=clone(settings()); delete st.ovCards; S.cm=null; save("settings/main",st,50); render(); }
+  else if (act==="cm-col-del"){ const bl=bucketList(); if (bl.length<=1){ toast(T("cm_last_col")); return; }
+    const rest=bl.filter(x=>x.id!==b.dataset.id), to=rest[0].id; allTasks().filter(t=>t.bucket===b.dataset.id).forEach(t=>save("tasks/"+t.id,{...t,bucket:to},50));
+    const st=clone(settings()); st.buckets=rest; S.cm=null; save("settings/main",st,50); render(); toast(T("cm_col_deleted", bName(rest[0]))); }
+  else if (act==="cm-day-del"){ const list=dayCards(), d=b.dataset.date; let next=list.filter(x=>x!==d); if (d===list[0] && list.length) next.push(addDays(list[list.length-1],1)); S.cm=null; saveDayCards(next.length?next:dayDefault()); }
+  else if (act==="cm-day-add"){ S.cm=null; saveDayCards([...dayCards(), b.dataset.date]); }
   else if (act==="wp-adj"){ S.wpAdj={pos:[...wpPos(wpFor(S.tab))]}; render(); }
   else if (act==="wp-adj-cancel"){ S.wpAdj=null; render(); }
   else if (act==="wp-adj-save"){ const w=wpFor(S.tab), st=clone(settings()); st.wpPos={...(st.wpPos||{}), [w.file]:S.wpAdj.pos.map(v=>Math.round(v*10)/10)}; S.wpAdj=null; save("settings/main",st,50); render(); }
@@ -1119,7 +1154,7 @@ document.addEventListener("click", e=>{
   else if (act==="show-done"){ S.showDone[b.dataset.bucket]=!S.showDone[b.dataset.bucket]; render(); }
   else if (act==="it-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date), l=listOf(d,+b.dataset.pi); l.splice(l.findIndex(i=>i.id===b.dataset.id),1); save("days/"+d.date,d,300); render(); }
   else if (act==="proj-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date); d.projects.splice(+b.dataset.pi,1); save("days/"+d.date,d,300); render(); }
-  else if (act==="days"){ const n=+b.dataset.n; S.viewStart = n===0 ? addDays(today(),-1) : addDays(S.viewStart,n); render._scrolled=false; render(); }
+  else if (act==="days"){ const n=+b.dataset.n; render._scrolled=false; saveDayCards(n===0 ? dayDefault() : dayCards().map(d=>addDays(d,n))); }
   else if (act==="week"){ const n=+b.dataset.n; S.weekStart=n===0?mondayOf(new Date()):addDays(S.weekStart,n); render._scrolled=n!==0; render(); }
   else if (act==="calmonth"){ const n=+b.dataset.n; if(n===0) S.calMonth=today().slice(0,7); else { const d=parse(S.calMonth+"-01"); d.setMonth(d.getMonth()+n); S.calMonth=ymd(d).slice(0,7); } S.calSel=null; render(); }
   else if (act==="cal-sel"){ if (e.target.closest("#calPop") && !e.target.closest(".icon-btn")) return; S.ctx=null; S.calSel = S.calSel===b.dataset.date ? null : b.dataset.date; render(); }
@@ -1179,8 +1214,8 @@ document.addEventListener("focusout", e=>{
   const k=el.dataset.tk, v=el.textContent.replace(/[<>"&]/g,"").replace(/\s+/g," ").trim();
   const st=clone(settings()); st.texts=st.texts||{}; st.texts[S.lang]=st.texts[S.lang]||{};
   const cur=st.texts[S.lang][k]||"";
-  if (!v || v===((I18N[S.lang]||{})[k])) delete st.texts[S.lang][k]; else st.texts[S.lang][k]=v;
-  if ((st.texts[S.lang][k]||"")===cur) { if(!v) el.textContent=T(k); return; }
+  if (!v || v===((I18N[S.lang]||{})[k]) || v===el.dataset.def) delete st.texts[S.lang][k]; else st.texts[S.lang][k]=v;
+  if ((st.texts[S.lang][k]||"")===cur) { if(!v) el.textContent=el.dataset.def||T(k); return; }
   save("settings/main", st, 50); toast(T("edit_saved")); setTimeout(()=>{ if(!isTyping()) render(); },0);
 }, true);
 
@@ -1212,6 +1247,36 @@ document.addEventListener("pointermove", e=>{ if(!wpDrag) return; const d=wpDrag
   S.wpAdj.pos=[x,y]; d.img.style.objectPosition=`${x}% ${y}%`; });
 document.addEventListener("pointerup", ()=>{ wpDrag=null; });
 document.addEventListener("pointercancel", ()=>{ wpDrag=null; });
+/* right-click menu for the cards on HOME: delete a card, or add one in that row */
+const cmEl=document.createElement("div"); cmEl.id="cmenu"; cmEl.className="ctx cm"; cmEl.hidden=true; cmEl.setAttribute("role","menu"); document.body.appendChild(cmEl);
+function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; return; }
+  const btn=(act,label,data="")=>`<button role="menuitem" data-act="${act}" ${data}>${label}</button>`;
+  let h="";
+  if (c.row==="ov"){ if (c.id) h+=btn("cm-ov-del",`✕ ${T("cm_del_card")}`,`data-id="${esc(c.id)}"`);
+    const shown=new Set(ovCards()), miss=ovAll().filter(x=>!shown.has(x));
+    h+=`<div class="ctx-h">${T("cm_add_card")}</div>` + (miss.length?miss.map(x=>btn("cm-ov-add","＋ "+esc(ovLabel(x)),`data-id="${esc(x)}"`)).join(""):`<p class="empty mini">${T("cm_all_shown")}</p>`);
+    if (settings().ovCards) h+=btn("cm-ov-reset",T("cm_reset")); }
+  else if (c.row==="col"){ if (c.id){ const b=bucketList().find(x=>x.id===c.id); h+=btn("cm-col-del",`✕ ${T("cm_del_col", b?bName(b):"")}`,`data-id="${esc(c.id)}"`); }
+    h+=`<div class="ctx-h">${T("cm_add_col")}</div><form class="add" data-act="cm-col-add"><input type="text" id="cm-col-name" placeholder="${T("cm_col_ph")}" autocomplete="off"></form>`; }
+  else if (c.row==="day"){ const list=dayCards(), nx=addDays(list[list.length-1],1);
+    if (c.id) h+=btn("cm-day-del",`✕ ${T("cm_del_day", md(c.id))}`,`data-date="${c.id}"`)+(c.id===list[0]?`<p class="empty mini">${T("cm_day_first", md(nx))}</p>`:"");
+    h+=`<div class="ctx-h">${T("cm_add_day")}</div>`+btn("cm-day-add",`＋ ${md(nx)} ${dow(nx)}`,`data-date="${nx}"`)+`<form class="add" data-act="cm-day-pick"><input type="date" id="cm-day-date" aria-label="${T("cm_pick_day")}"><button class="ghost mini" type="submit">${T("cm_add")}</button></form>`
+      + (list.length>=DAY_MAX?`<p class="empty mini">${T("cm_day_max")}</p>`:""); }
+  cmEl.innerHTML=h; cmEl.hidden=false;
+  const w=cmEl.offsetWidth, hh=cmEl.offsetHeight; cmEl.style.left=Math.max(8,Math.min(c.x, innerWidth-w-8))+"px"; cmEl.style.top=Math.max(8,Math.min(c.y, innerHeight-hh-8))+"px";
+}
+document.addEventListener("contextmenu", e=>{
+  const t=e.target; if (!t.closest || S.tab!=="home" || S.edit) return;
+  if (t.closest("#s-cal") || t.closest("#cmenu") || t.closest("input,textarea,select,[contenteditable]")) return;
+  let row=null, id=null;
+  const ov=t.closest(".ov[data-card]"), col=t.closest(".col[data-bucket]"), dy=t.closest(".day[data-day]");
+  if (ov){ row="ov"; id=ov.dataset.card; } else if (t.closest("#s-overview")) row="ov";
+  else if (col){ row="col"; id=col.dataset.bucket; } else if (t.closest("#s-tasks")) row="col";
+  else if (dy){ row="day"; id=dy.dataset.day; } else if (t.closest("#s-week")) row="day";
+  if (!row) return; e.preventDefault(); S.cm={row,id,x:e.clientX,y:e.clientY}; renderCm(); });
+document.addEventListener("pointerdown", e=>{ if (S.cm && !e.target.closest("#cmenu")){ S.cm=null; renderCm(); } });
+document.addEventListener("keydown", e=>{ if (e.key==="Escape" && S.cm){ S.cm=null; renderCm(); } });
+addEventListener("scroll", ()=>{ if (S.cm){ S.cm=null; renderCm(); } }, {passive:true});
 /* drag routine chips to reorder */
 let rtDrag=null;
 const rtSide=(c,e)=>{ const b=c.getBoundingClientRect(); return e.clientX<b.left+b.width/2?"l":"r"; };
