@@ -865,7 +865,7 @@ function viewGym(){
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
 
 /* ---------- covers & tint ---------- */
-const WPS = [{"file": "bg/01.jpg", "name": "冰河谷", "hue": 197, "sat": 33}, {"file": "bg/02.jpg", "name": "晨光", "hue": 19, "sat": 38}, {"file": "bg/03.jpg", "name": "霧林", "hue": 142, "sat": 20}, {"file": "bg/04.jpg", "name": "暮色", "hue": 300, "sat": 26}, {"file": "bg/05.jpg", "name": "秋嶺", "hue": 26, "sat": 47}, {"file": "bg/06.jpg", "name": "星夜", "hue": 218, "sat": 56}, {"file": "bg/07.jpg", "name": "湖光", "hue": 198, "sat": 25}, {"file": "bg/08.jpg", "name": "雪原", "hue": 206, "sat": 17}, {"file": "bg/09.jpg", "name": "碧湖黃昏", "hue": 178, "sat": 31}, {"file": "bg/10.jpg", "name": "薰衣草霧", "hue": 260, "sat": 22}];
+const WPS = [{"file": "bg/01.jpg", "name": "冰河谷", "hue": 197, "sat": 33}, {"file": "bg/02.jpg", "name": "晨光", "hue": 19, "sat": 38}, {"file": "bg/03.jpg", "name": "霧林", "hue": 142, "sat": 20}, {"file": "bg/04.jpg", "name": "暮色", "hue": 300, "sat": 26}, {"file": "bg/05.jpg", "name": "秋嶺", "hue": 26, "sat": 47}, {"file": "bg/06.jpg", "name": "星夜", "hue": 218, "sat": 56}, {"file": "bg/07.jpg", "name": "湖光", "hue": 198, "sat": 25}, {"file": "bg/08.jpg", "name": "雪原", "hue": 206, "sat": 17}, {"file": "bg/09.jpg", "name": "碧湖黃昏", "hue": 178, "sat": 31}, {"file": "bg/10.jpg", "name": "薰衣草霧", "hue": 260, "sat": 22}, {"file": "bg/11.jpg", "name": "楓湖", "hue": 14, "sat": 40, "pos": 74}, {"file": "bg/12.jpg", "name": "雪峰", "hue": 210, "sat": 24, "pos": 36}, {"file": "bg/13.jpg", "name": "海岸晨霧", "hue": 200, "sat": 16, "pos": 45}, {"file": "bg/14.jpg", "name": "海峽秋色", "hue": 205, "sat": 34, "pos": 50}, {"file": "bg/15.jpg", "name": "城市雲海", "hue": 212, "sat": 16, "pos": 78}];
 const WP_DEFAULT = {home:"bg/01.jpg", review:"bg/03.jpg", money:"bg/07.jpg", gym:"bg/05.jpg"};
 function wpList(){ return [...WPS.map(w=>({...w, src:w.file})), ...((settings().customWps)||[]).map(w=>({...w, src:w.url, file:w.url, custom:true}))]; }
 function wpFor(tab){ const key=((settings().wp)||{})[tab] || WP_DEFAULT[tab] || WPS[0].file; return wpList().find(w=>w.file===key) || {...WPS[0], src:WPS[0].file}; }
@@ -878,7 +878,7 @@ function applyTint(h,s){
 }
 function renderHero(){
   const w=wpFor(S.tab), img=document.getElementById("heroImg");
-  if (img.getAttribute("src")!==w.src) img.setAttribute("src", w.src);
+  if (img.getAttribute("src")!==w.src) img.setAttribute("src", w.src); img.style.objectPosition=`50% ${w.pos??50}%`;
   applyTint(w.hue, w.sat);
   document.getElementById("heroBtns").innerHTML=`<button data-act="wp-open">${T("wp_change")}</button><button data-act="wp-next">${T("wp_random")}</button>`;
   const m=document.getElementById("wpModal");
