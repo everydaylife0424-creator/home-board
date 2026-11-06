@@ -219,6 +219,41 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 /* review */
 .review-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
 @media (max-width:960px){.review-grid{grid-template-columns:1fr}}
+.focus-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.top3 .sec-h,.inbox .sec-h{margin-bottom:6px}
+.top-list{list-style:none;margin:0;padding:0;counter-reset:top}
+.top-list .item{counter-increment:top}
+.top-list .item::before{content:counter(top);font-family:var(--f-mono);font-weight:600;color:var(--accent);width:16px;text-align:center}
+.top-list .src,.ib-list .src{font-size:12px;color:var(--muted);white-space:nowrap}
+.top-done{margin:8px 0 0;color:var(--good)}
+.icon-btn.pin.on{color:var(--warn);opacity:1}
+.ib-list .ib-acts{display:flex;gap:4px;align-items:center;opacity:.35}.ib-list .item:hover .ib-acts,.ib-list .item:focus-within .ib-acts{opacity:1}
+@media (hover:none){.ib-list .ib-acts{opacity:1}}
+#qc{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.18);display:flex;justify-content:center;align-items:flex-start;padding:18vh 16px 0}
+#qc[hidden]{display:none}
+.qc-box{width:min(520px,100%);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:0 16px 40px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:8px}
+.qc-box b{font-size:13px;color:var(--muted);font-weight:500}
+.qc-box input{font-size:17px;border:0;border-bottom:1px solid var(--line);padding:8px 2px;background:transparent;color:var(--fg);outline:none}
+.dlg-back{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.2)}
+.dlg{position:fixed;z-index:51;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,calc(100vw - 32px));max-height:86vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 16px 40px rgba(0,0,0,.2)}
+.dlg h3{margin:0 0 4px;font-size:17px}.dlg .fl{display:flex;flex-direction:column;gap:4px;margin:12px 0;font-size:13px;color:var(--muted)}
+.dlg textarea,.dlg input[type=date]{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
+.sp-prev{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:13.5px;display:flex;flex-direction:column;gap:4px}
+.sp-prev small{color:var(--muted)}.sp-prev div{display:flex;gap:10px}.sp-prev b{font-family:var(--f-mono);font-weight:500;min-width:6.5em}
+.dlg-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.wk-ready{display:block;width:100%;margin:-12px 0 18px;padding:10px 14px;border-radius:10px;border:1px dashed var(--accent);background:var(--accent-soft);color:var(--accent);font:inherit;font-weight:500;text-align:left;cursor:pointer}
+.wk{margin-bottom:26px}
+.stats.wk-stats{margin-bottom:12px;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:700px){.stats.wk-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.wk-bars{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;height:96px;margin:4px 0 14px}
+.wb{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px;font-size:12px;color:var(--muted)}
+.wb i{display:block;width:min(36px,60%);min-height:2px;background:var(--good);border-radius:4px 4px 0 0;opacity:.75}
+.wb b{position:absolute;top:0;font-family:var(--f-mono);font-weight:500;color:var(--fg)}
+.wb.today span{color:var(--accent);font-weight:700}
+.wk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:12px}
+.wk-grid h4{margin:0 0 8px}
+.wk-grid .h{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:8px 0;font:inherit;color:var(--fg);cursor:pointer}
+.wk-grid .h .d{font-size:12px;color:var(--muted);font-family:var(--f-mono)}.wk-grid .h .x{font-size:13.5px}.wk-grid .h .x.imp{color:var(--muted)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:13px;font-weight:500;margin-bottom:4px}
@@ -440,7 +475,10 @@ const I18N = {
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
     nav_home:"待辦", nav_review:"每日檢討", nav_money:"記帳",
     grp_pages:"頁面", grp_sections:"本頁段落", grp_switch:"切換",
-    sec_overview:"總覽", sec_tasks:"Tasks", sec_week:"每日清單", sec_cal:"完成月曆",
+    sec_overview:"總覽", top_title:"今日三件事", top_sub:"先做完這三件，其他的晚點再說", top_empty:"在下面的待辦或任務板按 ☆，挑出今天最重要的三件。", top_full:"今天已經挑滿三件了，先取消一件再加", top_pin:"加到今日三件事", top_unpin:"從今日三件事移除", top_done:"三件都完成了 🎉",
+    ib_title:"想法收集箱", ib_sub:"先記下來，晚點再分類", ib_ph:"想到什麼就打，按 Enter", ib_empty:"目前沒有想法。隨時按 N 或左側「收集想法」都能快速記下。", ib_today:"→ 今天", ib_board:"→ 任務板", ib_today_t:"放進今天的待辦", ib_board_t:"放進任務板第一欄", ib_btn:"收集想法", ib_saved:"已收進想法收集箱", ib_moved:"已移過去",
+    sp_btn:"倒推拆解", sp_title:t=>`拆解「${t}」`, sp_steps:"步驟（一行一個）", sp_default:"找資料、規劃\n初稿\n修改\n最後檢查", sp_start:"從哪天開始", sp_due:d=>`截止日 ${d}，最後一步會排在前一天`, sp_preview:"會排成：", sp_go:"排進每日清單", sp_cancel:"取消", sp_done:n=>`已排進 ${n} 天的每日清單`, sp_need_due:"這個任務還沒有截止日",
+    wk_title:"每週回顧", wk_range:(a,b)=>`${a} ~ ${b}`, wk_done:"完成", wk_rate:"完成率", wk_gym:"健身", wk_mood:"平均心情", wk_days:n=>`${n} 天`, wk_items:n=>`${n} 件`, wk_stuck:"一直被延後的", wk_stuck_age:n=>`拖了 ${n} 天`, wk_none_stuck:"沒有拖延的事項 👍", wk_reviews:"這週的檢討重點", wk_no_review:"這週還沒有寫每日檢討", wk_note:"本週心得與下週調整", wk_note_ph:"這週學到什麼？下週要改什麼？", wk_ready:"本週回顧已經整理好了 →", wk_this:"本週", sec_tasks:"Tasks", sec_week:"每日清單", sec_cal:"完成月曆",
     lang_btn:"切換成 English", theme_btn:"主題", theme_system:"跟隨系統", theme_light:"淺色", theme_dark:"深色",
     proj_settings:"專案設定", menu:"目錄",
     b_urgent:"超級逼人", b_nagging:"如鯁在喉", b_later:"目前不重要也不在乎",
@@ -497,7 +535,10 @@ const I18N = {
     gym_logged:"Logged", gym_need:"Fill in sets or weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
     nav_home:"To-dos", nav_review:"Daily review", nav_money:"Expenses",
     grp_pages:"PAGES", grp_sections:"ON THIS PAGE", grp_switch:"SWITCHES",
-    sec_overview:"Overview", sec_tasks:"Tasks", sec_week:"Daily lists", sec_cal:"Done calendar",
+    sec_overview:"Overview", top_title:"Today's top 3", top_sub:"Finish these first, everything else can wait", top_empty:"Tap ☆ on a to-do or task below to pick today's three most important things.", top_full:"Already three picked today. Remove one first", top_pin:"Add to today's top 3", top_unpin:"Remove from today's top 3", top_done:"All three done 🎉",
+    ib_title:"Idea inbox", ib_sub:"Capture now, sort later", ib_ph:"Type anything, press Enter", ib_empty:"No ideas yet. Press N or use “Capture idea” in the sidebar any time.", ib_today:"→ Today", ib_board:"→ Board", ib_today_t:"Move to today's to-dos", ib_board_t:"Move to the first board column", ib_btn:"Capture idea", ib_saved:"Saved to the idea inbox", ib_moved:"Moved",
+    sp_btn:"Plan backwards", sp_title:t=>`Break down “${t}”`, sp_steps:"Steps (one per line)", sp_default:"Research & plan\nFirst draft\nRevise\nFinal check", sp_start:"Start on", sp_due:d=>`Due ${d}. The last step lands the day before.`, sp_preview:"Schedule:", sp_go:"Add to daily lists", sp_cancel:"Cancel", sp_done:n=>`Added across ${n} days`, sp_need_due:"This task has no due date yet",
+    wk_title:"Weekly review", wk_range:(a,b)=>`${a} – ${b}`, wk_done:"Done", wk_rate:"Completion", wk_gym:"Gym", wk_mood:"Avg mood", wk_days:n=>`${n} days`, wk_items:n=>`${n}`, wk_stuck:"Kept getting pushed back", wk_stuck_age:n=>`${n} days`, wk_none_stuck:"Nothing pushed back 👍", wk_reviews:"Review highlights", wk_no_review:"No daily reviews this week yet", wk_note:"Notes for this week & changes for next", wk_note_ph:"What did you learn? What will you change?", wk_ready:"This week's review is ready →", wk_this:"This week", sec_tasks:"Tasks", sec_week:"Daily lists", sec_cal:"Done calendar",
     lang_btn:"切換成中文", theme_btn:"Theme", theme_system:"System", theme_light:"Light", theme_dark:"Dark",
     proj_settings:"Projects", menu:"Menu",
     b_urgent:"Super urgent", b_nagging:"Nagging", b_later:"Not important now",
@@ -559,6 +600,7 @@ const ICON = {
   theme:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
   pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
   out:'<path d="M14 5H6v14h8M10 12h10M17 9l3 3-3 3"/>',
 };
 
@@ -566,7 +608,7 @@ const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
   calMonth: ymd(new Date()).slice(0,7), calSel: null, gcalMonth: ymd(new Date()).slice(0,7), gcalSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, cm:null, gymAsc:(()=>{ try{ return localStorage.getItem("home.gymAsc")==="1"; }catch(_){ return false; } })(), wpBusy:false, confirmDel:null,
-  tasks:{}, days:{}, expenses:{}, settings:null,
+  tasks:{}, days:{}, expenses:{}, settings:null, inbox:{}, split:null, qc:false, wkRev: mondayOf(new Date()),
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
@@ -630,10 +672,10 @@ async function flush(path){
     else toast(T("save_fail", e && e.message || e));
   } finally { inflight.delete(path); }
 }
-function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; }
+function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; }
 async function remove(path){
   pending.delete(path); clearTimeout(timers.get(path));
-  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id];
+  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id];
   if (db) { try { await db.doc(path).delete(); } catch(e){ toast(T("del_fail")); } }
 }
 
@@ -679,6 +721,7 @@ function renderSide(){
     ${page("home")}${page("gym")}${page("review")}${page("money")}
     ${S.tab==="home" ? `<div class="grp"><span class="lbl">${L("grp_sections")}</span></div>
       ${sec("s-overview","overview",T("sec_overview"))}${sec("s-tasks","tasks",T("sec_tasks"))}${sec("s-week","week",T("sec_week"))}${sec("s-cal","cal",T("sec_cal"))}` : ""}
+    <button class="navb" data-act="qc-open" title="N">${svg("bulb")}<span class="lbl">${T("ib_btn")}</span><span class="val lbl">N</span></button>
     <div class="grp"><span class="lbl">${L("grp_switch")}</span></div>
     <button class="navb" data-act="lang">${svg("lang")}<span class="lbl">${L("lang_btn")}</span></button>
     <button class="navb" data-act="theme">${svg("theme")}<span class="lbl">${L("theme_btn")}</span><span class="val lbl">${themeName}</span></button>
@@ -727,7 +770,7 @@ function viewHome(){
     const li = (t,i) => t.k ? blkLi(t,{task:t.id},nums[i],`<span class="acts">${moveBtns(t)}<button class="icon-btn" data-act="task-del" data-id="${t.id}" title="${T("del")}">✕</button></span>`,`draggable="true" data-task="${t.id}"`) : `<li class="item ${t.done?"done":""}" draggable="true" data-task="${t.id}">
         <input type="checkbox" ${t.done?"checked":""} data-act="task-toggle" data-id="${t.id}" aria-label="${T("done")}">
         <span class="t">${esc(t.title)}</span>${dueBadge(t.due)}
-        <span class="acts">
+        <span class="acts">${t.done?"":pinBtn({task:t.id})}${t.due&&!t.done?`<button class="icon-btn" data-act="split-open" data-id="${t.id}" title="${T("sp_btn")}">✂</button>`:""}
           ${bl.filter(b=>b.id!==bk).map(b=>`<button class="icon-btn" data-act="task-move" data-id="${t.id}" data-to="${b.id}" title="${esc(T("move_to",bName(b)))}">${b.name?esc("→"+b.name.slice(0,2)):T("mv_"+b.id)}</button>`).join("")}
           <button class="icon-btn" data-act="task-del" data-id="${t.id}" title="${T("del")}">✕</button>
         </span></li>`;
@@ -742,8 +785,12 @@ function viewHome(){
       ${show?`<ul class="list">${done.map(li).join("")}</ul>`:""}
     </div>`;
   }).join("");
+  const dw=new Date().getDay();
   return `<section class="block" id="s-overview">${overview(tasks)}</section>
+    ${dw===0||dw===1?`<button class="wk-ready" data-act="wk-open">${T("wk_ready")}</button>`:""}
+    <section class="block focus-row" id="s-focus">${viewTop3()}${viewInbox()}</section>
     ${S.showSettings?settingsPanel():""}
+    ${S.split?splitDialog():""}
     <section class="block" id="s-tasks">
       <div class="sec-h"><h2>${L("sec_tasks")}</h2><span class="sub">${L("tasks_sub")}</span></div>
       <div class="board" style="--ncol:${bl.length}">${cols}</div>
@@ -790,6 +837,95 @@ function settingsPanel(){
     <form class="add" data-act="proj-new"><input type="text" id="proj-new" placeholder="${T("proj_new_ph")}" autocomplete="off"></form></section>`;
 }
 
+/* ---------- today's top 3 ---------- */
+function refKey(r){ return r.task ? "t:"+r.task : `d:${r.date}:${r.pi}:${r.id}`; }
+function topList(){ return (day(today()).top||[]); }
+function pinBtn(ref){ const on=topList().some(r=>refKey(r)===refKey(ref));
+  return `<button class="icon-btn pin ${on?"on":""}" data-act="${on?"top-unpin":"top-pin"}" data-ref="${esc(JSON.stringify(ref))}" title="${on?T("top_unpin"):T("top_pin")}">${on?"★":"☆"}</button>`; }
+function resolveRef(r){
+  if (r.task){ const t=task(r.task); return t ? {t:t.title, done:!!t.done, chk:`data-act="task-toggle" data-id="${t.id}"`, src:bName(bucketList().find(b=>b.id===t.bucket)||bucketList()[0]), due:t.due} : null; }
+  const d=day(r.date), l=+r.pi<0 ? (d.items||[]) : ((d.projects||[])[+r.pi]||{}).items||[], it=l.find(i=>i.id===r.id);
+  return it ? {t:it.t, done:!!it.d, chk:`data-act="it-toggle" data-date="${r.date}" data-pi="${r.pi}" data-id="${it.id}"`, src: +r.pi<0 ? md(r.date) : (d.projects[+r.pi]||{}).name} : null; }
+function viewTop3(){
+  const rs=topList().map(r=>({r, x:resolveRef(r)})).filter(o=>o.x), n=rs.filter(o=>o.x.done).length;
+  return `<div class="card top3">
+    <div class="sec-h"><h2>${L("top_title")}</h2><span class="sub">${rs.length?`${n}/${rs.length}`:L("top_sub")}</span></div>
+    ${rs.length?`<ol class="top-list">${rs.map(({r,x})=>`<li class="item ${x.done?"done":""}"><input type="checkbox" ${x.done?"checked":""} ${x.chk} aria-label="${T("done")}"><span class="t">${esc(x.t)}</span>${x.due?dueBadge(x.due):""}<span class="src">${esc(x.src||"")}</span><span class="acts"><button class="icon-btn" data-act="top-unpin" data-ref="${esc(JSON.stringify(r))}" title="${T("top_unpin")}">✕</button></span></li>`).join("")}</ol>
+      ${n===rs.length&&n===3?`<p class="sub top-done">${T("top_done")}</p>`:""}`:`<p class="empty mini">${T("top_empty")}</p>`}
+  </div>`; }
+function setTop(fn){ const d=dayCopy(today()); d.top=fn([...(d.top||[])]); save("days/"+d.date,d,100); render(); }
+
+/* ---------- idea inbox ---------- */
+function inboxList(){ const ids=new Set(Object.keys(S.inbox)); for (const p of pending.keys()) if (p.startsWith("inbox/")) ids.add(p.slice(6)); return [...ids].map(id=>pending.get("inbox/"+id)||S.inbox[id]).filter(Boolean).sort((a,b)=>(b.at||0)-(a.at||0)); }
+function addIdea(t){ const id=uid(); save("inbox/"+id,{id,t,at:Date.now()},50); }
+function viewInbox(){
+  const ls=inboxList();
+  return `<div class="card inbox">
+    <div class="sec-h"><h2>${L("ib_title")}</h2><span class="sub">${ls.length?ls.length:L("ib_sub")}</span></div>
+    <form class="add" data-act="ib-add"><input type="text" id="ib-new" placeholder="${T("ib_ph")}" autocomplete="off"></form>
+    ${ls.length?`<ul class="list ib-list">${ls.map(x=>`<li class="item"><span class="t">${esc(x.t)}</span><span class="src">${md(ymd(new Date(x.at||Date.now())))}</span>
+      <span class="ib-acts"><button class="ghost mini" data-act="ib-today" data-id="${x.id}" title="${T("ib_today_t")}">${T("ib_today")}</button><button class="ghost mini" data-act="ib-board" data-id="${x.id}" title="${T("ib_board_t")}">${T("ib_board")}</button><button class="icon-btn" data-act="ib-del" data-id="${x.id}" title="${T("del")}">✕</button></span></li>`).join("")}</ul>`:`<p class="empty mini">${T("ib_empty")}</p>`}
+  </div>`; }
+const qcEl=document.createElement("div"); qcEl.id="qc"; qcEl.hidden=true; document.body.appendChild(qcEl);
+function openQc(){ qcEl.innerHTML=`<form class="qc-box" data-act="qc-add"><b>${T("ib_title")}</b><input type="text" id="qc-in" placeholder="${T("ib_ph")}" autocomplete="off"></form>`; qcEl.hidden=false; setTimeout(()=>document.getElementById("qc-in")?.focus(),0); }
+function closeQc(){ qcEl.hidden=true; qcEl.innerHTML=""; }
+qcEl.addEventListener("pointerdown", e=>{ if (e.target===qcEl) closeQc(); });
+document.addEventListener("keydown", e=>{
+  if (e.key==="Escape" && !qcEl.hidden){ closeQc(); return; }
+  if ((e.key==="n"||e.key==="N") && !e.metaKey && !e.ctrlKey && !e.altKey && !isTyping() && !(document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) && qcEl.hidden){ e.preventDefault(); openQc(); } });
+
+/* ---------- plan a big task backwards ---------- */
+function splitDates(n, start, due){
+  let last=addDays(due,-1); if (last<start) last=start;
+  const D=daysBetween(start,last);
+  return Array.from({length:n},(_,i)=> n===1 ? last : addDays(start, Math.round(i*D/(n-1))));
+}
+function splitDialog(){
+  const sp=S.split, t=task(sp.id); if (!t) return "";
+  const steps=sp.steps.split("\n").map(x=>x.trim()).filter(Boolean), ds=splitDates(steps.length, sp.start, t.due);
+  return `<div class="dlg-back" data-act="split-cancel"></div><div class="dlg" role="dialog" aria-label="${esc(T("sp_title",t.title))}">
+    <form data-act="split-go">
+      <h3>${esc(T("sp_title",t.title))}</h3>
+      <p class="sub">${T("sp_due",md(t.due))}</p>
+      <label class="fl">${T("sp_steps")}<textarea id="sp-steps" rows="5" data-act="sp-steps">${esc(sp.steps)}</textarea></label>
+      <label class="fl">${T("sp_start")}<input type="date" id="sp-start" value="${sp.start}" data-act="sp-start"></label>
+      <div class="sp-prev"><small>${T("sp_preview")}</small>${steps.map((x,i)=>`<div><b>${md(ds[i])} ${dow(ds[i])}</b><span>${esc(x)}</span></div>`).join("")}</div>
+      <div class="dlg-foot"><button type="button" class="ghost" data-act="split-cancel">${T("sp_cancel")}</button><button class="primary" type="submit">${T("sp_go")}</button></div>
+    </form></div>`; }
+
+/* ---------- weekly review ---------- */
+function viewWeekReview(){
+  const mon=S.wkRev, days7=Array.from({length:7},(_,i)=>addDays(mon,i)), sun=days7[6], t=today();
+  const by=doneByDate(allTasks().filter(x=>!x.k));
+  const doneN=days7.map(d=>(by[d]||[]).length), total=doneN.reduce((a,b)=>a+b,0), mx=Math.max(1,...doneN);
+  let n=0,k=0; days7.forEach(d=>{ if(hasDay(d)){ const st=dayStats(day(d)); n+=st.n; k+=st.k; } });
+  const gymDays=[...new Set(gymEntries().filter(e=>e.date>=mon&&e.date<=sun).map(e=>e.date))];
+  const moods=days7.map(d=>hasDay(d)?day(d).mood:0).filter(Boolean), mood=moods.length?(moods.reduce((a,b)=>a+b,0)/moods.length).toFixed(1):"–";
+  const end=sun<t?sun:t, stuck=[];
+  for (let i=0;i<30;i++){ const ds=addDays(end,-i); if (ds<addDays(mon,-21) || !hasDay(ds)) continue; const d=day(ds);
+    (d.items||[]).forEach(it=>{ if(!it.k && !it.d) stuck.push({t:it.t, from:ds, age:daysBetween(ds,end)}); });
+    (d.projects||[]).forEach(p=>p.items.forEach(it=>{ if(!it.k && !it.d) stuck.push({t:it.t, src:p.name, from:ds, age:daysBetween(ds,end)}); })); }
+  allTasks().filter(x=>!x.k && !x.done && x.due && x.due<end).forEach(x=>stuck.push({t:x.title, src:T("src_board"), from:x.due, age:daysBetween(x.due,end)}));
+  const top=stuck.filter(x=>x.age>=1).sort((a,b)=>b.age-a.age).slice(0,6);
+  const rvs=days7.filter(hasDay).map(d=>({d, r:day(d).review||{}})).filter(o=>o.r.done||o.r.improve);
+  const note=(hasDay(mon)?day(mon).weekNote:"")||"";
+  return `<section class="block wk" id="s-wk">
+    <div class="sec-h"><h2>${L("wk_title")}</h2><span class="sub">${T("wk_range",md(mon),md(sun))}</span><span class="sp"></span>
+      <button class="ghost" data-act="wk-nav" data-n="-1" aria-label="←">←</button><button class="ghost" data-act="wk-nav" data-n="0">${T("wk_this")}</button><button class="ghost" data-act="wk-nav" data-n="1" aria-label="→">→</button></div>
+    <div class="stats wk-stats">
+      <div class="stat"><div class="k">${T("wk_done")}</div><div class="v">${T("wk_items",total)}</div></div>
+      <div class="stat"><div class="k">${T("wk_rate")}</div><div class="v">${n?Math.round(k/n*100)+"%":"–"}<small> ${k}/${n}</small></div></div>
+      <div class="stat"><div class="k">${T("wk_gym")}</div><div class="v">${T("wk_days",gymDays.length)}</div></div>
+      <div class="stat"><div class="k">${T("wk_mood")}</div><div class="v">${mood}</div></div>
+    </div>
+    <div class="wk-bars">${days7.map((d,i)=>`<div class="wb ${d===t?"today":""}"><i style="height:${doneN[i]/mx*100}%"></i><b>${doneN[i]||""}</b><span>${T("wd_mon_first")[i]}</span></div>`).join("")}</div>
+    <div class="wk-grid">
+      <div class="card"><h4>${T("wk_stuck")}</h4>${top.length?`<ul class="list">${top.map(x=>`<li class="item"><span class="t">${esc(x.t)}</span><span class="src">${esc(x.src||md(x.from))}</span><span class="carry-tag">${T("wk_stuck_age",x.age)}</span></li>`).join("")}</ul>`:`<p class="empty mini">${T("wk_none_stuck")}</p>`}</div>
+      <div class="card"><h4>${T("wk_reviews")}</h4>${rvs.length?rvs.map(o=>`<button class="h" data-act="rv-open" data-date="${o.d}"><div class="d">${md(o.d)} ${dow(o.d)}</div>${o.r.done?`<div class="x">✓ ${esc(o.r.done.slice(0,80))}</div>`:""}${o.r.improve?`<div class="x imp">↻ ${esc(o.r.improve.slice(0,80))}</div>`:""}</button>`).join(""):`<p class="empty mini">${T("wk_no_review")}</p>`}</div>
+    </div>
+    <div class="field"><label for="wk-note">${T("wk_note")}</label><textarea id="wk-note" data-act="wk-note" data-mon="${mon}" placeholder="${T("wk_note_ph")}">${esc(note)}</textarea></div>
+  </section>`; }
+
 /* list blocks (bulleted / numbered / toggle) shared by day cards and the task board */
 function blkLi(x, ref, n, acts, extra=""){
   const txt=esc(x.t ?? x.title ?? ""), data=`data-blk="${esc(JSON.stringify(ref))}"`;
@@ -823,7 +959,7 @@ function viewWeek(){
       <span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>` : `<li class="item ${it.d?"done":""}">
       <input type="checkbox" ${it.d?"checked":""} data-act="it-toggle" data-date="${date}" data-pi="${pi}" data-id="${it.id}" aria-label="${T("done")}">
       <span class="t">${esc(it.t)}</span>${tag?`<span class="carry-tag" title="${esc(T("carry_from",date))}">${md(date)}</span>`:""}
-      <span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>`;
+      <span class="acts">${it.d?"":pinBtn({date,pi:String(pi),id:it.id})}<button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>`;
   const addForm=(date,name)=>`<form class="add" data-act="it-add" data-date="${date}" ${name?`data-proj="${esc(name)}"`:""}><input type="text" id="add-${date}-${name?hash(name):"_"}" placeholder="${T("todo_ph")}" autocomplete="off"></form>`;
   const dayCols=days.map(date=>{
     const d=day(date), td=date===t, myCar=td?car:[];
@@ -1131,7 +1267,7 @@ function viewReview(){
   const date=S.reviewDate, d=day(date), r=d.review||{}, st=dayStats(d);
   const field=(key,big)=>`<div class="field"><label for="rv-${key}">${L("f_"+key)}<small>${L("f_"+key+"_h")}</small></label><textarea id="rv-${key}" data-act="rv" data-key="${key}" class="${big?"big":""}">${esc(r[key]||"")}</textarea></div>`;
   const hist=allDayKeys().map(day).filter(x=>x.review && Object.values(x.review).some(v=>v && v.trim())).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);
-  return `<div class="review-grid">
+  return `${viewWeekReview()}<div class="review-grid">
     <div class="card">
       <div class="sec-h"><div class="daynav">
         <button class="ghost" data-act="rv-day" data-n="-1" aria-label="${T("prev_day")}">←</button>
@@ -1203,6 +1339,14 @@ document.addEventListener("submit", e=>{
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:due.value||today(),title,kind:m.mark},50); inp.value=""; due.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
     const id=uid(), tk={id, title:inp.value.trim()||title, bucket:m.bucket||f.dataset.bucket, done:false, due:due.value||null, createdAt:Date.now()}; if (m.k){ tk.k=m.k; tk.due=null; if (m.k==="tb") tk.rows=newRows(); } save("tasks/"+id, tk, 50); clearSlash(f);
     inp.value=""; due.value=""; render();
+  } else if (act==="ib-add" || act==="qc-add"){
+    const inp=f.querySelector("input"), v=inp.value.trim(); if(!v) return; addIdea(v); inp.value=""; if (act==="qc-add"){ closeQc(); toast(T("ib_saved")); } render();
+  } else if (act==="split-go"){
+    const sp=S.split, t=sp&&task(sp.id); if(!t) return; const steps=sp.steps.split("\n").map(x=>x.trim()).filter(Boolean); if(!steps.length) return;
+    const ds=splitDates(steps.length, sp.start, t.due), byDay={};
+    steps.forEach((x,i)=>{ (byDay[ds[i]]=byDay[ds[i]]||[]).push({id:uid(), t:`${t.title}：${x}`, d:false, from:t.id}); });
+    Object.entries(byDay).forEach(([dt,its])=>{ const d=dayCopy(dt); d.items.push(...its); save("days/"+dt,d,100); });
+    S.split=null; render(); toast(T("sp_done",Object.keys(byDay).length));
   } else if (act==="kid-add"){
     const inp=f.querySelector("input"), v=inp.value.trim(), ref=blkRef(f); if(!v||!ref) return; inp.value="";
     blkEdit(ref, x=>{ x.kids=[...(x.kids||[]), {id:uid(), t:v}]; x.o=true; });
@@ -1307,6 +1451,16 @@ document.addEventListener("click", e=>{
   else if (act==="tb-addcol"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.rows=(x.rows||newRows()).map(r=>({...r, c:[...r.c, ""]})); }); }
   else if (act==="tb-delcol"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.rows=(x.rows||[]).map(r=>({...r, c:r.c.slice(0,-1)})); }); }
   else if (act==="tb-delrow"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.rows=(x.rows||[]).filter((_,i)=>i!==+b.dataset.ri); }); }
+  else if (act==="top-pin"){ const r=JSON.parse(b.dataset.ref); if (topList().length>=3){ toast(T("top_full")); return; } setTop(l=>[...l.filter(x=>refKey(x)!==refKey(r)), r]); }
+  else if (act==="top-unpin"){ const r=JSON.parse(b.dataset.ref); setTop(l=>l.filter(x=>refKey(x)!==refKey(r))); }
+  else if (act==="ib-del"){ remove("inbox/"+b.dataset.id); render(); }
+  else if (act==="ib-today"){ const x=inboxList().find(i=>i.id===b.dataset.id); if(!x) return; const d=dayCopy(today()); d.items.push({id:uid(), t:x.t, d:false}); save("days/"+d.date,d,100); remove("inbox/"+x.id); render(); toast(T("ib_moved")); }
+  else if (act==="ib-board"){ const x=inboxList().find(i=>i.id===b.dataset.id); if(!x) return; const id=uid(); save("tasks/"+id,{id,title:x.t,bucket:bucketList()[0].id,done:false,due:null,createdAt:Date.now()},50); remove("inbox/"+x.id); render(); toast(T("ib_moved")); }
+  else if (act==="qc-open"){ openQc(); }
+  else if (act==="split-open"){ const t=task(b.dataset.id); if (!t||!t.due){ toast(T("sp_need_due")); return; } const st=today()<t.due?today():t.due; S.split={id:t.id, steps:T("sp_default"), start:st}; render(); setTimeout(()=>document.getElementById("sp-steps")?.focus(),0); }
+  else if (act==="split-cancel"){ S.split=null; render(); }
+  else if (act==="wk-open"){ S.wkRev=mondayOf(addDays(today(), new Date().getDay()===1?-7:0)); setTab("review"); }
+  else if (act==="wk-nav"){ const n=+b.dataset.n; S.wkRev = n===0 ? mondayOf(new Date()) : addDays(S.wkRev, 7*n); render(); }
   else if (act==="kid-del"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.kids=(x.kids||[]).filter(c=>c.id!==b.dataset.kid); }); }
   else if (act==="it-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date), l=listOf(d,+b.dataset.pi); l.splice(l.findIndex(i=>i.id===b.dataset.id),1); save("days/"+d.date,d,300); render(); }
   else if (act==="proj-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date); d.projects.splice(+b.dataset.pi,1); save("days/"+d.date,d,300); render(); }
@@ -1359,6 +1513,13 @@ document.addEventListener("toggle", e=>{
   if ((p.open!==false)===dt.open) return;
   p.open=dt.open; save("days/"+d.date,d,800);
 }, true);
+document.addEventListener("input", e=>{ const el=e.target;
+  if (el.dataset.act==="sp-steps" && S.split){ S.split.steps=el.value; refreshSplitPreview(); return; }
+  if (el.dataset.act==="wk-note"){ const d=dayCopy(el.dataset.mon); d.weekNote=el.value; save("days/"+d.date,d,800); } });
+document.addEventListener("change", e=>{ const el=e.target; if (el.dataset && el.dataset.act==="sp-start" && S.split && el.value){ S.split.start=el.value; refreshSplitPreview(); } });
+function refreshSplitPreview(){ const sp=S.split, t=task(sp.id), box=document.querySelector(".sp-prev"); if(!t||!box) return;
+  const steps=sp.steps.split("\n").map(x=>x.trim()).filter(Boolean), ds=splitDates(steps.length, sp.start, t.due);
+  box.innerHTML=`<small>${T("sp_preview")}</small>`+steps.map((x,i)=>`<div><b>${md(ds[i])} ${dow(ds[i])}</b><span>${esc(x)}</span></div>`).join(""); }
 document.addEventListener("input", e=>{
   const el=e.target; if (el.dataset.act!=="rv") return;
   const d=dayCopy(S.reviewDate); d.review[el.dataset.key]=el.value; save("days/"+d.date,d,800);
@@ -1556,12 +1717,12 @@ function banner(msg){ const b=document.getElementById("banner"); b.textContent=m
   try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch(e){ db=null; }
   if (!db){ banner(T("offline")); return; }
   for (const p of pending.keys()) flush(p);
-  const waiting=new Set(["tasks","days","expenses","settings","events","gymlog","gym"]);
+  const waiting=new Set(["tasks","days","expenses","settings","events","gymlog","gym","inbox"]);
   const timer=setTimeout(()=>{ if (waiting.size) banner(T("loading")); }, 10000);
   const done=(k,snap)=>{ if (!snap.metadata.fromCache){ waiting.delete(k); if (!waiting.size){ clearTimeout(timer); banner(""); } } };
   const fail=k=>e=>{ waiting.delete(k); if (e.code!=="revoked") banner(T("disconnected",e.code)); };
   const sub=(name)=>db.collection(name).onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S[name]=o; done(name,snap); softRender(); }, fail(name));
-  sub("tasks"); sub("days"); sub("expenses"); sub("events"); sub("gymlog");
+  sub("tasks"); sub("days"); sub("expenses"); sub("events"); sub("gymlog"); sub("inbox");
   db.doc("gym/plan").onSnapshot(s=>{ S.gymPlan=s.exists?s.data():null; done("gym",s); softRender(); }, fail("gym"));
   db.doc("settings/main").onSnapshot(s=>{ S.settings=s.exists?s.data():null; done("settings",s); softRender(); }, fail("settings"));
 })();
