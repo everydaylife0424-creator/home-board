@@ -102,6 +102,18 @@ section.block{margin-bottom:34px;scroll-margin-top:calc(16px + env(safe-area-ins
 .item.blk .t,.item.blk hr{flex:1}
 .item.k-h .t{font-weight:700;font-size:15.5px}
 .item.k-p .t{color:var(--fg)}
+.item.blk .bul{flex:0 0 auto;width:18px;color:var(--muted);font-family:var(--f-mono);font-size:13px;text-align:center}
+.item.k-ul .bul{font-size:18px;line-height:1;color:var(--fg)}
+.item.k-tg{display:block}
+.item.k-tg details>summary{display:flex;align-items:center;gap:6px;cursor:pointer;list-style:none}
+.item.k-tg details>summary::-webkit-details-marker{display:none}
+.item.k-tg .tw{display:inline-block;transition:transform .15s;color:var(--muted);font-size:12px;width:18px;text-align:center}
+.item.k-tg details[open] .tw{transform:rotate(90deg)}
+.item.k-tg summary .t{flex:1}
+.tg-kids{list-style:none;margin:4px 0 2px 24px;padding:0}
+.tg-kids li{display:flex;gap:6px;align-items:center;padding:2px 0}.tg-kids li::before{content:"•";width:18px;text-align:center;font-size:16px;line-height:1}.tg-kids li .t{flex:1}
+.tg-kids li .icon-btn{opacity:0}.tg-kids li:hover .icon-btn{opacity:1}
+.tg-add{margin-left:26px}
 .item.k-hr hr{border:0;border-top:1px solid var(--line);margin:6px 0;width:100%}
 .ctx.cm .add{display:flex;gap:6px;align-items:center}
 .ctx.cm .add input[type=text]{flex:1;min-width:0}
@@ -409,7 +421,7 @@ const I18N = {
     pop_no_review:"這天沒有寫檢討。", pop_open_review:"打開這天的每日檢討", ctx_deadline:"標記截止日", ctx_event:"標記重大事件",
     nav_gym:"健身計劃", src_gym:"健身", k_deadline:"截止日", k_event:"重大事件", marks_title:"截止日與重大事件", marks_empty:"這天沒有標記。",
     ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
-    wp_change:"更換桌布", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"刪除這張卡片", sl_title:"輸入以篩選，↑↓ 選擇，Enter 確認", sl_none:"沒有符合的指令", sl_clear:"取消這個指令", sl_todo:"待辦事項", sl_heading:"標題", sl_text:"文字（不打勾）", sl_divider:"分隔線", sl_tomorrow:"明天", sl_to_day:d=>`加到 ${d}`, sl_board:n=>`加到任務板：${n}`, sl_proj:n=>`新增專案區塊：${n}`, sl_review:"打開這天的每日檢討", sl_today:"截止日設為今天", sl_nextweek:"截止日設為下週一", sl_due_set:d=>`截止日：${d}`, sl_marked:"已標記在月曆上", sl_to_board:"已加到任務板", sl_added_to:d=>`已加到 ${d}`, cm_del_item:t=>`刪除「${t}」`, cm_add_item:"新增事項（Enter）", cm_add_item_to:n=>`新增事項到「${n}」`, cm_del_sec:n=>`刪除這天的「${n}」區塊`, cm_unpin:n=>`「${n}」不再每天自動出現`, cm_unpinned:"已取消自動出現，可在專案設定改回來", cm_add_sec:"新增專案區塊", cm_add_card:"加回卡片", cm_all_shown:"所有卡片都已顯示", cm_reset:"恢復預設卡片", cm_row_empty:"這排沒有卡片，在這裡按右鍵可以加回來。", cm_del_col:n=>`刪除「${n}」這欄`, cm_add_col:"新增一欄", cm_col_ph:"欄名，按 Enter", cm_last_col:"至少要留一欄", cm_col_deleted:n=>`已刪除，裡面的任務移到「${n}」`, cm_del_day:d=>`刪除 ${d} 這張卡片`, cm_day_first:d=>`刪除後會在最後補上 ${d}。月曆上的紀錄不會消失。`, cm_add_day:"新增日期卡片", cm_pick_day:"選一天", cm_add:"新增", cm_day_max:"最多 7 天，再新增會刪掉最早的那天。", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
+    wp_change:"更換桌布", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"刪除這張卡片", sl_title:"輸入以篩選，↑↓ 選擇，Enter 確認", sl_none:"沒有符合的指令", sl_clear:"取消這個指令", sl_todo:"待辦清單（To-do list）", sl_bullet:"項目符號清單（Bulleted list）", sl_numbered:"編號清單（Numbered list）", sl_toggle:"折疊清單（Toggle list）", sl_kid_ph:"在折疊裡新增，按 Enter", sl_heading:"標題", sl_text:"文字（不打勾）", sl_divider:"分隔線", sl_tomorrow:"明天", sl_to_day:d=>`加到 ${d}`, sl_board:n=>`加到任務板：${n}`, sl_proj:n=>`新增專案區塊：${n}`, sl_review:"打開這天的每日檢討", sl_today:"截止日設為今天", sl_nextweek:"截止日設為下週一", sl_due_set:d=>`截止日：${d}`, sl_marked:"已標記在月曆上", sl_to_board:"已加到任務板", sl_added_to:d=>`已加到 ${d}`, cm_del_item:t=>`刪除「${t}」`, cm_add_item:"新增事項（Enter）", cm_add_item_to:n=>`新增事項到「${n}」`, cm_del_sec:n=>`刪除這天的「${n}」區塊`, cm_unpin:n=>`「${n}」不再每天自動出現`, cm_unpinned:"已取消自動出現，可在專案設定改回來", cm_add_sec:"新增專案區塊", cm_add_card:"加回卡片", cm_all_shown:"所有卡片都已顯示", cm_reset:"恢復預設卡片", cm_row_empty:"這排沒有卡片，在這裡按右鍵可以加回來。", cm_del_col:n=>`刪除「${n}」這欄`, cm_add_col:"新增一欄", cm_col_ph:"欄名，按 Enter", cm_last_col:"至少要留一欄", cm_col_deleted:n=>`已刪除，裡面的任務移到「${n}」`, cm_del_day:d=>`刪除 ${d} 這張卡片`, cm_day_first:d=>`刪除後會在最後補上 ${d}。月曆上的紀錄不會消失。`, cm_add_day:"新增日期卡片", cm_pick_day:"選一天", cm_add:"新增", cm_day_max:"最多 7 天，再新增會刪掉最早的那天。", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
     gym_sub:"點動作展開，可以記錄每次的組數、重量和 RPE", gym_add_routine:"＋ 新增課表", gym_add_group:"＋ 新增分組，例如「胸」（Enter）", gym_add_ex:"＋ 新增動作（Enter）",
     gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_date:"日期", gcal_title:"健身月曆", gcal_sub:"只顯示健身紀錄，和主畫面月曆分開", gcal_month:(n,d)=>`本月 ${d} 天 · ${n} 筆`, gcal_last:"上次", gcal_ago:n=>n===0?"今天":`${n} 天前`, gcal_never:"還沒練", gcal_times:n=>`本月 ${n} 次`, gcal_day_empty:"這天沒有健身紀錄", gcal_other:"其他", gcal_rest:n=>`已休息 ${n} 天`, gym_new:"新→舊", gym_old:"舊→新", gym_sort_desc:"目前由新到舊，點一下改成由舊到新", gym_sort_asc:"目前由舊到新，點一下改成由新到舊", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
     gym_history:"紀錄", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
@@ -466,7 +478,7 @@ const I18N = {
     pop_no_review:"No review written this day.", pop_open_review:"Open this day's review", ctx_deadline:"Mark a deadline", ctx_event:"Mark a key event",
     nav_gym:"Workout plan", src_gym:"Workout", k_deadline:"Deadline", k_event:"Key event", marks_title:"Deadlines & key events", marks_empty:"Nothing marked.",
     ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
-    wp_change:"Change cover", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"Delete this card", sl_title:"Type to filter, ↑↓ to choose, Enter to pick", sl_none:"No matching command", sl_clear:"Cancel this command", sl_todo:"To-do", sl_heading:"Heading", sl_text:"Text (no checkbox)", sl_divider:"Divider", sl_tomorrow:"Tomorrow", sl_to_day:d=>`Add to ${d}`, sl_board:n=>`Add to board: ${n}`, sl_proj:n=>`Add section: ${n}`, sl_review:"Open this day’s review", sl_today:"Due today", sl_nextweek:"Due next Monday", sl_due_set:d=>`Due: ${d}`, sl_marked:"Marked on the calendar", sl_to_board:"Added to the task board", sl_added_to:d=>`Added to ${d}`, cm_del_item:t=>`Delete “${t}”`, cm_add_item:"Add an item (Enter)", cm_add_item_to:n=>`Add an item to “${n}”`, cm_del_sec:n=>`Remove the “${n}” section from this day`, cm_unpin:n=>`Stop showing “${n}” every day`, cm_unpinned:"It won’t appear automatically now. Change it back in Project settings.", cm_add_sec:"Add a project section", cm_add_card:"Add a card back", cm_all_shown:"All cards are showing", cm_reset:"Restore default cards", cm_row_empty:"No cards here. Right-click to add them back.", cm_del_col:n=>`Delete the “${n}” column`, cm_add_col:"Add a column", cm_col_ph:"Column name, press Enter", cm_last_col:"Keep at least one column", cm_col_deleted:n=>`Deleted. Its tasks moved to “${n}”.`, cm_del_day:d=>`Delete the ${d} card`, cm_day_first:d=>`${d} will be added at the end. Calendar records stay.`, cm_add_day:"Add a day card", cm_pick_day:"Pick a day", cm_add:"Add", cm_day_max:"Up to 7 days. Adding more removes the earliest.", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
+    wp_change:"Change cover", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"Delete this card", sl_title:"Type to filter, ↑↓ to choose, Enter to pick", sl_none:"No matching command", sl_clear:"Cancel this command", sl_todo:"To-do list", sl_bullet:"Bulleted list", sl_numbered:"Numbered list", sl_toggle:"Toggle list", sl_kid_ph:"Add inside, press Enter", sl_heading:"Heading", sl_text:"Text (no checkbox)", sl_divider:"Divider", sl_tomorrow:"Tomorrow", sl_to_day:d=>`Add to ${d}`, sl_board:n=>`Add to board: ${n}`, sl_proj:n=>`Add section: ${n}`, sl_review:"Open this day’s review", sl_today:"Due today", sl_nextweek:"Due next Monday", sl_due_set:d=>`Due: ${d}`, sl_marked:"Marked on the calendar", sl_to_board:"Added to the task board", sl_added_to:d=>`Added to ${d}`, cm_del_item:t=>`Delete “${t}”`, cm_add_item:"Add an item (Enter)", cm_add_item_to:n=>`Add an item to “${n}”`, cm_del_sec:n=>`Remove the “${n}” section from this day`, cm_unpin:n=>`Stop showing “${n}” every day`, cm_unpinned:"It won’t appear automatically now. Change it back in Project settings.", cm_add_sec:"Add a project section", cm_add_card:"Add a card back", cm_all_shown:"All cards are showing", cm_reset:"Restore default cards", cm_row_empty:"No cards here. Right-click to add them back.", cm_del_col:n=>`Delete the “${n}” column`, cm_add_col:"Add a column", cm_col_ph:"Column name, press Enter", cm_last_col:"Keep at least one column", cm_col_deleted:n=>`Deleted. Its tasks moved to “${n}”.`, cm_del_day:d=>`Delete the ${d} card`, cm_day_first:d=>`${d} will be added at the end. Calendar records stay.`, cm_add_day:"Add a day card", cm_pick_day:"Pick a day", cm_add:"Add", cm_day_max:"Up to 7 days. Adding more removes the earliest.", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
     gym_sub:"Open an exercise to log sets, weight and RPE", gym_add_routine:"+ New routine", gym_add_group:"+ New group, e.g. Chest (Enter)", gym_add_ex:"+ New exercise (Enter)",
     gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_date:"Date", gcal_title:"Training calendar", gcal_sub:"Gym records only, separate from the main calendar", gcal_month:(n,d)=>`This month: ${d} days · ${n} sets logged`, gcal_last:"Last", gcal_ago:n=>n===0?"today":`${n}d ago`, gcal_never:"not yet", gcal_times:n=>`${n}× this month`, gcal_day_empty:"No gym records this day", gcal_other:"Other", gcal_rest:n=>`${n} rest days so far`, gym_new:"Newest", gym_old:"Oldest", gym_sort_desc:"Newest first. Click for oldest first", gym_sort_asc:"Oldest first. Click for newest first", gym_sets:"Sets×reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
     gym_history:"Records", gym_no_history:"No logs yet. Log one after training to compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
@@ -694,11 +706,13 @@ function dayCards(){ const st=settings().dayCards; if(!st || !st.list || !st.lis
 function saveDayCards(list){ const st=clone(settings()); list=[...new Set(list)].sort(); if(list.length>DAY_MAX) list=list.slice(-DAY_MAX);
   st.dayCards = list.length?{list, at:today()}:null; save("settings/main",st,50); render(); }
 function viewHome(){
-  const tasks = allTasks().sort((a,b)=>(a.done-b.done)||((a.due||"9999")<(b.due||"9999")?-1:(a.due||"9999")>(b.due||"9999")?1:0)||(a.createdAt||0)-(b.createdAt||0));
+  const every = allTasks().sort((a,b)=>(a.done-b.done)||((a.due||"9999")<(b.due||"9999")?-1:(a.due||"9999")>(b.due||"9999")?1:0)||(a.createdAt||0)-(b.createdAt||0));
+  const tasks = every.filter(t=>!t.k);
   const bl=bucketList(), ids=new Set(bl.map(b=>b.id)), home=bl[0].id;
   const cols = bl.map(B=>{ const bk=B.id;
-    const mine=tasks.filter(t=>(ids.has(t.bucket)?t.bucket:home)===bk), open=mine.filter(t=>!t.done), done=mine.filter(t=>t.done), show=S.showDone[bk];
-    const li = t => `<li class="item ${t.done?"done":""}" draggable="true" data-task="${t.id}">
+    const mine=every.filter(t=>(ids.has(t.bucket)?t.bucket:home)===bk), open=mine.filter(t=>!t.done), done=mine.filter(t=>t.done), show=S.showDone[bk];
+    const nums=olNums(open), moveBtns=t=>bl.filter(b=>b.id!==bk).map(b=>`<button class="icon-btn" data-act="task-move" data-id="${t.id}" data-to="${b.id}" title="${esc(T("move_to",bName(b)))}">${b.name?esc("→"+b.name.slice(0,2)):T("mv_"+b.id)}</button>`).join("");
+    const li = (t,i) => t.k ? blkLi(t,{task:t.id},nums[i],`<span class="acts">${moveBtns(t)}<button class="icon-btn" data-act="task-del" data-id="${t.id}" title="${T("del")}">✕</button></span>`,`draggable="true" data-task="${t.id}"`) : `<li class="item ${t.done?"done":""}" draggable="true" data-task="${t.id}">
         <input type="checkbox" ${t.done?"checked":""} data-act="task-toggle" data-id="${t.id}" aria-label="${T("done")}">
         <span class="t">${esc(t.title)}</span>${dueBadge(t.due)}
         <span class="acts">
@@ -706,7 +720,7 @@ function viewHome(){
           <button class="icon-btn" data-act="task-del" data-id="${t.id}" title="${T("del")}">✕</button>
         </span></li>`;
     return `<div class="col ${B.name?"custom":bk}" data-bucket="${bk}">
-      <div class="col-h"><span class="dot"></span><b>${B.name?esc(B.name):L("b_"+bk)}</b><span class="n">${open.length}</span></div>
+      <div class="col-h"><span class="dot"></span><b>${B.name?esc(B.name):L("b_"+bk)}</b><span class="n">${open.filter(t=>!t.k).length}</span></div>
       <ul class="list">${open.map(li).join("") || `<li class="empty mini">${T("empty_col")}</li>`}</ul>
       <form class="add" data-act="task-add" data-bucket="${bk}">
         <input type="text" id="add-task-${bk}" placeholder="${T("add_enter")}" autocomplete="off">
@@ -764,11 +778,29 @@ function settingsPanel(){
     <form class="add" data-act="proj-new"><input type="text" id="proj-new" placeholder="${T("proj_new_ph")}" autocomplete="off"></form></section>`;
 }
 
+/* list blocks (bulleted / numbered / toggle) shared by day cards and the task board */
+function blkLi(x, ref, n, acts, extra=""){
+  const txt=esc(x.t ?? x.title ?? ""), data=`data-blk="${esc(JSON.stringify(ref))}"`;
+  if (x.k==="tg") return `<li class="item blk k-tg" ${data} ${extra}><details ${x.o?"open":""} data-tg><summary><span class="tw">▸</span><span class="t">${txt}</span>${acts}</summary>
+      <ul class="tg-kids">${(x.kids||[]).map(c=>`<li><span class="t">${esc(c.t)}</span><button class="icon-btn" data-act="kid-del" data-kid="${c.id}" title="${T("del")}">✕</button></li>`).join("")}</ul>
+      <form class="add tg-add" data-act="kid-add"><input type="text" id="kid-${x.id}" placeholder="${T("sl_kid_ph")}" autocomplete="off"></form></details></li>`;
+  return `<li class="item blk k-${x.k}" ${data} ${extra}><span class="bul">${x.k==="ol"?n+".":"•"}</span><span class="t">${txt}</span>${acts}</li>`;
+}
+function olNums(list){ let n=0; return list.map(x=>x.k==="ol"?++n:(n=0,0)); }
+function blkEdit(ref, fn){
+  if (ref.task){ const t=clone(task(ref.task)); if(!t) return; fn(t); save("tasks/"+t.id,t,200); }
+  else { const x=dayCopy(ref.date), it=listOf(x,+ref.pi).find(i=>i.id===ref.id); if(!it) return; fn(it); save("days/"+x.date,x,200); }
+  render(); }
+function blkRef(el){ const r=el.closest("[data-blk]"); try{ return r?JSON.parse(r.dataset.blk):null; }catch(_){ return null; } }
+document.addEventListener("toggle", e=>{ const d=e.target; if (!d.matches || !d.matches("details[data-tg]")) return; const ref=blkRef(d); if(!ref) return;
+  const cur = ref.task ? task(ref.task) : listOf(day(ref.date),+ref.pi)?.find(i=>i.id===ref.id); if (!cur || !!cur.o===d.open) return;
+  blkEdit(ref, x=>{ x.o=d.open; }); }, true);
 function viewWeek(){
   const days=dayCards();
   const projOpts=settings().projects, pins=pinned(), t=today();
   const car=days.includes(t) ? carried() : [];
-  const itemLi=(it,date,pi,tag)=> it.k ? `<li class="item blk k-${it.k}">${it.k==="hr"?`<hr>`:`<span class="t">${esc(it.t)}</span>`}
+  const delBtn=(it,date,pi)=>`<span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span>`;
+  const itemLi=(it,date,pi,tag,n)=> ["ul","ol","tg"].includes(it.k) ? blkLi(it,{date,pi:String(pi),id:it.id},n,delBtn(it,date,pi)) : it.k ? `<li class="item blk k-${it.k}">${it.k==="hr"?`<hr>`:`<span class="t">${esc(it.t)}</span>`}
       <span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>` : `<li class="item ${it.d?"done":""}">
       <input type="checkbox" ${it.d?"checked":""} data-act="it-toggle" data-date="${date}" data-pi="${pi}" data-id="${it.id}" aria-label="${T("done")}">
       <span class="t">${esc(it.t)}</span>${tag?`<span class="carry-tag" title="${esc(T("carry_from",date))}">${md(date)}</span>`:""}
@@ -786,13 +818,13 @@ function viewWeek(){
       const open=s.p ? s.p.open!==false : (date===t || extra.length>0);
       return `<details class="proj ${s.p?"":"virtual"}" ${open?"open":""} data-date="${date}" ${s.p?`data-pi="${s.pi}"`:""}>
         <summary data-name="${esc(s.name)}">${esc(T("prog",s.name))} <span class="cnt">${k}/${n}</span>${s.p?`<button class="icon-btn" data-act="proj-del" data-date="${date}" data-pi="${s.pi}" title="${T("remove_block")}">✕</button>`:""}</summary>
-        <div class="inner">${n?`<div class="progress"><i style="width:${k/n*100}%"></i></div>`:""}<ul class="list">${extra.map(c=>itemLi(c.it,c.date,c.pi,true)).join("")}${own.map(it=>itemLi(it,date,s.pi)).join("")}</ul>${addForm(date,s.name)}</div>
+        <div class="inner">${n?`<div class="progress"><i style="width:${k/n*100}%"></i></div>`:""}<ul class="list">${extra.map(c=>itemLi(c.it,c.date,c.pi,true)).join("")}${(nn=>own.map((it,i)=>itemLi(it,date,s.pi,false,nn[i])).join(""))(olNums(own))}</ul>${addForm(date,s.name)}</div>
       </details>`;
     }).join("");
     const topCar=myCar.filter(c=>!c.proj);
     return `<div class="day ${td?"today":""}" data-day="${date}">
       <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}</div>
-      <ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(d.items||[]).map(it=>itemLi(it,date,-1)).join("")}</ul>${addForm(date)}
+      <ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}</ul>${addForm(date)}
       ${projs}
       <div class="day-foot">
         <select data-act="proj-add" data-date="${date}" aria-label="${T("add_proj")}"><option value="">${T("add_proj")}</option>${projOpts.filter(p=>!names.has(p)).map(p=>`<option>${esc(p)}</option>`).join("")}<option value="__new">${T("new_proj")}</option></select>
@@ -1150,15 +1182,18 @@ document.addEventListener("submit", e=>{
   if (act==="task-add"){
     const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"), title=inp.value.trim(), m=slashMode(f); if (!title) return;
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:due.value||today(),title,kind:m.mark},50); inp.value=""; due.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
-    const id=uid(); save("tasks/"+id, {id, title, bucket:m.bucket||f.dataset.bucket, done:false, due:due.value||null, createdAt:Date.now()}, 50); clearSlash(f);
+    const id=uid(), tk={id, title:inp.value.trim()||title, bucket:m.bucket||f.dataset.bucket, done:false, due:due.value||null, createdAt:Date.now()}; if (m.k){ tk.k=m.k; tk.due=null; } save("tasks/"+id, tk, 50); clearSlash(f);
     inp.value=""; due.value=""; render();
+  } else if (act==="kid-add"){
+    const inp=f.querySelector("input"), v=inp.value.trim(), ref=blkRef(f); if(!v||!ref) return; inp.value="";
+    blkEdit(ref, x=>{ x.kids=[...(x.kids||[]), {id:uid(), t:v}]; x.o=true; });
   } else if (act==="it-add"){
     const inp=f.querySelector("input"), t=inp.value.trim(), m=slashMode(f); if (!t && m.k!=="hr") return;
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:m.date||f.dataset.date,title:t,kind:m.mark},50); inp.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
     if (m.bucket){ const id=uid(); save("tasks/"+id,{id,title:t,bucket:m.bucket,done:false,due:f.dataset.date,createdAt:Date.now()},50); inp.value=""; clearSlash(f); render(); toast(T("sl_to_board")); return; }
     const d=dayCopy(m.date||f.dataset.date), name=f.dataset.proj; let list=d.items;
     if (name){ let p=d.projects.find(x=>x.name===name); if(!p){ p={name,open:true,items:[]}; d.projects.push(p); } list=p.items; }
-    const it={id:uid(), t, d:false}; if (m.k) it.k=m.k; list.push(it); save("days/"+d.date, d, 300); inp.value=""; if (m.date) toast(T("sl_added_to", md(m.date))); clearSlash(f); render();
+    const it={id:uid(), t:inp.value.trim()||t, d:false}; if (m.k) it.k=m.k; list.push(it); save("days/"+d.date, d, 300); inp.value=""; if (m.date) toast(T("sl_added_to", md(m.date))); clearSlash(f); render();
   } else if (act==="proj-new"){
     const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return;
     const st=clone(settings()); st.pinned=[...pinned()];
@@ -1249,6 +1284,7 @@ document.addEventListener("click", e=>{
   else if (act==="task-move"){ const t={...task(b.dataset.id), bucket:b.dataset.to}; save("tasks/"+t.id,t,50); render(); }
   else if (act==="task-del"){ remove("tasks/"+b.dataset.id); render(); toast(T("deleted")); }
   else if (act==="show-done"){ S.showDone[b.dataset.bucket]=!S.showDone[b.dataset.bucket]; render(); }
+  else if (act==="kid-del"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.kids=(x.kids||[]).filter(c=>c.id!==b.dataset.kid); }); }
   else if (act==="it-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date), l=listOf(d,+b.dataset.pi); l.splice(l.findIndex(i=>i.id===b.dataset.id),1); save("days/"+d.date,d,300); render(); }
   else if (act==="proj-del"){ e.preventDefault(); const d=dayCopy(b.dataset.date); d.projects.splice(+b.dataset.pi,1); save("days/"+d.date,d,300); render(); }
   else if (act==="days"){ const n=+b.dataset.n; render._scrolled=false; saveDayCards(n===0 ? dayDefault() : dayCards().map(d=>addDays(d,n))); }
@@ -1349,32 +1385,18 @@ document.addEventListener("pointercancel", ()=>{ wpDrag=null; });
 /* ---------- "/" command menu in add fields, like Notion ---------- */
 const slEl=document.createElement("div"); slEl.id="slash"; slEl.className="ctx slash"; slEl.hidden=true; slEl.setAttribute("role","listbox"); document.body.appendChild(slEl);
 const SL={inp:null, list:[], i:0, at:-1};
-function slashMode(f){ try{ return JSON.parse(f.dataset.mode||"{}"); }catch(_){ return {}; } }
+function slashMode(f){ let m; try{ m=JSON.parse(f.dataset.mode||"{}"); }catch(_){ m={}; }
+  // Notion-style shortcuts at the start of the text: "- " "1. " "> " "[] "
+  const inp=f.querySelector("input[type=text]"); if (inp && !m.k){ const v=inp.value, r=[[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"],[/^>\s+/,"tg"],[/^\[\s?\]\s+/,null]].find(([re])=>re.test(v)); if (r){ inp.value=v.replace(r[0],""); if (r[1]) m.k=r[1]; } }
+  return m; }
 function clearSlash(f){ delete f.dataset.mode; f.querySelector(".sl-chip")?.remove(); }
 function setSlash(f, mode, label){ f.dataset.mode=JSON.stringify(mode); let c=f.querySelector(".sl-chip"); if(!c){ c=document.createElement("button"); c.type="button"; c.className="sl-chip"; c.title=T("sl_clear"); c.addEventListener("click",()=>{ clearSlash(f); f.querySelector("input")?.focus(); }); f.prepend(c); } c.textContent=label+" ✕"; }
 function slashCmds(f){
-  const act=f.dataset.act, cmds=[], add=(icon,label,kw,run)=>cmds.push({icon,label,kw:(label+" "+kw).toLowerCase(),run});
-  const fill=(fn)=> (f2,inp)=>fn(f2,inp);
-  if (act==="it-add"){ const date=f.dataset.date;
-    add("☐",T("sl_todo"),"todo checkbox 待辦 dd",(f,inp)=>clearSlash(f));
-    add("H",T("sl_heading"),"heading h1 title 標題 bt",(f)=>setSlash(f,{k:"h"},T("sl_heading")));
-    add("¶",T("sl_text"),"text paragraph note 文字 備註 wz",(f)=>setSlash(f,{k:"p"},T("sl_text")));
-    add("—",T("sl_divider"),"divider hr line 分隔線 fgx",(f)=>{ setSlash(f,{k:"hr"},""); f.requestSubmit(); });
-    add("→",T("sl_tomorrow"),"tomorrow next 明天 mt",(f)=>setSlash(f,{date:addDays(date,1)},T("sl_to_day",md(addDays(date,1)))));
-    add("⚑",T("ctx_deadline"),"deadline due 截止 jzr",(f)=>setSlash(f,{mark:"deadline"},"⚑ "+T("k_deadline")));
-    add("★",T("ctx_event"),"event milestone 重大事件 zdsj",(f)=>setSlash(f,{mark:"event"},"★ "+T("k_event")));
-    bucketList().forEach(b=>add("▤",T("sl_board",bName(b)),"task board 任務 rw "+bName(b),(f)=>setSlash(f,{bucket:b.id},T("sl_board",bName(b)))));
-    const d=day(date), have=new Set((d.projects||[]).map(p=>p.name)); if (date>=today()) pinned().forEach(n=>have.add(n));
-    if (!f.dataset.proj) settings().projects.filter(p=>!have.has(p)).forEach(p=>add("▸",T("sl_proj",p),"project section 專案 zx "+p,()=>addProj(date,p)));
-    add("✎",T("sl_review"),"review 檢討 jt",()=>{ S.reviewDate=date; setTab("review"); });
-  } else if (act==="task-add"){
-    const due=f.querySelector("input[type=date]"), set=(n,l)=>()=>{ due.value=addDays(today(),n); toast(T("sl_due_set",md(due.value))); };
-    add("◷",T("sl_today"),"today 今天 jt",set(0)); add("◷",T("sl_tomorrow"),"tomorrow 明天 mt",set(1));
-    add("◷",T("sl_nextweek"),"next week monday 下週 xz",()=>{ due.value=addDays(mondayOf(new Date()),7); toast(T("sl_due_set",md(due.value))); });
-    add("⚑",T("ctx_deadline"),"deadline 截止 jzr",(f)=>setSlash(f,{mark:"deadline"},"⚑ "+T("k_deadline")));
-    add("★",T("ctx_event"),"event 重大事件 zdsj",(f)=>setSlash(f,{mark:"event"},"★ "+T("k_event")));
-    bucketList().filter(b=>b.id!==f.dataset.bucket).forEach(b=>add("▤",T("sl_board",bName(b)),"move column 移到 欄 "+bName(b),(f)=>setSlash(f,{bucket:b.id},T("sl_board",bName(b)))));
-  }
+  const cmds=[], add=(icon,label,kw,run)=>cmds.push({icon,label,kw:(label+" "+kw).toLowerCase(),run});
+  add("☐",T("sl_todo"),"todo checkbox 待辦 dd",(f)=>clearSlash(f));
+  add("•",T("sl_bullet"),"bulleted list bullet 項目符號 xmfh",(f)=>setSlash(f,{k:"ul"},"• "+T("sl_bullet")));
+  add("1.",T("sl_numbered"),"numbered list number 編號 bh",(f)=>setSlash(f,{k:"ol"},"1. "+T("sl_numbered")));
+  add("▸",T("sl_toggle"),"toggle list 折疊 zd",(f)=>setSlash(f,{k:"tg"},"▸ "+T("sl_toggle")));
   return cmds; }
 function slashClose(){ SL.inp=null; slEl.hidden=true; slEl.innerHTML=""; }
 function slashRender(){
