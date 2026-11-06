@@ -1,5 +1,5 @@
 /* HOME offline cache: app files are network-first (so updates arrive on next open), wallpapers and libraries cache-first. */
-const CACHE = "home-v1";
+const CACHE = "home-v2";
 const SHELL = ["./", "index.html", "fb.js", "manifest.webmanifest", "icons/192.png", "icons/180.png"];
 self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {})); });
 self.addEventListener("activate", e => e.waitUntil((async () => {
@@ -14,7 +14,8 @@ self.addEventListener("fetch", e => {
   if (sameOrigin && u.pathname.includes("/bg/") || lib) {
     e.respondWith(caches.match(r).then(hit => hit || fetch(r).then(res => { if (res.ok || res.type === "opaque") { const c = res.clone(); caches.open(CACHE).then(x => x.put(r, c)); } return res; })));
   } else if (sameOrigin) {
-    e.respondWith(fetch(r).then(res => { if (res.ok) { const c = res.clone(); caches.open(CACHE).then(x => x.put(r, c)); } return res; })
+    // no-cache: always ask GitHub whether there is a newer version (its CDN otherwise lets browsers keep a copy for 10 minutes)
+    e.respondWith(fetch(r, { cache: "no-cache" }).then(res => { if (res.ok) { const c = res.clone(); caches.open(CACHE).then(x => x.put(r, c)); } return res; })
       .catch(() => caches.match(r).then(hit => hit || caches.match("index.html"))));
   }
 });
