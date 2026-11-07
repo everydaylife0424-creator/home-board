@@ -1,5 +1,5 @@
 /* HOME offline cache: app files are network-first (so updates arrive on next open), wallpapers and libraries cache-first. */
-const CACHE = "home-v4";
+const CACHE = "home-v5";
 const SHELL = ["./", "index.html", "fb.js", "manifest.webmanifest", "icons/192.png", "icons/180.png"];
 self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {})); });
 self.addEventListener("activate", e => e.waitUntil((async () => {

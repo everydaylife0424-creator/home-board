@@ -222,6 +222,34 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .review-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
 @media (max-width:960px){.review-grid{grid-template-columns:1fr}}
 .inline-edit{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px;background:var(--surface);cursor:text;white-space:normal}
+tr.bad td{background:var(--hot-soft)}
+.warn-i{color:var(--hot);cursor:help}
+.chk{margin:0 0 14px;border-color:var(--hot);background:var(--hot-soft)}
+.chk .sec-h{margin:0}.chk .list{margin-top:8px}.chk .item{flex-wrap:wrap}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--fg);text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-align:left}
+.vol{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.vol h4{margin:0 0 4px;font-size:13.5px}.vol .sub{font-weight:400;font-size:12px}
+.vol table{width:100%;border-collapse:collapse;font-size:13px}.vol td{padding:3px 4px;border-top:1px solid var(--line)}
+.vol td.num{font-family:var(--f-mono);text-align:right}
+td.up{color:var(--good);font-family:var(--f-mono);text-align:right;white-space:nowrap}td.down{color:var(--hot);font-family:var(--f-mono);text-align:right;white-space:nowrap}
+.prog{margin-bottom:6px}.prog .sec-h{margin-bottom:8px;flex-wrap:wrap}.prog h3{margin:0;font-size:17px}
+.pg-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px}.pg-row label,.pg-days label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+.pg-row input{font:inherit;font-size:16px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+.pg-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.pg-days select{font:inherit;font-size:14px;padding:6px 4px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);min-width:0}
+@media (max-width:700px){.pg-days{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.pg-sched{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:10px 0}
+.pg-d{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:8px;background:var(--bg);font-size:12.5px;color:var(--muted);text-align:center;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.pg-d.on{background:var(--accent-soft);color:var(--fg)}.pg-d b{font-weight:600}
+.cmp{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}.cmp h4{margin:6px 0}.cmp h4 .sub{font-weight:400;font-size:12px}
+.cmp-t{width:100%;border-collapse:collapse;font-size:13.5px}.cmp-t th{text-align:left;font-weight:500;color:var(--muted);font-size:12.5px}.cmp-t td,.cmp-t th{padding:4px 6px;border-bottom:1px solid var(--line)}.cmp-t td:nth-child(2),.cmp-t td:nth-child(3){font-family:var(--f-mono)}
+.wkvol{display:flex;flex-direction:column;gap:6px}.wv{display:grid;grid-template-columns:5em 1fr;gap:8px;align-items:end}.wv-n{font-size:12.5px;color:var(--muted)}
+.wv-bars{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;height:34px;align-items:end}.wv-bars i{display:block;background:var(--accent);opacity:.7;border-radius:2px 2px 0 0;min-height:1px}
+.cmp-how{margin-top:10px;font-size:12px}
+.gchip.plan{background:transparent;border:1px dashed hsl(var(--h,0) var(--gs,0%) 50%);border-left-width:3px;color:var(--muted)}
+.gchip.plan.miss{text-decoration:line-through;opacity:.6}
+.cell.gcell.inprog{box-shadow:inset 0 -3px 0 var(--accent-soft)}
+.cell .wk-n{font-style:normal;font-size:10.5px;color:var(--accent);font-weight:600}
 .focus-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .top3 .sec-h,.inbox .sec-h{margin-bottom:6px}
 .top-list{list-style:none;margin:0;padding:0;counter-reset:top}
@@ -415,7 +443,7 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
 .ex-fields{display:grid;grid-template-columns:1fr;gap:8px}
 .ex-fields label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted)}
 .ex-fields input,.ex-log input{border:1px solid var(--line);border-radius:7px;background:var(--bg);padding:5px 7px;min-width:0;width:100%}
-.ex-log{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:6px;align-items:center}
+.ex-log{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:6px;align-items:center}
 .ex-log .gl-date{grid-column:1/-1;width:12em}
 .eh-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .eh-h h4{margin:0}
@@ -424,7 +452,7 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
 .ex-hist td .mv{border:0;background:transparent;font:inherit;color:inherit;padding:0;width:8.6em}
 .ex-log .lg{font-size:12px;color:var(--muted)}
 .ex-log .primary{padding:5px 12px}
-@media (max-width:520px){.ex-log{grid-template-columns:repeat(3,minmax(0,1fr))}.ex-log .lg,.ex-log .gl-date{grid-column:1/-1;width:100%}.ex-log .primary{grid-column:1/-1}}
+@media (max-width:520px){.ex-log{grid-template-columns:repeat(2,minmax(0,1fr))}.ex-log .lg,.ex-log .gl-date{grid-column:1/-1;width:100%}.ex-log .primary{grid-column:1/-1}}
 .ex-hist h4{margin:0 0 4px;font-size:12px;color:var(--muted);font-weight:500}
 .ex-hist table{border-collapse:collapse;width:100%;font-family:var(--f-mono);font-size:12.5px}
 .ex-hist td{padding:3px 6px;border-bottom:1px solid var(--line)}
@@ -474,7 +502,11 @@ const I18N = {
     wp_change:"更換桌布", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"刪除這張卡片", sl_title:"輸入以篩選，↑↓ 選擇，Enter 確認", sl_none:"沒有符合的指令", sl_clear:"取消這個指令", sl_todo:"待辦清單（To-do list）", sl_bullet:"項目符號清單（Bulleted list）", sl_numbered:"編號清單（Numbered list）", sl_toggle:"折疊清單（Toggle list）", sl_table:"表格（Table）", tb_row:"＋列", tb_col:"＋欄", tb_delcol:"－欄", tb_delrow:"刪除這一列", sl_kid_ph:"在折疊裡新增，按 Enter", sl_heading:"標題", sl_text:"文字（不打勾）", sl_divider:"分隔線", sl_tomorrow:"明天", sl_to_day:d=>`加到 ${d}`, sl_board:n=>`加到任務板：${n}`, sl_proj:n=>`新增專案區塊：${n}`, sl_review:"打開這天的每日檢討", sl_today:"截止日設為今天", sl_nextweek:"截止日設為下週一", sl_due_set:d=>`截止日：${d}`, sl_marked:"已標記在月曆上", sl_to_board:"已加到任務板", sl_added_to:d=>`已加到 ${d}`, cm_del_item:t=>`刪除「${t}」`, cm_edit_item:t=>`編輯「${t}」`, edit_done:"已更新", cm_add_item:"新增事項（Enter）", cm_add_item_to:n=>`新增事項到「${n}」`, cm_del_sec:n=>`刪除這天的「${n}」區塊`, cm_unpin:n=>`「${n}」不再每天自動出現`, cm_unpinned:"已取消自動出現，可在專案設定改回來", cm_add_sec:"新增專案區塊", cm_add_card:"加回卡片", cm_all_shown:"所有卡片都已顯示", cm_reset:"恢復預設卡片", cm_row_empty:"這排沒有卡片，在這裡按右鍵可以加回來。", cm_del_col:n=>`刪除「${n}」這欄`, cm_add_col:"新增一欄", cm_col_ph:"欄名，按 Enter", cm_last_col:"至少要留一欄", cm_col_deleted:n=>`已刪除，裡面的任務移到「${n}」`, cm_del_day:d=>`刪除 ${d} 這張卡片`, cm_day_first:d=>`刪除後會在最後補上 ${d}。月曆上的紀錄不會消失。`, cm_add_day:"新增日期卡片", cm_pick_day:"選一天", cm_add:"新增", cm_day_max:"最多 7 天，再新增會刪掉最早的那天。", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
     gym_sub:"點動作展開，可以記錄每次的組數、重量和 RPE", gym_add_routine:"＋ 新增課表", gym_add_group:"＋ 新增分組，例如「胸」（Enter）", gym_add_ex:"＋ 新增動作（Enter）",
     gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_date:"日期", gcal_title:"健身月曆", gcal_sub:"只顯示健身紀錄，和主畫面月曆分開", gcal_month:(n,d)=>`本月 ${d} 天 · ${n} 筆`, gcal_last:"上次", gcal_ago:n=>n===0?"今天":`${n} 天前`, gcal_never:"還沒練", gcal_times:n=>`本月 ${n} 次`, gcal_day_empty:"這天沒有健身紀錄", gcal_other:"其他", gcal_rest:n=>`已休息 ${n} 天`, gym_new:"新→舊", gym_old:"舊→新", gym_sort_desc:"目前由新到舊，點一下改成由舊到新", gym_sort_asc:"目前由舊到新，點一下改成由新到舊", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
-    gym_history:"紀錄", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
+    gym_history:"紀錄", gym_rest:"組間休息", gym_rest_ph:"休息 例 90s", vol_title:"總訓練量", vol_sub:"組 × 次 × 重量（kg）", vol_none:"還沒有可計算的紀錄", vol_bad:"這次含有有誤的資料，數字可能不準", vol_more:n=>`顯示全部 ${n} 次`, vol_less:"收起",
+    chk_title:n=>`⚠ 有 ${n} 筆紀錄可能有誤`, chk_open:"展開", chk_close:"收起", chk_sets:"組×次看不懂，請寫成像 3×12", chk_no_w:"沒填重量", chk_unit:"重量沒寫單位，先當作 kg", chk_sets_big:n=>`組數 ${n} 偏多`, chk_reps_big:n=>`次數 ${n} 不太合理`, chk_zero:"組數或次數是 0", chk_w_big:n=>`重量 ${n} kg 太重了`, chk_w_zero:"重量是 0", chk_rpe:"RPE 要在 1～10 之間", chk_rest:"休息時間看不懂，請寫成像 90s 或 2m", chk_rest_big:"休息超過 15 分鐘", chk_jump:(a,b)=>`重量從上次的 ${a} 變成 ${b}，差很多`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
+    pg_title:"10 週訓練計劃", pg_none:"還沒有設定訓練計劃。", pg_make:"建立 10 週計劃", pg_edit:"編輯計劃", pg_save:"儲存計劃", pg_cancel:"取消", pg_del:"刪除計劃", pg_start:"開始日", pg_weeks:"週數", pg_rest_day:"休息", pg_week:(n,m)=>`第 ${n} / ${m} 週`, pg_before:"還沒開始", pg_after:"已結束", pg_adherence:(a,b)=>`照計劃完成 ${a} / ${b} 次`, pg_range:(a,b)=>`${a} ~ ${b}`, pg_planned:"計劃", pg_missed:"沒練到",
+    cmp_title:"前後比較", cmp_sub:"每個動作用估計 1RM（e1RM）比較力量，用每週總訓練量比較份量", cmp_ex:"動作", cmp_base:"起點", cmp_now:"最近", cmp_chg:"變化", cmp_none:"計劃開始後累積兩週以上紀錄，這裡就會出現比較。", cmp_wk:"每週總訓練量（kg）", cmp_how:"怎麼算：e1RM = 重量 ×（1 + (次數 + 保留次數) ÷ 30），保留次數 = 10 − RPE；起點取計劃開始前 4 週到第 2 週的最好成績，最近取最後 2 週的最好成績。",
+    undo:"復原", undo_done:"已復原", undo_none:"沒有可以復原的動作", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
     nav_home:"待辦", nav_review:"每日檢討", nav_money:"記帳",
     grp_pages:"頁面", grp_sections:"本頁段落", grp_switch:"切換",
@@ -534,7 +566,11 @@ const I18N = {
     wp_change:"Change cover", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"Delete this card", sl_title:"Type to filter, ↑↓ to choose, Enter to pick", sl_none:"No matching command", sl_clear:"Cancel this command", sl_todo:"To-do list", sl_bullet:"Bulleted list", sl_numbered:"Numbered list", sl_toggle:"Toggle list", sl_table:"Table", tb_row:"+ Row", tb_col:"+ Column", tb_delcol:"− Column", tb_delrow:"Delete row", sl_kid_ph:"Add inside, press Enter", sl_heading:"Heading", sl_text:"Text (no checkbox)", sl_divider:"Divider", sl_tomorrow:"Tomorrow", sl_to_day:d=>`Add to ${d}`, sl_board:n=>`Add to board: ${n}`, sl_proj:n=>`Add section: ${n}`, sl_review:"Open this day’s review", sl_today:"Due today", sl_nextweek:"Due next Monday", sl_due_set:d=>`Due: ${d}`, sl_marked:"Marked on the calendar", sl_to_board:"Added to the task board", sl_added_to:d=>`Added to ${d}`, cm_del_item:t=>`Delete “${t}”`, cm_edit_item:t=>`Edit “${t}”`, edit_done:"Updated", cm_add_item:"Add an item (Enter)", cm_add_item_to:n=>`Add an item to “${n}”`, cm_del_sec:n=>`Remove the “${n}” section from this day`, cm_unpin:n=>`Stop showing “${n}” every day`, cm_unpinned:"It won’t appear automatically now. Change it back in Project settings.", cm_add_sec:"Add a project section", cm_add_card:"Add a card back", cm_all_shown:"All cards are showing", cm_reset:"Restore default cards", cm_row_empty:"No cards here. Right-click to add them back.", cm_del_col:n=>`Delete the “${n}” column`, cm_add_col:"Add a column", cm_col_ph:"Column name, press Enter", cm_last_col:"Keep at least one column", cm_col_deleted:n=>`Deleted. Its tasks moved to “${n}”.`, cm_del_day:d=>`Delete the ${d} card`, cm_day_first:d=>`${d} will be added at the end. Calendar records stay.`, cm_add_day:"Add a day card", cm_pick_day:"Pick a day", cm_add:"Add", cm_day_max:"Up to 7 days. Adding more removes the earliest.", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
     gym_sub:"Open an exercise to log sets, weight and RPE", gym_add_routine:"+ New routine", gym_add_group:"+ New group, e.g. Chest (Enter)", gym_add_ex:"+ New exercise (Enter)",
     gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_date:"Date", gcal_title:"Training calendar", gcal_sub:"Gym records only, separate from the main calendar", gcal_month:(n,d)=>`This month: ${d} days · ${n} sets logged`, gcal_last:"Last", gcal_ago:n=>n===0?"today":`${n}d ago`, gcal_never:"not yet", gcal_times:n=>`${n}× this month`, gcal_day_empty:"No gym records this day", gcal_other:"Other", gcal_rest:n=>`${n} rest days so far`, gym_new:"Newest", gym_old:"Oldest", gym_sort_desc:"Newest first. Click for oldest first", gym_sort_asc:"Oldest first. Click for newest first", gym_sets:"Sets×reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
-    gym_history:"Records", gym_no_history:"No logs yet. Log one after training to compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
+    gym_history:"Records", gym_rest:"Rest", gym_rest_ph:"Rest e.g. 90s", vol_title:"Total volume", vol_sub:"sets × reps × weight (kg)", vol_none:"No records to calculate yet", vol_bad:"This session has records that look wrong", vol_more:n=>`Show all ${n}`, vol_less:"Show less",
+    chk_title:n=>`⚠ ${n} records may be wrong`, chk_open:"Show", chk_close:"Hide", chk_sets:"Can't read sets×reps. Write it like 3×12", chk_no_w:"No weight", chk_unit:"No unit on the weight, counted as kg", chk_sets_big:n=>`${n} sets is a lot`, chk_reps_big:n=>`${n} reps looks wrong`, chk_zero:"Sets or reps is 0", chk_w_big:n=>`${n} kg is very heavy`, chk_w_zero:"Weight is 0", chk_rpe:"RPE should be 1–10", chk_rest:"Can't read the rest time. Write it like 90s or 2m", chk_rest_big:"Rest is over 15 minutes", chk_jump:(a,b)=>`Weight went from ${a} to ${b}`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
+    pg_title:"10-week program", pg_none:"No program yet.", pg_make:"Create a 10-week program", pg_edit:"Edit program", pg_save:"Save program", pg_cancel:"Cancel", pg_del:"Delete program", pg_start:"Start", pg_weeks:"Weeks", pg_rest_day:"Rest", pg_week:(n,m)=>`Week ${n} of ${m}`, pg_before:"Not started", pg_after:"Finished", pg_adherence:(a,b)=>`${a} of ${b} planned sessions done`, pg_range:(a,b)=>`${a} – ${b}`, pg_planned:"Planned", pg_missed:"Missed",
+    cmp_title:"Before vs after", cmp_sub:"Strength per exercise as estimated 1RM (e1RM); volume as weekly total", cmp_ex:"Exercise", cmp_base:"Start", cmp_now:"Latest", cmp_chg:"Change", cmp_none:"After two weeks of logs in the program, the comparison shows up here.", cmp_wk:"Weekly volume (kg)", cmp_how:"How: e1RM = weight × (1 + (reps + reps in reserve) ÷ 30), reps in reserve = 10 − RPE. Start = best from 4 weeks before to week 2; latest = best of the last 2 weeks.",
+    undo:"Undo", undo_done:"Undone", undo_none:"Nothing to undo", gym_no_history:"No logs yet. Log one after training to compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
     gym_logged:"Logged", gym_need:"Fill in sets or weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
     nav_home:"To-dos", nav_review:"Daily review", nav_money:"Expenses",
     grp_pages:"PAGES", grp_sections:"ON THIS PAGE", grp_switch:"SWITCHES",
@@ -603,6 +639,7 @@ const ICON = {
   theme:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
   pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
   bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
   out:'<path d="M14 5H6v14h8M10 12h10M17 9l3 3-3 3"/>',
 };
@@ -611,7 +648,7 @@ const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
   calMonth: ymd(new Date()).slice(0,7), calSel: null, gcalMonth: ymd(new Date()).slice(0,7), gcalSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, cm:null, gymAsc:(()=>{ try{ return localStorage.getItem("home.gymAsc")==="1"; }catch(_){ return false; } })(), wpBusy:false, confirmDel:null,
-  tasks:{}, days:{}, expenses:{}, settings:null, inbox:{}, split:null, qc:false, wkRev: mondayOf(new Date()),
+  tasks:{}, days:{}, expenses:{}, settings:null, inbox:{}, pgEdit:null, chkOpen:false, volAll:{}, split:null, qc:false, wkRev: mondayOf(new Date()),
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
@@ -660,7 +697,21 @@ function allEvents(){ const ids=new Set(Object.keys(S.events)); for (const p of 
 function month(m){ return pending.get("expenses/"+m) || S.expenses[m] || {month:m, entries:[]}; }
 function dayStats(d){ const all=[...(d.items||[]), ...(d.projects||[]).flatMap(p=>p.items)].filter(i=>!i.k); return {n:all.length, k:all.filter(i=>i.d).length}; }
 
-function save(path, body, delay=500){ pending.set(path, body); clearTimeout(timers.get(path)); timers.set(path, setTimeout(()=>flush(path), delay)); }
+/* undo: remember what a document looked like before each user action (actions within 0.8 s form one step) */
+const undoStack=[]; let undoMute=false, lastUserAt=0, undoGroup=null;
+["pointerdown","keydown","change"].forEach(t=>document.addEventListener(t, ()=>{ lastUserAt=performance.now(); }, true));
+function cachedDoc(path){ const [c,id]=path.split("/"); if (path==="gym/plan") return S.gymPlan; if (path==="settings/main") return S.settings; const m={tasks:S.tasks,days:S.days,expenses:S.expenses,events:S.events,gymlog:S.gymlog,inbox:S.inbox}[c]; return m?m[id]:undefined; }
+function recordUndo(path){
+  if (undoMute || performance.now()-lastUserAt>1500) return;
+  const a=document.activeElement; if (a && a.tagName==="TEXTAREA") return;
+  const now=performance.now(); if (!undoGroup || now-undoGroup.at>800){ undoGroup={at:now, before:new Map()}; undoStack.push(undoGroup); if (undoStack.length>60) undoStack.shift(); }
+  if (!undoGroup.before.has(path)){ const cur = pending.has(path) ? pending.get(path) : cachedDoc(path); undoGroup.before.set(path, cur==null ? null : clone(cur)); }
+}
+function undo(){ const g=undoStack.pop(); undoGroup=null; if (!g){ toast(T("undo_none")); return; }
+  undoMute=true; try { for (const [path,before] of g.before){ if (before==null) remove(path); else save(path, before, 50); } } finally { undoMute=false; }
+  render(); toast(T("undo_done")); }
+document.addEventListener("keydown", e=>{ if ((e.metaKey||e.ctrlKey) && !e.shiftKey && (e.key==="z"||e.key==="Z")){ const a=document.activeElement; if (isTyping() || (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.type!=="checkbox")) return; e.preventDefault(); undo(); } });
+function save(path, body, delay=500){ recordUndo(path); pending.set(path, body); clearTimeout(timers.get(path)); timers.set(path, setTimeout(()=>flush(path), delay)); }
 async function flush(path){
   if (inflight.has(path)) { timers.set(path, setTimeout(()=>flush(path), 300)); return; }
   const body = pending.get(path); if (!body || !db) return;
@@ -677,6 +728,7 @@ async function flush(path){
 }
 function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; }
 async function remove(path){
+  recordUndo(path);
   pending.delete(path); clearTimeout(timers.get(path));
   const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id];
   if (db) { try { await db.doc(path).delete(); } catch(e){ toast(T("del_fail")); } }
@@ -726,6 +778,7 @@ function renderSide(){
     ${page("home")}${page("gym")}${page("review")}${page("money")}
     ${S.tab==="home" ? `<div class="grp"><span class="lbl">${L("grp_sections")}</span></div>
       ${sec("s-overview","overview",T("sec_overview"))}${sec("s-tasks","tasks",T("sec_tasks"))}${sec("s-week","week",T("sec_week"))}${sec("s-cal","cal",T("sec_cal"))}` : ""}
+    <button class="navb" data-act="undo" title="⌘Z">${svg("undo")}<span class="lbl">${T("undo")}</span><span class="val lbl">⌘Z</span></button>
     <button class="navb" data-act="qc-open" title="N">${svg("bulb")}<span class="lbl">${T("ib_btn")}</span><span class="val lbl">N</span></button>
     <div class="grp"><span class="lbl">${L("grp_switch")}</span></div>
     <button class="navb" data-act="lang">${svg("lang")}<span class="lbl">${L("lang_btn")}</span></button>
@@ -1163,7 +1216,7 @@ function viewGym(){
   const r=rs.find(x=>x.id===S.gymR);
   const all=gymEntries(), t=today();
   const hist=exId=>all.filter(e=>e.exId===exId).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:(b.ts||0)-(a.ts||0));
-  const todayN=all.filter(e=>e.date===t).length;
+  const todayN=all.filter(e=>e.date===t).length, issues=gymIssues(all);
   const chips=rs.map(x=>`<button class="chip" data-act="gym-r" data-id="${x.id}" data-rt="${x.id}" draggable="true" aria-pressed="${x.id===S.gymR}">${esc(x.name)}</button>`).join("");
   const exRow=(g,x)=>{ const h=hist(x.id), last=h[0], open=!!S.gymOpen[x.id];
     return `<li class="ex ${open?"open":""}">
@@ -1175,29 +1228,43 @@ function viewGym(){
           <input type="text" id="gls-${x.id}" placeholder="${T("gym_sets")}" value="${esc(last?.sets||"")}" autocomplete="off">
           <input type="text" id="glw-${x.id}" placeholder="${T("gym_weight")}" value="${esc(last?.weight||"")}" autocomplete="off">
           <input type="text" id="glr-${x.id}" placeholder="${T("gym_rpe")}" value="${esc(last?.rpe||"")}" autocomplete="off">
+          <input type="text" id="glt-${x.id}" placeholder="${T("gym_rest_ph")}" value="${esc(last?.rest||"")}" autocomplete="off">
           <button class="primary" type="submit">${T("gym_save")}</button>
         </form>
         <div class="ex-hist"><div class="eh-h"><h4>${T("gym_history")}</h4>${h.length>1?`<button class="icon-btn sort-btn" data-act="gym-sort" title="${S.gymAsc?T("gym_sort_asc"):T("gym_sort_desc")}" aria-label="${S.gymAsc?T("gym_sort_asc"):T("gym_sort_desc")}">${S.gymAsc?"↑ "+T("gym_old"):"↓ "+T("gym_new")}</button>`:""}</div>
-          ${h.length?`<table><thead><tr><th>${T("gym_date")}</th><th>${T("gym_sets")}</th><th>${T("gym_weight")}</th><th>${T("gym_rpe")}</th><th></th></tr></thead><tbody>${(S.gymAsc?[...h].reverse():h).map(e=>`<tr><td><input type="date" class="mv" value="${e.date}" data-act="mv-date" data-drag="${esc(JSON.stringify({k:"gl",month:e.date.slice(0,7),id:e.id}))}" aria-label="${T("move_date")}"></td><td>${esc(e.sets||"")}</td><td>${esc(e.weight||"")}</td><td>${esc(e.rpe||"")}</td><td><button class="icon-btn" data-act="gym-log-del" data-month="${e.date.slice(0,7)}" data-id="${e.id}" title="${T("del")}">✕</button></td></tr>`).join("")}</tbody></table>`:`<p class="empty mini">${T("gym_no_history")}</p>`}
+          ${h.length?`<table><thead><tr><th>${T("gym_date")}</th><th>${T("gym_sets")}</th><th>${T("gym_weight")}</th><th>${T("gym_rpe")}</th><th>${T("gym_rest")}</th><th></th></tr></thead><tbody>${(S.gymAsc?[...h].reverse():h).map(e=>`<tr class="${issues[e.id]?"bad":""}" ${issues[e.id]?`title="${esc(issues[e.id].join("、"))}"`:""}><td><input type="date" class="mv" value="${e.date}" data-act="mv-date" data-drag="${esc(JSON.stringify({k:"gl",month:e.date.slice(0,7),id:e.id}))}" aria-label="${T("move_date")}"></td><td>${esc(e.sets||"")}</td><td>${esc(e.weight||"")}</td><td>${esc(e.rpe||"")}</td><td>${esc(e.rest||"")}${issues[e.id]?` <span class="warn-i" title="${esc(issues[e.id].join("、"))}">⚠</span>`:""}</td><td><button class="icon-btn" data-act="gym-log-del" data-month="${e.date.slice(0,7)}" data-id="${e.id}" title="${T("del")}">✕</button></td></tr>`).join("")}</tbody></table>`:`<p class="empty mini">${T("gym_no_history")}</p>`}
         </div>
         <button class="ghost mini" data-act="gym-ex-del" data-g="${g.id}" data-x="${x.id}">${T("gym_del_ex")}</button>
       </div>`:""}
     </li>`; };
+  const volBlock=(g, all, issues)=>{ const exs=new Set(g.ex.map(x=>x.id)), by={};
+    all.filter(e=>exs.has(e.exId) && isStrength(e)).forEach(e=>{ const o=(by[e.date]=by[e.date]||{v:0,bad:false}); o.v+=entryVol(e); if (issues[e.id]) o.bad=true; });
+    const ds=Object.keys(by).sort(); if (!ds.length) return "";
+    const rows=ds.map((d,i)=>{ const o=by[d], p=i?by[ds[i-1]]:null, ch=p&&p.v&&o.v?(o.v/p.v-1)*100:null; return {d,o,ch}; }).reverse(), showAll=!!S.volAll[g.id], list=showAll?rows:rows.slice(0,5);
+    return `<div class="vol"><div class="eh-h"><h4>${T("vol_title")} <span class="sub">${T("vol_sub")}</span></h4></div>
+      <table><tbody>${list.map(({d,o,ch})=>`<tr class="${o.bad?"bad":""}"><td>${md(d)} ${dow(d)}</td><td class="num">${Math.round(o.v).toLocaleString()}${o.bad?` <span class="warn-i" title="${T("vol_bad")}">⚠</span>`:""}</td><td class="${ch==null?"":ch>=0?"up":"down"}">${ch==null?"":(ch>=0?"▲ ":"▼ ")+Math.abs(ch).toFixed(0)+"%"}</td></tr>`).join("")}</tbody></table>
+      ${rows.length>5?`<button class="ghost mini" data-act="vol-all" data-g="${g.id}">${showAll?T("vol_less"):T("vol_more",rows.length)}</button>`:""}</div>`; };
+  const ibad=Object.keys(issues), exInfo={}; rs.forEach(rt=>rt.groups.forEach(g=>g.ex.forEach(x=>exInfo[x.id]={r:rt,g,x})));
+  const issueBox = ibad.length ? `<div class="chk card"><div class="sec-h"><b>${T("chk_title",ibad.length)}</b><span class="sp"></span><button class="ghost mini" data-act="chk-toggle">${S.chkOpen?T("chk_close"):T("chk_open")}</button></div>
+    ${S.chkOpen?`<ul class="list">${all.filter(e=>issues[e.id]).sort((a,b)=>a.date<b.date?1:-1).map(e=>{ const inf=exInfo[e.exId]; return `<li class="item"><button class="linkish" data-act="chk-go" data-r="${inf?inf.r.id:""}" data-x="${e.exId}">${esc(T("chk_where", inf?inf.r.name:"?", inf?inf.g.name:"?", inf?inf.x.name:e.exName, md(e.date)))}</button><span class="src">${esc(issues[e.id].join("、"))}</span></li>`; }).join("")}</ul>`:""}</div>` : "";
   const groups = r ? r.groups.map(g=>`<div class="card gcard">
       <div class="g-h"><h3>${esc(g.name)}</h3><span class="cnt">${g.ex.length}</span><span class="sp"></span><button class="icon-btn" data-act="gym-g-del" data-g="${g.id}" title="${T("del")}">✕</button></div>
       <ul class="exl">${g.ex.map(x=>exRow(g,x)).join("")}</ul>
+      ${volBlock(g, all, issues)}
       <form class="add" data-act="gym-ex-add" data-g="${g.id}"><input type="text" id="gx-${g.id}" placeholder="${T("gym_add_ex")}" autocomplete="off"></form>
     </div>`).join("") : "";
   return `<div class="gym-top">
       <div class="chips">${chips}<form class="add chip-add" data-act="gym-r-add"><input type="text" id="gym-r-new" placeholder="${T("gym_add_routine")}" autocomplete="off"></form></div>
       <span class="sub">${T("gym_today_count",todayN)}</span>
     </div>
+    ${issueBox}
     ${r?`<div class="sec-h"><h2>${esc(r.name)}</h2><span class="sub">${L("gym_sub")}</span><span class="sp"></span>
         <button class="ghost mini" data-act="gym-r-del" data-id="${r.id}">${S.confirmDel===r.id?T("confirm_del"):T("gym_del_routine")}</button></div>
       <div class="gym-grid">${groups}
         <div class="card gcard ghost-card"><form class="add" data-act="gym-g-add"><input type="text" id="gym-g-new" placeholder="${T("gym_add_group")}" autocomplete="off"></form>
         ${r.groups.length?"":`<p class="empty mini">${T("gym_empty")}</p>`}</div>
       </div>`:`<p class="empty">${T("gym_none")}</p>`}
+    <section class="block" id="s-prog">${viewProgram(rs, all)}</section>
     ${viewGymCal(rs, all)}`;
 }
 /* training calendar: gym records only, its own month, not tied to the main calendar */
@@ -1222,18 +1289,106 @@ function viewGymCal(rs, all){
       <button class="ghost" data-act="gcalmonth" data-n="-1" aria-label="${T("prev_month")}">←</button><button class="ghost" data-act="gcalmonth" data-n="0">${T("this_month")}</button><button class="ghost" data-act="gcalmonth" data-n="1" aria-label="${T("next_month")}">→</button></div>
     ${rs.length?`<div class="gsums">${sum}</div>`:""}
     <div class="cal gcal">${T("wd_mon_first").map(w=>`<div class="wh">${w}</div>`).join("")}
-    ${cells.map(c=>{ const d=by[c]||{}, ks=Object.keys(d), n=ks.reduce((s,k)=>s+d[k].length,0);
-      return `<div role="button" tabindex="0" class="cell gcell ${parse(c).getMonth()!==m-1?"out":""} ${c===t?"today":""} ${n?"trained":""} ${c===sel?"sel":""}" data-act="gcal-sel" data-date="${c}" data-drop-date="${c}" aria-label="${c}">
-        <span class="n"><span>${parse(c).getDate()}</span></span>
-        ${ks.slice(0,3).map(k=>chip(k,d[k].length)).join("")}${ks.length>3?`<span class="more">+${ks.length-3}</span>`:""}
+    ${cells.map(c=>{ const d=by[c]||{}, ks=Object.keys(d), n=ks.reduce((s,k)=>s+d[k].length,0), pg=program(), pr=progPlanned(pg,c), wkN=pg&&c>=pg.start&&c<=progEnd(pg)&&daysBetween(pg.start,c)%7===0?daysBetween(pg.start,c)/7+1:0;
+      const plan = pr && !d[pr] ? `<span class="gchip plan ${c<t?"miss":""}" ${hue(pr)==null?"":`style="--h:${hue(pr)}"`} title="${c<t?T("pg_missed"):T("pg_planned")} · ${esc(rname(pr))}">${esc(rname(pr))}</span>` : "";
+      return `<div role="button" tabindex="0" class="cell gcell ${pg&&c>=pg.start&&c<=progEnd(pg)?"inprog":""} ${parse(c).getMonth()!==m-1?"out":""} ${c===t?"today":""} ${n?"trained":""} ${c===sel?"sel":""}" data-act="gcal-sel" data-date="${c}" data-drop-date="${c}" aria-label="${c}">
+        <span class="n"><span>${parse(c).getDate()}</span>${wkN?`<em class="wk-n">W${wkN}</em>`:""}</span>
+        ${ks.slice(0,3).map(k=>chip(k,d[k].length)+(pr===k?"":"")).join("")}${plan}${ks.length>3?`<span class="more">+${ks.length-3}</span>`:""}
       </div>`; }).join("")}
     </div>
     ${sel?`<div class="gday"><div class="pop-h"><b>${md(sel)} ${dow(sel)}</b><span class="sp"></span><button class="icon-btn" data-act="gcal-sel" data-date="${sel}" aria-label="close">✕</button></div>
-      ${sd?Object.keys(sd).map(k=>`<h4>${chip(k,sd[k].length)}</h4><table><tbody>${sd[k].map(e=>`<tr><td>${esc(e.exName)}</td><td>${esc(e.sets||"")}</td><td>${esc(e.weight||"")}</td><td>${esc(e.rpe?"RPE "+e.rpe:"")}</td><td><input type="date" class="mv" value="${e.date}" data-act="mv-date" data-drag="${esc(JSON.stringify({k:"gl",month:e.date.slice(0,7),id:e.id}))}" aria-label="${T("move_date")}"></td></tr>`).join("")}</tbody></table>`).join(""):`<p class="empty mini">${T("gcal_day_empty")}</p>`}
+      ${sd?Object.keys(sd).map(k=>`<h4>${chip(k,sd[k].length)}</h4><table><tbody>${sd[k].map(e=>`<tr><td>${esc(e.exName)}</td><td>${esc(e.sets||"")}</td><td>${esc(e.weight||"")}</td><td>${esc(e.rpe?"RPE "+e.rpe:"")}</td><td>${esc(e.rest||"")}</td><td><input type="date" class="mv" value="${e.date}" data-act="mv-date" data-drag="${esc(JSON.stringify({k:"gl",month:e.date.slice(0,7),id:e.id}))}" aria-label="${T("move_date")}"></td></tr>`).join("")}</tbody></table>`).join(""):`<p class="empty mini">${T("gcal_day_empty")}</p>`}
     </div>`:""}
     <p class="sub" style="margin-top:8px">${L("gcal_sub")}</p>
   </section>`;
 }
+/* ---------- gym numbers: parse records, check them, volume and e1RM ---------- */
+function parseSR(v){ const m=String(v||"").match(/(\d+(?:\.\d+)?)\s*[x×X*＊]\s*(\d+(?:\.\d+)?)/); return m?{sets:+m[1],reps:+m[2]}:null; }
+function parseW(v){ const s=String(v||"").trim(); if (!s) return null; if (/自重|bw|body\s*weight/i.test(s)) return {kg:0, bw:true, unit:"kg"};
+  const m=s.match(/(\d+(?:\.\d+)?)\s*(kg|公斤|lbs?|磅)?/i); if (!m) return {bad:true}; const num=+m[1], u=(m[2]||"").toLowerCase();
+  return /lb|磅/.test(u) ? {kg:num*0.4536, unit:"lb", raw:num} : {kg:num, unit:u?"kg":"", raw:num}; }
+function parseRpe(v){ const s=String(v||"").trim(); if (!s) return null; const m=s.match(/(\d+(?:\.\d+)?)\s*$/); return m?+m[1]:NaN; }
+function parseRest(v){ const s=String(v||"").trim().toLowerCase(); if (!s) return null;
+  let m=s.match(/^(\d+)\s*[:：]\s*(\d{1,2})$/); if (m) return +m[1]*60+ +m[2];
+  m=s.match(/^(\d+(?:\.\d+)?)\s*(s|sec|秒)?$/); if (m) return +m[1]*(+m[1]<=10 && !m[2] ? 60 : 1);
+  m=s.match(/^(\d+(?:\.\d+)?)\s*(m|min|分鐘?)\s*(?:(\d+)\s*(s|sec|秒)?)?$/); if (m) return +m[1]*60+(+m[3]||0);
+  return NaN; }
+function fmtRest(sec){ return sec==null||isNaN(sec) ? "" : sec>=60 ? `${Math.floor(sec/60)}:${String(Math.round(sec%60)).padStart(2,"0")}` : `${Math.round(sec)}s`; }
+function isStrength(e){ return !!parseSR(e.sets) || !!String(e.weight||"").trim(); }
+function entryVol(e){ const sr=parseSR(e.sets), w=parseW(e.weight); return sr && w && !w.bad ? sr.sets*sr.reps*w.kg : 0; }
+function entryE1rm(e){ const sr=parseSR(e.sets), w=parseW(e.weight); if (!sr || !w || w.bad || !w.kg) return 0; const r=parseRpe(e.rpe), rir=isNaN(r)||r==null?0:Math.max(0,Math.min(5,10-r)); return w.kg*(1+(sr.reps+rir)/30); }
+function entryIssues(e, prev){
+  if (!isStrength(e)) return [];
+  const out=[], sr=parseSR(e.sets), w=parseW(e.weight), r=parseRpe(e.rpe), rest=parseRest(e.rest);
+  if (!sr) out.push(T("chk_sets"));
+  else { if (!sr.sets || !sr.reps) out.push(T("chk_zero")); if (sr.sets>12) out.push(T("chk_sets_big",sr.sets)); if (sr.reps>50) out.push(T("chk_reps_big",sr.reps)); }
+  if (!w) out.push(T("chk_no_w"));
+  else if (w.bad) out.push(T("chk_no_w"));
+  else if (!w.bw){ if (!w.kg) out.push(T("chk_w_zero")); else if (w.kg>400) out.push(T("chk_w_big",Math.round(w.kg))); else if (!w.unit) out.push(T("chk_unit"));
+    const pw=prev && parseW(prev.weight); if (pw && !pw.bad && pw.kg && w.kg && (w.kg/pw.kg>2.5 || w.kg/pw.kg<0.4)) out.push(T("chk_jump",prev.weight,e.weight)); }
+  if (r!=null && (isNaN(r) || r<1 || r>10)) out.push(T("chk_rpe"));
+  if (rest!=null){ if (isNaN(rest)) out.push(T("chk_rest")); else if (rest>900) out.push(T("chk_rest_big")); }
+  return out; }
+/* issues for every record, keyed by entry id (compares each record with the one before it for the same exercise) */
+function gymIssues(all){ const by={}, res={}; [...all].sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.ts||0)-(b.ts||0)).forEach(e=>{ const prev=by[e.exId]; const is=entryIssues(e, prev); if (is.length) res[e.id]=is; if (isStrength(e)) by[e.exId]=e; }); return res; }
+function kgFmt(v){ return v>=1000 ? (v/1000).toFixed(v>=10000?0:1)+"k" : String(Math.round(v)); }
+
+/* ---------- 10-week program ---------- */
+function program(){ return gymPlan().program || null; }
+function progDefault(rs){ const find=k=>rs.find(r=>r.name.toLowerCase().includes(k))?.id||""; const push=find("push"), pull=find("pull"), leg=find("leg");
+  let st=today(); while (parse(st).getDay()!==2) st=addDays(st,1);
+  return {start:st, weeks:10, days:{"2":push,"3":pull,"5":leg,"6":push,"0":pull}}; }
+function progEnd(pg){ return addDays(pg.start, pg.weeks*7-1); }
+function progPlanned(pg, ds){ if (!pg || ds<pg.start || ds>progEnd(pg)) return null; return pg.days[String(parse(ds).getDay())]||null; }
+function viewProgram(rs, all){
+  const pg=program(), t=today(), ed=S.pgEdit;
+  if (ed){ const days=[1,2,3,4,5,6,0];
+    return `<div class="card prog"><form data-act="pg-save"><div class="sec-h"><h3>${T("pg_title")}</h3></div>
+      <div class="pg-row"><label>${T("pg_start")}<input type="date" id="pg-start" value="${ed.start}"></label><label>${T("pg_weeks")}<input type="number" id="pg-weeks" min="1" max="52" value="${ed.weeks}"></label></div>
+      <div class="pg-days">${days.map((d,i)=>`<label><span>${T("wd_mon_first")[i]}</span><select id="pg-d${d}"><option value="">${T("pg_rest_day")}</option>${rs.map(r=>`<option value="${r.id}" ${ed.days[String(d)]===r.id?"selected":""}>${esc(r.name)}</option>`).join("")}</select></label>`).join("")}</div>
+      <div class="dlg-foot">${pg?`<button type="button" class="ghost" data-act="pg-del">${S.confirmDel==="pg"?T("confirm_del"):T("pg_del")}</button><span class="sp"></span>`:""}<button type="button" class="ghost" data-act="pg-cancel">${T("pg_cancel")}</button><button class="primary" type="submit">${T("pg_save")}</button></div></form></div>`; }
+  if (!pg) return `<div class="card prog"><div class="sec-h"><h3>${T("pg_title")}</h3><span class="sub">${T("pg_none")}</span><span class="sp"></span><button class="primary" data-act="pg-new">${T("pg_make")}</button></div></div>`;
+  const end=progEnd(pg), wk=Math.floor(daysBetween(pg.start, t)/7)+1;
+  let plan=0, done=0; for (let d=pg.start; d<=end && d<=t; d=addDays(d,1)){ const r=progPlanned(pg,d); if (!r) continue; plan++; if (all.some(e=>e.date===d && e.routineId===r)) done++; }
+  const status = t<pg.start ? T("pg_before") : t>end ? T("pg_after") : T("pg_week", wk, pg.weeks);
+  const sched=[1,2,3,4,5,6,0].map((d,i)=>{ const r=rs.find(x=>x.id===pg.days[String(d)]); return `<span class="pg-d ${r?"on":""}"><b>${T("wd_mon_first")[i]}</b>${r?esc(r.name.replace(/[（(].*$/,"").trim()):"–"}</span>`; }).join("");
+  return `<div class="card prog"><div class="sec-h"><h3>${T("pg_title")}</h3><span class="sub">${T("pg_range",md(pg.start),md(end))} · ${status}${plan?` · ${T("pg_adherence",done,plan)}`:""}</span><span class="sp"></span><button class="ghost mini" data-act="pg-edit">${T("pg_edit")}</button></div>
+    ${t>=pg.start&&t<=end?`<div class="progress"><i style="width:${Math.min(100,daysBetween(pg.start,t)/(pg.weeks*7)*100)}%"></i></div>`:""}
+    <div class="pg-sched">${sched}</div>
+    ${viewCompare(rs, all, pg)}</div>`; }
+function viewCompare(rs, all, pg){
+  const t=today(), end=progEnd(pg), upto=t<end?t:end;
+  const baseFrom=addDays(pg.start,-28), baseTo=addDays(pg.start,13), nowFrom=addDays(upto,-13);
+  const ids=new Set(Object.values(pg.days).filter(Boolean)), issues=gymIssues(all), ok=e=>!issues[e.id];
+  const rows=[]; rs.filter(r=>ids.has(r.id)).forEach(r=>r.groups.forEach(g=>g.ex.forEach(x=>{
+    const es=all.filter(e=>e.exId===x.id && ok(e)), best=(a,b)=>Math.max(0,...es.filter(e=>e.date>=a && e.date<=b).map(entryE1rm));
+    const b0=best(baseFrom,baseTo), b1= upto>=addDays(pg.start,14) ? best(nowFrom,upto) : 0;
+    if (b0 || b1) rows.push({name:x.name, b0, b1}); })));
+  const weeks=Array.from({length:pg.weeks},(_,i)=>addDays(pg.start,i*7)), groups=[];
+  rs.filter(r=>ids.has(r.id)).forEach(r=>r.groups.forEach(g=>{ const exs=new Set(g.ex.map(x=>x.id)); const v=weeks.map(w=>all.filter(e=>exs.has(e.exId) && ok(e) && e.date>=w && e.date<=addDays(w,6)).reduce((s,e)=>s+entryVol(e),0)); if (v.some(Boolean)) groups.push({name:g.name, v}); }));
+  const mx=Math.max(1,...groups.flatMap(g=>g.v));
+  return `<div class="cmp"><h4>${T("cmp_title")} <span class="sub">${T("cmp_sub")}</span></h4>
+    ${rows.length?`<table class="cmp-t"><thead><tr><th>${T("cmp_ex")}</th><th>${T("cmp_base")}</th><th>${T("cmp_now")}</th><th>${T("cmp_chg")}</th></tr></thead><tbody>${rows.map(o=>{ const ch=o.b0&&o.b1?(o.b1/o.b0-1)*100:null; return `<tr><td>${esc(o.name)}</td><td>${o.b0?o.b0.toFixed(1):"–"}</td><td>${o.b1?o.b1.toFixed(1):"–"}</td><td class="${ch==null?"":ch>=0?"up":"down"}">${ch==null?"–":(ch>=0?"▲ ":"▼ ")+Math.abs(ch).toFixed(1)+"%"}</td></tr>`; }).join("")}</tbody></table>`:`<p class="empty mini">${T("cmp_none")}</p>`}
+    ${groups.length?`<h4>${T("cmp_wk")}</h4><div class="wkvol">${groups.map(g=>`<div class="wv"><span class="wv-n">${esc(g.name)}</span><div class="wv-bars">${g.v.map((v,i)=>`<i style="height:${v/mx*100}%" title="W${i+1} · ${Math.round(v)} kg"></i>`).join("")}</div></div>`).join("")}</div>`:""}
+    <p class="sub cmp-how">${T("cmp_how")}</p></div>`; }
+
+/* one-time fixes on Adam's data: keep only the last RPE number; bring back the sitting lateral raises */
+let migrated=false;
+function migrateGym(){
+  if (migrated) return; migrated=true; undoMute=true;
+  try {
+    for (const k of Object.keys(S.gymlog)){ const m=gymMonth(k); if (m.entries.some(e=>/[\/／]/.test(String(e.rpe||"")))){ const c=clone(m); c.entries.forEach(e=>{ if (/[\/／]/.test(String(e.rpe||""))) e.rpe=String(e.rpe).split(/[\/／]/).pop().trim(); }); save("gymlog/"+k,c,200); } }
+    const pl=gymPlan(); if (pl.routines && pl.routines.length && !pl.fix1){
+      const c=clone(pl), push=c.routines.find(r=>r.id==="push"), names=new Set(c.routines.flatMap(r=>r.groups.flatMap(g=>g.ex.map(x=>x.name.toLowerCase()))));
+      const sh=push && (push.groups.find(g=>g.id==="pg2") || push.groups.find(g=>g.name==="肩"));
+      if (sh){ [["e7","Sitting DB lateral raises",2],["e8","Sitting machine lateral raise",3]].forEach(([id,name,at])=>{ if (!c.routines.some(r=>r.groups.some(g=>g.ex.some(x=>x.id===id))) && !names.has(name.toLowerCase())) sh.ex.splice(Math.min(at,sh.ex.length),0,{id,name}); }); }
+      c.fix1=true; save("gym/plan",c,200);
+      const oct=clone(gymMonth("2026-10")); let add=false;
+      [{id:"ne7",date:"2026-10-20",routineId:"push",exId:"e7",exName:"Sitting DB lateral raises",sets:"3×12",weight:"60 lbs",rpe:"10",ts:1793974319475},
+       {id:"ne8",date:"2026-10-20",routineId:"push",exId:"e8",exName:"Sitting machine lateral raise",sets:"3×10",weight:"110 lbs",rpe:"9",ts:1793974319476}].forEach(e=>{ if (!gymEntries().some(x=>x.id===e.id || (x.exId===e.exId && x.date===e.date))){ oct.entries.push(e); add=true; } });
+      if (add){ oct.month="2026-10"; save("gymlog/2026-10",oct,200); } }
+  } finally { undoMute=false; } }
+
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
 
 /* ---------- covers & tint ---------- */
@@ -1368,6 +1523,10 @@ document.addEventListener("submit", e=>{
     steps.forEach((x,i)=>{ (byDay[ds[i]]=byDay[ds[i]]||[]).push({id:uid(), t:`${t.title}：${x}`, d:false, from:t.id}); });
     Object.entries(byDay).forEach(([dt,its])=>{ const d=dayCopy(dt); d.items.push(...its); save("days/"+dt,d,100); });
     S.split=null; render(); toast(T("sp_done",Object.keys(byDay).length));
+  } else if (act==="pg-save"){
+    const pg={start:document.getElementById("pg-start").value||today(), weeks:Math.max(1,Math.min(52,+document.getElementById("pg-weeks").value||10)), days:{}};
+    [0,1,2,3,4,5,6].forEach(d=>{ const v=document.getElementById("pg-d"+d)?.value; if (v) pg.days[String(d)]=v; });
+    const pl=clone(gymPlan()); pl.program=pg; savePlan(pl); S.pgEdit=null; S.gcalMonth=pg.start.slice(0,7); render();
   } else if (act==="kid-add"){
     const inp=f.querySelector("input"), v=inp.value.trim(), ref=blkRef(f); if(!v||!ref) return; inp.value="";
     blkEdit(ref, x=>{ x.kids=[...(x.kids||[]), {id:uid(), t:v}]; x.o=true; });
@@ -1404,9 +1563,10 @@ document.addEventListener("submit", e=>{
     planEdit((pl,r)=>r.groups.find(g=>g.id===f.dataset.g).ex.push({id:uid(),name:n,target:"",note:""}));
   } else if (act==="gym-log"){
     const x=f.dataset.x, v=k=>document.getElementById(k+x).value.trim();
-    const sets=v("gls-"), weight=v("glw-"), rpe=v("glr-"); if(!sets && !weight){ toast(T("gym_need")); return; }
+    const sets=v("gls-"), weight=v("glw-"), rpe=v("glr-"), rest=document.getElementById("glt-"+x)?.value.trim()||""; if(!sets && !weight){ toast(T("gym_need")); return; }
     const t=document.getElementById("gld-"+x)?.value||today(), m=clone(gymMonth(t.slice(0,7)));
-    m.entries.push({id:uid(),date:t,routineId:S.gymR,exId:x,exName:f.dataset.name,sets,weight,rpe,ts:Date.now()});
+    m.entries.push({id:uid(),date:t,routineId:S.gymR,exId:x,exName:f.dataset.name,sets,weight,rpe,rest,ts:Date.now()});
+    { const prev=gymEntries().filter(e=>e.exId===x && isStrength(e)).sort((a,b)=>a.date<b.date?1:-1)[0], is=entryIssues({sets,weight,rpe,rest}, prev); if (is.length) setTimeout(()=>toast("⚠ "+is.join("、")),1900); }
     save("gymlog/"+t.slice(0,7),m,50); document.activeElement && document.activeElement.blur(); toast(T("gym_logged")); render();
   } else if (act==="exp-add"){
     const amt=parseFloat(document.getElementById("exp-amt").value); if (!(amt>0)) { toast(T("need_amt")); return; }
@@ -1481,6 +1641,14 @@ document.addEventListener("click", e=>{
   else if (act==="ib-today"){ const x=inboxList().find(i=>i.id===b.dataset.id); if(!x) return; const d=dayCopy(today()); d.items.push({id:uid(), t:x.t, d:false}); save("days/"+d.date,d,100); remove("inbox/"+x.id); render(); toast(T("ib_moved")); }
   else if (act==="ib-board"){ const x=inboxList().find(i=>i.id===b.dataset.id); if(!x) return; const id=uid(); save("tasks/"+id,{id,title:x.t,bucket:bucketList()[0].id,done:false,due:null,createdAt:Date.now()},50); remove("inbox/"+x.id); render(); toast(T("ib_moved")); }
   else if (act==="qc-open"){ openQc(); }
+  else if (act==="undo"){ undo(); }
+  else if (act==="vol-all"){ S.volAll[b.dataset.g]=!S.volAll[b.dataset.g]; render(); }
+  else if (act==="chk-toggle"){ S.chkOpen=!S.chkOpen; render(); }
+  else if (act==="chk-go"){ if (b.dataset.r) S.gymR=b.dataset.r; S.gymOpen[b.dataset.x]=true; render(); setTimeout(()=>{ const el=document.querySelector(`[data-act="gym-open"][data-id="${b.dataset.x}"]`); el && el.scrollIntoView({block:"center"}); },30); }
+  else if (act==="pg-new"){ S.pgEdit=progDefault(gymPlan().routines); render(); }
+  else if (act==="pg-edit"){ S.pgEdit=clone(program()); render(); }
+  else if (act==="pg-cancel"){ S.pgEdit=null; S.confirmDel=null; render(); }
+  else if (act==="pg-del"){ if (S.confirmDel!=="pg"){ S.confirmDel="pg"; render(); return; } S.confirmDel=null; const pl=clone(gymPlan()); delete pl.program; savePlan(pl); S.pgEdit=null; render(); }
   else if (act==="split-open"){ const t=task(b.dataset.id); if (!t||!t.due){ toast(T("sp_need_due")); return; } const st=today()<t.due?today():t.due; S.split={id:t.id, steps:T("sp_default"), start:st}; render(); setTimeout(()=>document.getElementById("sp-steps")?.focus(),0); }
   else if (act==="split-cancel"){ S.split=null; render(); }
   else if (act==="wk-open"){ S.wkRev=mondayOf(addDays(today(), new Date().getDay()===1?-7:0)); setTab("review"); }
@@ -1745,7 +1913,7 @@ function banner(msg){ const b=document.getElementById("banner"); b.textContent=m
   for (const p of pending.keys()) flush(p);
   const waiting=new Set(["tasks","days","expenses","settings","events","gymlog","gym","inbox"]);
   const timer=setTimeout(()=>{ if (waiting.size) banner(T("loading")); }, 10000);
-  const done=(k,snap)=>{ if (!snap.metadata.fromCache){ waiting.delete(k); if (!waiting.size){ clearTimeout(timer); banner(""); } } };
+  const done=(k,snap)=>{ if (!snap.metadata.fromCache){ waiting.delete(k); if (!waiting.size){ clearTimeout(timer); banner(""); migrateGym(); } } };
   const fail=k=>e=>{ waiting.delete(k); if (e.code!=="revoked") banner(T("disconnected",e.code)); };
   const sub=(name)=>db.collection(name).onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S[name]=o; done(name,snap); softRender(); }, fail(name));
   sub("tasks"); sub("days"); sub("expenses"); sub("events"); sub("gymlog"); sub("inbox");
