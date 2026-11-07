@@ -164,7 +164,9 @@ ul.list{list-style:none;margin:0;padding:0}
 .week::-webkit-scrollbar-track{background:var(--calm-soft);border-radius:5px}
 .week::-webkit-scrollbar-thumb{background:var(--muted);border-radius:5px}
 @media (max-width:640px){.week{grid-auto-columns:86vw}}
-.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0;display:flex;flex-direction:column;max-height:min(var(--day-max,680px),82vh)}
+.day-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0 -8px;padding:0 8px;scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
+.day-h,.day-foot{flex:0 0 auto}
 .day.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
 .day-h{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:6px}
 .day-h b{font-family:var(--f-mono);font-size:15px;font-weight:500}
@@ -692,6 +694,7 @@ function render(){
   dirty=false;
   const a=document.activeElement, fid=a && a.id, sel=a && "selectionStart" in a ? [a.selectionStart,a.selectionEnd] : null;
   const sx={}; document.querySelectorAll("[data-keep-scroll]").forEach(el=>sx[el.dataset.keepScroll]=el.scrollLeft);
+  const sy={}; document.querySelectorAll("[data-keep-y]").forEach(el=>sy[el.dataset.keepY]=el.scrollTop);
   const v=document.getElementById("view"), wy=window.scrollY, ss=document.getElementById("sideInner").scrollTop;
   v.style.minHeight=v.offsetHeight+"px";
   document.documentElement.lang = S.lang==="en" ? "en" : "zh-Hant";
@@ -705,6 +708,7 @@ function render(){
   if (S.tab==="home") positionPop();
   if (!S.cm) renderCm();
   document.querySelectorAll("[data-keep-scroll]").forEach(el=>{ if (sx[el.dataset.keepScroll]!=null) el.scrollLeft=sx[el.dataset.keepScroll]; });
+  document.querySelectorAll("[data-keep-y]").forEach(el=>{ if (sy[el.dataset.keepY]!=null) el.scrollTop=sy[el.dataset.keepY]; });
   document.getElementById("sideInner").scrollTop = ss;
   v.style.minHeight=""; if (Math.abs(window.scrollY-wy)>1) window.scrollTo(0,wy);
   if (fid){ const el=document.getElementById(fid); if (el){ el.focus({preventScroll:true}); if (sel && "setSelectionRange" in el) try{ el.setSelectionRange(sel[0],sel[1]); }catch(e){} } }
@@ -996,8 +1000,8 @@ function viewWeek(){
     const topCar=myCar.filter(c=>!c.proj);
     return `<div class="day ${td?"today":""}" data-day="${date}">
       <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}</div>
-      <ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}</ul>${addForm(date)}
-      ${projs}
+      <div class="day-body" data-keep-y="${date}"><ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}</ul>${addForm(date)}
+      ${projs}</div>
       <div class="day-foot">
         <select data-act="proj-add" data-date="${date}" aria-label="${T("add_proj")}"><option value="">${T("add_proj")}</option>${projOpts.filter(p=>!names.has(p)).map(p=>`<option>${esc(p)}</option>`).join("")}<option value="__new">${T("new_proj")}</option></select>
         <button class="ghost mini" data-act="go-review" data-date="${date}">${L("write_review")}</button>
