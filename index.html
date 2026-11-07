@@ -1237,7 +1237,7 @@ function viewGym(){
           <input type="text" id="gls-${x.id}" placeholder="${T("gym_sets")}" value="${esc(last?.sets||"")}" autocomplete="off">
           <input type="text" id="glw-${x.id}" placeholder="${T("gym_weight")}" value="${esc(last?.weight||"")}" autocomplete="off">
           <input type="text" id="glr-${x.id}" placeholder="${T("gym_rpe")}" value="${esc(last?.rpe||"")}" autocomplete="off">
-          <input type="text" id="glt-${x.id}" placeholder="${T("gym_rest_ph")}" value="${esc(last?.rest||REST_DEFAULT)}" autocomplete="off">
+          <input type="text" id="glt-${x.id}" placeholder="${T("gym_rest_ph")}" value="${esc(last?.rest||restDefault(x.name))}" autocomplete="off">
           <button class="primary" type="submit">${T("gym_save")}</button>
         </form>
         <div class="ex-hist"><div class="eh-h"><h4>${T("gym_history")}</h4>${h.length>1?`<button class="icon-btn sort-btn" data-act="gym-sort" title="${S.gymAsc?T("gym_sort_asc"):T("gym_sort_desc")}" aria-label="${S.gymAsc?T("gym_sort_asc"):T("gym_sort_desc")}">${S.gymAsc?"↑ "+T("gym_old"):"↓ "+T("gym_new")}</button>`:""}</div>
@@ -1391,19 +1391,24 @@ function viewCompare(rs, all, pg){
 
 /* one-time fixes on Adam's data: keep only the last RPE number; bring back the sitting lateral raises */
 let migrated=false;
-const REST_DEFAULT="1分鐘";
+const REST_DEFAULT="1分鐘", REST_COMPOUND="2分鐘";
+const isCompound=n=>/press|squat|dead\s*lift|\brdl\b|row|pull\s*-?\s*down|pulldown|pull-?up|chin-?up|\bdips?\b|lunge|thrust|臥推|推舉|胸推|肩推|深蹲|硬舉|划船|下拉|引體/i.test(String(n||""));
+const restDefault=n=>isCompound(n)?REST_COMPOUND:REST_DEFAULT;
 function migrateGym(){
   if (migrated) return; migrated=true; undoMute=true;
   try {
     for (const k of Object.keys(S.gymlog)){ const m=gymMonth(k); if (m.entries.some(e=>/[\/／]/.test(String(e.rpe||"")))){ const c=clone(m); c.entries.forEach(e=>{ if (/[\/／]/.test(String(e.rpe||""))) e.rpe=String(e.rpe).split(/[\/／]/).pop().trim(); }); save("gymlog/"+k,c,200); } }
     const pl=gymPlan(); if (pl.routines && pl.routines.length && !pl.fix2){
-      for (const k of Object.keys(S.gymlog)){ const m=pending.get("gymlog/"+k)||gymMonth(k); if (m.entries.some(e=>!e.rest && isStrength(e))){ const c=clone(m); c.entries.forEach(e=>{ if (!e.rest && isStrength(e)) e.rest=REST_DEFAULT; }); save("gymlog/"+k,c,200); } }
-      if (pl.fix1){ save("gym/plan",{...clone(pl), fix2:true},200); } }
+      for (const k of Object.keys(S.gymlog)){ const m=pending.get("gymlog/"+k)||gymMonth(k); if (m.entries.some(e=>!e.rest && isStrength(e))){ const c=clone(m); c.entries.forEach(e=>{ if (!e.rest && isStrength(e)) e.rest=restDefault(e.exName); }); save("gymlog/"+k,c,200); } }
+      if (pl.fix1){ save("gym/plan",{...clone(pl), fix2:true, fix3:true},200); } }
+    else if (pl.routines && pl.routines.length && !pl.fix3){
+      for (const k of Object.keys(S.gymlog)){ const m=gymMonth(k); if (m.entries.some(e=>e.rest===REST_DEFAULT && isCompound(e.exName))){ const c=clone(m); c.entries.forEach(e=>{ if (e.rest===REST_DEFAULT && isCompound(e.exName)) e.rest=REST_COMPOUND; }); save("gymlog/"+k,c,200); } }
+      save("gym/plan",{...clone(pl), fix3:true},200); }
     if (pl.routines && pl.routines.length && !pl.fix1){
       const c=clone(pl), push=c.routines.find(r=>r.id==="push"), names=new Set(c.routines.flatMap(r=>r.groups.flatMap(g=>g.ex.map(x=>x.name.toLowerCase()))));
       const sh=push && (push.groups.find(g=>g.id==="pg2") || push.groups.find(g=>g.name==="肩"));
       if (sh){ [["e7","Sitting DB lateral raises",2],["e8","Sitting machine lateral raise",3]].forEach(([id,name,at])=>{ if (!c.routines.some(r=>r.groups.some(g=>g.ex.some(x=>x.id===id))) && !names.has(name.toLowerCase())) sh.ex.splice(Math.min(at,sh.ex.length),0,{id,name}); }); }
-      c.fix1=true; c.fix2=true; save("gym/plan",c,200);
+      c.fix1=true; c.fix2=true; c.fix3=true; save("gym/plan",c,200);
       const oct=clone(pending.get("gymlog/2026-10")||gymMonth("2026-10")); let add=false;
       [{id:"ne7",date:"2026-10-20",routineId:"push",exId:"e7",exName:"Sitting DB lateral raises",sets:"3×12",weight:"60 lbs",rpe:"10",rest:REST_DEFAULT,ts:1793974319475},
        {id:"ne8",date:"2026-10-20",routineId:"push",exId:"e8",exName:"Sitting machine lateral raise",sets:"3×10",weight:"110 lbs",rpe:"9",rest:REST_DEFAULT,ts:1793974319476}].forEach(e=>{ if (!gymEntries().some(x=>x.id===e.id || (x.exId===e.exId && x.date===e.date))){ oct.entries.push(e); add=true; } });
