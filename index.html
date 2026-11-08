@@ -1488,6 +1488,11 @@ const WPS = [{"file": "bg/16.jpg", "name": "海峽電塔", "hue": 208, "sat": 34
 const WP_DEFAULT = {home:"bg/16.jpg", review:"bg/17.jpg", money:"bg/18.jpg", gym:"bg/11.jpg"};
 function wpList(){ return [...WPS.map(w=>({...w, src:w.file})), ...((settings().customWps)||[]).map(w=>({...w, src:w.url, file:w.url, custom:true}))]; }
 function wpFor(tab){ const key=((settings().wp)||{})[tab] || WP_DEFAULT[tab] || WPS[0].file; return wpList().find(w=>w.file===key) || {...WPS[0], src:WPS[0].file}; }
+/* if a wallpaper fails to load (offline, slow host), try the copy on raw.githubusercontent, then hide the broken-image icon */
+document.getElementById("heroImg").addEventListener("error", e=>{ const img=e.target, want=img.dataset.want||"", n=+(img.dataset.try||0); img.dataset.try=String(n+1);
+  if (n===0 && /^bg\//.test(want)) { img.setAttribute("src", "https://raw.githubusercontent.com/everydaylife0424-creator/home-board/main/"+want); return; }
+  img.style.visibility="hidden"; });
+document.getElementById("heroImg").addEventListener("load", e=>{ e.target.style.visibility=""; });
 const tintEl=document.createElement("style"); document.body.appendChild(tintEl);
 function applyTint(h,s){
   const sl=Math.max(10,Math.min(30,s*0.75)), sa=Math.max(30,Math.min(55,s+12)), q=sl*0.6;
@@ -1497,7 +1502,7 @@ function applyTint(h,s){
 }
 function renderHero(){
   const w=wpFor(S.tab), img=document.getElementById("heroImg");
-  if (img.getAttribute("src")!==w.src) img.setAttribute("src", w.src);
+  if (img.dataset.want!==w.src){ img.dataset.want=w.src; img.dataset.try="0"; img.style.visibility=""; img.setAttribute("src", w.src); }
   const ps = S.wpAdj ? S.wpAdj.pos : wpPos(w); img.style.objectPosition=`${ps[0]}% ${ps[1]}%`;
   document.getElementById("hero").classList.toggle("adjusting", !!S.wpAdj);
   applyTint(w.hue, w.sat);
