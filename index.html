@@ -878,6 +878,12 @@ function viewHome(){
 }
 
 /* unfinished items from the past 14 days, shown under today automatically */
+/* items from earlier days that were checked off on this date: they stay on this date's card */
+function doneOn(date){ const out=[];
+  for (let i=14;i>=1;i--){ const ds=addDays(date,-i); if(!hasDay(ds)) continue; const d=day(ds);
+    (d.items||[]).forEach(it=>{ if(!it.k && it.d && it.dn===date) out.push({date:ds, pi:-1, it, proj:null}); });
+    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(!it.k && it.d && it.dn===date) out.push({date:ds, pi, it, proj:p.name}); })); }
+  return out; }
 function carried(withDone){
   const t=today(), out=[];
   for (let i=14;i>=1;i--){ const ds=addDays(t,-i); if(!hasDay(ds)) continue; const d=day(ds);
@@ -1056,7 +1062,7 @@ function viewWeek(){
       <span class="acts">${it.d?"":pinBtn({date,pi:String(pi),id:it.id})}<button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>`;
   const addForm=(date,name)=>`<form class="add" data-act="it-add" data-date="${date}" ${name?`data-proj="${esc(name)}"`:""}><input type="text" id="add-${date}-${name?hash(name):"_"}" placeholder="${T("todo_ph")}" autocomplete="off"></form>`;
   const dayCols=days.map(date=>{
-    const d=day(date), td=date===t, myCar=td?car:[];
+    const d=day(date), td=date===t, myCar=[...(td?car.filter(c=>!c.it.d):[]), ...(date<=t?doneOn(date):[])];
     const secs=(d.projects||[]).map((p,pi)=>({name:p.name,pi,p}));
     const names=new Set(secs.map(s=>s.name));
     if (date>=t) pins.forEach(n=>{ if(!names.has(n)){ names.add(n); secs.push({name:n,pi:null}); } });
