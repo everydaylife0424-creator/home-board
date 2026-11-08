@@ -231,6 +231,14 @@ tr.bad td{background:var(--hot-soft)}
 .vol h4{margin:0 0 4px;font-size:13.5px}.vol .sub{font-weight:400;font-size:12px}
 .vol table{width:100%;border-collapse:collapse;font-size:13px}.vol td{padding:3px 4px;border-top:1px solid var(--line)}
 .vol td.num{font-family:var(--f-mono);text-align:right}
+li[data-lp]{-webkit-touch-callout:none}
+li[data-lp] .t{-webkit-user-select:none;user-select:none}
+.lp-src{opacity:.35}
+.lp-ghost{position:fixed;left:0;top:0;z-index:200;pointer-events:none;background:var(--surface);border:1px solid var(--accent);border-radius:8px;box-shadow:0 10px 28px rgba(0,0,0,.18);padding:6px 10px;list-style:none;display:flex;gap:8px;align-items:center;opacity:.95}
+.lp-dragging,.lp-dragging *{cursor:grabbing!important;-webkit-user-select:none;user-select:none}
+.day.lp-over{outline:2px dashed var(--accent);outline-offset:-2px;background:var(--accent-soft)}
+details.proj.lp-over{outline:2px dashed var(--accent);border-radius:8px}
+.cell.lp-over{outline:2px dashed var(--accent);outline-offset:-2px}
 .ex-rest{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:6px 0 8px}.ex-rest input{width:110px;font-size:16px;padding:4px 7px}
 .vol tr.vrow{cursor:pointer}.vol tr.vrow:hover td,.vol tr.vrow.op td{background:var(--accent-soft)}.vol tr.vrow:focus-visible{outline:2px solid var(--accent)}
 .vol tr.vfix-row td{padding:6px 0 8px;border-top:0}
@@ -512,7 +520,7 @@ const I18N = {
     wp_change:"更換桌布", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"刪除這張卡片", sl_title:"輸入以篩選，↑↓ 選擇，Enter 確認", sl_none:"沒有符合的指令", sl_clear:"取消這個指令", sl_todo:"待辦清單（To-do list）", sl_bullet:"項目符號清單（Bulleted list）", sl_numbered:"編號清單（Numbered list）", sl_toggle:"折疊清單（Toggle list）", sl_table:"表格（Table）", tb_row:"＋列", tb_col:"＋欄", tb_delcol:"－欄", tb_delrow:"刪除這一列", sl_kid_ph:"在折疊裡新增，按 Enter", sl_heading:"標題", sl_text:"文字（不打勾）", sl_divider:"分隔線", sl_tomorrow:"明天", sl_to_day:d=>`加到 ${d}`, sl_board:n=>`加到任務板：${n}`, sl_proj:n=>`新增專案區塊：${n}`, sl_review:"打開這天的每日檢討", sl_today:"截止日設為今天", sl_nextweek:"截止日設為下週一", sl_due_set:d=>`截止日：${d}`, sl_marked:"已標記在月曆上", sl_to_board:"已加到任務板", sl_added_to:d=>`已加到 ${d}`, cm_del_item:t=>`刪除「${t}」`, cm_edit_item:t=>`編輯「${t}」`, edit_done:"已更新", cm_add_item:"新增事項（Enter）", cm_add_item_to:n=>`新增事項到「${n}」`, cm_del_sec:n=>`刪除這天的「${n}」區塊`, cm_unpin:n=>`「${n}」不再每天自動出現`, cm_unpinned:"已取消自動出現，可在專案設定改回來", cm_add_sec:"新增專案區塊", cm_add_card:"加回卡片", cm_all_shown:"所有卡片都已顯示", cm_reset:"恢復預設卡片", cm_row_empty:"這排沒有卡片，在這裡按右鍵可以加回來。", cm_del_col:n=>`刪除「${n}」這欄`, cm_add_col:"新增一欄", cm_col_ph:"欄名，按 Enter", cm_last_col:"至少要留一欄", cm_col_deleted:n=>`已刪除，裡面的任務移到「${n}」`, cm_del_day:d=>`刪除 ${d} 這張卡片`, cm_day_first:d=>`刪除後會在最後補上 ${d}。月曆上的紀錄不會消失。`, cm_add_day:"新增日期卡片", cm_pick_day:"選一天", cm_add:"新增", cm_day_max:"最多 7 天，再新增會刪掉最早的那天。", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
     gym_sub:"點動作展開，可以記錄每次的組數、重量和 RPE", gym_add_routine:"＋ 新增課表", gym_add_group:"＋ 新增分組，例如「胸」（Enter）", gym_add_ex:"＋ 新增動作（Enter）",
     gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_date:"日期", gcal_title:"健身月曆", gcal_sub:"只顯示健身紀錄，和主畫面月曆分開", gcal_month:(n,d)=>`本月 ${d} 天 · ${n} 筆`, gcal_last:"上次", gcal_ago:n=>n===0?"今天":`${n} 天前`, gcal_never:"還沒練", gcal_times:n=>`本月 ${n} 次`, gcal_day_empty:"這天沒有健身紀錄", gcal_other:"其他", gcal_rest:n=>`已休息 ${n} 天`, gym_new:"新→舊", gym_old:"舊→新", gym_sort_desc:"目前由新到舊，點一下改成由舊到新", gym_sort_asc:"目前由舊到新，點一下改成由新到舊", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
-    gym_history:"紀錄", gym_rest:"組間休息", gym_rest_ph:"休息 例 90s", vol_title:"總訓練量", vol_sub:"組 × 次 × 重量（kg）", vol_none:"還沒有可計算的紀錄", vol_bad:"這次含有有誤的資料，數字可能不準", vol_more:n=>`顯示全部 ${n} 次`, vol_less:"收起", vol_tip:"點一下可以查看、修改這天的紀錄", rest_def:"這個動作預設組間休息", rest_def_ok:"已更新預設休息", fix_save:"儲存", fix_ok:"已修正", fix_still:"還有問題：",
+    gym_history:"紀錄", gym_rest:"組間休息", gym_rest_ph:"休息 例 90s", vol_title:"總訓練量", vol_sub:"組 × 次 × 重量（kg）", vol_none:"還沒有可計算的紀錄", vol_bad:"這次含有有誤的資料，數字可能不準", vol_more:n=>`顯示全部 ${n} 次`, vol_less:"收起", vol_tip:"點一下可以查看、修改這天的紀錄", lp_moved:d=>`已移到 ${d}`, rest_def:"這個動作預設組間休息", rest_def_ok:"已更新預設休息", fix_save:"儲存", fix_ok:"已修正", fix_still:"還有問題：",
     chk_title:n=>`⚠ 有 ${n} 筆紀錄可能有誤`, chk_open:"展開", chk_close:"收起", chk_sets:"組×次看不懂，請寫成像 3×12", chk_no_w:"沒填重量", chk_unit:"重量沒寫單位，先當作 kg", chk_sets_big:n=>`組數 ${n} 偏多`, chk_reps_big:n=>`次數 ${n} 不太合理`, chk_zero:"組數或次數是 0", chk_w_big:n=>`重量 ${n} kg 太重了`, chk_w_zero:"重量是 0", chk_rpe:"RPE 要在 1～10 之間", chk_rest:"休息時間看不懂，請寫成像 90s 或 2m", chk_rest_big:"休息超過 15 分鐘", chk_jump:(a,b)=>`重量從上次的 ${a} 變成 ${b}，差很多`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
     pg_title:"10 週訓練計劃", pg_none:"還沒有設定訓練計劃。", pg_make:"建立 10 週計劃", pg_edit:"編輯計劃", pg_save:"儲存計劃", pg_cancel:"取消", pg_del:"刪除計劃", pg_start:"開始日", pg_weeks:"週數", pg_rest_day:"休息", pg_week:(n,m)=>`第 ${n} / ${m} 週`, pg_before:"還沒開始", pg_after:"已結束", pg_adherence:(a,b)=>`照計劃完成 ${a} / ${b} 次`, pg_range:(a,b)=>`${a} ~ ${b}`, pg_planned:"計劃", pg_missed:"沒練到",
     cmp_title:"前後比較", cmp_sub:"每個動作用估計 1RM（e1RM）比較力量，用每週總訓練量比較份量", cmp_ex:"動作", cmp_base:"起點", cmp_now:"最近", cmp_chg:"變化", cmp_none:"計劃開始後累積兩週以上紀錄，這裡就會出現比較。", cmp_wk:"每週總訓練量（kg）", cmp_how:"怎麼算：e1RM = 重量 ×（1 + (次數 + 保留次數) ÷ 30），保留次數 = 10 − RPE；起點取計劃開始前 4 週到第 2 週的最好成績，最近取最後 2 週的最好成績。",
@@ -576,7 +584,7 @@ const I18N = {
     wp_change:"Change cover", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"Delete this card", sl_title:"Type to filter, ↑↓ to choose, Enter to pick", sl_none:"No matching command", sl_clear:"Cancel this command", sl_todo:"To-do list", sl_bullet:"Bulleted list", sl_numbered:"Numbered list", sl_toggle:"Toggle list", sl_table:"Table", tb_row:"+ Row", tb_col:"+ Column", tb_delcol:"− Column", tb_delrow:"Delete row", sl_kid_ph:"Add inside, press Enter", sl_heading:"Heading", sl_text:"Text (no checkbox)", sl_divider:"Divider", sl_tomorrow:"Tomorrow", sl_to_day:d=>`Add to ${d}`, sl_board:n=>`Add to board: ${n}`, sl_proj:n=>`Add section: ${n}`, sl_review:"Open this day’s review", sl_today:"Due today", sl_nextweek:"Due next Monday", sl_due_set:d=>`Due: ${d}`, sl_marked:"Marked on the calendar", sl_to_board:"Added to the task board", sl_added_to:d=>`Added to ${d}`, cm_del_item:t=>`Delete “${t}”`, cm_edit_item:t=>`Edit “${t}”`, edit_done:"Updated", cm_add_item:"Add an item (Enter)", cm_add_item_to:n=>`Add an item to “${n}”`, cm_del_sec:n=>`Remove the “${n}” section from this day`, cm_unpin:n=>`Stop showing “${n}” every day`, cm_unpinned:"It won’t appear automatically now. Change it back in Project settings.", cm_add_sec:"Add a project section", cm_add_card:"Add a card back", cm_all_shown:"All cards are showing", cm_reset:"Restore default cards", cm_row_empty:"No cards here. Right-click to add them back.", cm_del_col:n=>`Delete the “${n}” column`, cm_add_col:"Add a column", cm_col_ph:"Column name, press Enter", cm_last_col:"Keep at least one column", cm_col_deleted:n=>`Deleted. Its tasks moved to “${n}”.`, cm_del_day:d=>`Delete the ${d} card`, cm_day_first:d=>`${d} will be added at the end. Calendar records stay.`, cm_add_day:"Add a day card", cm_pick_day:"Pick a day", cm_add:"Add", cm_day_max:"Up to 7 days. Adding more removes the earliest.", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
     gym_sub:"Open an exercise to log sets, weight and RPE", gym_add_routine:"+ New routine", gym_add_group:"+ New group, e.g. Chest (Enter)", gym_add_ex:"+ New exercise (Enter)",
     gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_date:"Date", gcal_title:"Training calendar", gcal_sub:"Gym records only, separate from the main calendar", gcal_month:(n,d)=>`This month: ${d} days · ${n} sets logged`, gcal_last:"Last", gcal_ago:n=>n===0?"today":`${n}d ago`, gcal_never:"not yet", gcal_times:n=>`${n}× this month`, gcal_day_empty:"No gym records this day", gcal_other:"Other", gcal_rest:n=>`${n} rest days so far`, gym_new:"Newest", gym_old:"Oldest", gym_sort_desc:"Newest first. Click for oldest first", gym_sort_asc:"Oldest first. Click for newest first", gym_sets:"Sets×reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
-    gym_history:"Records", gym_rest:"Rest", gym_rest_ph:"Rest e.g. 90s", vol_title:"Total volume", vol_sub:"sets × reps × weight (kg)", vol_none:"No records to calculate yet", vol_bad:"This session has records that look wrong", vol_more:n=>`Show all ${n}`, vol_less:"Show less", vol_tip:"Click to view and fix this session's records", rest_def:"Default rest for this exercise", rest_def_ok:"Default rest updated", fix_save:"Save", fix_ok:"Fixed", fix_still:"Still: ",
+    gym_history:"Records", gym_rest:"Rest", gym_rest_ph:"Rest e.g. 90s", vol_title:"Total volume", vol_sub:"sets × reps × weight (kg)", vol_none:"No records to calculate yet", vol_bad:"This session has records that look wrong", vol_more:n=>`Show all ${n}`, vol_less:"Show less", vol_tip:"Click to view and fix this session's records", lp_moved:d=>`Moved to ${d}`, rest_def:"Default rest for this exercise", rest_def_ok:"Default rest updated", fix_save:"Save", fix_ok:"Fixed", fix_still:"Still: ",
     chk_title:n=>`⚠ ${n} records may be wrong`, chk_open:"Show", chk_close:"Hide", chk_sets:"Can't read sets×reps. Write it like 3×12", chk_no_w:"No weight", chk_unit:"No unit on the weight, counted as kg", chk_sets_big:n=>`${n} sets is a lot`, chk_reps_big:n=>`${n} reps looks wrong`, chk_zero:"Sets or reps is 0", chk_w_big:n=>`${n} kg is very heavy`, chk_w_zero:"Weight is 0", chk_rpe:"RPE should be 1–10", chk_rest:"Can't read the rest time. Write it like 90s or 2m", chk_rest_big:"Rest is over 15 minutes", chk_jump:(a,b)=>`Weight went from ${a} to ${b}`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
     pg_title:"10-week program", pg_none:"No program yet.", pg_make:"Create a 10-week program", pg_edit:"Edit program", pg_save:"Save program", pg_cancel:"Cancel", pg_del:"Delete program", pg_start:"Start", pg_weeks:"Weeks", pg_rest_day:"Rest", pg_week:(n,m)=>`Week ${n} of ${m}`, pg_before:"Not started", pg_after:"Finished", pg_adherence:(a,b)=>`${a} of ${b} planned sessions done`, pg_range:(a,b)=>`${a} – ${b}`, pg_planned:"Planned", pg_missed:"Missed",
     cmp_title:"Before vs after", cmp_sub:"Strength per exercise as estimated 1RM (e1RM); volume as weekly total", cmp_ex:"Exercise", cmp_base:"Start", cmp_now:"Latest", cmp_chg:"Change", cmp_none:"After two weeks of logs in the program, the comparison shows up here.", cmp_wk:"Weekly volume (kg)", cmp_how:"How: e1RM = weight × (1 + (reps + reps in reserve) ÷ 30), reps in reserve = 10 − RPE. Start = best from 4 weeks before to week 2; latest = best of the last 2 weeks.",
@@ -1040,7 +1048,7 @@ function viewWeek(){
   const car=days.includes(t) ? carried() : [];
   const delBtn=(it,date,pi)=>`<span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span>`;
   const itemLi=(it,date,pi,tag,n)=> ["ul","ol","tg","tb"].includes(it.k) ? blkLi(it,{date,pi:String(pi),id:it.id},n,delBtn(it,date,pi)) : it.k ? `<li class="item blk k-${it.k}">${it.k==="hr"?`<hr>`:`<span class="t">${esc(it.t)}</span>`}
-      <span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>` : `<li class="item ${it.d?"done":""}">
+      <span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>` : `<li class="item ${it.d?"done":""}" data-lp="${esc(JSON.stringify({date,pi,id:it.id}))}">
       <input type="checkbox" ${it.d?"checked":""} data-act="it-toggle" data-date="${date}" data-pi="${pi}" data-id="${it.id}" aria-label="${T("done")}">
       <span class="t">${esc(it.t)}</span>${tag?`<span class="carry-tag" title="${esc(T("carry_from",date))}">${md(date)}</span>`:""}
       <span class="acts">${it.d?"":pinBtn({date,pi:String(pi),id:it.id})}<button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>`;
@@ -1202,6 +1210,57 @@ function positionPop(){
   if (m && grid){ const gw=grid.clientWidth; if (m.offsetLeft+m.offsetWidth>gw) m.style.left=Math.max(0,gw-m.offsetWidth)+"px"; const i=m.querySelector("input"); if(i && document.activeElement!==i) i.focus(); }
 }
 /* move anything shown on the calendar to another date */
+/* long-press a to-do, then drag it to another day (or a project section, or a calendar date) */
+function moveItem(src, dst){
+  const same=src.date===dst.date, a=dayCopy(src.date), b=same?a:dayCopy(dst.date);
+  const from=+src.pi<0 ? a.items : (a.projects[+src.pi]||{}).items; if (!from) return false;
+  const i=from.findIndex(x=>x.id===src.id); if (i<0) return false;
+  let to=b.items, npi=-1;
+  if (dst.proj){ let k=b.projects.findIndex(p=>p.name===dst.proj); if (k<0){ b.projects.push({name:dst.proj,open:true,items:[]}); k=b.projects.length-1; } to=b.projects[k].items; npi=k; }
+  if (to===from) return false;
+  const [it]=from.splice(i,1); to.push(it);
+  const t=today(), td=t===a.date?a:t===b.date?b:dayCopy(t), oldK=refKey({date:src.date,pi:String(src.pi),id:src.id});
+  if ((td.top||[]).some(r=>refKey(r)===oldK)){ td.top=td.top.map(r=>refKey(r)===oldK?{date:dst.date,pi:String(npi),id:src.id}:r); if (td!==a && td!==b) save("days/"+t,td,50); }
+  save("days/"+a.date,a,50); if (!same) save("days/"+b.date,b,50);
+  return true;
+}
+let lp=null;
+function lpTarget(x,y){ const el=document.elementFromPoint(x,y); if (!el) return null;
+  const pr=el.closest("details.proj[data-date]"); if (pr){ const n=pr.querySelector("summary")?.dataset.name; return {el:pr, date:pr.dataset.date, proj:n||null}; }
+  const dy=el.closest(".day[data-day]"); if (dy) return {el:dy, date:dy.dataset.day, proj:null};
+  const c=el.closest(".cell[data-drop-date]:not(.gcell)"); if (c) return {el:c, date:c.dataset.dropDate, proj:null};
+  return null; }
+function lpEnd(drop){ if (!lp) return; clearTimeout(lp.timer); const L=lp; lp=null;
+  document.querySelectorAll(".lp-over").forEach(x=>x.classList.remove("lp-over")); L.li && L.li.classList.remove("lp-src"); L.ghost && L.ghost.remove(); cancelAnimationFrame(L.raf||0);
+  document.documentElement.classList.remove("lp-dragging");
+  if (!L.on) return; window.__lpBlock=performance.now();
+  if (drop && L.tgt){ if (moveItem(L.src, L.tgt)){ render(); toast(T("lp_moved", md(L.tgt.date)+(L.tgt.proj?" · "+L.tgt.proj:""))); } } }
+document.addEventListener("pointerdown", e=>{
+  if (e.button!==0 || S.edit) return; const li=e.target.closest && e.target.closest("li[data-lp]"); if (!li) return;
+  if (e.target.closest("input,button,a,select,textarea,[contenteditable=true]")) return;
+  let src; try{ src=JSON.parse(li.dataset.lp); }catch(_){ return; }
+  lp={src, li, x:e.clientX, y:e.clientY, id:e.pointerId, on:false};
+  lp.timer=setTimeout(()=>{ if (!lp) return; lp.on=true; navigator.vibrate && navigator.vibrate(15);
+    const g=li.cloneNode(true); g.className="item lp-ghost"; g.querySelectorAll(".acts").forEach(x=>x.remove()); g.style.width=li.offsetWidth+"px"; document.body.appendChild(g); lp.ghost=g;
+    lp.dx=lp.x-li.getBoundingClientRect().left; lp.dy=lp.y-li.getBoundingClientRect().top; li.classList.add("lp-src"); document.documentElement.classList.add("lp-dragging");
+    window.getSelection && window.getSelection().removeAllRanges(); lpMove(lp.x, lp.y); lpScroll(); }, 380);
+});
+function lpMove(x,y){ if (!lp || !lp.on) return; lp.cx=x; lp.cy=y; lp.ghost.style.transform=`translate(${x-lp.dx}px,${y-lp.dy}px)`;
+  const t=lpTarget(x,y); document.querySelectorAll(".lp-over").forEach(z=>z!==(t&&t.el)&&z.classList.remove("lp-over")); if (t) t.el.classList.add("lp-over"); lp.tgt=t; }
+function lpScroll(){ if (!lp || !lp.on) return; const x=lp.cx, y=lp.cy, strip=document.querySelector("#s-week .week");
+  if (strip){ const r=strip.getBoundingClientRect(); if (y>r.top-40 && y<r.bottom+40){ if (x<r.left+60) strip.scrollLeft-=14; else if (x>r.right-60) strip.scrollLeft+=14; } }
+  if (y<50) scrollBy(0,-14); else if (y>innerHeight-50) scrollBy(0,14);
+  lp.raf=requestAnimationFrame(()=>{ lpMove(lp?lp.cx:0, lp?lp.cy:0); lpScroll(); }); }
+document.addEventListener("pointermove", e=>{ if (!lp || e.pointerId!==lp.id) return;
+  if (!lp.on){ if (Math.hypot(e.clientX-lp.x, e.clientY-lp.y)>8) lpEnd(false); return; }
+  e.preventDefault(); lpMove(e.clientX, e.clientY); }, {passive:false});
+document.addEventListener("touchmove", e=>{ if (lp && lp.on) e.preventDefault(); }, {passive:false});
+document.addEventListener("pointerup", e=>{ if (lp && e.pointerId===lp.id) lpEnd(true); });
+document.addEventListener("pointercancel", e=>{ if (lp && e.pointerId===lp.id && !lp.on) lpEnd(false); });
+document.addEventListener("contextmenu", e=>{ if ((lp && lp.on) || performance.now()-(window.__lpBlock||0)<400){ e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+document.addEventListener("click", e=>{ if (performance.now()-(window.__lpBlock||0)<300){ e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+document.addEventListener("keydown", e=>{ if (e.key==="Escape" && lp) lpEnd(false); });
+
 function moveTo(d, date){
   if (!date) return;
   if (d.k==="ev"){ const e=ev(d.id); if(e) save("events/"+e.id,{...e,date},50); }
