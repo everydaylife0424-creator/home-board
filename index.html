@@ -827,13 +827,15 @@ function ovDefault(){ return ["today","week",...pinned().map(p=>"proj:"+p),"due"
 function ovCards(){ return settings().ovCards || ovDefault(); }
 function ovAll(){ return ["today","week",...settings().projects.map(p=>"proj:"+p),"due","carry"]; }
 function ovLabel(id){ return id.startsWith("proj:")?T("ov_proj",id.slice(5)):T({today:"ov_today",week:"ov_week",due:"ov_due",carry:"ov_carry"}[id]); }
-const DAY_MAX=7;
+const DAY_MAX=7, DAY_KEEP=5; // a day card stays until it is 5 days old (11/8 leaves on 11/13), then a new day is added at the end
 function dayDefault(){ const t=today(); return [-1,0,1,2,3].map(i=>addDays(t,i)); }
 /* the day cards: what was saved, plus one more card at the end for every day that has passed since, keeping at most 7 */
 function dayCards(){ const st=settings().dayCards; if(!st || !st.list || !st.list.length) return dayDefault();
-  let list=[...new Set(st.list)].sort(); const passed=Math.max(0,Math.round((parse(today())-parse(st.at||today()))/864e5));
-  for (let i=0;i<Math.min(passed,DAY_MAX);i++) list.push(addDays(list[list.length-1],1));
-  return list.slice(-DAY_MAX); }
+  let list=[...new Set(st.list)].sort(); const size=list.length, t=today(), keep=addDays(t,-(DAY_KEEP-1));
+  if (list[list.length-1] < t) list=[t]; // long time away: start again from today
+  list=list.filter(d=>d>=keep); if (!list.length) list=[t];
+  while (list.length<size) list.push(addDays(list[list.length-1],1));
+  return list.slice(0,DAY_MAX); }
 function saveDayCards(list){ const st=clone(settings()); list=[...new Set(list)].sort(); if(list.length>DAY_MAX) list=list.slice(-DAY_MAX);
   st.dayCards = list.length?{list, at:today()}:null; save("settings/main",st,50); render(); }
 function viewHome(){
@@ -876,11 +878,11 @@ function viewHome(){
 }
 
 /* unfinished items from the past 14 days, shown under today automatically */
-function carried(){
+function carried(withDone){
   const t=today(), out=[];
   for (let i=14;i>=1;i--){ const ds=addDays(t,-i); if(!hasDay(ds)) continue; const d=day(ds);
-    (d.items||[]).forEach(it=>{ if(!it.d && !it.k) out.push({date:ds, pi:-1, it, proj:null}); });
-    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(!it.d && !it.k) out.push({date:ds, pi, it, proj:p.name}); })); }
+    (d.items||[]).forEach(it=>{ if(!it.k && (!it.d || (withDone && it.dn===t))) out.push({date:ds, pi:-1, it, proj:null}); });
+    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(!it.k && (!it.d || (withDone && it.dn===t))) out.push({date:ds, pi, it, proj:p.name}); })); }
   return out;
 }
 
@@ -1045,7 +1047,7 @@ document.addEventListener("toggle", e=>{ const d=e.target; if (!d.matches || !d.
 function viewWeek(){
   const days=dayCards();
   const projOpts=settings().projects, pins=pinned(), t=today();
-  const car=days.includes(t) ? carried() : [];
+  const car=days.includes(t) ? carried(true) : [];
   const delBtn=(it,date,pi)=>`<span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span>`;
   const itemLi=(it,date,pi,tag,n)=> ["ul","ol","tg","tb"].includes(it.k) ? blkLi(it,{date,pi:String(pi),id:it.id},n,delBtn(it,date,pi)) : it.k ? `<li class="item blk k-${it.k}">${it.k==="hr"?`<hr>`:`<span class="t">${esc(it.t)}</span>`}
       <span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>` : `<li class="item ${it.d?"done":""}" data-lp="${esc(JSON.stringify({date,pi,id:it.id}))}">
@@ -1061,7 +1063,7 @@ function viewWeek(){
     myCar.forEach(c=>{ if(c.proj && !names.has(c.proj)){ names.add(c.proj); secs.push({name:c.proj,pi:null}); } });
     const projs=secs.map(s=>{
       const own=s.p?s.p.items:[], extra=myCar.filter(c=>c.proj===s.name);
-      const n=own.filter(i=>!i.k).length+extra.length, k=own.filter(i=>i.d).length;
+      const n=own.filter(i=>!i.k).length+extra.length, k=own.filter(i=>i.d).length+extra.filter(c=>c.it.d).length;
       const open=s.p ? s.p.open!==false : (date===t || extra.length>0);
       return `<details class="proj ${s.p?"":"virtual"}" ${open?"open":""} data-date="${date}" ${s.p?`data-pi="${s.pi}"`:""}>
         <summary data-name="${esc(s.name)}">${esc(T("prog",s.name))} <span class="cnt">${k}/${n}</span>${s.p?`<button class="icon-btn" data-act="proj-del" data-date="${date}" data-pi="${s.pi}" title="${T("remove_block")}">✕</button>`:""}</summary>
@@ -1082,7 +1084,7 @@ function viewWeek(){
   return `<section class="block" id="s-week">
       <div class="sec-h"><h2>${L("week_title", md(days[0]), md(days[days.length-1]))}</h2><span class="sp"></span>
         <button class="ghost" data-act="days" data-n="-1" aria-label="${T("prev_day")}">←</button><button class="ghost" data-act="days" data-n="0">${T("today")}</button><button class="ghost" data-act="days" data-n="1" aria-label="${T("next_day")}">→</button></div>
-      ${car.length?`<p class="sub" style="margin:-4px 0 10px">${L("carry_note")}</p>`:""}
+      ${car.some(c=>!c.it.d)?`<p class="sub" style="margin:-4px 0 10px">${L("carry_note")}</p>`:""}
       <div class="week" data-keep-scroll="week" tabindex="0">${dayCols}</div>
     </section>`;
 }
