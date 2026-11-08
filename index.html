@@ -1500,10 +1500,16 @@ function applyTint(h,s){
   const Dk=`--bg:hsl(${h} 14% 9.5%);--surface:hsl(${h} 13% 12.5%);--line:hsl(${h} 11% 21%);--rail:hsl(${h} 14% 10.5%);--accent:hsl(${h} ${sa}% 72%);--accent-soft:hsl(${h} 28% 19%);--calm-soft:hsl(${h} 10% 16%);--muted:hsl(${h} 9% 64%);--fg:hsl(${h} 12% 91%);`;
   tintEl.textContent=`:root{${Lt}}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){${Dk}}}:root[data-theme="dark"]{${Dk}}`;
 }
+/* remember each page's wallpaper on this device, so a fresh open shows it right away instead of the default until settings load */
+function wpMemo(tab, w, pos){ let m={}; try{ m=JSON.parse(localStorage.getItem("home-wp")||"{}"); }catch(_){}
+  if (!w) return m[tab]||null;
+  const v={src:w.src, file:w.file, hue:w.hue, sat:w.sat, pos}; if (JSON.stringify(m[tab])!==JSON.stringify(v)){ m[tab]=v; try{ localStorage.setItem("home-wp", JSON.stringify(m)); }catch(_){} } return v; }
 function renderHero(){
-  const w=wpFor(S.tab), img=document.getElementById("heroImg");
+  const img=document.getElementById("heroImg"); let w;
+  if (S.settingsSeen || pending.has("settings/main")){ w=wpFor(S.tab); wpMemo(S.tab, w, wpPos(w)); }
+  else { const m=wpMemo(S.tab); w = m ? {...m, memo:true} : wpFor(S.tab); }
   if (img.dataset.want!==w.src){ img.dataset.want=w.src; img.dataset.try="0"; img.style.visibility=""; img.setAttribute("src", w.src); }
-  const ps = S.wpAdj ? S.wpAdj.pos : wpPos(w); img.style.objectPosition=`${ps[0]}% ${ps[1]}%`;
+  const ps = S.wpAdj ? S.wpAdj.pos : w.memo ? w.pos : wpPos(w); img.style.objectPosition=`${ps[0]}% ${ps[1]}%`;
   document.getElementById("hero").classList.toggle("adjusting", !!S.wpAdj);
   applyTint(w.hue, w.sat);
   document.getElementById("heroBtns").innerHTML = S.wpAdj
@@ -2026,7 +2032,7 @@ function banner(msg){ const b=document.getElementById("banner"); b.textContent=m
   const sub=(name)=>db.collection(name).onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S[name]=o; done(name,snap); softRender(); }, fail(name));
   sub("tasks"); sub("days"); sub("expenses"); sub("events"); sub("gymlog"); sub("inbox");
   db.doc("gym/plan").onSnapshot(s=>{ S.gymPlan=s.exists?s.data():null; done("gym",s); softRender(); }, fail("gym"));
-  db.doc("settings/main").onSnapshot(s=>{ S.settings=s.exists?s.data():null; done("settings",s); softRender(); }, fail("settings"));
+  db.doc("settings/main").onSnapshot(s=>{ S.settings=s.exists?s.data():null; S.settingsSeen=true; done("settings",s); softRender(); }, fail("settings"));
 })();
 })();
 </script>
