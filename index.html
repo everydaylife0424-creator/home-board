@@ -328,6 +328,19 @@ textarea.big{min-height:150px}
 .stat .k{font-size:12px;color:var(--muted)}
 .stat .v{font-family:var(--f-mono);font-size:19px;font-variant-numeric:tabular-nums}
 .v.neg{color:var(--hot)} .v.pos{color:var(--good)}
+.subs{margin-top:20px}
+.sub-list{list-style:none;margin:0 0 14px;padding:0}
+.sub-row{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.9fr) minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 4px;border-top:1px solid var(--line)}
+.sub-row:first-child{border-top:0}
+.sub-row .sb-name{font-weight:600;min-width:0;overflow-wrap:anywhere}.sub-row .sb-note{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
+.sub-row .sb-amt{font-family:var(--f-mono);font-variant-numeric:tabular-nums}.sub-row small{color:var(--muted);font-size:12px}
+.sub-row .sb-next{font-family:var(--f-mono);font-size:13.5px}.sub-row .sb-next small{display:block}
+.sub-row.soon .sb-next small{color:var(--hot);font-weight:600}
+.sub-row.paused{opacity:.5}
+.sub-row .sb-acts{display:flex;gap:4px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+form.sub-form{grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px dashed var(--line);padding-top:14px}
+.sub-btns{display:flex;gap:8px;justify-content:flex-end}
+@media (max-width:640px){.sub-row{grid-template-columns:minmax(0,1fr) auto}.sub-row .sb-acts{grid-column:1/-1;justify-content:flex-start}form.sub-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
 form.exp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 form.exp .full{grid-column:1/-1}
 form.exp label{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
@@ -572,7 +585,7 @@ const I18N = {
     quota:"儲存空間已滿，請刪除一些舊資料", save_fail:m=>`儲存失敗：${m}`, del_fail:"刪除失敗",
     m_out:"支出", m_in:"收入", m_bal:"結餘", m_type:"類型", m_amt:"金額", m_date:"日期", m_cat:"分類", m_note:"備註",
     m_note_ph:"例如：午餐、捷運", m_submit:"記一筆", m_cats:"支出分類", m_cats_empty:"這個月還沒有支出。",
-    m_ledger:"明細", m_count:n=>`${n} 筆`, m_ledger_empty:"記下第一筆後，明細會依日期排在這裡。",
+    sub_title:"訂閱方案", sub_sum:(m,y,n)=>`每月約 ${m} · 每年約 ${y} · ${n} 個進行中`, sub_name:"名稱", sub_name_ph:"例 Spotify", sub_amt:"金額", sub_cycle:"週期", sub_month:"每月", sub_year:"每年", sub_week:"每週", sub_next:"下次扣款日", sub_note:"付款方式／備註", sub_note_ph:"例 玉山信用卡", sub_cur:"幣別", sub_add:"新增訂閱", sub_save:"儲存修改", sub_cancel:"取消", sub_empty:"還沒有訂閱。把每個月、每年會自動扣款的服務記在這裡，就知道總共花多少、哪天要扣款。", sub_in:n=>n===0?"今天扣款":n===1?"明天扣款":`還有 ${n} 天`, sub_paused:"已暫停", sub_pause:"暫停", sub_resume:"恢復", sub_edit:"編輯", sub_log:"記一筆", sub_logged:"已記到這個月的明細", sub_rate:"外幣用約略匯率換算成台幣（USD 32、JPY 0.21、EUR 35）", sub_cat:"訂閱", sub_need:"請填名稱和金額", m_ledger:"明細", m_count:n=>`${n} 筆`, m_ledger_empty:"記下第一筆後，明細會依日期排在這裡。",
     offline:"目前無法連到資料庫，這次的變更只會留在這個分頁，重新整理就會消失。",
     loading:"資料還在載入，畫面可能不是最新的。", disconnected:c=>`資料連線中斷（${c}），請重新整理頁面。`,
   },
@@ -636,7 +649,7 @@ const I18N = {
     quota:"Storage is full. Delete some old data.", save_fail:m=>`Couldn't save: ${m}`, del_fail:"Couldn't delete",
     m_out:"Spent", m_in:"Income", m_bal:"Balance", m_type:"Type", m_amt:"Amount", m_date:"Date", m_cat:"Category", m_note:"Note",
     m_note_ph:"e.g. lunch, MRT", m_submit:"Save entry", m_cats:"Spending by category", m_cats_empty:"No spending this month yet.",
-    m_ledger:"Entries", m_count:n=>`${n} entries`, m_ledger_empty:"Your entries will be listed here by date.",
+    sub_title:"Subscriptions", sub_sum:(m,y,n)=>`About ${m}/month · ${y}/year · ${n} active`, sub_name:"Name", sub_name_ph:"e.g. Spotify", sub_amt:"Amount", sub_cycle:"Cycle", sub_month:"Monthly", sub_year:"Yearly", sub_week:"Weekly", sub_next:"Next charge", sub_note:"Payment / note", sub_note_ph:"e.g. credit card", sub_cur:"Currency", sub_add:"Add subscription", sub_save:"Save changes", sub_cancel:"Cancel", sub_empty:"No subscriptions yet. Track every service that charges you automatically, to see the total and the next charge dates.", sub_in:n=>n===0?"Charges today":n===1?"Charges tomorrow":`In ${n} days`, sub_paused:"Paused", sub_pause:"Pause", sub_resume:"Resume", sub_edit:"Edit", sub_log:"Log it", sub_logged:"Added to this month's entries", sub_rate:"Foreign currencies use rough rates to TWD (USD 32, JPY 0.21, EUR 35)", sub_cat:"Subscription", sub_need:"Enter a name and amount", m_ledger:"Entries", m_count:n=>`${n} entries`, m_ledger_empty:"Your entries will be listed here by date.",
     offline:"Can't reach the database. Changes stay in this tab only and will be lost on reload.",
     loading:"Still loading. What you see may be out of date.", disconnected:c=>`Lost connection (${c}). Reload the page.`,
   },
@@ -1611,8 +1624,46 @@ function viewMoney(){
           es.map(e=>`<div class="row"><span class="cat">${esc(e.cat)}</span><span class="note">${esc(e.note||"")}</span><span class="amt ${e.type==="in"?"in":""}">${e.type==="in"?"+":"-"}${money(e.amount)}</span><button class="icon-btn" data-act="exp-del" data-id="${e.id}" title="${T("del")}">✕</button></div>`).join("");
         }).join("") : `<p class="empty">${T("m_ledger_empty")}</p>`}
       </div>
-    </div>`;
+    </div>
+    ${viewSubs()}`;
 }
+
+/* ---------- subscriptions (settings.subs) ---------- */
+const SUB_RATE={TWD:1, USD:32, JPY:0.21, EUR:35};
+function subs(){ return settings().subs||[]; }
+function addMonthsKeep(ds, n, dom){ const [y,m]=ds.split("-").map(Number); const t=new Date(y, m-1+n, 1); const last=new Date(t.getFullYear(), t.getMonth()+1, 0).getDate(); return ymd(new Date(t.getFullYear(), t.getMonth(), Math.min(dom,last))); }
+function subNext(sb){ const t=today(), st=sb.start||t, dom=+st.slice(8,10); let d=st;
+  for (let k=1; d<t && k<2000; k++) d = sb.cycle==="week" ? addDays(st,7*k) : addMonthsKeep(st, sb.cycle==="year"?12*k:k, dom);
+  return d; }
+function subMonthly(sb){ const v=(+sb.amount||0)*(SUB_RATE[sb.cur||"TWD"]||1); return sb.cycle==="year"? v/12 : sb.cycle==="week" ? v*52/12 : v; }
+function viewSubs(){
+  const list=subs().map(sb=>({sb, next:subNext(sb)})).sort((a,b)=>(a.sb.paused?1:0)-(b.sb.paused?1:0) || (a.next<b.next?-1:1));
+  const act=list.filter(x=>!x.sb.paused), mo=act.reduce((s,x)=>s+subMonthly(x.sb),0), t=today();
+  const ed=S.subEdit && subs().find(x=>x.id===S.subEdit), cyc=c=>T("sub_"+(c||"month"));
+  const amt=sb=>`${(sb.cur&&sb.cur!=="TWD")?sb.cur+" ":"$"}${(+sb.amount||0).toLocaleString("zh-TW")}`;
+  const f=ed||{cycle:"month", cur:"TWD", start:t};
+  return `<section class="block card subs" id="s-subs">
+    <div class="sec-h"><h2>${L("sub_title")}</h2>${act.length?`<span class="sub">${T("sub_sum", money(mo), money(mo*12), act.length)}</span>`:""}</div>
+    ${list.length?`<ul class="sub-list">${list.map(({sb,next})=>{ const n=daysBetween(t,next);
+      return `<li class="sub-row ${sb.paused?"paused":""} ${!sb.paused&&n<=3?"soon":""}">
+        <span class="sb-name">${esc(sb.name)}${sb.note?`<span class="sb-note">${esc(sb.note)}</span>`:""}</span>
+        <span class="sb-amt">${amt(sb)}<small> / ${cyc(sb.cycle)}</small></span>
+        <span class="sb-next">${sb.paused?T("sub_paused"):`${md(next)} ${dow(next)}<small>${T("sub_in",n)}</small>`}</span>
+        <span class="sb-acts">${sb.paused?"":`<button class="ghost mini" data-act="sub-log" data-id="${sb.id}">${T("sub_log")}</button>`}<button class="ghost mini" data-act="sub-pause" data-id="${sb.id}">${sb.paused?T("sub_resume"):T("sub_pause")}</button><button class="ghost mini" data-act="sub-edit" data-id="${sb.id}">${T("sub_edit")}</button><button class="icon-btn" data-act="sub-del" data-id="${sb.id}" title="${T("del")}">${S.confirmDel==="sub:"+sb.id?T("confirm_del"):"✕"}</button></span>
+      </li>`; }).join("")}</ul>`:`<p class="empty">${T("sub_empty")}</p>`}
+    <form class="exp sub-form" data-act="sub-save">
+      <label>${L("sub_name")}<input name="name" type="text" value="${esc(f.name||"")}" placeholder="${T("sub_name_ph")}" autocomplete="off" required></label>
+      <label>${L("sub_amt")}<input name="amount" type="number" inputmode="decimal" min="0" step="any" value="${esc(f.amount??"")}" placeholder="0" required></label>
+      <label>${L("sub_cur")}<select name="cur">${Object.keys(SUB_RATE).map(c=>`<option ${c===(f.cur||"TWD")?"selected":""}>${c}</option>`).join("")}</select></label>
+      <label>${L("sub_cycle")}<select name="cycle">${["month","year","week"].map(c=>`<option value="${c}" ${c===f.cycle?"selected":""}>${cyc(c)}</option>`).join("")}</select></label>
+      <label>${L("sub_next")}<input name="start" type="date" value="${ed?subNext(ed):f.start}"></label>
+      <label>${L("sub_note")}<input name="note" type="text" value="${esc(f.note||"")}" placeholder="${T("sub_note_ph")}" autocomplete="off"></label>
+      <div class="full sub-btns">${ed?`<button type="button" class="ghost" data-act="sub-cancel">${T("sub_cancel")}</button>`:""}<button class="primary" type="submit">${ed?T("sub_save"):T("sub_add")}</button></div>
+    </form>
+    ${list.some(x=>x.sb.cur&&x.sb.cur!=="TWD")?`<p class="sub" style="margin-top:8px">${T("sub_rate")}</p>`:""}
+  </section>`;
+}
+function saveSubs(fn){ const st=clone(settings()); st.subs=fn([...(st.subs||[])]); save("settings/main",st,50); render(); }
 
 /* ---------- mutations ---------- */
 function dayCopy(date){ const d=clone(day(date)); d.date=date; d.items=d.items||[]; d.projects=d.projects||[]; d.review=d.review||{}; return d; }
@@ -1686,6 +1737,11 @@ document.addEventListener("submit", e=>{
     m.entries.push({id:uid(),date:t,routineId:S.gymR,exId:x,exName:f.dataset.name,sets,weight,rpe,rest,ts:Date.now()});
     { const prev=gymEntries().filter(e=>e.exId===x && isStrength(e)).sort((a,b)=>a.date<b.date?1:-1)[0], is=entryIssues({sets,weight,rpe,rest}, prev); if (is.length) setTimeout(()=>toast("⚠ "+is.join("、")),1900); }
     save("gymlog/"+t.slice(0,7),m,50); document.activeElement && document.activeElement.blur(); toast(T("gym_logged")); render();
+  } else if (act==="sub-save"){
+    const v=k=>f.elements[k].value.trim(), name=v("name"), amount=parseFloat(v("amount")); if (!name || !(amount>=0) || v("amount")===""){ toast(T("sub_need")); return; }
+    const body={name, amount, cur:v("cur"), cycle:v("cycle"), start:v("start")||today(), note:v("note")};
+    const id=S.subEdit; S.subEdit=null;
+    saveSubs(l=> id ? l.map(x=>x.id===id?{...x,...body}:x) : [...l, {id:uid(), ...body}]);
   } else if (act==="exp-add"){
     const amt=parseFloat(document.getElementById("exp-amt").value); if (!(amt>0)) { toast(T("need_amt")); return; }
     const date=document.getElementById("exp-date").value || today(), mkey=date.slice(0,7), m=clone(month(mkey));
@@ -1795,6 +1851,13 @@ document.addEventListener("click", e=>{
   }
   else if (act==="month"){ const n=+b.dataset.n; if(n===0) S.month=today().slice(0,7); else { const d=parse(S.month+"-01"); d.setMonth(d.getMonth()+n); S.month=ymd(d).slice(0,7); } render(); }
   else if (act==="exp-type"){ S.expType=b.dataset.t; render(); }
+  else if (act==="sub-edit"){ S.subEdit=b.dataset.id; render(); setTimeout(()=>{ const i=document.querySelector(".sub-form input[name=name]"); i && (i.scrollIntoView({block:"center"}), i.focus()); },30); }
+  else if (act==="sub-cancel"){ S.subEdit=null; render(); }
+  else if (act==="sub-pause"){ saveSubs(l=>l.map(x=>x.id===b.dataset.id?{...x,paused:!x.paused}:x)); }
+  else if (act==="sub-del"){ const k="sub:"+b.dataset.id; if (S.confirmDel!==k){ S.confirmDel=k; render(); return; } S.confirmDel=null; if (S.subEdit===b.dataset.id) S.subEdit=null; saveSubs(l=>l.filter(x=>x.id!==b.dataset.id)); toast(T("deleted")); }
+  else if (act==="sub-log"){ const sb=subs().find(x=>x.id===b.dataset.id); if (!sb) return; const d=today(), mk=d.slice(0,7), m=clone(month(mk));
+    const tw=Math.round((+sb.amount||0)*(SUB_RATE[sb.cur||"TWD"]||1));
+    m.entries.push({id:uid(), date:d, amount:tw, type:"out", cat:T("sub_cat"), note:sb.name+(sb.cur&&sb.cur!=="TWD"?` (${sb.cur} ${sb.amount})`:""), ts:Date.now()}); save("expenses/"+mk,m,50); render(); toast(T("sub_logged")); }
   else if (act==="exp-del"){ const m=clone(month(S.month)); m.entries=m.entries.filter(x=>x.id!==b.dataset.id); save("expenses/"+S.month,m,50); render(); toast(T("deleted")); }
 });
 
