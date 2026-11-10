@@ -892,10 +892,11 @@ function viewHome(){
 
 /* unfinished items from the past 14 days, shown under today automatically */
 /* items from earlier days that were checked off on this date: they stay on this date's card */
+function shownOn(it, date){ if (!it.d || it.k) return false; if (it.dc) return it.dc===date; return it.dn===date && it.dn<="2026-11-10"; } // items checked before dc existed keep the old rule
 function doneOn(date){ const out=[];
   for (let i=14;i>=1;i--){ const ds=addDays(date,-i); if(!hasDay(ds)) continue; const d=day(ds);
-    (d.items||[]).forEach(it=>{ if(!it.k && it.d && it.dn===date) out.push({date:ds, pi:-1, it, proj:null}); });
-    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(!it.k && it.d && it.dn===date) out.push({date:ds, pi, it, proj:p.name}); })); }
+    (d.items||[]).forEach(it=>{ if(shownOn(it,date)) out.push({date:ds, pi:-1, it, proj:null}); });
+    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(shownOn(it,date)) out.push({date:ds, pi, it, proj:p.name}); })); }
   return out; }
 function carried(withDone){
   const t=today(), out=[];
@@ -1864,7 +1865,10 @@ document.addEventListener("click", e=>{
 document.addEventListener("change", e=>{
   const el=e.target, act=el.dataset.act;
   if (act==="task-toggle"){ const t={...task(el.dataset.id), done:el.checked, doneAt:el.checked?Date.now():null}; save("tasks/"+t.id,t,50); render(); }
-  else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked; it.dn=el.checked?today():null; save("days/"+d.date,d,300); render(); }
+  else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked; it.dn=el.checked?today():null;
+    // dc = the card it was checked on. Only an item checked on a later day's card (a carried item) shows up on that card too.
+    const card=el.closest(".day[data-day]")?.dataset.day; if (el.checked && card) it.dc=card; else delete it.dc;
+    save("days/"+d.date,d,300); render(); }
   else if (act==="proj-add"){ const name=el.value; if (!name) return; if (name==="__new"){ el.value=""; askNewProject(el.dataset.date, el); return; } addProj(el.dataset.date, name); }
   else if (act==="mv-date"){ try{ moveTo(JSON.parse(el.dataset.drag), el.value); }catch(_){} }
   else if (act==="gym-field"){ const v=el.value.trim(); const pl=clone(gymPlan()), r=pl.routines.find(x=>x.id===S.gymR), x=r.groups.find(g=>g.id===el.dataset.g).ex.find(x=>x.id===el.dataset.x); if ((x[el.dataset.f]||"")!==v){ x[el.dataset.f]=v; savePlan(pl); } }
