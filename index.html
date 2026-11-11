@@ -1568,11 +1568,16 @@ function migrateGym(){
         save("gym/backup-20261111",{at:Date.now(), note:"records before the 11/14 cycle", months},200);
         const lighter=w=>{ const q=parseW(w); if (!q || q.bad || q.bw || q.raw==null) return w; const nv=Math.round((q.raw-(q.unit==="lb"?5:2.5))*100)/100; return nv>0 ? String(w).replace(/\d+(?:\.\d+)?/, String(nv)) : w; };
         const latest={}; all.forEach(e=>{ const c=latest[e.exId]; if (!c || e.date>c.date || (e.date===c.date && (e.ts||0)>(c.ts||0))) latest[e.exId]=e; });
-        const fresh=Object.values(latest).map((e,i)=>({...e, id:uid()+i, date:"2026-11-13", weight:lighter(e.weight||""), ts:Date.now()+i, base:true}));
+        const fresh=Object.values(latest).map((e,i)=>({...e, id:uid()+i, date:"2026-11-14", weight:lighter(e.weight||""), ts:Date.now()+i, base:true}));
         ks.forEach(k=>{ if (k!=="2026-11") remove("gymlog/"+k); });
         save("gymlog/2026-11",{month:"2026-11", entries:fresh},200);
       }
       save("gym/plan",{...clone(p3), fix6:true},200); } }
+    // Adam: the starting records belong on 11/14 (day 1 of the cycle), not 11/13
+    { const p4=pending.get("gym/plan")||gymPlan(); if (p4.routines && p4.routines.length && p4.fix6 && !p4.fix7){
+      const m=clone(gymMonth("2026-11")); let ch=false; (m.entries||[]).forEach(e=>{ if (e.base && e.date==="2026-11-13"){ e.date="2026-11-14"; ch=true; } });
+      if (ch) save("gymlog/2026-11",{...m, month:"2026-11"},200);
+      save("gym/plan",{...clone(p4), fix7:true},200); } }
   } finally { undoMute=false; } }
 
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
