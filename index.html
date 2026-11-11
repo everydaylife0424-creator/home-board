@@ -424,7 +424,9 @@ html{-webkit-text-size-adjust:100%}
 .gchip{display:flex;justify-content:space-between;gap:4px;font-size:11.5px;line-height:1.5;padding:0 4px;border-radius:4px;padding-left:16px;background:radial-gradient(circle at 7px 50%,hsl(var(--h,0) var(--gs,0%) 50%) 3px,transparent 3.5px),hsl(var(--h,0) var(--gs,0%) 50% / .14);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .gchip[style]{--gs:60%}
 .gchip b{font-weight:500;font-family:var(--f-mono);opacity:.75}
-.cell.gcell{height:84px}
+.cell.gcell{height:92px;padding:6px 8px}
+.cell.gcell>*{flex:none}
+.cell.gcell .n .more{margin-left:4px;font-family:var(--f-body)}
 .cell.gcell.trained{background:linear-gradient(var(--accent-soft),var(--accent-soft)) top/100% 3px no-repeat, var(--surface)}
 .cell.gcell.sel{background:var(--accent-soft)}
 .gday{margin-top:12px;padding:12px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
@@ -1447,8 +1449,8 @@ function viewGymCal(rs, all){
     ${cells.map(c=>{ const d=by[c]||{}, ks=Object.keys(d), n=ks.reduce((s,k)=>s+d[k].length,0), pg=program(), pr=progPlanned(pg,c), wkN=pg&&c>=pg.start&&c<=progEnd(pg)&&daysBetween(pg.start,c)%7===0?daysBetween(pg.start,c)/7+1:0;
       const plan = pr && !d[pr] ? `<span class="gchip plan ${c<t?"miss":""}" ${hue(pr)==null?"":`style="--h:${hue(pr)}"`} title="${c<t?T("pg_missed"):T("pg_planned")} · ${esc(rname(pr))}">${esc(rname(pr))}</span>` : "";
       return `<div role="button" tabindex="0" class="cell gcell ${pg&&c>=pg.start&&c<=progEnd(pg)?"inprog":""} ${parse(c).getMonth()!==m-1?"out":""} ${c===t?"today":""} ${n?"trained":""} ${c===sel?"sel":""}" data-act="gcal-sel" data-date="${c}" data-drop-date="${c}" aria-label="${c}">
-        <span class="n"><span>${parse(c).getDate()}</span>${wkN?`<em class="wk-n">W${wkN}</em>`:""}</span>
-        ${ks.slice(0,3).map(k=>chip(k,d[k].length)+(pr===k?"":"")).join("")}${plan}${ks.length>3?`<span class="more">+${ks.length-3}</span>`:""}
+        <span class="n"><span>${parse(c).getDate()}${ks.length+(plan?1:0)>3?`<span class="more">+${ks.length+(plan?1:0)-3}</span>`:""}</span>${wkN?`<em class="wk-n">W${wkN}</em>`:""}</span>
+        ${ks.slice(0,plan?2:3).map(k=>chip(k,d[k].length)).join("")}${plan}
       </div>`; }).join("")}
     </div>
     ${sel?`<div class="gday"><div class="pop-h"><b>${md(sel)} ${dow(sel)}</b><span class="sp"></span><button class="icon-btn" data-act="gcal-sel" data-date="${sel}" aria-label="close">✕</button></div>
