@@ -511,6 +511,36 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
 [data-tk][contenteditable]:focus{outline-style:solid;background:var(--accent-soft)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:8px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30}
 .toast.on{opacity:1}
+/* ---- style: Atelier (limewash paper, umber ink, serif heads, paper cards; a warm-dusk variant for dark) ---- */
+html:root[data-style="atelier"]{
+  --bg:oklch(94.5% 0.010 76); --surface:oklch(97.6% 0.007 82); --fg:oklch(19% 0.024 52); --muted:oklch(47% 0.014 60); --line:oklch(84% 0.011 70);
+  --accent:oklch(41% 0.075 248); --accent-soft:oklch(92% 0.022 248); --rail:oklch(91.8% 0.013 74); --calm-soft:oklch(91.8% 0.013 74);
+  --hot:oklch(52% 0.13 32); --hot-ink:oklch(47% 0.13 32); --hot-soft:oklch(92% 0.03 40); --warn:oklch(58% 0.10 70); --warn-ink:oklch(45% 0.09 65); --warn-soft:oklch(92% 0.035 80);
+  --good:oklch(50% 0.07 150); --good-soft:oklch(92% 0.03 150); --shade:oklch(30% 0.03 55 / .14);
+  --at-card:0 0 0 1px oklch(30% 0.03 55 / .05), .5px 1px 1px oklch(30% 0.03 55 / .08), 3px 8px 14px -6px oklch(30% 0.03 55 / .14), 14px 36px 64px -28px oklch(30% 0.03 55 / .22);
+  --at-glow:oklch(99% .006 85 / .9); --f-head:"Noto Serif TC","Newsreader",Georgia,serif; --f-fig:"Newsreader",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){html:root[data-style="atelier"]:not([data-theme="light"]){
+  --bg:oklch(19% 0.012 60); --surface:oklch(23% 0.013 62); --fg:oklch(92% 0.012 80); --muted:oklch(70% 0.014 70); --line:oklch(32% 0.012 62);
+  --accent:oklch(74% 0.06 248); --accent-soft:oklch(30% 0.03 248); --rail:oklch(17% 0.012 60); --calm-soft:oklch(27% 0.012 62);
+  --hot:oklch(74% 0.11 40); --hot-ink:oklch(74% 0.11 40); --hot-soft:oklch(30% 0.04 40); --warn:oklch(80% 0.09 75); --warn-ink:oklch(80% 0.09 75); --warn-soft:oklch(30% 0.04 75);
+  --good:oklch(76% 0.08 150); --good-soft:oklch(29% 0.035 150); --shade:oklch(5% 0.01 60 / .5);
+  --at-card:0 0 0 1px oklch(100% 0 0 / .04), 0 18px 40px -20px oklch(5% 0.01 60 / .6); --at-glow:oklch(30% .02 70 / .5);
+  color-scheme:dark}}
+html:root[data-style="atelier"][data-theme="dark"]{
+  --bg:oklch(19% 0.012 60); --surface:oklch(23% 0.013 62); --fg:oklch(92% 0.012 80); --muted:oklch(70% 0.014 70); --line:oklch(32% 0.012 62);
+  --accent:oklch(74% 0.06 248); --accent-soft:oklch(30% 0.03 248); --rail:oklch(17% 0.012 60); --calm-soft:oklch(27% 0.012 62);
+  --hot:oklch(74% 0.11 40); --hot-ink:oklch(74% 0.11 40); --hot-soft:oklch(30% 0.04 40); --warn:oklch(80% 0.09 75); --warn-ink:oklch(80% 0.09 75); --warn-soft:oklch(30% 0.04 75);
+  --good:oklch(76% 0.08 150); --good-soft:oklch(29% 0.035 150); --shade:oklch(5% 0.01 60 / .5);
+  --at-card:0 0 0 1px oklch(100% 0 0 / .04), 0 18px 40px -20px oklch(5% 0.01 60 / .6); --at-glow:oklch(30% .02 70 / .5);
+  color-scheme:dark}
+[data-style="atelier"] body{background:var(--bg) radial-gradient(120% 60% at 15% -10%, var(--at-glow), transparent 60%) no-repeat}
+[data-style="atelier"] .card,[data-style="atelier"] .col,[data-style="atelier"] .day{border-radius:2px;border-color:transparent;box-shadow:var(--at-card)}
+[data-style="atelier"] h1,[data-style="atelier"] h2,[data-style="atelier"] h3{font-family:var(--f-head);font-weight:500;letter-spacing:-.01em}
+[data-style="atelier"] h1{font-size:30px;font-weight:400}
+[data-style="atelier"] .ov .v{font-family:var(--f-fig);font-weight:400;font-size:30px}
+[data-style="atelier"] .primary,[data-style="atelier"] .ghost,[data-style="atelier"] .chip,[data-style="atelier"] .mood button,[data-style="atelier"] .hero-btns button{border-radius:3px}
+[data-style="atelier"] .hero img{filter:saturate(.85) sepia(.08)}
 @keyframes tick{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
 input[type=checkbox]:checked{animation:tick .22s cubic-bezier(.3,.7,.4,1)}
 .item.done .t{transition:color .2s}
@@ -561,7 +591,7 @@ const I18N = {
     ib_title:"想法收集箱", ib_sub:"先記下來，晚點再分類", ib_ph:"想到什麼就打，按 Enter", ib_empty:"目前沒有想法。隨時按 N 或左側「收集想法」都能快速記下。", ib_today:"→ 今天", ib_board:"→ 任務板", ib_today_t:"放進今天的待辦", ib_board_t:"放進任務板第一欄", ib_btn:"收集想法", ib_saved:"已收進想法收集箱", ib_moved:"已移過去",
     sp_btn:"倒推拆解", sp_title:t=>`拆解「${t}」`, sp_steps:"步驟（一行一個）", sp_default:"找資料、規劃\n初稿\n修改\n最後檢查", sp_start:"從哪天開始", sp_due:d=>`截止日 ${d}，最後一步會排在前一天`, sp_preview:"會排成：", sp_go:"排進每日清單", sp_cancel:"取消", sp_done:n=>`已排進 ${n} 天的每日清單`, sp_need_due:"這個任務還沒有截止日",
     wk_title:"每週回顧", wk_range:(a,b)=>`${a} ~ ${b}`, wk_done:"完成", wk_rate:"完成率", wk_gym:"健身", wk_mood:"平均心情", wk_days:n=>`${n} 天`, wk_items:n=>`${n} 件`, wk_stuck:"一直被延後的", wk_stuck_age:n=>`拖了 ${n} 天`, wk_none_stuck:"沒有拖延的事項 👍", wk_reviews:"這週的檢討重點", wk_no_review:"這週還沒有寫每日檢討", wk_note:"本週心得與下週調整", wk_note_ph:"這週學到什麼？下週要改什麼？", wk_ready:"本週回顧已經整理好了 →", wk_this:"本週", sec_tasks:"Tasks", sec_week:"每日清單", sec_cal:"完成月曆",
-    lang_btn:"切換成 English", theme_btn:"主題", theme_system:"跟隨系統", theme_light:"淺色", theme_dark:"深色",
+    lang_btn:"切換成 English", theme_btn:"主題", style_btn:"風格", style_default:"預設", style_atelier:"Atelier 紙感", theme_system:"跟隨系統", theme_light:"淺色", theme_dark:"深色",
     proj_settings:"專案設定", menu:"目錄",
     b_urgent:"超級逼人", b_nagging:"如鯁在喉", b_later:"目前不重要也不在乎",
     mv_urgent:"↑急", mv_nagging:"→卡", mv_later:"↓緩",
@@ -625,7 +655,7 @@ const I18N = {
     ib_title:"Idea inbox", ib_sub:"Capture now, sort later", ib_ph:"Type anything, press Enter", ib_empty:"No ideas yet. Press N or use “Capture idea” in the sidebar any time.", ib_today:"→ Today", ib_board:"→ Board", ib_today_t:"Move to today's to-dos", ib_board_t:"Move to the first board column", ib_btn:"Capture idea", ib_saved:"Saved to the idea inbox", ib_moved:"Moved",
     sp_btn:"Plan backwards", sp_title:t=>`Break down “${t}”`, sp_steps:"Steps (one per line)", sp_default:"Research & plan\nFirst draft\nRevise\nFinal check", sp_start:"Start on", sp_due:d=>`Due ${d}. The last step lands the day before.`, sp_preview:"Schedule:", sp_go:"Add to daily lists", sp_cancel:"Cancel", sp_done:n=>`Added across ${n} days`, sp_need_due:"This task has no due date yet",
     wk_title:"Weekly review", wk_range:(a,b)=>`${a} – ${b}`, wk_done:"Done", wk_rate:"Completion", wk_gym:"Gym", wk_mood:"Avg mood", wk_days:n=>`${n} days`, wk_items:n=>`${n}`, wk_stuck:"Kept getting pushed back", wk_stuck_age:n=>`${n} days`, wk_none_stuck:"Nothing pushed back 👍", wk_reviews:"Review highlights", wk_no_review:"No daily reviews this week yet", wk_note:"Notes for this week & changes for next", wk_note_ph:"What did you learn? What will you change?", wk_ready:"This week's review is ready →", wk_this:"This week", sec_tasks:"Tasks", sec_week:"Daily lists", sec_cal:"Done calendar",
-    lang_btn:"切換成中文", theme_btn:"Theme", theme_system:"System", theme_light:"Light", theme_dark:"Dark",
+    lang_btn:"切換成中文", theme_btn:"Theme", style_btn:"Style", style_default:"Default", style_atelier:"Atelier", theme_system:"System", theme_light:"Light", theme_dark:"Dark",
     proj_settings:"Projects", menu:"Menu",
     b_urgent:"Super urgent", b_nagging:"Nagging", b_later:"Not important now",
     mv_urgent:"↑Urgent", mv_nagging:"→Nag", mv_later:"↓Later",
@@ -683,6 +713,7 @@ const ICON = {
   week:'<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   cal:'<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/>',
   lang:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
+  style:'<path d="M4 20h16"/><path d="M6 16l6-12 6 12"/><path d="M8.5 11h7"/>',
   theme:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
   pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
@@ -700,10 +731,12 @@ const S = {
 };
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
 function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
-S.tab = lsGet("home.tab") || "home"; S.lang = lsGet("home.lang") || "zh"; S.theme = lsGet("home.theme") || "system";
+S.tab = lsGet("home.tab") || "home"; S.lang = lsGet("home.lang") || "zh"; S.theme = lsGet("home.theme") || "system"; S.style = lsGet("home.style") || "default";
 const hostTheme = document.documentElement.getAttribute("data-theme");
 const PHONE = matchMedia("(max-width:700px)");
-function applyTheme(){ const r=document.documentElement; if (S.theme==="system"){ hostTheme ? r.setAttribute("data-theme",hostTheme) : r.removeAttribute("data-theme"); } else r.setAttribute("data-theme", S.theme); }
+const STYLES=["default","atelier"];
+function applyStyle(){ const r=document.documentElement; if (S.style==="atelier"){ r.setAttribute("data-style","atelier"); if(!document.getElementById("fontAtelier")){ const l=document.createElement("link"); l.id="fontAtelier"; l.rel="stylesheet"; l.href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500&family=Newsreader:opsz,wght@6..72,400&display=swap"; document.head.appendChild(l); } } else r.removeAttribute("data-style"); }
+function applyTheme(){ applyStyle(); const r=document.documentElement; if (S.theme==="system"){ hostTheme ? r.setAttribute("data-theme",hostTheme) : r.removeAttribute("data-theme"); } else r.setAttribute("data-theme", S.theme); }
 applyTheme();
 
 function T(k, ...a){ const o = (settings().texts||{})[S.lang]; if (o && typeof o[k]==="string" && o[k]) return o[k];
@@ -831,6 +864,7 @@ function renderSide(){
     <div class="grp"><span class="lbl">${L("grp_switch")}</span></div>
     <button class="navb" data-act="lang">${svg("lang")}<span class="lbl">${L("lang_btn")}</span></button>
     <button class="navb" data-act="theme">${svg("theme")}<span class="lbl">${L("theme_btn")}</span><span class="val lbl">${themeName}</span></button>
+    <button class="navb" data-act="style">${svg("style")}<span class="lbl">${L("style_btn")}</span><span class="val lbl">${T("style_"+S.style)}</span></button>
     <button class="navb" data-act="toggle-settings" aria-pressed="${S.showSettings}">${svg("gear")}<span class="lbl">${L("proj_settings")}</span></button>
     <button class="navb" data-act="edit" aria-pressed="${S.edit}" ${S.edit?'aria-current="page"':""}>${svg("pen")}<span class="lbl">${T("edit_btn")}</span>${S.edit?`<span class="val lbl">${T("edit_on")}</span>`:""}</button>
     ${window.HOME_ACCOUNT?`<button class="navb" data-act="signout" title="${esc(window.HOME_ACCOUNT.email||"")}">${svg("out")}<span class="lbl">${T("signout")}</span><span class="val lbl">${esc((window.HOME_ACCOUNT.email||"").split("@")[0])}</span></button>`:""}`;
@@ -1836,6 +1870,7 @@ document.addEventListener("click", e=>{
   else if (act==="signout"){ if (window.HOME_ACCOUNT) window.HOME_ACCOUNT.signOut(); }
   else if (act==="edit"){ S.edit=!S.edit; render(); }
   else if (act==="lang"){ S.lang = S.lang==="zh"?"en":"zh"; lsSet("home.lang",S.lang); render(); }
+  else if (act==="style"){ S.style = STYLES[(STYLES.indexOf(S.style)+1)%STYLES.length]; lsSet("home.style",S.style); applyStyle(); render(); }
   else if (act==="theme"){ S.theme = {system:"light", light:"dark", dark:"system"}[S.theme]; lsSet("home.theme",S.theme); applyTheme(); render(); }
   else if (act==="toggle-settings"){ S.showSettings=!S.showSettings; if (S.tab!=="home"){ S.showSettings=true; S.tab="home"; lsSet("home.tab","home"); } render(); if (S.showSettings){ const el=document.getElementById("s-settings"); el && el.scrollIntoView({block:"start"}); } }
   else if (act==="task-move"){ const t={...task(b.dataset.id), bucket:b.dataset.to}; save("tasks/"+t.id,t,50); render(); }
