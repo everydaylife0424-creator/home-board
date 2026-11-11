@@ -1503,6 +1503,8 @@ function migrateGym(){
       [{id:"ne7",date:"2026-10-20",routineId:"push",exId:"e7",exName:"Sitting DB lateral raises",sets:"3×12",weight:"60 lbs",rpe:"10",rest:REST_DEFAULT,ts:1793974319475},
        {id:"ne8",date:"2026-10-20",routineId:"push",exId:"e8",exName:"Sitting machine lateral raise",sets:"3×10",weight:"110 lbs",rpe:"9",rest:REST_DEFAULT,ts:1793974319476}].forEach(e=>{ if (!gymEntries().some(x=>x.id===e.id || (x.exId===e.exId && x.date===e.date))){ oct.entries.push(e); add=true; } });
       if (add){ oct.month="2026-10"; save("gymlog/2026-10",oct,200); } }
+    // 2026-11-11: Adam restarted the 10-week program from Sat 11/14
+    { const p2=pending.get("gym/plan")||gymPlan(); if (p2.program && p2.program.start==="2026-11-10" && !p2.fix5) save("gym/plan",{...clone(p2), program:{...p2.program, start:"2026-11-14"}, fix5:true},200); }
   } finally { undoMute=false; } }
 
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
