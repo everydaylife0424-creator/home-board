@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Adam 的 HOME</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <script>
@@ -23,7 +27,7 @@ if (/\.github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname)) {
 :root{
   --bg:#f7f7f5; --surface:#ffffff; --fg:#1d2124; --muted:#6d747a; --line:#e3e4e1;
   --accent:#2f5d8a; --accent-soft:#e6eef6;
-  --hot:#c2412d; --hot-soft:#fbe9e5; --warn:#b07a12; --warn-soft:#f8efd9; --calm:#7a8288; --calm-soft:#eef0f1;
+  --hot:#c2412d; --hot-soft:#fbe9e5; --warn:#b07a12; --warn-soft:#f8efd9; --hot-ink:#a3301c; --warn-ink:#7f5508; --calm:#7a8288; --calm-soft:#eef0f1;
   --good:#2f7d4f; --good-soft:#e3f1e8; --rail:#eeeeeb;
   --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
@@ -32,12 +36,12 @@ if (/\.github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname)) {
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#17191b; --surface:#1f2225; --fg:#e7e9ea; --muted:#9aa1a7; --line:#30353a;
   --accent:#7fb0e0; --accent-soft:#22313f;
-  --hot:#ef8a76; --hot-soft:#3a2420; --warn:#e2b45a; --warn-soft:#352b18; --calm:#a3abb1; --calm-soft:#272b2f; --good:#6cc391; --good-soft:#1d3226; --rail:#1b1e20;
+  --hot:#ef8a76; --hot-soft:#3a2420; --warn:#e2b45a; --warn-soft:#352b18; --hot-ink:#ef8a76; --warn-ink:#e2b45a; --calm:#a3abb1; --calm-soft:#272b2f; --good:#6cc391; --good-soft:#1d3226; --rail:#1b1e20;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#17191b; --surface:#1f2225; --fg:#e7e9ea; --muted:#9aa1a7; --line:#30353a;
   --accent:#7fb0e0; --accent-soft:#22313f;
-  --hot:#ef8a76; --hot-soft:#3a2420; --warn:#e2b45a; --warn-soft:#352b18; --calm:#a3abb1; --calm-soft:#272b2f; --good:#6cc391; --good-soft:#1d3226; --rail:#1b1e20;
+  --hot:#ef8a76; --hot-soft:#3a2420; --warn:#e2b45a; --warn-soft:#352b18; --hot-ink:#ef8a76; --warn-ink:#e2b45a; --calm:#a3abb1; --calm-soft:#272b2f; --good:#6cc391; --good-soft:#1d3226; --rail:#1b1e20;
   color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55}
@@ -49,12 +53,16 @@ button,input,textarea,select{font:inherit;color:inherit}
 button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* ---- left rail ---- */
-.side{position:fixed;left:0;top:0;bottom:0;z-index:20;width:calc(var(--rail-w) + env(safe-area-inset-left,0px));background:var(--rail);border-right:1px solid var(--line);
+.side{position:fixed;left:0;top:0;bottom:0;z-index:20;width:calc(var(--rail-open) + env(safe-area-inset-left,0px));background:var(--rail);
   padding-left:env(safe-area-inset-left,0px);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-  transition:width .18s ease, box-shadow .18s ease;overflow:hidden}
+  /* the rail is always full width; a clip reveals it, so opening never re-lays-out its contents */
+  clip-path:inset(0 calc(var(--rail-open) - var(--rail-w)) 0 0);-webkit-clip-path:inset(0 calc(var(--rail-open) - var(--rail-w)) 0 0);
+  transition:clip-path .18s ease,-webkit-clip-path .18s ease,box-shadow .18s ease;overflow:hidden}
+.side::after{content:"";position:absolute;top:0;bottom:0;left:calc(var(--rail-w) + env(safe-area-inset-left,0px) - 1px);width:1px;background:var(--line);transition:transform .18s ease;pointer-events:none}
+.side.open::after{transform:translateX(calc(var(--rail-open) - var(--rail-w)))}
 .side-scroll{height:100%;overflow-y:auto;overflow-x:hidden;padding:14px 10px 20px;display:flex;flex-direction:column;gap:2px;scrollbar-width:thin}
-.side.open{width:calc(var(--rail-open) + env(safe-area-inset-left,0px));box-shadow:4px 0 24px rgba(0,0,0,.12)}
-@media (hover:hover){.side:hover{width:calc(var(--rail-open) + env(safe-area-inset-left,0px));box-shadow:4px 0 24px rgba(0,0,0,.12)}}
+.side.open{clip-path:inset(0 -32px 0 0);-webkit-clip-path:inset(0 -32px 0 0);box-shadow:4px 0 24px rgba(0,0,0,.12)}
+@media (hover:hover){.side:hover{clip-path:inset(0 -32px 0 0);-webkit-clip-path:inset(0 -32px 0 0);box-shadow:4px 0 24px rgba(0,0,0,.12)}.side:hover::after{transform:translateX(calc(var(--rail-open) - var(--rail-w)))}}
 .side .lbl{white-space:nowrap;opacity:0;transition:opacity .12s}
 .side.open .lbl{opacity:1}
 @media (hover:hover){.side:hover .lbl{opacity:1}}
@@ -72,8 +80,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .menu-btn{display:none}
 @media (max-width:700px){
   :root{--rail-w:0px}
-  .side{width:0;border-right:0}
-  .side.open{width:min(82vw, calc(var(--rail-open) + env(safe-area-inset-left,0px)));border-right:1px solid var(--line)}
+  .side,.side:hover,.side.open{width:min(82vw, calc(var(--rail-open) + env(safe-area-inset-left,0px)));clip-path:none;-webkit-clip-path:none;border-right:1px solid var(--line);transition:transform .2s ease,box-shadow .2s ease}
+  .side,.side:hover{transform:translateX(-101%);box-shadow:none}
+  .side.open{transform:none}
+  .side::after{display:none}
   .menu-btn{display:grid;place-items:center;position:fixed;z-index:21;top:calc(10px + env(safe-area-inset-top,0px));left:calc(10px + env(safe-area-inset-left,0px));width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
   .menu-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
   .wrap{padding-top:64px}
@@ -146,10 +156,12 @@ ul.list{list-style:none;margin:0;padding:0}
 .item .t{flex:1;min-width:0;overflow-wrap:anywhere}
 .item.done .t{color:var(--muted);text-decoration:line-through}
 .item .due{font-family:var(--f-mono);font-size:11.5px;padding:1px 6px;border-radius:5px;background:var(--calm-soft);color:var(--muted);white-space:nowrap;margin-top:2px}
-.item .due.soon{background:var(--hot-soft);color:var(--hot)}
+.item .due.soon{background:var(--hot-soft);color:var(--hot-ink)}
 .item .acts{display:none;gap:2px}
 .item:hover .acts,.item:focus-within .acts{display:flex}
 @media (hover:none){.item .acts{display:flex}}
+/* touch: the bigger buttons drop to their own line when the title would get squeezed */
+@media (pointer:coarse){.item{flex-wrap:wrap}.item .t{flex:1 1 150px}.item .acts{margin-left:auto}}
 .icon-btn{border:0;background:none;color:var(--muted);cursor:pointer;padding:2px 5px;border-radius:5px;font-size:13px;line-height:1.4}
 .icon-btn:hover{background:var(--calm-soft);color:var(--fg)}
 .add{display:flex;gap:6px;margin-top:6px}
@@ -186,7 +198,7 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .mini{font-size:12.5px}
 .progress{height:4px;border-radius:2px;background:var(--calm-soft);overflow:hidden;margin:2px 0 6px}
 .progress i{display:block;height:100%;background:var(--good)}
-.carry-tag{font-family:var(--f-mono);font-size:10.5px;color:var(--warn);background:var(--warn-soft);border-radius:4px;padding:0 5px;margin-top:3px;white-space:nowrap}
+.carry-tag{font-family:var(--f-mono);font-size:11.5px;color:var(--warn-ink);background:var(--warn-soft);border-radius:4px;padding:0 5px;margin-top:3px;white-space:nowrap}
 .settings-panel{margin-bottom:16px}
 .settings-panel .prow{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
 .settings-panel .prow span{flex:1;min-width:0}
@@ -223,7 +235,7 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 @media (max-width:960px){.review-grid{grid-template-columns:1fr}}
 .inline-edit{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px;background:var(--surface);cursor:text;white-space:normal}
 tr.bad td{background:var(--hot-soft)}
-.warn-i{color:var(--hot);cursor:help}
+.warn-i{color:var(--hot-ink);cursor:help}
 .chk{margin:0 0 14px;border-color:var(--hot);background:var(--hot-soft)}
 .chk .sec-h{margin:0}.chk .list{margin-top:8px}.chk .item{flex-wrap:wrap}
 .linkish{background:none;border:0;padding:0;font:inherit;color:var(--fg);text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-align:left}
@@ -363,7 +375,7 @@ form.exp input,form.exp select{border:1px solid var(--line);border-radius:7px;ba
 .empty{color:var(--muted);font-size:13.5px;padding:14px 4px}
 /* touch devices: 16px inputs stop iPad/iPhone auto-zoom, which is what makes the page jump while typing */
 html{-webkit-text-size-adjust:100%}
-@media (pointer:coarse){input,textarea,select{font-size:16px!important}.icon-btn{padding:4px 8px}button,input,select,summary{touch-action:manipulation}}
+@media (pointer:coarse){input,textarea,select{font-size:16px!important}.icon-btn{padding:4px 8px;min-width:44px;min-height:44px;display:inline-grid;place-items:center}.done-toggle{min-height:44px;padding:6px 4px}.ghost,.hero-btns button,.mood button,select{min-height:44px}.ghost{min-width:44px}button,input,select,summary{touch-action:manipulation}}
 /* cover */
 .hero{position:relative;height:clamp(130px,20vw,230px);margin-left:calc(var(--rail-w) + env(safe-area-inset-left,0px));background:var(--calm-soft);overflow:hidden}
 .hero img{width:100%;height:100%;object-fit:cover;display:block}
@@ -373,7 +385,7 @@ html{-webkit-text-size-adjust:100%}
 @media (hover:none){.hero-btns{opacity:1}}
 .hero.adjusting .hero-btns{opacity:1}.hero.adjusting img{cursor:grab;touch-action:none;user-select:none;-webkit-user-drag:none}.hero.adjusting img:active{cursor:grabbing}.hero.adjusting::after{display:none}
 .hero-hint{align-self:center;font-size:12.5px;padding:5px 10px;border-radius:7px;background:rgba(0,0,0,.45);color:#fff}
-.hero-btns button.on{background:var(--accent);color:#fff}
+.hero-btns button.on{background:var(--accent);color:var(--surface)}
 .gev{display:block;font-size:12px;line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 5px;margin:1px 0;border-radius:4px;background:hsl(217 70% 95%);color:hsl(217 55% 32%)}
 .gev b{font-weight:600}.gev.holiday{background:transparent;color:var(--muted);padding-left:0}
 .cal-pop .gev{display:inline-block;flex:0 0 auto;margin-right:6px}
@@ -686,6 +698,7 @@ function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null
 function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
 S.tab = lsGet("home.tab") || "home"; S.lang = lsGet("home.lang") || "zh"; S.theme = lsGet("home.theme") || "system";
 const hostTheme = document.documentElement.getAttribute("data-theme");
+const PHONE = matchMedia("(max-width:700px)");
 function applyTheme(){ const r=document.documentElement; if (S.theme==="system"){ hostTheme ? r.setAttribute("data-theme",hostTheme) : r.removeAttribute("data-theme"); } else r.setAttribute("data-theme", S.theme); }
 applyTheme();
 
@@ -877,9 +890,11 @@ function viewHome(){
     </div>`;
   }).join("");
   const dw=new Date().getDay();
-  return `<section class="block" id="s-overview">${overview(tasks)}</section>
+  const ovSec=`<section class="block" id="s-overview">${overview(tasks)}</section>`, focusSec=`<section class="block focus-row" id="s-focus">${viewTop3()}${viewInbox()}</section>`;
+  /* on a phone the cards fill the first screen, so today's three comes first */
+  return `${PHONE.matches?focusSec+ovSec:ovSec}
     ${dw===0||dw===1?`<button class="wk-ready" data-act="wk-open">${T("wk_ready")}</button>`:""}
-    <section class="block focus-row" id="s-focus">${viewTop3()}${viewInbox()}</section>
+    ${PHONE.matches?"":focusSec}
     ${S.showSettings?settingsPanel():""}
     ${S.split?splitDialog():""}
     <section class="block" id="s-tasks">
@@ -2099,6 +2114,7 @@ document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closes
 document.addEventListener("dragend", ()=>{ dragId=null; document.querySelectorAll(".col.drop").forEach(x=>x.classList.remove("drop")); });
 
 /* ---------- boot ---------- */
+PHONE.addEventListener?.("change", ()=>render());
 render();
 function banner(msg){ const b=document.getElementById("banner"); b.textContent=msg; b.hidden=!msg; }
 (async () => {
