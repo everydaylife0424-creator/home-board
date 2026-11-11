@@ -247,6 +247,9 @@ tr.bad td{background:var(--hot-soft)}
 li[data-lp]{-webkit-touch-callout:none}
 li[data-lp] .t{-webkit-user-select:none;user-select:none}
 .lp-src{opacity:.35}
+li.lp-before{box-shadow:inset 0 3px 0 var(--accent)}li.lp-after{box-shadow:inset 0 -3px 0 var(--accent)}
+.gcard.lp-over{outline:2px dashed var(--accent);outline-offset:-2px}
+li[data-lpx] .ex-sum{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .lp-ghost{position:fixed;left:0;top:0;z-index:200;pointer-events:none;background:var(--surface);border:1px solid var(--accent);border-radius:8px;box-shadow:0 10px 28px var(--shade);padding:8px 12px;list-style:none;display:flex;gap:8px;align-items:center;opacity:.95}
 .lp-dragging,.lp-dragging *{cursor:grabbing!important;-webkit-user-select:none;user-select:none}
 .day.lp-over{outline:2px dashed var(--accent);outline-offset:-2px;background:var(--accent-soft)}
@@ -1298,8 +1301,10 @@ function moveItem(src, dst){
   const i=from.findIndex(x=>x.id===src.id); if (i<0) return false;
   let to=b.items, npi=-1;
   if (dst.proj){ let k=b.projects.findIndex(p=>p.name===dst.proj); if (k<0){ b.projects.push({name:dst.proj,open:true,items:[]}); k=b.projects.length-1; } to=b.projects[k].items; npi=k; }
-  if (to===from) return false;
-  const [it]=from.splice(i,1); to.push(it);
+  if (to===from && !dst.anchor) return false;
+  const [it]=from.splice(i,1); let at=dst.anchor ? to.findIndex(x=>x.id===dst.anchor) : -1;
+  if (dst.anchor===src.id){ from.splice(i,0,it); return false; }
+  if (at<0) to.push(it); else to.splice(at+(dst.after?1:0),0,it);
   const t=today(), td=t===a.date?a:t===b.date?b:dayCopy(t), oldK=refKey({date:src.date,pi:String(src.pi),id:src.id});
   if ((td.top||[]).some(r=>refKey(r)===oldK)){ td.top=td.top.map(r=>refKey(r)===oldK?{date:dst.date,pi:String(npi),id:src.id}:r); if (td!==a && td!==b) save("days/"+t,td,50); }
   save("days/"+a.date,a,50); if (!same) save("days/"+b.date,b,50);
@@ -1307,27 +1312,42 @@ function moveItem(src, dst){
 }
 let lp=null;
 function lpTarget(x,y){ const el=document.elementFromPoint(x,y); if (!el) return null;
+  const li=el.closest("li[data-lp]"), dy0=el.closest(".day[data-day]");
+  if (li && dy0 && !li.classList.contains("lp-src")){ let a; try{ a=JSON.parse(li.dataset.lp); }catch(_){}
+    if (a && a.date===dy0.dataset.day){ const pr0=li.closest("details.proj[data-date]"), r=li.getBoundingClientRect();
+      return {el:li, date:a.date, proj:pr0?(pr0.querySelector("summary")?.dataset.name||null):null, anchor:a.id, after:y>r.top+r.height/2}; } }
   const pr=el.closest("details.proj[data-date]"); if (pr){ const n=pr.querySelector("summary")?.dataset.name; return {el:pr, date:pr.dataset.date, proj:n||null}; }
   const dy=el.closest(".day[data-day]"); if (dy) return {el:dy, date:dy.dataset.day, proj:null};
   const c=el.closest(".cell[data-drop-date]:not(.gcell)"); if (c) return {el:c, date:c.dataset.dropDate, proj:null};
   return null; }
+function exTarget(x,y){ const el=document.elementFromPoint(x,y); if (!el) return null;
+  const li=el.closest("li[data-lpx]"); if (li && !li.classList.contains("lp-src")){ let a; try{ a=JSON.parse(li.dataset.lpx); }catch(_){} if (a){ const r=li.getBoundingClientRect(); return {el:li, g:a.g, anchor:a.x, after:y>r.top+r.height/2}; } }
+  const gc=el.closest(".gcard"), f=gc&&gc.querySelector('form[data-act="gym-ex-add"]'); if (f) return {el:gc, g:f.dataset.g};
+  return null; }
+function moveEx(src, dst){ let ok=false; planEdit((pl,r)=>{ if (!r) return; const fg=r.groups.find(g=>g.id===src.g), tg=r.groups.find(g=>g.id===dst.g); if (!fg||!tg) return;
+  const i=fg.ex.findIndex(x=>x.id===src.x); if (i<0 || dst.anchor===src.x) return; const [x]=fg.ex.splice(i,1);
+  const at=dst.anchor ? tg.ex.findIndex(y=>y.id===dst.anchor) : -1; if (at<0) tg.ex.push(x); else tg.ex.splice(at+(dst.after?1:0),0,x); ok=true; }); return ok; }
 function lpEnd(drop){ if (!lp) return; clearTimeout(lp.timer); const L=lp; lp=null;
-  document.querySelectorAll(".lp-over").forEach(x=>x.classList.remove("lp-over")); L.li && L.li.classList.remove("lp-src"); L.ghost && L.ghost.remove(); cancelAnimationFrame(L.raf||0);
+  document.querySelectorAll(".lp-over,.lp-before,.lp-after").forEach(x=>x.classList.remove("lp-over","lp-before","lp-after")); L.li && L.li.classList.remove("lp-src"); L.ghost && L.ghost.remove(); cancelAnimationFrame(L.raf||0);
   document.documentElement.classList.remove("lp-dragging");
   if (!L.on) return; window.__lpBlock=performance.now();
-  if (drop && L.tgt){ if (moveItem(L.src, L.tgt)){ render(); toast(T("lp_moved", md(L.tgt.date)+(L.tgt.proj?" · "+L.tgt.proj:""))); } } }
+  if (drop && L.tgt && L.kind==="ex"){ moveEx(L.src, L.tgt); return; }
+  if (drop && L.tgt){ if (L.tgt.anchor && L.tgt.date===L.src.date){ if (moveItem(L.src, L.tgt)) render(); return; } if (moveItem(L.src, L.tgt)){ render(); toast(T("lp_moved", md(L.tgt.date)+(L.tgt.proj?" · "+L.tgt.proj:""))); } } }
 document.addEventListener("pointerdown", e=>{
-  if (e.button!==0 || S.edit) return; const li=e.target.closest && e.target.closest("li[data-lp]"); if (!li) return;
-  if (e.target.closest("input,button,a,select,textarea,[contenteditable=true]")) return;
-  let src; try{ src=JSON.parse(li.dataset.lp); }catch(_){ return; }
-  lp={src, li, x:e.clientX, y:e.clientY, id:e.pointerId, on:false};
+  if (e.button!==0 || S.edit) return; const li=e.target.closest && e.target.closest("li[data-lp],li[data-lpx]"); if (!li) return;
+  const isEx=li.hasAttribute("data-lpx");
+  if (isEx ? !e.target.closest(".ex-sum") : e.target.closest("input,button,a,select,textarea,[contenteditable=true]")) return;
+  let src; try{ src=JSON.parse(isEx?li.dataset.lpx:li.dataset.lp); }catch(_){ return; }
+  lp={src, li, kind:isEx?"ex":"todo", x:e.clientX, y:e.clientY, id:e.pointerId, on:false};
   lp.timer=setTimeout(()=>{ if (!lp) return; lp.on=true; navigator.vibrate && navigator.vibrate(15);
-    const g=li.cloneNode(true); g.className="item lp-ghost"; g.querySelectorAll(".acts").forEach(x=>x.remove()); g.style.width=li.offsetWidth+"px"; document.body.appendChild(g); lp.ghost=g;
+    const g=(isEx?li.querySelector(".ex-sum"):li).cloneNode(true); g.className="item lp-ghost"; g.querySelectorAll(".acts").forEach(x=>x.remove()); g.style.width=li.offsetWidth+"px"; document.body.appendChild(g); lp.ghost=g;
     lp.dx=lp.x-li.getBoundingClientRect().left; lp.dy=lp.y-li.getBoundingClientRect().top; li.classList.add("lp-src"); document.documentElement.classList.add("lp-dragging");
     window.getSelection && window.getSelection().removeAllRanges(); lpMove(lp.x, lp.y); lpScroll(); }, 380);
 });
 function lpMove(x,y){ if (!lp || !lp.on) return; lp.cx=x; lp.cy=y; lp.ghost.style.transform=`translate(${x-lp.dx}px,${y-lp.dy}px)`;
-  const t=lpTarget(x,y); document.querySelectorAll(".lp-over").forEach(z=>z!==(t&&t.el)&&z.classList.remove("lp-over")); if (t) t.el.classList.add("lp-over"); lp.tgt=t; }
+  const t=lp.kind==="ex"?exTarget(x,y):lpTarget(x,y), cls=t?(t.anchor?(t.after?"lp-after":"lp-before"):"lp-over"):"";
+  document.querySelectorAll(".lp-over,.lp-before,.lp-after").forEach(z=>{ if (z!==(t&&t.el)) z.classList.remove("lp-over","lp-before","lp-after"); });
+  if (t){ t.el.classList.remove("lp-over","lp-before","lp-after"); t.el.classList.add(cls); } lp.tgt=t; }
 function lpScroll(){ if (!lp || !lp.on) return; const x=lp.cx, y=lp.cy, strip=document.querySelector("#s-week .week");
   if (strip){ const r=strip.getBoundingClientRect(); if (y>r.top-40 && y<r.bottom+40){ if (x<r.left+60) strip.scrollLeft-=14; else if (x>r.right-60) strip.scrollLeft+=14; } }
   if (y<50) scrollBy(0,-14); else if (y>innerHeight-50) scrollBy(0,14);
@@ -1378,7 +1398,7 @@ function viewGym(){
   const todayN=all.filter(e=>e.date===t).length, issues=gymIssues(all);
   const chips=rs.map(x=>`<button class="chip" data-act="gym-r" data-id="${x.id}" data-rt="${x.id}" draggable="true" aria-pressed="${x.id===S.gymR}">${esc(x.name)}</button>`).join("");
   const exRow=(g,x)=>{ const h=hist(x.id), last=h[0], open=!!S.gymOpen[x.id];
-    return `<li class="ex ${open?"open":""}">
+    return `<li class="ex ${open?"open":""}" data-lpx="${esc(JSON.stringify({g:g.id,x:x.id}))}">
       <button class="ex-sum" data-act="gym-open" data-id="${x.id}" aria-expanded="${open}"><span class="tw">▸</span><span class="ex-name">${esc(x.name)}</span>
         ${last?`<span class="ex-target" title="${T("gym_last")} ${md(last.date)}">${esc([last.sets,last.weight].filter(Boolean).join(" · "))}</span>`:""}</button>
       ${open?`<div class="ex-body">
