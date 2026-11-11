@@ -892,6 +892,8 @@ function viewHome(){
 
 /* unfinished items from the past 14 days, shown under today automatically */
 /* items from earlier days that were checked off on this date: they stay on this date's card */
+// items checked on their own card on 11/11 just before the card-date fix: count them on their own day
+function doneDay(it, ds){ return (!it.dc && it.dn==="2026-11-11" && ds<it.dn && ds>="2026-11-10") ? ds : (it.dn||ds); }
 function shownOn(it, date){ if (!it.d || it.k) return false; if (it.dc) return it.dc===date; return it.dn===date && it.dn<="2026-11-10"; } // items checked before dc existed keep the old rule
 function doneOn(date){ const out=[];
   for (let i=14;i>=1;i--){ const ds=addDays(date,-i); if(!hasDay(ds)) continue; const d=day(ds);
@@ -1114,8 +1116,8 @@ function viewWeek(){
 function doneByDate(tasks){
   const by={}; const push=(ds,x)=>(by[ds]=by[ds]||[]).push(x);
   allDayKeys().forEach(ds=>{ const d=day(ds);
-    (d.items||[]).forEach(it=>{ if(it.d) push(it.dn||ds, {t:it.t, src:T("src_todo"), drag:{k:"dd",date:ds,pi:-1,id:it.id}}); });
-    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(it.d) push(it.dn||ds, {t:it.t, src:p.name, drag:{k:"dd",date:ds,pi,id:it.id}}); })); });
+    (d.items||[]).forEach(it=>{ if(it.d) push(doneDay(it,ds), {t:it.t, src:T("src_todo"), drag:{k:"dd",date:ds,pi:-1,id:it.id}}); });
+    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(it.d) push(doneDay(it,ds), {t:it.t, src:p.name, drag:{k:"dd",date:ds,pi,id:it.id}}); })); });
   tasks.forEach(x=>{ if(!x.done) return; const ds = x.doneAt ? ymd(new Date(x.doneAt)) : x.due; if (ds) push(ds, {t:x.title, src:T("src_board"), drag:{k:"dt",id:x.id}}); });
   return by;
 }
@@ -1865,9 +1867,11 @@ document.addEventListener("click", e=>{
 document.addEventListener("change", e=>{
   const el=e.target, act=el.dataset.act;
   if (act==="task-toggle"){ const t={...task(el.dataset.id), done:el.checked, doneAt:el.checked?Date.now():null}; save("tasks/"+t.id,t,50); render(); }
-  else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked; it.dn=el.checked?today():null;
+  else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked;
     // dc = the card it was checked on. Only an item checked on a later day's card (a carried item) shows up on that card too.
-    const card=el.closest(".day[data-day]")?.dataset.day; if (el.checked && card) it.dc=card; else delete it.dc;
+    // The calendar records it on that card's date (not the clock's), so checking the 11/10 card after midnight still counts for 11/10.
+    const card=el.closest(".day[data-day]")?.dataset.day, t0=today(); it.dn=el.checked ? (card && card<t0 ? card : t0) : null;
+    if (el.checked && card) it.dc=card; else delete it.dc;
     save("days/"+d.date,d,300); render(); }
   else if (act==="proj-add"){ const name=el.value; if (!name) return; if (name==="__new"){ el.value=""; askNewProject(el.dataset.date, el); return; } addProj(el.dataset.date, name); }
   else if (act==="mv-date"){ try{ moveTo(JSON.parse(el.dataset.drag), el.value); }catch(_){} }
