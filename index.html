@@ -1580,6 +1580,26 @@ function migrateGym(){
       const m=clone(gymMonth("2026-11")); let ch=false; (m.entries||[]).forEach(e=>{ if (e.base && e.date==="2026-11-13"){ e.date="2026-11-14"; ch=true; } });
       if (ch) save("gymlog/2026-11",{...m, month:"2026-11"},200);
       save("gym/plan",{...clone(p4), fix7:true},200); } }
+    // Adam: each routine's starting record goes on that routine's first scheduled day of the cycle (11/14 push, 11/15 pull, 11/20 legs).
+    // Routines not in the weekly schedule (Cardio) go back to their original dates, read from the backup.
+    { const p5=pending.get("gym/plan")||gymPlan(), pg=p5.program; if (p5.routines && p5.routines.length && p5.fix6 && !p5.fix8 && pg){
+      const first={}; for (let i=0;i<7;i++){ const d=addDays(pg.start,i), r=pg.days[String(parse(d).getDay())]; if (r && !first[r]) first[r]=d; }
+      const m=clone(gymMonth("2026-11")); let ch=false, other=[];
+      (m.entries||[]).forEach(e=>{ if (!e.base) return; if (first[e.routineId]){ if (e.date!==first[e.routineId]){ e.date=first[e.routineId]; ch=true; } } else other.push(e); });
+      if (ch) save("gymlog/2026-11",{...m, month:"2026-11"},200);
+      save("gym/plan",{...clone(p5), fix8:true},200);
+      if (other.length) (async()=>{ try{ const db=await window.claude.use("db"); let done=false, un=null;
+        un=db.doc("gym/backup-20261111").onSnapshot(sn=>{ if (done || !sn.exists) return; done=true; try{ un && un(); }catch(_){}
+          const old=Object.values((sn.data()||{}).months||{}).flat(), orig={};
+          old.forEach(e=>{ const c=orig[e.exId]; if (!c || e.date>c.date || (e.date===c.date && (e.ts||0)>(c.ts||0))) orig[e.exId]=e; });
+          const moves=other.filter(e=>orig[e.exId] && orig[e.exId].date!==e.date); if (!moves.length) return;
+          undoMute=true; try {
+            const cur=clone(gymMonth("2026-11")), ids=new Set(moves.map(e=>e.id)), byM={};
+            cur.entries=cur.entries.filter(e=>{ if (!ids.has(e.id)) return true; const o=orig[e.exId]; const k=o.date.slice(0,7); if (k==="2026-11"){ e.date=o.date; return true; } (byM[k]=byM[k]||[]).push({...e, date:o.date}); return false; });
+            save("gymlog/2026-11",{...cur, month:"2026-11"},50);
+            Object.entries(byM).forEach(([k,es])=>{ const mm=clone(gymMonth(k)); mm.month=k; mm.entries=[...(mm.entries||[]), ...es]; save("gymlog/"+k,mm,50); });
+          } finally { undoMute=false; } render(); }); }catch(_){} })();
+    } }
   } finally { undoMute=false; } }
 
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
