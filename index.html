@@ -1520,6 +1520,21 @@ function migrateGym(){
       if (add){ oct.month="2026-10"; save("gymlog/2026-10",oct,200); } }
     // 2026-11-11: Adam restarted the 10-week program from Sat 11/14
     { const p2=pending.get("gym/plan")||gymPlan(); if (p2.program && p2.program.start==="2026-11-10" && !p2.fix5) save("gym/plan",{...clone(p2), program:{...p2.program, start:"2026-11-14"}, fix5:true},200); }
+    // 2026-11-11: new cycle. Old records are backed up to gym/backup-20261111, then replaced by one starting record per exercise
+    // (its latest record, 5 lb / 2.5 kg lighter), dated 11/13, the day before the program starts.
+    { const p3=pending.get("gym/plan")||gymPlan(); if (p3.routines && p3.routines.length && !p3.fix6){
+      const ks=[...new Set([...Object.keys(S.gymlog), ...[...pending.keys()].filter(k=>k.startsWith("gymlog/")).map(k=>k.slice(7))])], months={};
+      ks.forEach(k=>{ months[k]=clone(gymMonth(k).entries||[]); });
+      const all=Object.values(months).flat();
+      if (all.length){
+        save("gym/backup-20261111",{at:Date.now(), note:"records before the 11/14 cycle", months},200);
+        const lighter=w=>{ const q=parseW(w); if (!q || q.bad || q.bw || q.raw==null) return w; const nv=Math.round((q.raw-(q.unit==="lb"?5:2.5))*100)/100; return nv>0 ? String(w).replace(/\d+(?:\.\d+)?/, String(nv)) : w; };
+        const latest={}; all.forEach(e=>{ const c=latest[e.exId]; if (!c || e.date>c.date || (e.date===c.date && (e.ts||0)>(c.ts||0))) latest[e.exId]=e; });
+        const fresh=Object.values(latest).map((e,i)=>({...e, id:uid()+i, date:"2026-11-13", weight:lighter(e.weight||""), ts:Date.now()+i, base:true}));
+        ks.forEach(k=>{ if (k!=="2026-11") remove("gymlog/"+k); });
+        save("gymlog/2026-11",{month:"2026-11", entries:fresh},200);
+      }
+      save("gym/plan",{...clone(p3), fix6:true},200); } }
   } finally { undoMute=false; } }
 
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
