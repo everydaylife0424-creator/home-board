@@ -1569,7 +1569,7 @@ function viewCompare(rs, all, pg){
 let migrated=false;
 const REST_DEFAULT="1分鐘", REST_COMPOUND="2分鐘";
 const isCompound=n=>/press|squat|dead\s*lift|\brdl\b|row|lat\s*pull\s*-?\s*down|lat\s*pulldown|pull-?up|chin-?up|\bdips?\b|lunge|thrust|臥推|推舉|胸推|肩推|深蹲|硬舉|划船|下拉|引體/i.test(String(n||""));
-const isIso=n=>/straight[- ]?arm|直臂|\bfly|flye|raise|curl|extension/i.test(String(n||""));
+const isIso=n=>/upright\s*row|straight[- ]?arm|直臂|\bfly|flye|raise|curl|extension/i.test(String(n||""));
 const restDefault=n=>isCompound(n)&&!isIso(n)?REST_COMPOUND:REST_DEFAULT;
 function migrateGym(){
   if (migrated) return; migrated=true; undoMute=true;
@@ -1619,6 +1619,11 @@ function migrateGym(){
     // 2026-11-11: more natural English exercise names (Adam asked for a wording check)
     { const p8=pending.get("gym/plan")||gymPlan(); if (p8.routines && p8.routines.length && !p8.fix11){ const RN={"Chest fly, machine": "Machine chest fly", "Sitting machine chest press": "Seated machine chest press", "Sitting DB lateral raises": "Seated dumbbell lateral raise", "Sitting machine lateral raise": "Seated machine lateral raise", "Incline chest press (dumbbell)": "Incline dumbbell press", "Flat chest press (dumbbell)": "Flat dumbbell press", "W bar triceps extension": "EZ-bar triceps extension", "Rope triceps extension": "Rope triceps pushdown", "Barbell bent over row": "Barbell bent-over row", "Cable lat pull down, straight bar": "Lat pulldown (straight bar)", "Cable lat pull down, V bar": "Lat pulldown (V-bar)", "Cable pull down (straight bar)": "Straight-arm pulldown", "Bar biceps curls": "Barbell curl", "Rope biceps curls (hammer)": "Rope hammer curl", "RDL": "Romanian deadlift (RDL)", "LEG DAY": "Leg day（腿）"};
       const c=clone(p8); c.routines.forEach(r=>{ if (RN[r.name]) r.name=RN[r.name]; r.groups.forEach(g=>g.ex.forEach(x=>{ if (RN[x.name]) x.name=RN[x.name]; })); }); c.fix11=true; save("gym/plan",c,200);
+      const ks=[...new Set([...Object.keys(S.gymlog), ...[...pending.keys()].filter(k=>k.startsWith("gymlog/")).map(k=>k.slice(7))])];
+      ks.forEach(k=>{ const m=gymMonth(k); if ((m.entries||[]).some(e=>RN[e.exName])){ const mm=clone(m); mm.month=k; mm.entries.forEach(e=>{ if (RN[e.exName]) e.exName=RN[e.exName]; }); save("gymlog/"+k,mm,200); } }); } }
+    // Adam: "Bar lateral raises" is a side-delt raise with a W (EZ) bar, which in English is an upright row
+    { const p9=pending.get("gym/plan")||gymPlan(); if (p9.routines && p9.routines.length && p9.fix11 && !p9.fix12){ const RN={"Bar lateral raises":"EZ-bar upright row"};
+      const c=clone(p9); c.routines.forEach(r=>r.groups.forEach(g=>g.ex.forEach(x=>{ if (RN[x.name]) x.name=RN[x.name]; }))); c.fix12=true; save("gym/plan",c,200);
       const ks=[...new Set([...Object.keys(S.gymlog), ...[...pending.keys()].filter(k=>k.startsWith("gymlog/")).map(k=>k.slice(7))])];
       ks.forEach(k=>{ const m=gymMonth(k); if ((m.entries||[]).some(e=>RN[e.exName])){ const mm=clone(m); mm.month=k; mm.entries.forEach(e=>{ if (RN[e.exName]) e.exName=RN[e.exName]; }); save("gymlog/"+k,mm,200); } }); } }
     // Adam: each routine's starting record goes on that routine's first scheduled day of the cycle (11/14 push, 11/15 pull, 11/20 legs).
