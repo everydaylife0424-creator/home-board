@@ -3,7 +3,7 @@
 import { STOCKS } from "./stocks.js";
 
 /* ---------- 設定 ---------- */
-const PROXY_DEFAULT = ""; // Apps Script 部署網址（…/exec）
+const PROXY_DEFAULT = "https://script.google.com/macros/s/AKfycbzTurnKOWD_n-ZEfWtJtuBJSQ5SR7058EHHv52WchdVF46oT87sgpq-cCg-lFIj8EYacw/exec"; // Apps Script 部署網址（…/exec）
 const DEFAULT_WATCH = ["TW:2330", "TW:2317", "TW:2454", "TW:0050", "TW:2881", "US:NVDA", "US:AAPL", "US:TSM"];
 const INDICES = [
   { k: "IDX:TWSE", n: "加權指數" }, { k: "IDX:OTC", n: "櫃買指數" },
@@ -124,8 +124,8 @@ function ySym(k) {
 const yUrl = (k, range = "1d", interval = "5m") => `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym(k))}?range=${range}&interval=${interval}&includePrePost=false`;
 
 function parseMis(text) {
-  let j; try { j = JSON.parse(text); } catch { return 0; }
-  let n = 0;
+  const got = new Set();
+  let j; try { j = JSON.parse(text); } catch { return got; }
   for (const m of j.msgArray || []) {
     const c = m.c; if (!c) continue;
     const key = c === "t00" ? "IDX:TWSE" : c === "o00" ? "IDX:OTC" : "TW:" + c;
@@ -140,9 +140,9 @@ function parseMis(text) {
       up: num(m.u), dn: num(m.w), time: num(m.tlong) || Date.now(), day: today, src: "TWSE",
     };
     if (!key.startsWith("IDX")) META[c] = { ex: m.ex, n: m.n };
-    n++;
+    got.add(c);
   }
-  return n;
+  return got;
 }
 function parseYahoo(key, text) {
   let r; try { r = JSON.parse(text).chart.result[0]; } catch { return null; }
@@ -191,14 +191,17 @@ async function doRefresh() {
     for (let i = 0; i < ex.length; i += 40) misLists.push(ex.slice(i, i + 40));
     const urls = [...misLists.map(misUrl), ...yKeys.map(k => yUrl(k))];
     const res = await fetchMany(urls);
-    let ok = 0, misOk = false;
-    misLists.forEach((_, i) => { if (res[i] && parseMis(res[i]) > 0) { ok++; misOk = true; } });
+    let ok = 0;
+    const got = new Set();
+    misLists.forEach((_, i) => { if (res[i]) { const g = parseMis(res[i]); if (g.size) { ok++; g.forEach(c => got.add(c)); } } });
     yKeys.forEach((k, i) => { const t = res[misLists.length + i]; const y = t && parseYahoo(k, t); if (y) { applyYahoo(k, y); ok++; } });
-    // 證交所沒回應時，台股改用 Yahoo
-    const missTW = tw.filter(c => !misOk || !Q["TW:" + c] || (Date.now() - (Q["TW:" + c].fetched || 0) > 120000 && !misOk));
-    if (!misOk && missTW.length) {
-      const r2 = await fetchMany(missTW.map(c => yUrl("TW:" + c)));
-      missTW.forEach((c, i) => { const y = r2[i] && parseYahoo("TW:" + c, r2[i]); if (y) { applyYahoo("TW:" + c, y); ok++; } });
+    // 證交所偶爾沒回應：沒拿到的台股和指數改用 Yahoo 補
+    const miss = tw.filter(c => !got.has(c)).map(c => "TW:" + c);
+    const missIdx = [["t00", "IDX:TWSE", "^TWII"], ["o00", "IDX:OTC", "^TWOII"]].filter(x => !got.has(x[0]));
+    if (miss.length || missIdx.length) {
+      const r2 = await fetchMany([...miss.map(k => yUrl(k)), ...missIdx.map(x => yUrl("IDX:" + x[2]))]);
+      miss.forEach((k, i) => { const y = r2[i] && parseYahoo(k, r2[i]); if (y) { applyYahoo(k, y); ok++; } });
+      missIdx.forEach((x, i) => { const t = r2[miss.length + i]; const y = t && parseYahoo(x[1], t); if (y) { applyYahoo(x[1], y); ok++; } });
     }
     net = ok ? { ok: true, at: Date.now() } : { ok: false, at: net.at, err: proxyUrl() ? "轉接站沒有回應" : "尚未設定報價轉接站" };
     if (ok) { LS.set("ss.q", Q); LS.set("ss.meta", META); }
