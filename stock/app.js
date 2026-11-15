@@ -6,8 +6,8 @@ import { STOCKS } from "./stocks.js";
 const PROXY_DEFAULT = "https://script.google.com/macros/s/AKfycbzTurnKOWD_n-ZEfWtJtuBJSQ5SR7058EHHv52WchdVF46oT87sgpq-cCg-lFIj8EYacw/exec"; // Apps Script 部署網址（…/exec）
 const DEFAULT_WATCH = ["TW:2330", "TW:2317", "TW:2454", "TW:0050", "TW:2881", "US:NVDA", "US:AAPL", "US:TSM"];
 const INDICES = [
-  { k: "IDX:TWSE", n: "加權指數" }, { k: "IDX:OTC", n: "櫃買指數" },
-  { k: "IDX:^GSPC", n: "S&P 500" }, { k: "IDX:^IXIC", n: "那斯達克" }, { k: "FX:USDTWD", n: "美元/台幣" },
+  { k: "IDX:TWSE", n: "加權指數" }, 
+  { k: "IDX:^GSPC", n: "S&P 500" }, { k: "IDX:^IXIC", n: "那斯達克" }, { k: "IDX:^SOX", n: "費城半導體" }, { k: "FX:USDTWD", n: "美元/台幣" },
 ];
 const COLORS = ["#2f5d8a", "#c9822b", "#6a8f4e", "#9b5c8f", "#3f8f9b", "#b5534a", "#7a6cc4", "#8a8f3a", "#5a6b7d", "#c46a8e"];
 
@@ -184,9 +184,9 @@ async function doRefresh() {
     const keys = neededKeys();
     const tw = keys.filter(k => mkt(k) === "TW").map(code);
     const us = keys.filter(k => mkt(k) === "US");
-    const yKeys = [...us, "IDX:^GSPC", "IDX:^IXIC", "FX:USDTWD"];
+    const yKeys = [...us, "IDX:^GSPC", "IDX:^IXIC", "IDX:^SOX", "FX:USDTWD"];
     const misLists = [];
-    const ex = ["tse_t00.tw", "otc_o00.tw"];
+    const ex = ["tse_t00.tw"];
     for (const c of tw) { const e = META[c]?.ex; if (e) ex.push(`${e}_${c}.tw`); else ex.push(`tse_${c}.tw`, `otc_${c}.tw`); }
     for (let i = 0; i < ex.length; i += 40) misLists.push(ex.slice(i, i + 40));
     const urls = [...misLists.map(misUrl), ...yKeys.map(k => yUrl(k))];
@@ -197,7 +197,7 @@ async function doRefresh() {
     yKeys.forEach((k, i) => { const t = res[misLists.length + i]; const y = t && parseYahoo(k, t); if (y) { applyYahoo(k, y); ok++; } });
     // 證交所偶爾沒回應：沒拿到的台股和指數改用 Yahoo 補
     const miss = tw.filter(c => !got.has(c)).map(c => "TW:" + c);
-    const missIdx = [["t00", "IDX:TWSE", "^TWII"], ["o00", "IDX:OTC", "^TWOII"]].filter(x => !got.has(x[0]));
+    const missIdx = [["t00", "IDX:TWSE", "^TWII"]].filter(x => !got.has(x[0]));
     if (miss.length || missIdx.length) {
       const r2 = await fetchMany([...miss.map(k => yUrl(k)), ...missIdx.map(x => yUrl("IDX:" + x[2]))]);
       miss.forEach((k, i) => { const y = r2[i] && parseYahoo(k, r2[i]); if (y) { applyYahoo(k, y); ok++; } });
