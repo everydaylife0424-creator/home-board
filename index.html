@@ -1671,6 +1671,24 @@ function migrateGym(){
     { const p7=pending.get("gym/plan")||gymPlan(); if (p7.routines && p7.routines.length && p7.program && p7.fix9 && !p7.fix10){
       const c=clone(p7); if (!c.routines.some(r=>r.id==="run10")) c.routines.push({"id": "run10", "name": "跑步 10 週", "groups": [{"id": "rw1", "name": "W1（11/16、11/19）", "ex": [{"id": "r1m", "name": "週一｜快走 5 分 → 5 km 測驗（記下時間，當作起點）→ 緩和走 5 分"}, {"id": "r1t", "name": "週四｜慢跑 20 分（速度 9）"}]}, {"id": "rw2", "name": "W2（11/23、11/26）", "ex": [{"id": "r2m", "name": "週一｜快走 8 分 → 400m × 6（速度 10.5），休 2 分 → 緩和走 5 分"}, {"id": "r2t", "name": "週四｜慢跑 20 分（速度 9）"}]}, {"id": "rw3", "name": "W3（11/30、12/3）", "ex": [{"id": "r3m", "name": "週一｜快走 8 分 → 800m × 3（速度 10.5），休 3 分 → 緩和走 5 分"}, {"id": "r3t", "name": "週四｜慢跑 25 分（速度 9）"}]}, {"id": "rw4", "name": "W4（12/7、12/10）", "ex": [{"id": "r4m", "name": "週一｜快走 8 分 → 800m × 4（速度 10.5），休 2.5 分 → 緩和走 5 分"}, {"id": "r4t", "name": "週四｜慢跑 25 分（速度 9）"}]}, {"id": "rw5", "name": "W5（12/14、12/17）", "ex": [{"id": "r5m", "name": "週一｜減量週：慢跑 20 分（速度 9）+ 4 × 20 秒加速"}, {"id": "r5t", "name": "週四｜慢跑 20 分（速度 9）"}]}, {"id": "rw6", "name": "W6（12/21、12/24）", "ex": [{"id": "r6m", "name": "週一｜快走 8 分 → 1200m × 3（速度 10.5），休 3 分 → 緩和走 5 分"}, {"id": "r6t", "name": "週四｜慢跑 30 分（速度 9）"}]}, {"id": "rw7", "name": "W7（12/28、12/31）", "ex": [{"id": "r7m", "name": "週一｜快走 8 分 → 1200m × 3（速度 11），休 2.5 分 → 緩和走 5 分"}, {"id": "r7t", "name": "週四｜慢跑 30 分（速度 9）"}]}, {"id": "rw8", "name": "W8（1/4、1/7）", "ex": [{"id": "r8m", "name": "週一｜快走 5 分 → 2000m × 2（速度 10.5），休 3 分 → 緩和走 5 分"}, {"id": "r8t", "name": "週四｜慢跑 30 分（速度 9）"}]}, {"id": "rw9", "name": "W9（1/11、1/14）", "ex": [{"id": "r9m", "name": "週一｜快走 8 分 → 節奏跑 15 分（速度 10.5～11）→ 緩和走 5 分"}, {"id": "r9t", "name": "週四｜慢跑 30 分（速度 9）"}]}, {"id": "rw10", "name": "W10（1/18、1/21）", "ex": [{"id": "r10m", "name": "週一｜快走 5 分 → 5 km 測驗（和第 1 週比）→ 緩和走 5 分"}, {"id": "r10t", "name": "週四｜輕鬆跑 20 分（速度 9），準備週五腿日"}]}]});
       c.program={...c.program, days:{...c.program.days, "1":"run10", "4":"run10"}}; c.fix10=true; save("gym/plan",c,200); } }
+    // 2026-11-15: Adam moved the 10-week cycle to start Tue 11/17 (weeks now run Tue–Mon, ending Mon 1/25).
+    // Backs up the plan and November records to gym/backup-20261115 first. Each starting record (base) moves to its routine's
+    // first scheduled day in the new cycle, unless Adam already logged that exercise on or after the starting record's date.
+    { const pa=pending.get("gym/plan")||gymPlan(), pga=pa.program; if (pa.routines && pa.routines.length && pga && pga.start==="2026-11-14" && !pa.fix13){
+      const nov=clone(gymMonth("2026-11"));
+      save("gym/backup-20261115",{at:Date.now(), note:"before moving the cycle start from 11/14 to 11/17", plan:clone(pa), nov:clone(nov.entries||[])},200);
+      const npg={...pga, start:"2026-11-17"}, c=clone(pa); c.program=npg;
+      const run=c.routines.find(r=>r.id==="run10");
+      if (run){ const lab=["11/19、11/23","11/26、11/30","12/3、12/7","12/10、12/14","12/17、12/21","12/24、12/28","12/31、1/4","1/7、1/11","1/14、1/18","1/21、1/25"];
+        run.groups.forEach((g,i)=>{ if (lab[i] && /^W\d+（/.test(g.name)) g.name=g.name.replace(/（.*）/,"（"+lab[i]+"）");
+          const th=g.ex.filter(x=>/^週四/.test(x.name)), mo=g.ex.filter(x=>!/^週四/.test(x.name)); g.ex=[...th, ...mo]; });
+        const w10=run.groups.find(g=>/^W10/.test(g.name)); if (w10) w10.ex.forEach(x=>{ x.name=x.name.replace("，準備週五腿日",""); }); }
+      c.fix13=true; save("gym/plan",c,200);
+      const first={}; for (let i=0;i<7;i++){ const d=addDays(npg.start,i), r=npg.days[String(parse(d).getDay())]; if (r && !first[r]) first[r]=d; }
+      let ch=false; (nov.entries||[]).forEach(e=>{ if (!e.base || !first[e.routineId] || e.date===first[e.routineId]) return;
+        if (gymEntries().some(x=>!x.base && x.exId===e.exId && x.date>=e.date)) return;
+        e.date=first[e.routineId]; ch=true; });
+      if (ch) save("gymlog/2026-11",{...nov, month:"2026-11"},200); } }
   } finally { undoMute=false; } }
 
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
