@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>股市模擬</title>
+<meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="股市模擬">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/180.png">
+<link rel="icon" href="icons/192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">模</span><div><b>股市模擬</b><small id="status">連線中…</small></div></div>
+  <nav class="tabs" id="tabsTop"></nav>
+  <button class="acct" id="acct" type="button">本機</button>
+</header>
+
+<main id="main">
+  <section id="v-market" class="view"></section>
+  <section id="v-port" class="view" hidden></section>
+  <section id="v-hist" class="view" hidden></section>
+  <section id="v-set" class="view" hidden></section>
+</main>
+
+<nav class="tabs bottom" id="tabsBottom"></nav>
+
+<div class="sheet-bg" id="sheetBg" hidden></div>
+<aside class="sheet" id="sheet" hidden aria-modal="true" role="dialog"></aside>
+<div class="toast" id="toast" hidden></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
