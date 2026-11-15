@@ -50,12 +50,14 @@ const isOpen = m => {
   if (t.wd < 1 || t.wd > 5) return false;
   return m === "US" ? t.min >= 570 && t.min < 960 : t.min >= 540 && t.min <= 810;
 };
+// 時間一律以台灣時間顯示
+const TPE = "Asia/Taipei";
 const fmtTime = ms => {
   if (!ms) return "";
-  const d = new Date(ms), same = d.toDateString() === new Date().toDateString();
-  return d.toLocaleString("zh-TW", same ? { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false } : { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
+  const d = new Date(ms), same = tz(d, TPE).date === twNow().date;
+  return d.toLocaleString("zh-TW", same ? { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: TPE } : { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: TPE });
 };
-const fmtDate = ms => new Date(ms).toLocaleString("zh-TW", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false });
+const fmtDate = ms => new Date(ms).toLocaleString("zh-TW", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: TPE });
 let toastT;
 function toast(msg) {
   const t = $("#toast"); t.textContent = msg; t.hidden = false;
@@ -602,8 +604,8 @@ function drawDetailChart() {
     if (q?.last != null && isOpen(mkt(k))) pts.push([Math.max(pts[pts.length - 1][0], Math.min(Date.now(), domain ? domain[1] : Date.now())), q.last]);
   }
   const tfmt = range === "1d" || range === "5d"
-    ? t => new Date(t).toLocaleString("zh-TW", { ...(range === "5d" ? { month: "numeric", day: "numeric" } : {}), hour: "2-digit", minute: "2-digit", hour12: false, timeZone: mkt(k) === "US" ? "America/New_York" : "Asia/Taipei" })
-    : t => new Date(t).toLocaleDateString("zh-TW", { year: range === "5y" ? "numeric" : undefined, month: "numeric", day: "numeric" });
+    ? t => new Date(t).toLocaleString("zh-TW", { ...(range === "5d" ? { month: "numeric", day: "numeric" } : {}), hour: "2-digit", minute: "2-digit", hour12: false, timeZone: TPE })
+    : t => new Date(t).toLocaleDateString("zh-TW", { year: range === "5y" ? "numeric" : undefined, month: "numeric", day: "numeric", timeZone: TPE });
   drawChart(box, { pts, ref, domain, dashed: range === "1d", fmt: x => fmtPx(k, x), tfmt });
 }
 
@@ -670,6 +672,13 @@ function orderEstimate() {
   btn.disabled = !(c && qty > 0);
   btn.textContent = `${side === "buy" ? "買進" : "賣出"} ${qty > 0 ? shares(qty) + " 股" : ""}${type === "limit" && !manual ? "（限價）" : ""}`;
 }
+function defaultQty(k) {
+  const px = Q[k]?.last;
+  if (mkt(k) === "US") return px ? Math.max(1, Math.min(10, maxBuy(k, px))) : 10;
+  if (!px) return 1000;
+  const m = maxBuy(k, px);
+  return m >= 1000 ? 1000 : Math.max(1, Math.floor(m / 10) * 10 || m); // 買不起一張就預設零股
+}
 function maxBuy(k, price) {
   const ccy = ccyOf(k), cash = availCash(ccy);
   if (!(price > 0)) return 0;
@@ -726,7 +735,7 @@ function renderDetail(full) {
         <div class="flex"><span class="seg" id="oType"><button type="button" data-type="market" aria-pressed="${detail.type === "market"}">市價</button><button type="button" data-type="limit" aria-pressed="${detail.type === "limit"}">限價</button></span></div>
         <p class="note" id="oManual" ${manual ? "" : "hidden"}>目前抓不到這檔的報價，可以自己輸入成交價來練習。</p>
         <label class="field" id="oPxF" ${detail.type === "limit" || manual ? "" : "hidden"}><span>${manual ? "成交價" : "限價"}（${isTW ? "元" : "美元"}）</span><input id="oPx" type="number" inputmode="decimal" min="0" step="any" value="${q?.last ?? ""}"></label>
-        <label class="field"><span>數量（股）${isTW ? "・1 張 = 1,000 股，不滿 1 張是零股" : ""}</span><input id="oQty" type="number" inputmode="numeric" min="0" step="1" value="${isTW ? 1000 : 10}"></label>
+        <label class="field"><span>數量（股）${isTW ? "・1 張 = 1,000 股，不滿 1 張是零股" : ""}</span><input id="oQty" type="number" inputmode="numeric" min="0" step="1" value="${defaultQty(k)}"></label>
         <div class="qtybtns">${isTW ? `<button type="button" data-q="1000">1 張</button><button type="button" data-q="5000">5 張</button><button type="button" data-q="100">100 股</button>` : `<button type="button" data-q="1">1 股</button><button type="button" data-q="10">10 股</button><button type="button" data-q="100">100 股</button>`}<button type="button" data-q="max">最大</button></div>
         <div class="est" id="oEst"></div>
         <div class="warn" id="oWarn"></div>
