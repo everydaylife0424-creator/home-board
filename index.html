@@ -598,7 +598,7 @@ const I18N = {
     pop_no_review:"這天沒有寫檢討。", pop_open_review:"打開這天的每日檢討", ctx_deadline:"標記截止日", ctx_event:"標記重大事件",
     nav_gym:"健身計劃", src_gym:"健身", k_deadline:"截止日", k_event:"重大事件", k_busy:"整天行程", busy_title:"整天行程", busy_sub:"整天只做這件事的日子（例如校外活動）。加進來後會記到月曆，那天的小卡會先收起來。", busy_ph:"例：銀行專題活動", busy_add:"加入", busy_del:"取消，恢復那天的小卡", busy_done:d=>`已加到 ${d}，那天的小卡已收起`, marks_title:"截止日與重大事件", marks_empty:"這天沒有標記。",
     ev_ph:"輸入名稱，Enter 新增", move_date:"改到其他日期", drag_hint:"也可以直接把月曆上的項目拖到別的日期。", moved:d=>`已移到 ${d}`,
-    wp_change:"更換桌布", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"刪除這張卡片", sl_title:"輸入以篩選，↑↓ 選擇，Enter 確認", sl_none:"沒有符合的指令", sl_clear:"取消這個指令", sl_todo:"待辦清單（To-do list）", sl_bullet:"項目符號清單（Bulleted list）", sl_numbered:"編號清單（Numbered list）", sl_toggle:"折疊清單（Toggle list）", sl_table:"表格（Table）", tb_row:"＋列", tb_col:"＋欄", tb_delcol:"－欄", tb_delrow:"刪除這一列", sl_kid_ph:"在折疊裡新增，按 Enter", sl_heading:"標題", sl_text:"文字（不打勾）", sl_divider:"分隔線", sl_tomorrow:"明天", sl_to_day:d=>`加到 ${d}`, sl_board:n=>`加到任務板：${n}`, sl_proj:n=>`新增專案區塊：${n}`, sl_review:"打開這天的每日檢討", sl_today:"截止日設為今天", sl_nextweek:"截止日設為下週一", sl_due_set:d=>`截止日：${d}`, sl_marked:"已標記在月曆上", sl_to_board:"已加到任務板", sl_added_to:d=>`已加到 ${d}`, cm_del_item:t=>`刪除「${t}」`, cm_edit_item:t=>`編輯「${t}」`, edit_done:"已更新", cm_add_item:"新增事項（Enter）", cm_add_item_to:n=>`新增事項到「${n}」`, cm_del_sec:n=>`刪除這天的「${n}」區塊`, cm_unpin:n=>`「${n}」不再每天自動出現`, cm_unpinned:"已取消自動出現，可在專案設定改回來", cm_add_sec:"新增專案區塊", cm_add_card:"加回卡片", cm_all_shown:"所有卡片都已顯示", cm_reset:"恢復預設卡片", cm_row_empty:"這排沒有卡片，在這裡按右鍵可以加回來。", cm_del_col:n=>`刪除「${n}」這欄`, cm_add_col:"新增一欄", cm_col_ph:"欄名，按 Enter", cm_last_col:"至少要留一欄", cm_col_deleted:n=>`已刪除，裡面的任務移到「${n}」`, cm_del_day:d=>`刪除 ${d} 這張卡片`, cm_day_first:d=>`刪除後會在最後補上 ${d}。月曆上的紀錄不會消失。`, cm_add_day:"新增日期卡片", cm_pick_day:"選一天", cm_add:"新增", cm_day_max:"最多 7 天，再新增會刪掉最早的那天。", gc_title:"Google 日曆", gc_on:"已同步 Google 日曆", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"允許讀取 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
+    wp_change:"更換桌布", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"刪除這張卡片", sl_title:"輸入以篩選，↑↓ 選擇，Enter 確認", sl_none:"沒有符合的指令", sl_clear:"取消這個指令", sl_todo:"待辦清單（To-do list）", sl_bullet:"項目符號清單（Bulleted list）", sl_numbered:"編號清單（Numbered list）", sl_toggle:"折疊清單（Toggle list）", sl_table:"表格（Table）", tb_row:"＋列", tb_col:"＋欄", tb_delcol:"－欄", tb_delrow:"刪除這一列", sl_kid_ph:"在折疊裡新增，按 Enter", sl_heading:"標題", sl_text:"文字（不打勾）", sl_divider:"分隔線", sl_tomorrow:"明天", sl_to_day:d=>`加到 ${d}`, sl_board:n=>`加到任務板：${n}`, sl_proj:n=>`新增專案區塊：${n}`, sl_review:"打開這天的每日檢討", sl_today:"截止日設為今天", sl_nextweek:"截止日設為下週一", sl_due_set:d=>`截止日：${d}`, sl_marked:"已標記在月曆上", sl_to_board:"已加到任務板", sl_added_to:d=>`已加到 ${d}`, cm_del_item:t=>`刪除「${t}」`, cm_edit_item:t=>`編輯「${t}」`, edit_done:"已更新", cm_add_item:"新增事項（Enter）", cm_add_item_to:n=>`新增事項到「${n}」`, cm_del_sec:n=>`刪除這天的「${n}」區塊`, cm_unpin:n=>`「${n}」不再每天自動出現`, cm_unpinned:"已取消自動出現，可在專案設定改回來", cm_add_sec:"新增專案區塊", cm_add_card:"加回卡片", cm_all_shown:"所有卡片都已顯示", cm_reset:"恢復預設卡片", cm_row_empty:"這排沒有卡片，在這裡按右鍵可以加回來。", cm_del_col:n=>`刪除「${n}」這欄`, cm_add_col:"新增一欄", cm_col_ph:"欄名，按 Enter", cm_last_col:"至少要留一欄", cm_col_deleted:n=>`已刪除，裡面的任務移到「${n}」`, cm_del_day:d=>`刪除 ${d} 這張卡片`, cm_day_first:d=>`刪除後會在最後補上 ${d}。月曆上的紀錄不會消失。`, cm_add_day:"新增日期卡片", cm_pick_day:"選一天", cm_add:"新增", cm_day_max:"最多 7 天，再新增會刪掉最早的那天。", gc_title:"Google 日曆", gc_reconnect:"重新連接 Google 日曆", gc_api_off:"Google Calendar API 尚未啟用（見說明）", gc_rail_on:"已同步", gc_rail_off:"點一下連接", gc_on:"已和 Google 日曆同步", gc_conn:"Google 日曆未連線，請到 claude.ai 設定 → 連接器重新連接", gc_allow:"連接 Google 日曆", gc_perm:"需要先允許這個網頁使用 Google 日曆", gc_fail:"Google 日曆暫時讀不到", gc_off:"這裡無法使用 Google 日曆", gc_also:"也加到 Google 日曆", gc_added:"已加到 Google 日曆", gc_add_fail:"加到 Google 日曆失敗，網頁上的標記已保存", gc_untitled:"（無標題）", gc_allday:"全天", gc_open:"開啟", wp_adjust:"調整位置", wp_adjust_done:"完成", wp_adjust_cancel:"取消", wp_adjust_hint:"拖移圖片選擇要顯示的位置", wp_random:"隨機換一張", wp_title:"桌布圖庫", wp_hint:"每一頁可以選不同的桌布，整頁的配色會跟著桌布主色換成很淡的色調。", wp_upload:"上傳自己的照片", wp_uploading:"上傳中…", wp_upload_fail:"上傳失敗，請再試一次", wp_no_upload:"這裡目前無法上傳圖片",
     gym_sub:"點動作展開，可以記錄每次的組數、重量和 RPE", gym_add_routine:"＋ 新增課表", gym_add_group:"＋ 新增分組，例如「胸」（Enter）", gym_add_ex:"＋ 新增動作（Enter）",
     gym_target:"目標", gym_target_ph:"例如 3×12 · 40 kg", gym_note:"備註", gym_note_ph:"例如 RPE 9/8、O20+2 reps", gym_log:"今天", gym_date:"日期", gcal_title:"健身月曆", gcal_sub:"只顯示健身紀錄，和主畫面月曆分開", gcal_month:(n,d)=>`本月 ${d} 天 · ${n} 筆`, gcal_last:"上次", gcal_ago:n=>n===0?"今天":`${n} 天前`, gcal_never:"還沒練", gcal_times:n=>`本月 ${n} 次`, gcal_day_empty:"這天沒有健身紀錄", gcal_other:"其他", gcal_rest:n=>`已休息 ${n} 天`, gym_new:"新→舊", gym_old:"舊→新", gym_sort_desc:"目前由新到舊，點一下改成由舊到新", gym_sort_asc:"目前由舊到新，點一下改成由新到舊", gym_sets:"組×次", gym_weight:"重量", gym_rpe:"RPE", gym_save:"記錄",
     gym_history:"紀錄", gym_rest:"組間休息", gym_rest_ph:"休息 例 90s", vol_title:"總訓練量", vol_sub:"組 × 次 × 重量（kg）", vol_none:"還沒有可計算的紀錄", vol_bad:"這次含有有誤的資料，數字可能不準", vol_more:n=>`顯示全部 ${n} 次`, vol_less:"收起", vol_tip:"點一下可以查看、修改這天的紀錄", gdrag_hint:"可拖到其他天", pg_moved_from:d=>`從 ${d} 改過來`, lp_moved:d=>`已移到 ${d}`, rest_def:"這個動作預設組間休息", rest_def_ok:"已更新預設休息", fix_save:"儲存", fix_ok:"已修正", fix_still:"還有問題：",
@@ -662,7 +662,7 @@ const I18N = {
     pop_no_review:"No review written this day.", pop_open_review:"Open this day's review", ctx_deadline:"Mark a deadline", ctx_event:"Mark a key event",
     nav_gym:"Workout plan", src_gym:"Workout", k_deadline:"Deadline", k_event:"Key event", k_busy:"All-day commitment", busy_title:"All-day plans", busy_sub:"Days taken up by one thing (like an off-site event). They go on the calendar and that day's card is hidden.", busy_ph:"e.g. bank project event", busy_add:"Add", busy_del:"Remove and bring the day card back", busy_done:d=>`Added to ${d}; that day's card is hidden`, marks_title:"Deadlines & key events", marks_empty:"Nothing marked.",
     ev_ph:"Name, press Enter", move_date:"Move to date", drag_hint:"You can also drag items on the calendar to another date.", moved:d=>`Moved to ${d}`,
-    wp_change:"Change cover", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"Delete this card", sl_title:"Type to filter, ↑↓ to choose, Enter to pick", sl_none:"No matching command", sl_clear:"Cancel this command", sl_todo:"To-do list", sl_bullet:"Bulleted list", sl_numbered:"Numbered list", sl_toggle:"Toggle list", sl_table:"Table", tb_row:"+ Row", tb_col:"+ Column", tb_delcol:"− Column", tb_delrow:"Delete row", sl_kid_ph:"Add inside, press Enter", sl_heading:"Heading", sl_text:"Text (no checkbox)", sl_divider:"Divider", sl_tomorrow:"Tomorrow", sl_to_day:d=>`Add to ${d}`, sl_board:n=>`Add to board: ${n}`, sl_proj:n=>`Add section: ${n}`, sl_review:"Open this day’s review", sl_today:"Due today", sl_nextweek:"Due next Monday", sl_due_set:d=>`Due: ${d}`, sl_marked:"Marked on the calendar", sl_to_board:"Added to the task board", sl_added_to:d=>`Added to ${d}`, cm_del_item:t=>`Delete “${t}”`, cm_edit_item:t=>`Edit “${t}”`, edit_done:"Updated", cm_add_item:"Add an item (Enter)", cm_add_item_to:n=>`Add an item to “${n}”`, cm_del_sec:n=>`Remove the “${n}” section from this day`, cm_unpin:n=>`Stop showing “${n}” every day`, cm_unpinned:"It won’t appear automatically now. Change it back in Project settings.", cm_add_sec:"Add a project section", cm_add_card:"Add a card back", cm_all_shown:"All cards are showing", cm_reset:"Restore default cards", cm_row_empty:"No cards here. Right-click to add them back.", cm_del_col:n=>`Delete the “${n}” column`, cm_add_col:"Add a column", cm_col_ph:"Column name, press Enter", cm_last_col:"Keep at least one column", cm_col_deleted:n=>`Deleted. Its tasks moved to “${n}”.`, cm_del_day:d=>`Delete the ${d} card`, cm_day_first:d=>`${d} will be added at the end. Calendar records stay.`, cm_add_day:"Add a day card", cm_pick_day:"Pick a day", cm_add:"Add", cm_day_max:"Up to 7 days. Adding more removes the earliest.", gc_title:"Google Calendar", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
+    wp_change:"Change cover", week_title:(a,b)=>`${a} ~ ${b}`, cm_del_card:"Delete this card", sl_title:"Type to filter, ↑↓ to choose, Enter to pick", sl_none:"No matching command", sl_clear:"Cancel this command", sl_todo:"To-do list", sl_bullet:"Bulleted list", sl_numbered:"Numbered list", sl_toggle:"Toggle list", sl_table:"Table", tb_row:"+ Row", tb_col:"+ Column", tb_delcol:"− Column", tb_delrow:"Delete row", sl_kid_ph:"Add inside, press Enter", sl_heading:"Heading", sl_text:"Text (no checkbox)", sl_divider:"Divider", sl_tomorrow:"Tomorrow", sl_to_day:d=>`Add to ${d}`, sl_board:n=>`Add to board: ${n}`, sl_proj:n=>`Add section: ${n}`, sl_review:"Open this day’s review", sl_today:"Due today", sl_nextweek:"Due next Monday", sl_due_set:d=>`Due: ${d}`, sl_marked:"Marked on the calendar", sl_to_board:"Added to the task board", sl_added_to:d=>`Added to ${d}`, cm_del_item:t=>`Delete “${t}”`, cm_edit_item:t=>`Edit “${t}”`, edit_done:"Updated", cm_add_item:"Add an item (Enter)", cm_add_item_to:n=>`Add an item to “${n}”`, cm_del_sec:n=>`Remove the “${n}” section from this day`, cm_unpin:n=>`Stop showing “${n}” every day`, cm_unpinned:"It won’t appear automatically now. Change it back in Project settings.", cm_add_sec:"Add a project section", cm_add_card:"Add a card back", cm_all_shown:"All cards are showing", cm_reset:"Restore default cards", cm_row_empty:"No cards here. Right-click to add them back.", cm_del_col:n=>`Delete the “${n}” column`, cm_add_col:"Add a column", cm_col_ph:"Column name, press Enter", cm_last_col:"Keep at least one column", cm_col_deleted:n=>`Deleted. Its tasks moved to “${n}”.`, cm_del_day:d=>`Delete the ${d} card`, cm_day_first:d=>`${d} will be added at the end. Calendar records stay.`, cm_add_day:"Add a day card", cm_pick_day:"Pick a day", cm_add:"Add", cm_day_max:"Up to 7 days. Adding more removes the earliest.", gc_title:"Google Calendar", gc_reconnect:"Reconnect Google Calendar", gc_api_off:"Google Calendar API isn't enabled yet (see setup)", gc_rail_on:"Synced", gc_rail_off:"Tap to connect", gc_on:"Synced with Google Calendar", gc_conn:"Google Calendar isn't connected. Reconnect it in claude.ai Settings → Connectors", gc_allow:"Allow Google Calendar", gc_perm:"Allow this page to use Google Calendar first", gc_fail:"Couldn't load Google Calendar right now", gc_off:"Google Calendar isn't available here", gc_also:"Also add to Google Calendar", gc_added:"Added to Google Calendar", gc_add_fail:"Couldn't add to Google Calendar. The mark is saved here.", gc_untitled:"(No title)", gc_allday:"All day", gc_open:"Open", wp_adjust:"Reposition", wp_adjust_done:"Done", wp_adjust_cancel:"Cancel", wp_adjust_hint:"Drag the image to reposition", wp_random:"Shuffle", wp_title:"Cover gallery", wp_hint:"Each page can have its own cover. The page colors follow the cover with a very light tint.", wp_upload:"Upload your own photo", wp_uploading:"Uploading…", wp_upload_fail:"Upload failed. Try again.", wp_no_upload:"Uploading isn't available here",
     gym_sub:"Open an exercise to log sets, weight and RPE", gym_add_routine:"+ New routine", gym_add_group:"+ New group, e.g. Chest (Enter)", gym_add_ex:"+ New exercise (Enter)",
     gym_target:"Target", gym_target_ph:"e.g. 3×12 · 40 kg", gym_note:"Note", gym_note_ph:"e.g. RPE 9/8", gym_log:"Today", gym_date:"Date", gcal_title:"Training calendar", gcal_sub:"Workouts only, separate from the main calendar", gcal_month:(n,d)=>`This month: ${d} training days · ${n} exercises logged`, gcal_last:"Last", gcal_ago:n=>n===0?"today":`${n}d ago`, gcal_never:"not yet", gcal_times:n=>`${n}× this month`, gcal_day_empty:"No workouts logged this day", gcal_other:"Other", gcal_rest:n=>`${n} days since your last workout`, gym_new:"Newest", gym_old:"Oldest", gym_sort_desc:"Newest first. Click for oldest first", gym_sort_asc:"Oldest first. Click for newest first", gym_sets:"Sets × reps", gym_weight:"Weight", gym_rpe:"RPE", gym_save:"Log",
     gym_history:"History", gym_rest:"Rest", gym_rest_ph:"Rest, e.g. 90s", vol_title:"Training volume", vol_sub:"sets × reps × weight (kg)", vol_none:"No records to calculate yet", vol_bad:"This session has entries that look wrong", vol_more:n=>`Show all ${n}`, vol_less:"Show less", vol_tip:"Click to view and fix this session's entries", gdrag_hint:"Drag to another day", pg_moved_from:d=>`Moved from ${d}`, lp_moved:d=>`Moved to ${d}`, rest_def:"Default rest for this exercise", rest_def_ok:"Default rest updated", fix_save:"Save", fix_ok:"Fixed", fix_still:"Still wrong: ",
@@ -814,7 +814,7 @@ function undo(){ const g=undoStack.pop(); undoGroup=null; if (!g){ toast(T("undo
   undoMute=true; try { for (const [path,before] of g.before){ if (before==null) remove(path); else save(path, before, 50); } } finally { undoMute=false; }
   render(); toast(T("undo_done")); }
 document.addEventListener("keydown", e=>{ if ((e.metaKey||e.ctrlKey) && !e.shiftKey && (e.key==="z"||e.key==="Z")){ const a=document.activeElement; if (isTyping() || (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.type!=="checkbox")) return; e.preventDefault(); undo(); } });
-function save(path, body, delay=500){ recordUndo(path); pending.set(path, body); clearTimeout(timers.get(path)); timers.set(path, setTimeout(()=>flush(path), delay)); }
+function save(path, body, delay=500){ if (path.startsWith("events/")) gcSyncSoon(); recordUndo(path); pending.set(path, body); clearTimeout(timers.get(path)); timers.set(path, setTimeout(()=>flush(path), delay)); }
 async function flush(path){
   if (inflight.has(path)) { timers.set(path, setTimeout(()=>flush(path), 300)); return; }
   const body = pending.get(path); if (!body || !db) return;
@@ -831,6 +831,7 @@ async function flush(path){
 }
 function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; }
 async function remove(path){
+  if (path.startsWith("events/")){ const e=cachedDoc(path)||pending.get(path); if (e&&e.gcalId){ gcQ("home.gcDel", q=>[...q,e.gcalId]); gcSyncSoon(); } }
   recordUndo(path);
   pending.delete(path); clearTimeout(timers.get(path));
   const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id];
@@ -887,6 +888,7 @@ function renderSide(){
     <button class="navb" data-act="lang">${svg("lang")}<span class="lbl">${L("lang_btn")}</span></button>
     <button class="navb" data-act="theme">${svg("theme")}<span class="lbl">${L("theme_btn")}</span><span class="val lbl">${themeName}</span></button>
     <button class="navb" data-act="style">${svg("style")}<span class="lbl">${L("style_btn")}</span><span class="val lbl">${T("style_"+S.style)}</span></button>
+    ${G.mcp?`<button class="navb" data-act="gc-allow" ${G.busy?"disabled":""}>${svg("cal")}<span class="lbl">${T("gc_title")}</span><span class="val lbl">${G.mcp.ready&&G.mcp.ready()&&!G.err?T("gc_rail_on"):T("gc_rail_off")}</span></button>`:""}
     <button class="navb" data-act="toggle-settings" aria-pressed="${S.showSettings}">${svg("gear")}<span class="lbl">${L("proj_settings")}</span></button>
     <button class="navb" data-act="edit" aria-pressed="${S.edit}" ${S.edit?'aria-current="page"':""}>${svg("pen")}<span class="lbl">${T("edit_btn")}</span>${S.edit?`<span class="val lbl">${T("edit_on")}</span>`:""}</button>
     ${window.HOME_ACCOUNT?`<button class="navb" data-act="signout" title="${esc(window.HOME_ACCOUNT.email||"")}">${svg("out")}<span class="lbl">${T("signout")}</span><span class="val lbl">${esc((window.HOME_ACCOUNT.email||"").split("@")[0])}</span></button>`:""}`;
@@ -1106,8 +1108,8 @@ function viewWeekReview(){
 function weekRecap(mon, isLast){
   const sun=addDays(mon,6), inR=d=>!!d && d>=mon && d<=sun, days7=Array.from({length:7},(_,i)=>addDays(mon,i));
   // activities: his own calendar marks, plus Google Calendar events when that is connected
-  const evs=allEvents().filter(e=>inR(e.date)), gc=gcByDate(), acts=evs.map(e=>({d:e.date, t:e.title, kind:e.kind||"event", tm:""}));
-  days7.forEach(d=>gcDedup(gc[d]||[], evs.filter(e=>e.date===d).map(e=>({t:e.title, kind:e.kind}))).filter(x=>x.kind!=="holiday").forEach(x=>acts.push({d, t:x.t, kind:"gc", tm:x.tm})));
+  gcCover(mon, addDays(sun,1)); const evs=allEvents().filter(e=>inR(e.date)), gc=gcByDate(), acts=evs.map(e=>({d:e.date, t:e.title, kind:e.kind||"event", tm:""}));
+  days7.forEach(d=>gcDedup(gc[d]||[], evs.filter(e=>e.date===d).map(e=>({t:e.title, kind:e.kind, gid:e.gcalId}))).filter(x=>x.kind!=="holiday").forEach(x=>acts.push({d, t:x.t, kind:"gc", tm:x.tm})));
   acts.sort((a,b)=>a.d.localeCompare(b.d) || (a.tm||"").localeCompare(b.tm||""));
   const icon=k=>k==="gc"?"📅":(MARK_ICON[k]||"★");
   // finished items, grouped by project (assignments), then To-do, then the task board
@@ -1273,7 +1275,7 @@ function doneByDate(tasks){
 /* deadlines and key events that Adam marks himself (right-click a date) */
 function marksByDate(tasks){
   const by={}; const push=(ds,x)=>(by[ds]=by[ds]||[]).push(x);
-  allEvents().forEach(e=>push(e.date, {t:e.title, kind:e.kind, id:e.id, drag:{k:"ev",id:e.id}}));
+  allEvents().forEach(e=>push(e.date, {t:e.title, kind:e.kind, id:e.id, gid:e.gcalId, drag:{k:"ev",id:e.id}}));
   return by;
 }
 const dragAttr = d => `draggable="true" data-drag="${esc(JSON.stringify(d))}"`;
@@ -1287,10 +1289,10 @@ function gcEvDates(ev){ const s=ev.start||{}, e=ev.end||{};
 function gcByDate(){ const by={};
   for (const [k,list] of Object.entries(G.data)) for (const ev of list){ if(ev.status==="cancelled") continue;
     const tm = ev.start?.dateTime ? new Date(ev.start.dateTime).toTimeString().slice(0,5) : "";
-    for (const d of gcEvDates(ev)) (by[d]=by[d]||[]).push({t:ev.summary||T("gc_untitled"), tm, link:ev.htmlLink, kind:k.startsWith("holiday")?"holiday":"own"}); }
+    for (const d of gcEvDates(ev)) (by[d]=by[d]||[]).push({id:ev.id, t:ev.summary||T("gc_untitled"), tm, link:ev.htmlLink, kind:k.startsWith("holiday")?"holiday":"own"}); }
   for (const k in by) by[k].sort((a,b)=>(a.kind==="holiday"?-1:0)-(b.kind==="holiday"?-1:0) || a.tm.localeCompare(b.tm));
   return by; }
-function gcErrKind(e){ const c=e&&e.code; return ["needs_reauth","server_not_connected","selection_required","server_not_found"].includes(c)?"conn" : c==="approval_required"||c==="not_in_manifest"||c==="consent_required"?"perm" : ["not_granted","capability_disabled","capability_removed"].includes(c)?"off" : "fail"; }
+function gcErrKind(e){ const c=e&&e.code; if (c==="api_off") return "api"; return ["needs_reauth","server_not_connected","selection_required","server_not_found"].includes(c)?"conn" : c==="approval_required"||c==="not_in_manifest"||c==="consent_required"?"perm" : ["not_granted","capability_disabled","capability_removed"].includes(c)?"off" : "fail"; }
 async function gcWatch(from, to){
   const key=from+"|"+to; if (G.range===key) return; G.range=key;
   const m=await gcMcp(); if (!m || G.range!==key) return;
@@ -1298,28 +1300,49 @@ async function gcWatch(from, to){
   GC_CALS.forEach(c=>{ const input={startTime:from+"T00:00:00", endTime:to+"T00:00:00", pageSize:250, orderBy:"startTime"}; if(c.id) input.calendarId=c.id;
     const k=c.kind+":"+(c.id||"primary");
     G.unsub.push(m.watchTool(GC,"list_events",input, ev=>{
-      if (ev.type==="data"){ G.data[k]=(ev.result.payload&&ev.result.payload.events)||[]; G.err=null; }
+      if (ev.type==="data"){ G.data[k]=(ev.result.payload&&ev.result.payload.events)||[]; G.err=null; if (c.kind==="own") gcSyncSoon(); }
       else { const kd=gcErrKind(ev.error); if (kd!=="fail") delete G.data[k]; if (c.kind==="own" || kd!=="fail") G.err=kd; }
       softRender(); }, {refetchInterval:300000, cache:{staleTime:60000, gcTime:3600000}})); });
 }
 async function gcAllow(){ const m=await gcMcp(); if(!m) return; G.busy=true; render();
-  try{ await m.callTool(GC,"list_events",{pageSize:1}); G.err=null; const r=G.range; G.range=null; const [a,b]=r.split("|"); await gcWatch(a,b); }
-  catch(e){ G.err=gcErrKind(e); } G.busy=false; render(); }
-async function gcCreate(date, title, kind){ const m=await gcMcp(); if(!m) { toast(T("gc_off")); return null; }
-  try{ const r=await m.callTool(GC,"create_event",{summary:(kind==="deadline"?"⚑ ":"★ ")+title, allDay:true, startTime:date+"T00:00:00", endTime:addDays(date,1)+"T00:00:00", description:"HOME"});
-    try{ await m.invalidate(GC,"list_events"); }catch(_){}
-    toast(T("gc_added")); return (r.payload&&r.payload.id)||null; }
-  catch(e){ const k=gcErrKind(e); toast(k==="conn"?T("gc_conn"):k==="perm"?T("gc_perm"):T("gc_add_fail")); return null; } }
+  try{ if (m.connect) await m.connect(); await m.callTool(GC,"list_events",{pageSize:1}); G.err=null; const r=G.range; G.range=null; if (r){ const [a,b]=r.split("|"); await gcWatch(a,b); } toast(T("gc_on")); gcSyncSoon(); }
+  catch(e){ G.err=gcErrKind(e); if (G.err==="fail") toast(T("gc_fail")); } G.busy=false; render(); }
+/* make sure the Google events of [from, to) are loaded (the month calendar or the weekly recap) */
+function gcCover(from, to){ const r=G.range&&G.range.split("|"); if (!r || from<r[0] || to>r[1]) gcWatch(from, to); }
+/* HOME marks (★ ◆ ⚑) are copied to Google Calendar, so they show on the phone's calendar too.
+   Each event remembers its Google id and what was sent (gcalSig); a change of date or title updates it, a delete deletes it. */
+function gcQ(k, fn){ try{ const q=JSON.parse(localStorage.getItem(k)||"[]"); if(!fn) return q; const n=fn(q).slice(-300); localStorage.setItem(k, JSON.stringify(n)); return n; }catch(_){ return []; } }
+let gcSyncT=null; function gcSyncSoon(){ clearTimeout(gcSyncT); gcSyncT=setTimeout(gcSync, 1500); }
+async function gcSync(){
+  if (G.syncing) return; const m=await gcMcp(); if (!m || !m.ready || !m.ready()) return; G.syncing=true;
+  try{
+    for (const gid of gcQ("home.gcDel")){
+      try{ await m.callTool(GC,"delete_event",{eventId:gid}); }catch(e){ if (e.code!=="gone"){ if (gcErrKind(e)!=="fail") return; continue; } }
+      gcQ("home.gcDel", q=>q.filter(x=>x!==gid)); gcQ("home.gcGone", q=>[...q,gid]); }
+    const gone=new Set(gcQ("home.gcGone")), from=addDays(today(),-60); let n=0;
+    for (const e of allEvents()){
+      if (!e.date || e.date<from || !e.title) continue;
+      const sig=[e.date,e.title,e.kind].join("|"); if (e.gcalId && e.gcalSig===sig && !gone.has(e.gcalId)) continue;
+      const input={summary:(MARK_ICON[e.kind]||"★")+" "+e.title, allDay:true, startTime:e.date+"T00:00:00", endTime:addDays(e.date,1)+"T00:00:00", description:"HOME"};
+      try{
+        let gid=gone.has(e.gcalId)?null:e.gcalId;
+        if (gid){ try{ await m.callTool(GC,"update_event",{...input, eventId:gid}); }catch(x){ if (x.code==="gone") gid=null; else throw x; } }
+        if (!gid){ const r=await m.callTool(GC,"create_event",input); gid=r.payload&&r.payload.id; }
+        const cur=ev(e.id); if (gid && cur){ const p="events/"+e.id; pending.set(p,{...cur, gcalId:gid, gcalSig:sig}); clearTimeout(timers.get(p)); timers.set(p, setTimeout(()=>flush(p), 50)); n++; }
+      }catch(x){ const k=gcErrKind(x); if (k!=="fail"){ G.err=k; softRender(); return; } }
+    }
+    if (n) { try{ await m.invalidate(GC,"list_events"); }catch(_){} }
+  } finally { G.syncing=false; } }
 /* a mark also sent to Google shows once, as the mark */
-function gcDedup(gl, marks){ const own=new Set(marks.map(x=>(x.kind==="deadline"?"⚑ ":"★ ")+x.t)); return gl.filter(x=>!own.has(x.t)); }
+function gcDedup(gl, marks){ const ids=new Set(marks.map(x=>x.gid).filter(Boolean)), own=new Set(marks.map(x=>(MARK_ICON[x.kind]||"★")+" "+x.t)); return gl.filter(x=>!ids.has(x.id) && !own.has(x.t)); }
 function gcStatus(){
   if (G.mcp===null || G.err==="off") return "";
   if (G.err==="conn") return `<span class="gc-st warn">${T("gc_conn")}</span>`;
-  if (G.err==="perm") return `<button class="ghost mini" data-act="gc-allow" ${G.busy?"disabled":""}>${T("gc_allow")}</button>`;
+  if (G.err==="perm") return `<button class="ghost mini" data-act="gc-allow" ${G.busy?"disabled":""}>${T(G.mcp&&G.mcp.everConnected&&G.mcp.everConnected()?"gc_reconnect":"gc_allow")}</button>`;
+  if (G.err==="api") return `<span class="gc-st warn">${T("gc_api_off")}</span>`;
   if (G.err==="fail") return `<span class="gc-st warn">${T("gc_fail")}</span>`;
   return Object.keys(G.data).length?`<span class="gc-st"><i class="gdot"></i>${T("gc_on")}</span>`:"";
 }
-function gcPref(v){ try{ if(v===undefined) return localStorage.getItem("home.gcAlso")==="1"; localStorage.setItem("home.gcAlso", v?"1":"0"); }catch(_){ return false; } }
 function viewDoneCalendar(tasks){
   const [y,m]=S.calMonth.split("-").map(Number);
   const cells=[]; let ds=mondayOf(new Date(y,m-1,1));
@@ -1368,7 +1391,7 @@ function ctxMenu(){
   const c=S.ctx;
   return `<div class="ctx" id="ctxMenu" style="left:${c.x}px;top:${c.y}px" role="menu">
     <div class="ctx-h">${md(c.date)} ${dow(c.date)}</div>
-    ${c.kind?`<form class="add" data-act="ev-add" data-date="${c.date}" data-kind="${c.kind}"><span class="mark ${c.kind}">${c.kind==="deadline"?"⚑":"★"}</span><input type="text" id="ev-title" placeholder="${T("ev_ph")}" autocomplete="off">${G.mcp&&G.err!=="off"?`<label class="gc-chk"><input type="checkbox" id="ev-gc" ${gcPref()?"checked":""}> ${T("gc_also")}</label>`:""}</form>`
+    ${c.kind?`<form class="add" data-act="ev-add" data-date="${c.date}" data-kind="${c.kind}"><span class="mark ${c.kind}">${c.kind==="deadline"?"⚑":"★"}</span><input type="text" id="ev-title" placeholder="${T("ev_ph")}" autocomplete="off"></form>`
       :`<button role="menuitem" data-act="ctx-kind" data-kind="deadline"><span class="mark deadline">⚑</span> ${T("ctx_deadline")}</button>
         <button role="menuitem" data-act="ctx-kind" data-kind="event"><span class="mark event">★</span> ${T("ctx_event")}</button>`}
   </div>`;
@@ -1977,10 +2000,8 @@ document.addEventListener("submit", e=>{
     const id=uid(); save("events/"+id,{id,date,title,kind:"busy"},50); f.elements.title.value=""; render(); toast(T("busy_done", md(date)));
   } else if (act==="ev-add"){
     const inp=document.getElementById("ev-title"), title=inp.value.trim(); if(!title) return;
-    const id=uid(), kind=f.dataset.kind||"deadline", date=f.dataset.date, cb=document.getElementById("ev-gc"), toG=!!(cb&&cb.checked);
-    if (cb) gcPref(toG);
+    const id=uid(), kind=f.dataset.kind||"deadline", date=f.dataset.date;
     save("events/"+id,{id,date,title,kind},50); inp.value=""; S.ctx=null; render();
-    if (toG) gcCreate(date,title,kind).then(gid=>{ if(gid){ const e=(S.events||{})[id]||{id,date,title,kind}; save("events/"+id,{...e,gcalId:gid},50); } });
   } else if (act==="gym-r-add"){
     const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return;
     const pl=clone(gymPlan()), id=uid(); pl.routines.push({id,name:n,groups:[]}); savePlan(pl); S.gymR=id; inp.value=""; render();
