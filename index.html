@@ -662,7 +662,7 @@ const I18N = {
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
     proj_sec:"專案", cls_edit:"編輯課表", cls_done:"完成，鎖定課表", cls_saved:"課表已鎖定", cls_locked:"已鎖定，按「編輯課表」才能修改", cls_wd:d=>`週${d}`,
     proj_rename:"點一下改名稱", proj_up:"往上移", proj_down:"往下移", proj_dup:"已經有同名的專案了", proj_renamed:n=>`已改名為「${n}」，每天的進度區塊也一起改了`,
-    nav_papers:"文獻", pp_add_title:"文獻標題", pp_add_author:"作者（選填）", pp_add_proj:"專案", pp_none_proj:"未分類", pp_add_btn:"加入",
+    nav_papers:"文獻", pp_add_title:"文獻標題", pp_add_author:"作者（選填）", pp_add_proj:"課程", pp_none_proj:"其他", pp_add_btn:"加入",
     pp_st_reading:"閱讀中", pp_pages:(a,n)=>`${a} / ${n} 頁`, pp_at_only:a=>`讀到第 ${a} 頁`, pp_at_lbl:"讀到第", pp_page_u:"頁", pp_total:"總頁數", pp_bm:"書籤", pp_bm_ph:"讀到哪裡、下次從哪開始", pp_log:"閱讀紀錄", pp_log_row:(a,b)=>`p.${a}→${b}`,
     pp_today:"排進今天", pp_today_on:"今天有排", pp_today_ok:"已排進今天的每日小卡", pp_next:d=>`還沒讀完，已排到 ${d}`, pp_finished:"整篇讀完了 🎉",
     pp_st_todo:"未讀", pp_st_read:"讀完", pp_st_noted:"已寫筆記", pp_all:"全部", pp_st_tip:"點一下切換：未讀 → 閱讀中 → 讀完 → 已寫筆記（更新頁數時會自動變）",
@@ -738,7 +738,7 @@ const I18N = {
     gym_logged:"Logged", gym_need:"Enter sets × reps or a weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
     proj_sec:"Projects", cls_edit:"Edit schedule", cls_done:"Done, lock schedule", cls_saved:"Schedule locked", cls_locked:"Locked. Press “Edit schedule” to change it", cls_wd:d=>d,
     proj_rename:"Click to rename", proj_up:"Move up", proj_down:"Move down", proj_dup:"A project with that name already exists", proj_renamed:n=>`Renamed to “${n}”, on every day too`,
-    nav_papers:"Readings", pp_add_title:"Paper title", pp_add_author:"Author (optional)", pp_add_proj:"Project", pp_none_proj:"Unsorted", pp_add_btn:"Add",
+    nav_papers:"Readings", pp_add_title:"Paper title", pp_add_author:"Author (optional)", pp_add_proj:"Course", pp_none_proj:"Other", pp_add_btn:"Add",
     pp_st_reading:"Reading", pp_pages:(a,n)=>`${a} / ${n} pages`, pp_at_only:a=>`at page ${a}`, pp_at_lbl:"At page", pp_page_u:"", pp_total:"Pages", pp_bm:"Bookmark", pp_bm_ph:"Where you stopped, where to start next", pp_log:"Reading log", pp_log_row:(a,b)=>`p.${a}→${b}`,
     pp_today:"Add to today", pp_today_on:"On today", pp_today_ok:"Added to today's card", pp_next:d=>`Not finished, added to ${d}`, pp_finished:"Finished the whole paper 🎉",
     pp_st_todo:"To read", pp_st_read:"Read", pp_st_noted:"Notes written", pp_all:"All", pp_st_tip:"Tap to switch: to read → reading → read → notes written (changes on its own as you log pages)",
@@ -1127,7 +1127,6 @@ function renameProject(from, to, el){
   st.projects=st.projects.map(sw); st.pinned=pinned().map(sw); if (st.ovCards) st.ovCards=st.ovCards.map(x=>x==="proj:"+from?"proj:"+to:x);
   save("settings/main",st,50);
   allDayKeys().forEach(ds=>{ const d=day(ds); if (!(d.projects||[]).some(p=>p.name===from)) return; const c=dayCopy(ds); c.projects.forEach(p=>{ if (p.name===from) p.name=to; }); save("days/"+ds,c,200); });
-  allPapers().filter(x=>x.proj===from).forEach(x=>save("papers/"+x.id,{...x, proj:to},200));
   toast(T("proj_renamed",to)); render(); }
 function clsEdit(fn){ const st=clone(settings()); st.classes=[...(st.classes||[])].map(c=>({...c})); fn(st); save("settings/main",st,300); }
 function settingsPanel(){
@@ -1147,10 +1146,10 @@ function paper(id){ return pending.get("papers/"+id) || S.papers[id]; }
 function allPapers(){ const ids=new Set(Object.keys(S.papers)); for (const p of pending.keys()) if (p.startsWith("papers/")) ids.add(p.slice(7)); return [...ids].map(paper).filter(Boolean); }
 function ppLink(u){ u=String(u||"").trim(); if (!u) return ""; if (/^10\.\d{4,}\//.test(u)) return "https://doi.org/"+u; return /^https?:\/\//i.test(u) ? u : ""; }
 function viewPapers(){
-  const all=allPapers(), projs=[...settings().projects], f=S.ppF;
+  const all=allPapers(), projs=courseList(), f=S.ppF, crs=x=>projs.includes(x.proj)?x.proj:"";
   const cnt=st=>all.filter(x=>(x.status||"todo")===st).length;
-  const shown=all.filter(x=>(f.st==="all"||(x.status||"todo")===f.st) && (f.proj==="all"||(x.proj||"")===f.proj));
-  const groups=[...projs, ""].map(p=>({p, list:shown.filter(x=>(x.proj||"")===p || (p==="" && x.proj && !projs.includes(x.proj)))
+  const shown=all.filter(x=>(f.st==="all"||(x.status||"todo")===f.st) && (f.proj==="all"||crs(x)===f.proj));
+  const groups=[...projs, ""].map(p=>({p, list:shown.filter(x=>crs(x)===p)
     .sort((a,b)=>PP_ST.indexOf(a.status||"todo")-PP_ST.indexOf(b.status||"todo") || (b.createdAt||0)-(a.createdAt||0))})).filter(g=>g.list.length);
   const chip=(k,v,label,n)=>`<button class="chip" data-act="pp-f" data-k="${k}" data-v="${esc(v)}" aria-pressed="${f[k]===v}">${esc(label)}${n!=null?` <small>${n}</small>`:""}</button>`;
   const row=x=>{ const st=x.status||"todo", op=!!S.ppOpen[x.id], url=ppLink(x.link);
@@ -1163,7 +1162,7 @@ function viewPapers(){
       ${op?`<div class="pp-body">
         <div class="pp-meta"><input type="text" value="${esc(x.title)}" data-act="pp-field" data-f="title" data-id="${x.id}" aria-label="${T("pp_add_title")}" autocomplete="off">
           <input type="text" value="${esc(x.author||"")}" placeholder="${T("pp_add_author")}" data-act="pp-field" data-f="author" data-id="${x.id}" aria-label="${T("pp_add_author")}" autocomplete="off">
-          <select data-act="pp-field" data-f="proj" data-id="${x.id}" aria-label="${T("pp_add_proj")}"><option value="">${T("pp_none_proj")}</option>${projs.map(p=>`<option ${p===x.proj?"selected":""}>${esc(p)}</option>`).join("")}</select>
+          <select data-act="pp-field" data-f="proj" data-id="${x.id}" aria-label="${T("pp_add_proj")}">${projs.map(p=>`<option ${p===x.proj?"selected":""}>${esc(p)}</option>`).join("")}<option value="" ${crs(x)?"":"selected"}>${T("pp_none_proj")}</option></select>
           <input type="text" value="${esc(x.link||"")}" placeholder="${T("pp_link_ph")}" data-act="pp-field" data-f="link" data-id="${x.id}" aria-label="${T("pp_link")}" autocomplete="off"></div>
         <div class="pp-read"><label>${T("pp_total")} <input type="number" inputmode="numeric" min="0" value="${x.pages||""}" data-act="pp-pages" data-id="${x.id}" aria-label="${T("pp_total")}"></label>
           <label>${T("pp_at_lbl")} <input type="number" inputmode="numeric" min="0" value="${+x.at||0}" data-act="pp-at" data-id="${x.id}" aria-label="${T("pp_at_lbl")}"></label>
@@ -1176,10 +1175,10 @@ function viewPapers(){
     <form class="card pp-add" data-act="pp-add">
       <input type="text" id="pp-title" placeholder="${T("pp_add_title")}" autocomplete="off" aria-label="${T("pp_add_title")}">
       <input type="text" id="pp-author" placeholder="${T("pp_add_author")}" autocomplete="off" aria-label="${T("pp_add_author")}">
-      <select id="pp-proj" aria-label="${T("pp_add_proj")}">${projs.map(p=>`<option ${p===(f.proj!=="all"?f.proj:S.ppLast)?"selected":""}>${esc(p)}</option>`).join("")}<option value="">${T("pp_none_proj")}</option></select>
+      <select id="pp-proj" aria-label="${T("pp_add_proj")}">${projs.map(p=>`<option ${p===(f.proj!=="all"?f.proj:S.ppLast)?"selected":""}>${esc(p)}</option>`).join("")}<option value="" ${f.proj===""?"selected":""}>${T("pp_none_proj")}</option></select>
       <button class="primary" type="submit">${T("pp_add_btn")}</button></form>
     <div class="chips pp-f">${chip("st","all",T("pp_all"),all.length)}${PP_ST.map(st=>chip("st",st,T("pp_st_"+st),cnt(st))).join("")}</div>
-    <div class="chips pp-f">${chip("proj","all",T("pp_all"))}${projs.map(p=>chip("proj",p,p,all.filter(x=>x.proj===p).length)).join("")}</div>
+    <div class="chips pp-f">${chip("proj","all",T("pp_all"))}${projs.map(p=>chip("proj",p,p,all.filter(x=>crs(x)===p).length)).join("")}${chip("proj","",T("pp_none_proj"),all.filter(x=>!crs(x)).length)}</div>
     ${groups.length?groups.map(g=>`<div class="card pp-g"><h3>${esc(g.p||T("pp_none_proj"))} <span class="cnt">${g.list.length}</span></h3><ul class="pp-l">${g.list.map(row).join("")}</ul></div>`).join("")
       :`<p class="empty">${all.length?T("pp_empty_f"):T("pp_empty")}</p>`}
   </section>`;
@@ -1200,6 +1199,8 @@ function ppAddToDay(id, ds){ const x=paper(id); if (!x || ppOnDay(id,ds)) return
 /* the line under a reading item on a day card: page input, shared with the readings page */
 function ppDay(it){ const x=it.pp && paper(it.pp); if (!x) return "";
   return `<span class="pp-day"><label>${T("pp_at_lbl")} <input type="number" inputmode="numeric" min="0" ${x.pages?`max="${+x.pages}"`:""} value="${+x.at||0}" data-act="pp-at" data-id="${x.id}" aria-label="${T("pp_at_lbl")}"></label><span class="pp-of">${x.pages?`/ ${+x.pages} `:""}${T("pp_page_u")}</span>${ppProg(x).replace(/<span class="pp-pn">.*$/,"")}${x.bm?`<span class="pp-bm" title="${T("pp_bm")}">🔖 ${esc(x.bm)}</span>`:""}</span>`; }
+/* readings are filed by this term's courses (names from the class schedule), plus 其他 */
+function courseList(){ return [...new Set(classList().map(c=>(c.name||"").trim()).filter(Boolean))]; }
 function ppSave(id, fn){ const x=paper(id); if (!x) return; const c=clone(x); fn(c); save("papers/"+id, c, 600); }
 
 /* ---------- today's top 3 ---------- */
@@ -2439,7 +2440,10 @@ document.addEventListener("change", e=>{
   else if (act==="pp-field"){ const f=el.dataset.f, v=el.value.trim(); if (f==="title" && !v) return; ppSave(el.dataset.id, x=>{ x[f]=v; }); render(); }
   else if (act==="pp-at"){ ppSetAt(el.dataset.id, el.value); render(); }
   else if (act==="pp-pages"){ const n=Math.max(0,Math.round(+el.value||0)); ppSave(el.dataset.id, x=>{ x.pages=n||null; if (n && (+x.at||0)>=n && x.status!=="noted") x.status="read"; else if (x.status==="read" && n && (+x.at||0)<n) x.status=(+x.at?"reading":"todo"); }); render(); }
-  else if (act==="cls-f"){ const f=el.dataset.f, v=f==="dow"?+el.value:el.value.trim(); clsEdit(st=>{ const c=st.classes.find(c=>c.id===el.dataset.id); if (c) c[f]=v; }); render(); }
+  else if (act==="cls-f"){ const f=el.dataset.f, v=f==="dow"?+el.value:el.value.trim();
+    if (f==="name"){ const old=(classList().find(c=>c.id===el.dataset.id)||{}).name; // renaming a course moves its readings with it, unless another class keeps the old name
+      if (old && v && old!==v && !classList().some(c=>c.id!==el.dataset.id && c.name===old)) allPapers().filter(x=>x.proj===old).forEach(x=>save("papers/"+x.id,{...x, proj:v},200)); }
+    clsEdit(st=>{ const c=st.classes.find(c=>c.id===el.dataset.id); if (c) c[f]=v; }); render(); }
   else if (act==="win-f"){ if (!el.value) return; const st=clone(settings()); st.dayWin={...dayWin(), [el.dataset.f]:el.value}; save("settings/main",st,300); render(); }
 });
 function addProj(date,name){ const d=dayCopy(date); if(!d.projects.some(p=>p.name===name)) d.projects.push({name,open:true,items:[]}); save("days/"+date,d,50); render(); setTimeout(()=>{ const i=document.getElementById(`add-${date}-${hash(name)}`); i&&i.focus(); },0); }
