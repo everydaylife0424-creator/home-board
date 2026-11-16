@@ -216,7 +216,15 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .pp-nl{font-size:12.5px;color:var(--muted)}.pp-body textarea{width:100%;margin-top:4px}
 .free{margin-left:auto;font-size:12px;color:var(--muted);font-family:var(--f-mono);white-space:nowrap}.free.low{color:var(--hot-ink)}
 .cls-l{display:flex;flex-wrap:wrap;gap:4px;margin:-2px 0 8px}.cls-c{font-size:12px;background:var(--calm-soft);border-radius:5px;padding:1px 6px;color:var(--fg)}.cls-c b{font-family:var(--f-mono);font-weight:500;color:var(--muted)}
-.cls-panel{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}.cls-panel h3{margin:0 0 4px;font-size:15px}.cls-panel .sub{margin:0 0 8px}
+.set-sec{border-top:1px solid var(--line);padding:4px 0}.set-sec:first-of-type{border-top:0}
+.set-sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:44px}.set-sec>summary::-webkit-details-marker{display:none}
+.set-sec>summary::before{content:"▸";color:var(--muted);font-size:12px;transition:transform .15s}.set-sec[open]>summary::before{transform:rotate(90deg)}
+.set-sec>summary h3{margin:0;font-size:15px}.set-sec>summary .cnt{font-family:var(--f-mono);font-size:12px;color:var(--muted)}.set-sec>summary .lock{font-size:12px;opacity:.7}
+.set-sec[open]{padding-bottom:10px}
+.cls-view{list-style:none;margin:0 0 10px;padding:0}.cls-view li{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.cls-view .cls-d{width:3em;color:var(--muted)}.cls-view .cls-t{font-family:var(--f-mono);width:8.5em;color:var(--muted)}.cls-ro{font-family:var(--f-mono);font-weight:500}
+.cls-btns{display:flex;gap:8px;margin-top:6px}
+.cls-panel h3{margin:0 0 4px;font-size:15px}.cls-panel .sub{margin:0 0 8px}
 .cls-win{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13.5px;margin-bottom:8px}
 .cls-row{display:flex;align-items:center;gap:6px;padding:4px 0;flex-wrap:wrap}.cls-row input[type=text]{flex:1 1 140px;min-width:0}
 .ex-spark{flex:none;margin-left:6px;vertical-align:middle}.ex-spark polyline{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-linejoin:round}.ex-spark circle{fill:var(--accent)}
@@ -643,6 +651,7 @@ const I18N = {
     cmp_title:"前後比較", cmp_sub:"每個動作用估計 1RM（e1RM）比較力量，用每週總訓練量比較份量", cmp_ex:"動作", cmp_base:"起點", cmp_now:"最近", cmp_chg:"變化", cmp_none:"計劃開始後累積兩週以上紀錄，這裡就會出現比較。", cmp_wk:"每週總訓練量（kg）", cmp_how:"怎麼算：e1RM = 重量 ×（1 + (次數 + 保留次數) ÷ 30），保留次數 = 10 − RPE；起點取計劃開始前 4 週到第 2 週的最好成績，最近取最後 2 週的最好成績。",
     undo:"復原", undo_done:"已復原", undo_none:"沒有可以復原的動作", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
+    proj_sec:"專案", cls_edit:"編輯課表", cls_done:"完成，鎖定課表", cls_saved:"課表已鎖定", cls_locked:"已鎖定，按「編輯課表」才能修改", cls_wd:d=>`週${d}`,
     proj_rename:"點一下改名稱", proj_up:"往上移", proj_down:"往下移", proj_dup:"已經有同名的專案了", proj_renamed:n=>`已改名為「${n}」，每天的進度區塊也一起改了`,
     nav_papers:"文獻", pp_add_title:"文獻標題", pp_add_author:"作者（選填）", pp_add_proj:"專案", pp_none_proj:"未分類", pp_add_btn:"加入",
     pp_st_todo:"未讀", pp_st_read:"讀完", pp_st_noted:"已寫筆記", pp_all:"全部", pp_st_tip:"點一下切換：未讀 → 讀完 → 已寫筆記",
@@ -716,6 +725,7 @@ const I18N = {
     cmp_title:"Progress: before vs. after", cmp_sub:"Strength is compared by estimated 1RM (e1RM), volume by weekly total", cmp_ex:"Exercise", cmp_base:"Baseline", cmp_now:"Current", cmp_chg:"Change", cmp_none:"The comparison shows up here after two weeks of logging in the program.", cmp_wk:"Weekly volume (kg)", cmp_how:"How: e1RM = weight × (1 + (reps + reps in reserve) ÷ 30), reps in reserve = 10 − RPE. Start = best from 4 weeks before to week 2; latest = best of the last 2 weeks.",
     undo:"Undo", undo_done:"Undone", undo_none:"Nothing to undo", gym_no_history:"Nothing logged yet. Log your sets after training so you can compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
     gym_logged:"Logged", gym_need:"Enter sets × reps or a weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
+    proj_sec:"Projects", cls_edit:"Edit schedule", cls_done:"Done, lock schedule", cls_saved:"Schedule locked", cls_locked:"Locked. Press “Edit schedule” to change it", cls_wd:d=>d,
     proj_rename:"Click to rename", proj_up:"Move up", proj_down:"Move down", proj_dup:"A project with that name already exists", proj_renamed:n=>`Renamed to “${n}”, on every day too`,
     nav_papers:"Readings", pp_add_title:"Paper title", pp_add_author:"Author (optional)", pp_add_proj:"Project", pp_none_proj:"Unsorted", pp_add_btn:"Add",
     pp_st_todo:"To read", pp_st_read:"Read", pp_st_noted:"Notes written", pp_all:"All", pp_st_tip:"Tap to switch: to read → read → notes written",
@@ -1085,10 +1095,17 @@ function dayFreeBadge(ds){ const m=freeMin(ds); if (m==null || (!classList().len
 function dayClassChips(ds){ const cs=classesOn(ds); return cs.length?`<div class="cls-l">${cs.map(c=>`<span class="cls-c"><b>${esc(c.s)}–${esc(c.e)}</b> ${esc(c.name||"")}</span>`).join("")}</div>`:""; }
 function classPanel(){ const cs=[...classList()].sort((a,b)=>((+a.dow+6)%7)-((+b.dow+6)%7) || (toMin(a.s)||0)-(toMin(b.s)||0)), w=dayWin(), wd=T("wd");
   const dsel=(c)=>`<select data-act="cls-f" data-id="${c.id}" data-f="dow" aria-label="${T("cls_title")}">${[1,2,3,4,5,6,0].map(i=>`<option value="${i}" ${+c.dow===i?"selected":""}>${wd[i]}</option>`).join("")}</select>`;
-  return `<div class="cls-panel"><h3>${T("cls_title")}</h3><p class="sub">${T("cls_hint")}</p>
+  const editing = S.clsEdit || !cs.length;
+  const body = !editing ? `<p class="sub">${T("cls_hint")}</p>
+    <div class="cls-win">${T("cls_win")} <b class="cls-ro">${esc(w.s)} – ${esc(w.e)}</b></div>
+    <ul class="cls-view">${cs.map(c=>`<li><span class="cls-d">${T("cls_wd",wd[+c.dow])}</span><span class="cls-t">${esc(c.s)}–${esc(c.e)}</span><span>${esc(c.name||"")}</span></li>`).join("")}</ul>
+    <button class="ghost mini" data-act="cls-edit">✎ ${T("cls_edit")}</button>` : null;
+  return `<details class="set-sec cls-panel" data-sec="cls" ${setOpen("cls")?"open":""}><summary><h3>${T("cls_title")}</h3><span class="cnt">${cs.length}</span>${!editing?`<span class="lock" title="${T("cls_locked")}">🔒</span>`:""}</summary>
+    ${body!==null?body:`<p class="sub">${T("cls_hint")}</p>
     <div class="cls-win">${T("cls_win")} <input type="time" data-act="win-f" data-f="s" value="${w.s}" aria-label="${T("cls_win")}"> – <input type="time" data-act="win-f" data-f="e" value="${w.e}" aria-label="${T("cls_win")}"></div>
     ${cs.length?cs.map(c=>`<div class="cls-row">${dsel(c)}<input type="time" data-act="cls-f" data-id="${c.id}" data-f="s" value="${esc(c.s)}" aria-label="start"><span>–</span><input type="time" data-act="cls-f" data-id="${c.id}" data-f="e" value="${esc(c.e)}" aria-label="end"><input type="text" data-act="cls-f" data-id="${c.id}" data-f="name" value="${esc(c.name||"")}" placeholder="${T("cls_name_ph")}" autocomplete="off" aria-label="${T("cls_name_ph")}"><button class="icon-btn" data-act="cls-del" data-id="${c.id}" title="${T("del")}">✕</button></div>`).join(""):`<p class="empty mini">${T("cls_none")}</p>`}
-    <button class="ghost mini" data-act="cls-add">＋ ${T("cls_add")}</button></div>`; }
+    <div class="cls-btns"><button class="ghost mini" data-act="cls-add">＋ ${T("cls_add")}</button>${cs.length?`<button class="primary mini" data-act="cls-done">✓ ${T("cls_done")}</button>`:""}</div>`}</details>`; }
+function setOpen(k){ try{ return !!JSON.parse(localStorage.getItem("home.setOpen")||"{}")[k]; }catch(_){ return false; } }
 /* renaming a project renames it everywhere: settings, overview cards, every day's section and the readings list */
 function renameProject(from, to, el){
   if (!to || to===from){ if (el) el.value=from; return; }
@@ -1103,9 +1120,10 @@ function clsEdit(fn){ const st=clone(settings()); st.classes=[...(st.classes||[]
 function settingsPanel(){
   const st=settings(), pin=new Set(pinned());
   return `<section class="card settings-panel" id="s-settings"><div class="sec-h"><h2>${L("proj_settings")}</h2><span class="sp"></span><button class="icon-btn" data-act="toggle-settings" aria-label="close">✕</button></div>
+    <details class="set-sec" data-sec="proj" ${setOpen("proj")?"open":""}><summary><h3>${T("proj_sec")}</h3><span class="cnt">${st.projects.length}</span></summary>
     <p class="sub" style="margin:0 0 6px">${L("settings_hint")}</p>
     ${st.projects.map((p,i)=>`<div class="prow"><input class="pname" value="${esc(p)}" data-act="proj-rename" data-name="${esc(p)}" aria-label="${T("proj_rename")}" title="${T("proj_rename")}" autocomplete="off"><button class="icon-btn" data-act="proj-move" data-name="${esc(p)}" data-n="-1" title="${T("proj_up")}" ${i?"":"disabled"}>↑</button><button class="icon-btn" data-act="proj-move" data-name="${esc(p)}" data-n="1" title="${T("proj_down")}" ${i<st.projects.length-1?"":"disabled"}>↓</button><label class="pin"><input type="checkbox" data-act="pin" data-name="${esc(p)}" ${pin.has(p)?"checked":""}>${L("pin_lbl")}</label><button class="icon-btn" data-act="proj-remove" data-name="${esc(p)}" title="${T("proj_remove_title")}">✕</button></div>`).join("")}
-    <form class="add" data-act="proj-new"><input type="text" id="proj-new" placeholder="${T("proj_new_ph")}" autocomplete="off"></form>
+    <form class="add" data-act="proj-new"><input type="text" id="proj-new" placeholder="${T("proj_new_ph")}" autocomplete="off"></form></details>
     ${classPanel()}</section>`;
 }
 
@@ -2266,7 +2284,9 @@ document.addEventListener("click", e=>{
   else if (act==="pp-st"){ ppSave(b.dataset.id, x=>{ x.status=PP_ST[(PP_ST.indexOf(x.status||"todo")+1)%3]; }); render(); }
   else if (act==="pp-open"){ S.ppOpen[b.dataset.id]=!S.ppOpen[b.dataset.id]; render(); if (S.ppOpen[b.dataset.id]) setTimeout(()=>{ const t=document.getElementById("ppn-"+b.dataset.id); if (t){ t.focus({preventScroll:true}); t.setSelectionRange(t.value.length,t.value.length); } },0); }
   else if (act==="pp-del"){ const k="pp:"+b.dataset.id; if (S.confirmDel===k){ S.confirmDel=null; remove("papers/"+b.dataset.id); } else { S.confirmDel=k; setTimeout(()=>{ if (S.confirmDel===k){ S.confirmDel=null; render(); } },3000); } render(); }
-  else if (act==="cls-add"){ clsEdit(st=>{ const last=st.classes[st.classes.length-1]; st.classes.push({id:uid(), name:"", dow:last?last.dow:1, s:"09:10", e:"12:00"}); }); render(); }
+  else if (act==="cls-edit"){ S.clsEdit=true; render(); }
+  else if (act==="cls-done"){ S.clsEdit=false; render(); toast(T("cls_saved")); }
+  else if (act==="cls-add"){ S.clsEdit=true; clsEdit(st=>{ const last=st.classes[st.classes.length-1]; st.classes.push({id:uid(), name:"", dow:last?last.dow:1, s:"09:10", e:"12:00"}); }); render(); }
   else if (act==="cls-del"){ clsEdit(st=>{ st.classes=st.classes.filter(c=>c.id!==b.dataset.id); }); render(); }
   else if (act==="gym-sort"){ S.gymAsc=!S.gymAsc; try{ localStorage.setItem("home.gymAsc", S.gymAsc?"1":"0"); }catch(_){} render(); }
   else if (act==="cm-ov-del"){ const st=clone(settings()); st.ovCards=ovCards().filter(x=>x!==b.dataset.id); S.cm=null; save("settings/main",st,50); render(); }
@@ -2392,6 +2412,8 @@ function askNewProject(date, sel){
     i.blur(); addProj(date,n); });
   i.addEventListener("blur", ()=>setTimeout(()=>{ if(document.body.contains(f)) render(); },150));
 }
+document.addEventListener("toggle", e=>{ const dt=e.target; if (!dt.matches || !dt.matches("details.set-sec")) return;
+  try{ const o=JSON.parse(localStorage.getItem("home.setOpen")||"{}"); o[dt.dataset.sec]=dt.open; localStorage.setItem("home.setOpen", JSON.stringify(o)); }catch(_){} }, true);
 document.addEventListener("toggle", e=>{
   const dt=e.target; if (!dt.matches || !dt.matches("details.proj")) return;
   const d=dayCopy(dt.dataset.date), p=d.projects[+dt.dataset.pi]; if (!p) return;
