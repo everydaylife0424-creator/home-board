@@ -213,7 +213,16 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .pp-st{flex:none;font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);min-width:66px;cursor:pointer;margin-top:2px}
 .pp-st.read{background:var(--calm-soft);color:var(--fg);border-color:transparent}.pp-st.noted{background:var(--accent-soft);color:var(--accent);border-color:transparent;font-weight:500}
 .pp-body{padding:6px 0 4px 74px}.pp-meta{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;margin-bottom:8px}.pp-meta input:last-child{grid-column:1/-1}
-.pp-nl{font-size:12.5px;color:var(--muted)}.pp-body textarea{width:100%;margin-top:4px}
+.pp-nl{font-size:12.5px;color:var(--muted)}
+.pp-pr{display:flex;align-items:center;gap:8px;margin-top:2px}.pp-prog{display:inline-block;width:120px;height:5px;border-radius:3px;background:var(--line);overflow:hidden;flex:none}.pp-prog i{display:block;height:100%;background:var(--accent)}
+.pp-pn{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.pp-st.reading{background:var(--warn-soft);color:var(--warn-ink);border-color:transparent}
+.pp-today{flex:none;margin-top:2px;white-space:nowrap}.pp-today.on{font-size:12px;color:var(--good);padding:4px 6px}
+.pp-read{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-bottom:8px;font-size:13.5px}.pp-read input[type=number]{width:5.5em}.pp-bml{flex:1 1 240px;display:flex;align-items:center;gap:6px}.pp-bml input{flex:1;min-width:0}
+.pp-log{display:flex;flex-wrap:wrap;gap:4px 12px;margin-bottom:8px;font-size:12.5px;font-family:var(--f-mono);color:var(--muted)}.pp-log .pp-nl{font-family:inherit}
+.pp-day{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px;font-size:12.5px;color:var(--muted)}.pp-day label{display:flex;align-items:center;gap:4px}
+.pp-day input{width:4.5em;padding:2px 6px;font-size:13px}.pp-day .pp-prog{width:70px}.pp-bm{flex-basis:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (pointer:coarse){.pp-day input,.pp-read input{font-size:16px;min-height:36px}}.pp-body textarea{width:100%;margin-top:4px}
 .free{margin-left:auto;font-size:12px;color:var(--muted);font-family:var(--f-mono);white-space:nowrap}.free.low{color:var(--hot-ink)}
 .cls-l{display:flex;flex-wrap:wrap;gap:4px;margin:-2px 0 8px}.cls-c{font-size:12px;background:var(--calm-soft);border-radius:5px;padding:1px 6px;color:var(--fg)}.cls-c b{font-family:var(--f-mono);font-weight:500;color:var(--muted)}
 .set-sec{border-top:1px solid var(--line);padding:4px 0}.set-sec:first-of-type{border-top:0}
@@ -654,9 +663,11 @@ const I18N = {
     proj_sec:"專案", cls_edit:"編輯課表", cls_done:"完成，鎖定課表", cls_saved:"課表已鎖定", cls_locked:"已鎖定，按「編輯課表」才能修改", cls_wd:d=>`週${d}`,
     proj_rename:"點一下改名稱", proj_up:"往上移", proj_down:"往下移", proj_dup:"已經有同名的專案了", proj_renamed:n=>`已改名為「${n}」，每天的進度區塊也一起改了`,
     nav_papers:"文獻", pp_add_title:"文獻標題", pp_add_author:"作者（選填）", pp_add_proj:"專案", pp_none_proj:"未分類", pp_add_btn:"加入",
-    pp_st_todo:"未讀", pp_st_read:"讀完", pp_st_noted:"已寫筆記", pp_all:"全部", pp_st_tip:"點一下切換：未讀 → 讀完 → 已寫筆記",
+    pp_st_reading:"閱讀中", pp_pages:(a,n)=>`${a} / ${n} 頁`, pp_at_only:a=>`讀到第 ${a} 頁`, pp_at_lbl:"讀到第", pp_page_u:"頁", pp_total:"總頁數", pp_bm:"書籤", pp_bm_ph:"讀到哪裡、下次從哪開始", pp_log:"閱讀紀錄", pp_log_row:(a,b)=>`p.${a}→${b}`,
+    pp_today:"排進今天", pp_today_on:"今天有排", pp_today_ok:"已排進今天的每日小卡", pp_next:d=>`還沒讀完，已排到 ${d}`, pp_finished:"整篇讀完了 🎉",
+    pp_st_todo:"未讀", pp_st_read:"讀完", pp_st_noted:"已寫筆記", pp_all:"全部", pp_st_tip:"點一下切換：未讀 → 閱讀中 → 讀完 → 已寫筆記（更新頁數時會自動變）",
     pp_note:"重點筆記", pp_note_ph:"這篇的重點、可以引用的段落、跟你論文的關聯⋯", pp_link:"連結", pp_link_ph:"https://… 或 DOI", pp_empty:"還沒有文獻。在上面輸入標題就能加入。", pp_empty_f:"沒有符合篩選的文獻。",
-    pp_count:(a,b,c)=>`未讀 ${a}・讀完 ${b}・已寫筆記 ${c}`, pp_sub:"每篇記讀到哪裡和重點，寫論文時回來找。", pp_open:"開啟",
+    pp_count:(a,r,b,c)=>`未讀 ${a}・閱讀中 ${r}・讀完 ${b}・已寫筆記 ${c}`, pp_sub:"每篇記讀到哪裡和重點，寫論文時回來找。", pp_open:"開啟",
     cls_title:"課表", cls_hint:"上課時間會出現在每日小卡上，並從當天的可用時間扣掉。Google 日曆裡有時間的行程也會一起扣。", cls_name_ph:"課名", cls_add:"新增一堂課", cls_win:"每天可安排的時段", cls_none:"還沒有課。",
     free_left:h=>`今天還剩 ${h}`, free_day:h=>`可用 ${h}`, free_tip:"可用時間 = 每天可安排的時段，扣掉上課和 Google 日曆裡有時間的行程",
     tip_tight:(d,h,n)=>`${d}扣掉上課和行程只剩 ${h}，卻排了 ${n} 件事。下次這天少排一點，或把幾件挪到空堂多的日子。`,
@@ -728,9 +739,11 @@ const I18N = {
     proj_sec:"Projects", cls_edit:"Edit schedule", cls_done:"Done, lock schedule", cls_saved:"Schedule locked", cls_locked:"Locked. Press “Edit schedule” to change it", cls_wd:d=>d,
     proj_rename:"Click to rename", proj_up:"Move up", proj_down:"Move down", proj_dup:"A project with that name already exists", proj_renamed:n=>`Renamed to “${n}”, on every day too`,
     nav_papers:"Readings", pp_add_title:"Paper title", pp_add_author:"Author (optional)", pp_add_proj:"Project", pp_none_proj:"Unsorted", pp_add_btn:"Add",
-    pp_st_todo:"To read", pp_st_read:"Read", pp_st_noted:"Notes written", pp_all:"All", pp_st_tip:"Tap to switch: to read → read → notes written",
+    pp_st_reading:"Reading", pp_pages:(a,n)=>`${a} / ${n} pages`, pp_at_only:a=>`at page ${a}`, pp_at_lbl:"At page", pp_page_u:"", pp_total:"Pages", pp_bm:"Bookmark", pp_bm_ph:"Where you stopped, where to start next", pp_log:"Reading log", pp_log_row:(a,b)=>`p.${a}→${b}`,
+    pp_today:"Add to today", pp_today_on:"On today", pp_today_ok:"Added to today's card", pp_next:d=>`Not finished, added to ${d}`, pp_finished:"Finished the whole paper 🎉",
+    pp_st_todo:"To read", pp_st_read:"Read", pp_st_noted:"Notes written", pp_all:"All", pp_st_tip:"Tap to switch: to read → reading → read → notes written (changes on its own as you log pages)",
     pp_note:"Key notes", pp_note_ph:"Main points, quotable parts, how it ties to your paper…", pp_link:"Link", pp_link_ph:"https://… or DOI", pp_empty:"No readings yet. Type a title above to add one.", pp_empty_f:"Nothing matches this filter.",
-    pp_count:(a,b,c)=>`${a} to read · ${b} read · ${c} with notes`, pp_sub:"Track where you are with each paper and its key points.", pp_open:"Open",
+    pp_count:(a,r,b,c)=>`${a} to read · ${r} reading · ${b} read · ${c} with notes`, pp_sub:"Track where you are with each paper and its key points.", pp_open:"Open",
     cls_title:"Class schedule", cls_hint:"Classes show on the day cards and come off that day's free time. Timed Google Calendar events count too.", cls_name_ph:"Class", cls_add:"Add a class", cls_win:"Hours you plan within each day", cls_none:"No classes yet.",
     free_left:h=>`${h} left today`, free_day:h=>`${h} free`, free_tip:"Free time = your daily planning hours minus classes and timed Google Calendar events",
     tip_tight:(d,h,n)=>`${d} had only ${h} free after classes and events, but ${n} items. Plan less that day, or move some to a day with more free time.`,
@@ -1129,7 +1142,7 @@ function settingsPanel(){
 
 
 /* ---------- readings: one doc per paper in papers/<id> ---------- */
-const PP_ST=["todo","read","noted"];
+const PP_ST=["todo","reading","read","noted"];
 function paper(id){ return pending.get("papers/"+id) || S.papers[id]; }
 function allPapers(){ const ids=new Set(Object.keys(S.papers)); for (const p of pending.keys()) if (p.startsWith("papers/")) ids.add(p.slice(7)); return [...ids].map(paper).filter(Boolean); }
 function ppLink(u){ u=String(u||"").trim(); if (!u) return ""; if (/^10\.\d{4,}\//.test(u)) return "https://doi.org/"+u; return /^https?:\/\//i.test(u) ? u : ""; }
@@ -1143,7 +1156,8 @@ function viewPapers(){
   const row=x=>{ const st=x.status||"todo", op=!!S.ppOpen[x.id], url=ppLink(x.link);
     return `<li class="pp ${st}">
       <div class="pp-r"><button class="pp-st ${st}" data-act="pp-st" data-id="${x.id}" title="${T("pp_st_tip")}">${T("pp_st_"+st)}</button>
-        <button class="pp-t linkish" data-act="pp-open" data-id="${x.id}" aria-expanded="${op}"><b>${esc(x.title)}</b>${x.author?`<span class="sub"> · ${esc(x.author)}</span>`:""}${x.note&&!op?`<span class="pp-peek">${esc(x.note.split("\n")[0].slice(0,80))}</span>`:""}</button>
+        <button class="pp-t linkish" data-act="pp-open" data-id="${x.id}" aria-expanded="${op}"><b>${esc(x.title)}</b>${x.author?`<span class="sub"> · ${esc(x.author)}</span>`:""}${(x.pages||x.at)?`<span class="pp-pr">${ppProg(x)}</span>`:""}${x.bm&&!op?`<span class="pp-peek">🔖 ${esc(x.bm)}</span>`:x.note&&!op?`<span class="pp-peek">${esc(x.note.split("\n")[0].slice(0,80))}</span>`:""}</button>
+        ${st==="read"||st==="noted"?"":ppOnDay(x.id,today())?`<span class="pp-today on" title="${T("pp_today_on")}">${T("pp_today_on")}</span>`:`<button class="ghost mini pp-today" data-act="pp-today" data-id="${x.id}">${T("pp_today")}</button>`}
         ${url?`<a class="icon-btn" href="${esc(url)}" target="_blank" rel="noopener" title="${T("pp_open")}">↗</a>`:""}
         <button class="icon-btn" data-act="pp-del" data-id="${x.id}" title="${T("del")}">${S.confirmDel==="pp:"+x.id?T("confirm_del"):"✕"}</button></div>
       ${op?`<div class="pp-body">
@@ -1151,10 +1165,14 @@ function viewPapers(){
           <input type="text" value="${esc(x.author||"")}" placeholder="${T("pp_add_author")}" data-act="pp-field" data-f="author" data-id="${x.id}" aria-label="${T("pp_add_author")}" autocomplete="off">
           <select data-act="pp-field" data-f="proj" data-id="${x.id}" aria-label="${T("pp_add_proj")}"><option value="">${T("pp_none_proj")}</option>${projs.map(p=>`<option ${p===x.proj?"selected":""}>${esc(p)}</option>`).join("")}</select>
           <input type="text" value="${esc(x.link||"")}" placeholder="${T("pp_link_ph")}" data-act="pp-field" data-f="link" data-id="${x.id}" aria-label="${T("pp_link")}" autocomplete="off"></div>
+        <div class="pp-read"><label>${T("pp_total")} <input type="number" inputmode="numeric" min="0" value="${x.pages||""}" data-act="pp-pages" data-id="${x.id}" aria-label="${T("pp_total")}"></label>
+          <label>${T("pp_at_lbl")} <input type="number" inputmode="numeric" min="0" value="${+x.at||0}" data-act="pp-at" data-id="${x.id}" aria-label="${T("pp_at_lbl")}"></label>
+          <label class="pp-bml">${T("pp_bm")} <input type="text" value="${esc(x.bm||"")}" placeholder="${T("pp_bm_ph")}" data-act="pp-field" data-f="bm" data-id="${x.id}" aria-label="${T("pp_bm")}" autocomplete="off"></label></div>
+        ${(x.log||[]).length?`<div class="pp-log"><span class="pp-nl">${T("pp_log")}</span>${[...x.log].reverse().slice(0,8).map(l=>`<span>${md(l.d)} ${T("pp_log_row",l.from,l.to)}</span>`).join("")}</div>`:""}
         <label class="pp-nl">${T("pp_note")}</label><textarea id="ppn-${x.id}" data-act="pp-note" data-id="${x.id}" placeholder="${T("pp_note_ph")}" rows="5">${esc(x.note||"")}</textarea>
       </div>`:""}</li>`; };
   return `<section class="block papers">
-    <p class="sub pp-head"><b>${T("pp_count",cnt("todo"),cnt("read"),cnt("noted"))}</b>　${T("pp_sub")}</p>
+    <p class="sub pp-head"><b>${T("pp_count",cnt("todo"),cnt("reading"),cnt("read"),cnt("noted"))}</b>　${T("pp_sub")}</p>
     <form class="card pp-add" data-act="pp-add">
       <input type="text" id="pp-title" placeholder="${T("pp_add_title")}" autocomplete="off" aria-label="${T("pp_add_title")}">
       <input type="text" id="pp-author" placeholder="${T("pp_add_author")}" autocomplete="off" aria-label="${T("pp_add_author")}">
@@ -1166,6 +1184,22 @@ function viewPapers(){
       :`<p class="empty">${all.length?T("pp_empty_f"):T("pp_empty")}</p>`}
   </section>`;
 }
+/* reading progress: pages (total), at (page reached), bm (bookmark), log [{d,from,to}] */
+function ppProg(x){ const n=+x.pages||0, a=Math.min(+x.at||0, n||Infinity); return n ? `<span class="pp-prog"><i style="width:${Math.round(a/n*100)}%"></i></span><span class="pp-pn">${T("pp_pages",a,n)}</span>` : (a?`<span class="pp-pn">${T("pp_at_only",a)}</span>`:""); }
+function ppSetAt(id, v){ const x=paper(id); if (!x) return; const at=Math.max(0, Math.round(+v||0)), n=+x.pages||0, prev=+x.at||0; if (at===prev) return;
+  const c=clone(x), t=today(); c.at=n?Math.min(at,n):at; c.log=[...(c.log||[])];
+  const last=c.log[c.log.length-1]; if (last && last.d===t) last.to=c.at; else c.log.push({d:t, from:prev, to:c.at});
+  c.log=c.log.filter(l=>l.to!==l.from);
+  if (c.status!=="noted") c.status = n && c.at>=n ? "read" : c.at>0 ? "reading" : "todo";
+  save("papers/"+id, c, 300);
+  if (n && c.at>=n){ // finished: tick its open items on the day cards
+    allDayKeys().forEach(ds=>{ const d=day(ds); if (!(d.items||[]).some(i=>i.pp===id && !i.d)) return; const cp=dayCopy(ds); cp.items.forEach(i=>{ if (i.pp===id && !i.d){ i.d=true; i.dn=t; i.dc=t; } }); save("days/"+ds,cp,300); });
+    toast(T("pp_finished")); } }
+function ppOnDay(id, ds){ return (day(ds).items||[]).some(i=>i.pp===id); }
+function ppAddToDay(id, ds){ const x=paper(id); if (!x || ppOnDay(id,ds)) return false; const d=dayCopy(ds); d.items.push({id:uid(), t:"📖 "+x.title, d:false, pp:id}); save("days/"+ds,d,50); return true; }
+/* the line under a reading item on a day card: page input, shared with the readings page */
+function ppDay(it){ const x=it.pp && paper(it.pp); if (!x) return "";
+  return `<span class="pp-day"><label>${T("pp_at_lbl")} <input type="number" inputmode="numeric" min="0" ${x.pages?`max="${+x.pages}"`:""} value="${+x.at||0}" data-act="pp-at" data-id="${x.id}" aria-label="${T("pp_at_lbl")}"></label><span class="pp-of">${x.pages?`/ ${+x.pages} `:""}${T("pp_page_u")}</span>${ppProg(x).replace(/<span class="pp-pn">.*$/,"")}${x.bm?`<span class="pp-bm" title="${T("pp_bm")}">🔖 ${esc(x.bm)}</span>`:""}</span>`; }
 function ppSave(id, fn){ const x=paper(id); if (!x) return; const c=clone(x); fn(c); save("papers/"+id, c, 600); }
 
 /* ---------- today's top 3 ---------- */
@@ -1388,7 +1422,7 @@ function viewWeek(){
   const itemLi=(it,date,pi,tag,n)=> ["ul","ol","tg","tb"].includes(it.k) ? blkLi(it,{date,pi:String(pi),id:it.id},n,delBtn(it,date,pi)) : it.k ? `<li class="item blk k-${it.k}">${it.k==="hr"?`<hr>`:`<span class="t">${esc(it.t)}</span>`}
       <span class="acts"><button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>` : `<li class="item ${it.d?"done":""}" data-lp="${esc(JSON.stringify({date,pi,id:it.id}))}">
       <input type="checkbox" ${it.d?"checked":""} data-act="it-toggle" data-date="${date}" data-pi="${pi}" data-id="${it.id}" aria-label="${T("done")}">
-      <span class="t">${esc(it.t)}</span>${tag?`<span class="carry-tag" title="${esc(T("carry_from",date))}">${md(date)}</span>`:""}
+      <span class="t">${it.pp&&paper(it.pp)?esc("📖 "+paper(it.pp).title):esc(it.t)}${ppDay(it)}</span>${tag?`<span class="carry-tag" title="${esc(T("carry_from",date))}">${md(date)}</span>`:""}
       <span class="acts">${it.d?"":pinBtn({date,pi:String(pi),id:it.id})}<button class="icon-btn" data-act="it-del" data-date="${date}" data-pi="${pi}" data-id="${it.id}" title="${T("del")}">✕</button></span></li>`;
   const addForm=(date,name)=>`<form class="add" data-act="it-add" data-date="${date}" ${name?`data-proj="${esc(name)}"`:""}><input type="text" id="add-${date}-${name?hash(name):"_"}" placeholder="${T("todo_ph")}" autocomplete="off"></form>`;
   const dayCols=days.map(date=>{
@@ -2280,8 +2314,9 @@ document.addEventListener("click", e=>{
   else if (act==="gym-ex-del"){ planEdit((pl,r)=>{ const g=r.groups.find(g=>g.id===b.dataset.g); g.ex=g.ex.filter(x=>x.id!==b.dataset.x); }); }
   else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
   else if (act==="gc-allow"){ gcAllow(); }
+  else if (act==="pp-today"){ if (ppAddToDay(b.dataset.id, today())) toast(T("pp_today_ok")); render(); }
   else if (act==="pp-f"){ S.ppF={...S.ppF, [b.dataset.k]:b.dataset.v}; render(); }
-  else if (act==="pp-st"){ ppSave(b.dataset.id, x=>{ x.status=PP_ST[(PP_ST.indexOf(x.status||"todo")+1)%3]; }); render(); }
+  else if (act==="pp-st"){ ppSave(b.dataset.id, x=>{ x.status=PP_ST[(PP_ST.indexOf(x.status||"todo")+1)%PP_ST.length]; }); render(); }
   else if (act==="pp-open"){ S.ppOpen[b.dataset.id]=!S.ppOpen[b.dataset.id]; render(); if (S.ppOpen[b.dataset.id]) setTimeout(()=>{ const t=document.getElementById("ppn-"+b.dataset.id); if (t){ t.focus({preventScroll:true}); t.setSelectionRange(t.value.length,t.value.length); } },0); }
   else if (act==="pp-del"){ const k="pp:"+b.dataset.id; if (S.confirmDel===k){ S.confirmDel=null; remove("papers/"+b.dataset.id); } else { S.confirmDel=k; setTimeout(()=>{ if (S.confirmDel===k){ S.confirmDel=null; render(); } },3000); } render(); }
   else if (act==="cls-edit"){ S.clsEdit=true; render(); }
@@ -2391,7 +2426,9 @@ document.addEventListener("change", e=>{
     // The calendar records it on that card's date (not the clock's), so checking the 11/10 card after midnight still counts for 11/10.
     const card=el.closest(".day[data-day]")?.dataset.day, t0=today(); it.dn=el.checked ? (card && card<t0 ? card : t0) : null;
     if (el.checked && card) it.dc=card; else delete it.dc;
-    save("days/"+d.date,d,300); render(); }
+    save("days/"+d.date,d,300);
+    if (el.checked && it.pp){ const x=paper(it.pp), n=x&&(+x.pages||0); if (x && !(n && (+x.at||0)>=n) && x.status!=="read" && x.status!=="noted"){ const nx=addDays(card||t0,1); if (ppAddToDay(it.pp, nx)) toast(T("pp_next",md(nx))); } }
+    render(); }
   else if (act==="proj-add"){ const name=el.value; if (!name) return; if (name==="__new"){ el.value=""; askNewProject(el.dataset.date, el); return; } addProj(el.dataset.date, name); }
   else if (act==="mv-date"){ try{ moveTo(JSON.parse(el.dataset.drag), el.value); }catch(_){} }
   else if (act==="gym-field"){ const v=el.value.trim(); const pl=clone(gymPlan()), r=pl.routines.find(x=>x.id===S.gymR), x=r.groups.find(g=>g.id===el.dataset.g).ex.find(x=>x.id===el.dataset.x); if ((x[el.dataset.f]||"")!==v){ x[el.dataset.f]=v; savePlan(pl); } }
@@ -2400,6 +2437,8 @@ document.addEventListener("change", e=>{
   else if (act==="rv-date"){ if (el.value){ S.reviewDate=el.value; render(); } }
   else if (act==="proj-rename"){ renameProject(el.dataset.name, el.value.trim(), el); }
   else if (act==="pp-field"){ const f=el.dataset.f, v=el.value.trim(); if (f==="title" && !v) return; ppSave(el.dataset.id, x=>{ x[f]=v; }); render(); }
+  else if (act==="pp-at"){ ppSetAt(el.dataset.id, el.value); render(); }
+  else if (act==="pp-pages"){ const n=Math.max(0,Math.round(+el.value||0)); ppSave(el.dataset.id, x=>{ x.pages=n||null; if (n && (+x.at||0)>=n && x.status!=="noted") x.status="read"; else if (x.status==="read" && n && (+x.at||0)<n) x.status=(+x.at?"reading":"todo"); }); render(); }
   else if (act==="cls-f"){ const f=el.dataset.f, v=f==="dow"?+el.value:el.value.trim(); clsEdit(st=>{ const c=st.classes.find(c=>c.id===el.dataset.id); if (c) c[f]=v; }); render(); }
   else if (act==="win-f"){ if (!el.value) return; const st=clone(settings()); st.dayWin={...dayWin(), [el.dataset.f]:el.value}; save("settings/main",st,300); render(); }
 });
