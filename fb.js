@@ -148,13 +148,14 @@ async function gcFetch(path, opt = {}) {
   if (r.status === 401) { gcDropTok(); throw gcErr("approval_required"); }
   if (r.status === 204) return {};
   if (r.status === 404 || r.status === 410) throw gcErr("gone");
+  if (r.status === 409) throw gcErr("exists");
   const j = await r.json().catch(() => ({}));
   if (!r.ok) { console.warn("[HOME] Google Calendar", r.status, j); const reason = j && j.error && j.error.errors && j.error.errors[0] && j.error.errors[0].reason;
     throw gcErr(reason === "accessNotConfigured" ? "api_off" : r.status === 403 && reason === "insufficientPermissions" ? "approval_required" : "fail"); }
   return j;
 }
 const enc = encodeURIComponent, cal = id => "/calendars/" + enc(id || "primary");
-function evBody(i) { return { summary: i.summary, description: i.description || "HOME",
+function evBody(i) { return { ...(i.id ? { id: i.id } : {}), ...(i.status ? { status: i.status } : {}), summary: i.summary, description: i.description || "HOME",
   start: i.allDay ? { date: i.startTime.slice(0, 10) } : { dateTime: i.startTime }, end: i.allDay ? { date: i.endTime.slice(0, 10) } : { dateTime: i.endTime } }; }
 const tz = (() => { const o = -new Date().getTimezoneOffset(), a = Math.abs(o); return (o >= 0 ? "+" : "-") + String(Math.floor(a / 60)).padStart(2, "0") + ":" + String(a % 60).padStart(2, "0"); })();
 const TOOLS = {
