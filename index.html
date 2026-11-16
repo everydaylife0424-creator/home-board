@@ -244,7 +244,7 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 @media (pointer:coarse){.pp-st{min-height:44px}.pp-t{min-height:44px}}
 .tc-head{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end;padding:14px 16px;margin-bottom:12px;position:relative}
 .tc-big b{display:block;font-size:26px;font-weight:700;color:var(--accent)}.tc-st{display:flex;flex-direction:column;gap:2px}.tc-st b{font-family:var(--f-mono);font-size:18px;font-weight:600}
-.tc-edit{position:absolute;top:8px;right:8px}
+.tc-edit{position:absolute;top:8px;right:8px}.tc-reg-open{color:var(--warn-ink)}.tc-st label.sub{display:flex;gap:4px;align-items:center;min-height:28px}
 .tc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px}.tc-grid .card{padding:14px 16px}.tc-grid h3{margin:0 0 8px;font-size:15px}.tc-grid h4{margin:10px 0 6px;font-size:13px;color:var(--muted)}
 .tc-week{list-style:none;margin:0;padding:0}.tc-day{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}.tc-day:last-child{border-bottom:0}
 .tc-dd{flex:none;width:6.5em;font-family:var(--f-mono);font-size:12.5px;color:var(--muted);padding-top:2px}.tc-day label{display:flex;gap:8px;align-items:flex-start;flex:1;cursor:pointer}
@@ -732,7 +732,7 @@ const I18N = {
     sk_done_talk:"完成：錄完一整段對話就算今天完成。卡住可以看提示再接下去。",
     sk_partner:"▶ 對方說", sk_partner_n:(i,n)=>`第 ${i} / ${n} 句`, sk_partner_again:"再聽一次",
     sk_why_txt:"跟讀（shadowing）能改善發音和流暢度（Kadota 2019；Hamada 2016）。重複講同一段、時間一次比一次短的 4/3/2 練法能提升流暢度（Maurice 1983；Nation 1989）。錄音後比對自己漏掉的字，是讓你注意到差距（Schmidt 1990 注意假說）。順序從對稿、到半開放、再到自由回答，對應 Nation 的流暢練習原則。",
-    nav_toeic:"多益", tc_setup:"建立多益計劃", tc_setup_sub:"填好考試日期和分數，計劃會從今天排到考試前一天，每天的任務自動出現在每日小卡。", tc_date:"考試日期", tc_target:"目標分數", tc_base:"目前分數", tc_make:"建立計劃",
+    nav_toeic:"多益", tc_reg:"報名", tc_reg_from:"報名開始", tc_reg_to:"報名截止", tc_reg_soon:n=>`${n} 天後開放`, tc_reg_left:n=>n?`報名中，剩 ${n} 天`:"今天截止", tc_reg_closed:"已截止", tc_reg_done:"已報名 ✓", tc_reg_mark:"已報名", tc_reg_opens:d=>`多益今天開放報名（${d} 截止）`, tc_reg_closing:d=>`多益報名 ${d} 截止，還沒報名`, tc_setup:"建立多益計劃", tc_setup_sub:"填好考試日期和分數，計劃會從今天排到考試前一天，每天的任務自動出現在每日小卡。", tc_date:"考試日期", tc_target:"目標分數", tc_base:"目前分數", tc_make:"建立計劃",
     tc_d:n=>n>0?`還有 ${n} 天`:n===0?"今天考試":"已經考完", tc_exam:d=>`考試 ${d}`, tc_best:"最佳模考", tc_none:"還沒有模考", tc_done:(a,b)=>`已完成 ${a} / ${b} 天`, tc_edit:"調整日期與分數", tc_save:"儲存", tc_cancel:"取消",
     tc_week:"本週任務", tc_plan:"整體計劃", tc_wk:(n,m)=>`第 ${n} / ${m} 週`, tc_ph_base:"打底", tc_ph_strat:"題型策略＋計時", tc_ph_mock:"整份模考", tc_rest:"休息",
     tc_mock:"模考成績", tc_mock_add:"記錄", tc_l:"聽力", tc_r:"閱讀", tc_total:"總分", tc_gap:n=>n>0?`離目標還差 ${n} 分`:"已達標 🎉", tc_mock_need:"記兩次以上就會畫出分數曲線。",
@@ -845,7 +845,7 @@ const I18N = {
     sk_done_talk:"Done: one recorded conversation counts for the day.",
     sk_partner:"▶ Partner", sk_partner_n:(i,n)=>`Line ${i} of ${n}`, sk_partner_again:"Again",
     sk_why_txt:"Shadowing improves pronunciation and fluency (Kadota 2019; Hamada 2016). Retelling the same content in less time (4/3/2) builds fluency (Maurice 1983; Nation 1989). Comparing your recording with the script makes you notice gaps (Schmidt 1990). The order from scripted to free speech follows Nation's fluency strand.",
-    nav_toeic:"TOEIC", tc_setup:"Set up a TOEIC plan", tc_setup_sub:"Enter the test date and scores. The plan runs from today to the day before the test, and each day's task shows on the day cards.", tc_date:"Test date", tc_target:"Target", tc_base:"Current score", tc_make:"Create plan",
+    nav_toeic:"TOEIC", tc_reg:"Registration", tc_reg_from:"Registration opens", tc_reg_to:"Registration closes", tc_reg_soon:n=>`Opens in ${n} days`, tc_reg_left:n=>n?`Open, ${n} days left`:"Closes today", tc_reg_closed:"Closed", tc_reg_done:"Registered ✓", tc_reg_mark:"Registered", tc_reg_opens:d=>`TOEIC registration opens today (closes ${d})`, tc_reg_closing:d=>`TOEIC registration closes ${d}`, tc_setup:"Set up a TOEIC plan", tc_setup_sub:"Enter the test date and scores. The plan runs from today to the day before the test, and each day's task shows on the day cards.", tc_date:"Test date", tc_target:"Target", tc_base:"Current score", tc_make:"Create plan",
     tc_d:n=>n>0?`${n} days to go`:n===0?"Test day":"Test done", tc_exam:d=>`Test ${d}`, tc_best:"Best mock", tc_none:"No mock yet", tc_done:(a,b)=>`${a} of ${b} days done`, tc_edit:"Change date & scores", tc_save:"Save", tc_cancel:"Cancel",
     tc_week:"This week", tc_plan:"Whole plan", tc_wk:(n,m)=>`Week ${n} of ${m}`, tc_ph_base:"Foundation", tc_ph_strat:"Strategy + timing", tc_ph_mock:"Full mocks", tc_rest:"Rest",
     tc_mock:"Mock scores", tc_mock_add:"Log", tc_l:"Listening", tc_r:"Reading", tc_total:"Total", tc_gap:n=>n>0?`${n} to target`:"Target reached 🎉", tc_mock_need:"Log two mocks and a score curve appears.",
@@ -1342,8 +1342,11 @@ function tcSet(ds, on){ const d=dayCopy(ds), i=d.items.findIndex(x=>x.tc);
   if (on){ if (i<0) d.items.push({id:uid(), t:"📘 "+tcTask(ds), d:true, tc:ds, dn:today()<ds?ds:today(), dc:ds}); else { d.items[i].d=true; d.items[i].dn=today(); d.items[i].dc=ds; } }
   else if (i>=0) d.items.splice(i,1);
   save("days/"+ds,d,200); }
-function tcVirtualLi(ds){ const tk=tcTask(ds); if (!tk || tcItem(ds)) return "";
-  return `<li class="item tc-v"><input type="checkbox" data-act="tc-toggle" data-date="${ds}" aria-label="${T("done")}"><span class="t">📘 ${esc(tk)}</span><span class="acts"><button class="ghost mini" data-act="tc-go" data-date="${ds}">${T("tq_go")}</button></span></li>`; }
+function tcRegLi(ds){ const c=tcCfg(); if (!c || !c.regTo || c.regDone) return ""; const f=c.regFrom||c.regTo;
+  const msg = ds===f ? T("tc_reg_opens", md(c.regTo)) : (ds>=addDays(c.regTo,-3) && ds<=c.regTo && ds>=f) ? T("tc_reg_closing", md(c.regTo)) : ""; if (!msg) return "";
+  return `<li class="item tc-v"><input type="checkbox" data-act="tc-reg-done" aria-label="${T("tc_reg_mark")}"><span class="t">📝 ${esc(msg)}</span></li>`; }
+function tcVirtualLi(ds){ const tk=tcTask(ds), reg=tcRegLi(ds); if (!tk || tcItem(ds)) return reg;
+  return `<li class="item tc-v"><input type="checkbox" data-act="tc-toggle" data-date="${ds}" aria-label="${T("done")}"><span class="t">📘 ${esc(tk)}</span><span class="acts"><button class="ghost mini" data-act="tc-go" data-date="${ds}">${T("tq_go")}</button></span></li>`+reg; }
 function tcDoneCount(c, to){ let a=0,b=0; for (let d=c.start; d<=to && d<c.date; d=addDays(d,1)){ if (!tcTask(d)) continue; b++; const it=tcItem(d); if (it && it.d) a++; } return [a,b]; }
 
 
@@ -1502,6 +1505,7 @@ function viewToeic(){
       <form class="tc-form" data-act="tc-setup"><label>${T("tc_date")}<input type="date" id="tc-date" value="${esc(o.date||"")}" min="${addDays(t,7)}" required></label>
       <label>${T("tc_base")}<input type="number" inputmode="numeric" id="tc-base" min="10" max="990" step="5" value="${o.base||780}"></label>
       <label>${T("tc_target")}<input type="number" inputmode="numeric" id="tc-target" min="10" max="990" step="5" value="${o.target||950}"></label>
+      <label>${T("tc_reg_from")}<input type="date" id="tc-reg-from" value="${esc(o.regFrom||"")}"></label><label>${T("tc_reg_to")}<input type="date" id="tc-reg-to" value="${esc(o.regTo||"")}"></label>
       <button class="primary" type="submit">${c?T("tc_save"):T("tc_make")}</button>${c?`<button class="ghost" type="button" data-act="tc-edit-cancel">${T("tc_cancel")}</button>`:""}</form></div></section>`; }
   const left=daysBetween(t,c.date), mocks=tcDocs("mock").sort((a,b)=>a.date<b.date?-1:1), best=mocks.reduce((m,x)=>Math.max(m,(+x.L||0)+(+x.R||0)),0);
   const todayIt=tcItem(t), [da,db0]=tcDoneCount(c, t), db=db0-(tcTask(t)&&!(todayIt&&todayIt.d)?1:0), W=tcWeeks(c), wk=Math.floor(daysBetween(c.start,t)/7)+1;
@@ -1526,6 +1530,7 @@ function viewToeic(){
       <div class="tc-st"><span class="sub">${T("tc_base")}</span><b>${c.base||"—"}</b></div><div class="tc-st"><span class="sub">${T("tc_target")}</span><b>${c.target}</b></div>
       <div class="tc-st"><span class="sub">${T("tc_best")}</span><b>${best||"—"}</b>${best?`<span class="sub">${T("tc_gap",c.target-best)}</span>`:""}</div>
       <div class="tc-st"><span class="sub">${wk>=1&&wk<=W?T("tc_wk",wk,W):""}</span><b>${T("tc_done",da,db)}</b></div>
+      ${c.regTo?`<div class="tc-st"><span class="sub">${T("tc_reg")} ${md(c.regFrom||t)}–${md(c.regTo)}</span><b class="${!c.regDone&&t>=(c.regFrom||t)&&t<=c.regTo?"tc-reg-open":""}">${c.regDone?T("tc_reg_done"):t<(c.regFrom||t)?T("tc_reg_soon",daysBetween(t,c.regFrom)):t<=c.regTo?T("tc_reg_left",daysBetween(t,c.regTo)):T("tc_reg_closed")}</b><label class="sub"><input type="checkbox" data-act="tc-reg-done" ${c.regDone?"checked":""}> ${T("tc_reg_mark")}</label></div>`:""}
       <button class="icon-btn tc-edit" data-act="tc-edit" title="${T("tc_edit")}">✎</button></div>
     <div class="card tq" id="tq">${viewQuiz(S.tcDay||t)}</div>
     <div class="tc-grid">
@@ -2586,7 +2591,7 @@ document.addEventListener("submit", e=>{
     const it={id:uid(), t:inp.value.trim()||t, d:false}; if (m.k) it.k=m.k; if (m.k==="tb") it.rows=newRows(); list.push(it); save("days/"+d.date, d, 300); inp.value=""; if (m.date) toast(T("sl_added_to", md(m.date))); clearSlash(f); render();
   } else if (act==="tc-setup"){
     const date=document.getElementById("tc-date").value; if (!date) return; const st=clone(settings()), o=st.toeic||{};
-    st.toeic={...o, date, base:+document.getElementById("tc-base").value||null, target:+document.getElementById("tc-target").value||950, start:o.start||today()}; S.tcEdit=false; save("settings/main",st,50); render();
+    st.toeic={...o, date, base:+document.getElementById("tc-base").value||null, target:+document.getElementById("tc-target").value||950, regFrom:document.getElementById("tc-reg-from").value||null, regTo:document.getElementById("tc-reg-to").value||null, start:o.start||today()}; S.tcEdit=false; save("settings/main",st,50); render();
   } else if (act==="tc-mock"){
     const L=+document.getElementById("tcm-l").value, R=+document.getElementById("tcm-r").value, date=document.getElementById("tcm-date").value||today(); if (!L||!R) return;
     const id=uid(); save("toeic/"+id,{id,type:"mock",date,L,R,at:Date.now()},50); render();
@@ -2798,6 +2803,7 @@ document.addEventListener("change", e=>{
   const el=e.target, act=el.dataset.act;
   if (act==="task-toggle"){ const t={...task(el.dataset.id), done:el.checked, doneAt:el.checked?Date.now():null}; save("tasks/"+t.id,t,50); render(); }
   else if (act==="tc-toggle"){ tcSet(el.dataset.date, el.checked); render(); }
+  else if (act==="tc-reg-done"){ const st=clone(settings()); st.toeic={...st.toeic, regDone:el.checked}; save("settings/main",st,50); render(); }
   else if (act==="sk-toggle"){ spSet(el.dataset.date, el.checked); render(); }
   else if (act==="sk-step"){ const x=clone(spDoc(el.dataset.date)); if (!x) return; x.steps={...(x.steps||{}), [el.dataset.i]:el.checked}; spSave(x); if ([0,1,2,3].every(i=>x.steps[i]) && spTask(el.dataset.day)) spSet(el.dataset.day,true); render(); }
   else if (act==="tq-pick"){ const set=clone(tqSet(el.dataset.date)); if (!set || set.done) return; set.ans={...(set.ans||{}), [el.dataset.k]:+el.value}; tqSave(set); const f=document.querySelector(".tq-foot .sub"), n=tqCount(set)-Object.keys(set.ans).length; if (f) f.textContent=n?T("tq_left",n):""; }
