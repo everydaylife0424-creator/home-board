@@ -1293,7 +1293,7 @@ const dragAttr = d => `draggable="true" data-drag="${esc(JSON.stringify(d))}"`;
 /* ---------- Google Calendar (read; optional write when marking) ---------- */
 const GC="Google Calendar", GC_CALS=[{id:null, kind:"own"}, {id:"zh-tw.taiwan#holiday@group.v.calendar.google.com", kind:"holiday"}];
 const G={mcp:undefined, range:null, unsub:[], data:{}, err:null, busy:false};
-async function gcMcp(){ if (G.mcp===undefined){ try{ G.mcp = await window.claude?.use?.("mcp") || null; }catch(e){ G.mcp=null; } } return G.mcp; }
+async function gcMcp(){ if (!(window.claude&&window.claude.use)) return null; /* not signed in yet: ask again later */ if (G.mcp===undefined){ try{ G.mcp = await window.claude?.use?.("mcp") || null; }catch(e){ G.mcp=null; } } return G.mcp; }
 function gcEvDates(ev){ const s=ev.start||{}, e=ev.end||{};
   if (s.date){ const out=[]; let d=s.date; const end=e.date||addDays(s.date,1); for(let i=0;i<62 && d<end;i++){ out.push(d); d=addDays(d,1); } return out; }
   if (s.dateTime) return [ymd(new Date(s.dateTime))]; return []; }
@@ -1306,7 +1306,7 @@ function gcByDate(){ const by={};
 function gcErrKind(e){ const c=e&&e.code; if (c==="api_off") return "api"; return ["needs_reauth","server_not_connected","selection_required","server_not_found"].includes(c)?"conn" : c==="approval_required"||c==="not_in_manifest"||c==="consent_required"?"perm" : ["not_granted","capability_disabled","capability_removed"].includes(c)?"off" : "fail"; }
 async function gcWatch(from, to){
   const key=from+"|"+to; if (G.range===key) return; G.range=key;
-  const m=await gcMcp(); if (!m || G.range!==key) return;
+  const m=await gcMcp(); if (!m){ if (G.range===key) G.range=null; return; } if (G.range!==key) return;
   G.unsub.forEach(u=>{ try{u();}catch(_){} }); G.unsub=[]; G.data={};
   GC_CALS.forEach(c=>{ const input={startTime:from+"T00:00:00", endTime:to+"T00:00:00", pageSize:250, orderBy:"startTime"}; if(c.id) input.calendarId=c.id;
     const k=c.kind+":"+(c.id||"primary");
