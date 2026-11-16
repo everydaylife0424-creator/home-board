@@ -3,6 +3,8 @@
 
   python3 tools/weekly.py dump [YYYY-MM-DD]     # print last week's records (or the week of that Monday) as JSON
   python3 tools/weekly.py write MONDAY tips.json  # save Claude's suggestions to users/<uid>/weekly/<MONDAY>
+  python3 tools/weekly.py toeic-dump [MONDAY]     # TOEIC plan tasks for that week (default: this week), errors, mocks, words already used
+  python3 tools/weekly.py toeic-write sets.json   # save daily question sets to users/<uid>/toeic/set_<date> (answered sets are kept)
 
 Needs the env var FIREBASE_SA: the Firebase service-account key JSON (raw or base64).
 Optional HOME_UID to pick the user when the project has more than one.
@@ -93,11 +95,79 @@ def write(mon, path):
     u.collection("weekly").document(mon).set(dict(monday=mon, tips=tips, by="Claude", at=int(dt.datetime.now().timestamp() * 1000)))
     print(f"saved {len(tips)} tips to weekly/{mon}")
 
+
+# ---- TOEIC: keep these tables in step with tc_t in index.html (zh) ----
+TC_T = dict(
+    base=["單字 30＋Part 5 二十題", "聽力：YouTube Part 3 兩組＋錯句跟讀｜Part 5 十題", "單字 30＋Part 6 兩篇", "聽力：YouTube Part 4 兩組＋錯句跟讀｜Part 5 十題", "單字 30＋Part 7 單篇 5 篇", "官方題本半份（聽力、閱讀輪流）＋檢討", "本週單字複習"],
+    strat=["Part 7 多篇 3 組（計時）", "聽力：YouTube Part 3、4 先看選項練 3 組｜Part 5 十題", "Part 5 難題 30 題（限時 9 分鐘）", "聽力：YouTube Part 2 二十五題＋跟讀｜Part 6 一篇", "單字 30＋Part 7 單篇計時 8 篇", "官方題本半份＋整理錯題", "本週單字複習"],
+    mock=["錯題本重做＋Part 5 二十題", "官方題本整份模考（計時 2 小時）", "單字 30＋Part 7 計時 5 篇", "聽力：YouTube 最弱的 Part 兩組｜Part 5 十題", "錯題本重做＋Part 6 兩篇", "官方題本整份模考（計時 2 小時）", None],
+    diag="官方題本整份模考（起點，計時 2 小時）＋把分數記下來", eve="只複習錯題本和單字，早點睡", exam="多益考試 💪")
+WHYS = ["單字", "文法", "沒聽懂", "換句話說沒對到", "時間不夠", "粗心"]
+
+def tc_task(c, d):
+    start, date = dt.date.fromisoformat(c["start"]), dt.date.fromisoformat(c["date"])
+    if d < start or d > date: return None
+    if d == date: return TC_T["exam"]
+    if d == date - dt.timedelta(days=1): return TC_T["eve"]
+    first_sat = start + dt.timedelta(days=(5 - start.weekday()) % 7)
+    if d == first_sat: return TC_T["diag"]
+    W = max(1, -(-(date - start).days // 7)); w = (d - start).days // 7; mock_w = 2 if W >= 6 else 1; base_w = max(1, round((W - mock_w) * 0.57))
+    ph = "mock" if w >= W - mock_w else "base" if w < base_w else "strat"
+    return TC_T[ph][d.weekday()]
+
+def toeic_dump(arg=None):
+    u = connect()
+    c = (u.collection("settings").document("main").get().to_dict() or {}).get("toeic")
+    if not c or not c.get("date"):
+        print(json.dumps(dict(plan=None, note="No TOEIC plan yet (settings.toeic). Nothing to write."), ensure_ascii=False)); return
+    c.setdefault("start", dt.datetime.now(TZ).date().isoformat())
+    mon = dt.date.fromisoformat(arg) if arg else monday(dt.datetime.now(TZ).date())
+    docs = [x.to_dict() for x in u.collection("toeic").stream()]
+    sets = {x["date"]: x for x in docs if x.get("type") == "set"}
+    week = []
+    for i in range(7):
+        d = mon + dt.timedelta(days=i); t = tc_task(c, d)
+        week.append(dict(date=d.isoformat(), task=t, needsSet=bool(t) and "官方題本" not in t and "複習" not in t and "考試" not in t and "睡" not in t,
+                         hasSet=d.isoformat() in sets, answered=bool(sets.get(d.isoformat(), {}).get("done"))))
+    errs = sorted([x for x in docs if x.get("type") == "err"], key=lambda x: x.get("at") or 0)
+    since = (mon - dt.timedelta(days=14)).isoformat()
+    recent = [x for x in errs if (x.get("date") or "") >= since]
+    count = lambda xs, f: {k: sum(1 for x in xs if f(x) == k) for k in sorted({f(x) for x in xs})}
+    out = dict(plan=dict(date=c["date"], start=c["start"], base=c.get("base"), target=c.get("target")), week=week,
+               errors=dict(total=len(errs), last14ByPart=count(recent, lambda x: f"Part {x.get('part')}"), last14ByWhy=count(recent, lambda x: WHYS[int(x.get("why") or 0)]),
+                           recent=[dict(date=x.get("date"), part=x.get("part"), why=WHYS[int(x.get("why") or 0)], note=x.get("note")) for x in errs[-25:]]),
+               mocks=sorted([dict(date=x.get("date"), L=x.get("L"), R=x.get("R")) for x in docs if x.get("type") == "mock"], key=lambda x: x["date"]),
+               setScores=[dict(date=d, score=s.get("score"), of=sum(len(b.get("qs", [])) for b in s.get("blocks", []))) for d, s in sorted(sets.items()) if s.get("done")],
+               wordsUsed=sorted({v.get("w") for s in sets.values() for v in s.get("vocab", []) if v.get("w")}))
+    print(json.dumps(out, ensure_ascii=False, indent=1))
+
+def toeic_write(path):
+    data = json.load(open(path, encoding="utf-8"))
+    sets = data.get("sets", data) if isinstance(data, dict) else data
+    u = connect(); n = 0
+    for st in sets:
+        d = dt.date.fromisoformat(st["date"]).isoformat()
+        blocks = []
+        for b in st.get("blocks", []):
+            qs = [q for q in b.get("qs", []) if q.get("q") is not None and isinstance(q.get("opts"), list) and 2 <= len(q["opts"]) <= 4 and isinstance(q.get("a"), int) and 0 <= q["a"] < len(q["opts"])]
+            if qs: blocks.append({**{k: b[k] for k in ("part", "passage", "script") if b.get(k)}, "qs": qs})
+        vocab = [v for v in st.get("vocab", []) if v.get("w") and v.get("zh")]
+        if not blocks and not vocab: print(f"skip {d}: nothing valid"); continue
+        ref = u.collection("toeic").document("set_" + d); old = ref.get()
+        if old.exists and old.to_dict().get("done"): print(f"keep {d}: already answered"); continue
+        ref.set(dict(id="set_" + d, type="set", date=d, vocab=vocab, blocks=blocks, ans={}, done=False, by="Claude", at=int(dt.datetime.now().timestamp() * 1000)))
+        n += 1; print(f"saved set_{d}: {len(vocab)} words, {sum(len(b['qs']) for b in blocks)} questions")
+    print(f"{n} sets written")
+
 if __name__ == "__main__":
     a = sys.argv[1:]
     if a[:1] == ["dump"]:
         dump(a[1] if len(a) > 1 else None)
     elif a[:1] == ["write"] and len(a) == 3:
         write(a[1], a[2])
+    elif a[:1] == ["toeic-dump"]:
+        toeic_dump(a[1] if len(a) > 1 else None)
+    elif a[:1] == ["toeic-write"] and len(a) == 2:
+        toeic_write(a[1])
     else:
         sys.exit(__doc__)

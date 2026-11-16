@@ -242,6 +242,36 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .ex-curve .ln{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round}.ex-curve .pt{fill:var(--surface);stroke:var(--accent);stroke-width:1.5}.ex-curve .pr{fill:var(--accent)}.ex-curve .prl{fill:var(--accent);font-size:10.5px;font-weight:600}
 @media (max-width:700px){.pp-body{padding-left:0}.pp-meta{grid-template-columns:1fr}.ex-spark{display:none}.ex-curve .ax{font-size:15px}.ex-curve .prl{font-size:14px}}
 @media (pointer:coarse){.pp-st{min-height:44px}.pp-t{min-height:44px}}
+.tc-head{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end;padding:14px 16px;margin-bottom:12px;position:relative}
+.tc-big b{display:block;font-size:26px;font-weight:700;color:var(--accent)}.tc-st{display:flex;flex-direction:column;gap:2px}.tc-st b{font-family:var(--f-mono);font-size:18px;font-weight:600}
+.tc-edit{position:absolute;top:8px;right:8px}
+.tc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px}.tc-grid .card{padding:14px 16px}.tc-grid h3{margin:0 0 8px;font-size:15px}.tc-grid h4{margin:10px 0 6px;font-size:13px;color:var(--muted)}
+.tc-week{list-style:none;margin:0;padding:0}.tc-day{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}.tc-day:last-child{border-bottom:0}
+.tc-dd{flex:none;width:6.5em;font-family:var(--f-mono);font-size:12.5px;color:var(--muted);padding-top:2px}.tc-day label{display:flex;gap:8px;align-items:flex-start;flex:1;cursor:pointer}
+.tc-day.today{background:var(--accent-soft);border-radius:6px;padding-left:6px;padding-right:6px}.tc-day.done span{color:var(--muted);text-decoration:line-through}.tc-day.miss .tc-dd{color:var(--hot-ink)}
+.tc-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}.tc-form input[type=number]{width:6.5em}.tc-form input[type=text]{flex:1 1 180px;min-width:0}.tc-form label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+.tc-setup h3{margin:0 0 4px}.tc-setup .tc-form{align-items:flex-end;gap:12px}
+.tc-curve{width:100%;height:auto;max-height:190px;display:block}.tc-curve .ln{fill:none;stroke:var(--accent);stroke-width:2}.tc-curve .pt{fill:var(--accent)}.tc-curve .tgt{stroke:var(--good);stroke-dasharray:4 4}.tc-curve .ax{fill:var(--muted);font-size:11px;font-family:var(--f-mono)}
+.tc-mt{width:100%;border-collapse:collapse;font-size:13.5px}.tc-mt td{padding:4px 6px;border-bottom:1px solid var(--line)}.tc-mt td:first-child{font-family:var(--f-mono);color:var(--muted)}
+.tc-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tc-bar{display:grid;grid-template-columns:6.5em 1fr auto;gap:6px;align-items:center;font-size:12.5px;margin:3px 0}.tc-bar i{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.tc-bar b{display:block;height:100%;background:var(--accent)}.tc-bar em{font-style:normal;font-family:var(--f-mono)}.tc-bar small{color:var(--muted)}
+.tc-el{list-style:none;margin:0;padding:0}.tc-el li{display:flex;gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line);font-size:13.5px}.tc-el .t{flex:1;min-width:0}.tc-ep{font-family:var(--f-mono);font-size:12px;background:var(--calm-soft);border-radius:4px;padding:0 5px}.tc-ew{font-size:12px;color:var(--muted)}
+.tc-plan{grid-column:1/-1}.tc-plan summary{cursor:pointer;list-style:none}.tc-plan summary h3{display:inline}.tc-wks{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px}
+.tc-wks li{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px}.tc-wks li.cur{border-color:var(--accent);background:var(--accent-soft)}.tc-wn{margin-left:auto;font-family:var(--f-mono)}
+.tc-ph{font-size:11.5px;border-radius:4px;padding:0 5px;background:var(--calm-soft)}.tc-ph.strat{background:var(--warn-soft);color:var(--warn-ink)}.tc-ph.mock{background:var(--hot-soft);color:var(--hot-ink)}
+.item.tc-v .t{color:var(--fg)}
+.item.tc-v .acts{display:flex}
+@media (max-width:700px){.tq-voc tr{display:grid;grid-template-columns:auto 1fr;gap:0 8px}.tq-voc tr td{border:0;align-self:center}.tq-voc tr{border-bottom:1px solid var(--line);padding:4px 0}.tq-voc tr td.tq-ex{grid-column:1/-1;padding-top:0}.tc-stats{grid-template-columns:1fr}.tc-big b{font-size:22px}}
+@media (pointer:coarse){.tc-day label input{width:22px;height:22px}}
+.tq{margin-bottom:12px;padding:16px}.tq-h{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:8px}.tq-h h3{margin:0;font-size:16px}
+.tq-voc{margin:6px 0 12px}.tq-voc summary{cursor:pointer;font-weight:600;font-size:14px;min-height:36px;display:flex;align-items:center;gap:6px}.tq-voc table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}.tq-voc td{padding:4px 6px;border-bottom:1px solid var(--line);vertical-align:top}.tq-voc td:first-child{white-space:nowrap}.tq-ex{color:var(--muted);font-size:13px}
+.tq-blur{filter:blur(5px);cursor:pointer}.tq-blur:hover{filter:none}
+.tq-b{border-top:1px solid var(--line);padding:10px 0}.tq-part{font-family:var(--f-mono);font-size:12px;color:var(--accent);margin-bottom:4px}.tq-pass{white-space:pre-wrap;background:var(--calm-soft);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.6;margin-bottom:8px}
+.tq-listen{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}.tq-scr{font-size:13.5px;margin-bottom:6px}.tq-scr summary{cursor:pointer;color:var(--muted)}.tq-scr p{margin:2px 0}
+.tq-q{margin:6px 0 10px}.tq-q p{margin:0 0 4px}.tq-opts{display:grid;gap:2px}.tq-opts label{display:flex;gap:8px;align-items:flex-start;padding:5px 8px;border-radius:6px;cursor:pointer}.tq-opts label:hover{background:var(--calm-soft)}
+.tq-opts label.right{background:var(--good-soft,rgba(46,125,50,.12));color:var(--good)}.tq-opts label.wrong{background:var(--hot-soft);color:var(--hot-ink);text-decoration:line-through}
+.tq-why{font-size:13px;color:var(--muted);margin:4px 8px 0}.tq-foot{display:flex;gap:12px;align-items:center;border-top:1px solid var(--line);padding-top:10px}.tq-sc{font-size:16px;color:var(--accent)}
+.tc-day.sel{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px}.tc-day .tc-dd{text-align:left;padding:0;background:none;border:0}
+@media (pointer:coarse){.tq-opts label{min-height:44px;align-items:center}.tq-opts input{width:20px;height:20px}}
 .settings-panel{margin-bottom:16px}
 .settings-panel .prow{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
 .settings-panel .prow span{flex:1;min-width:0}
@@ -662,6 +692,22 @@ const I18N = {
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
     proj_sec:"專案", cls_edit:"編輯課表", cls_done:"完成，鎖定課表", cls_saved:"課表已鎖定", cls_locked:"已鎖定，按「編輯課表」才能修改", cls_wd:d=>`週${d}`,
     proj_rename:"點一下改名稱", proj_up:"往上移", proj_down:"往下移", proj_dup:"已經有同名的專案了", proj_renamed:n=>`已改名為「${n}」，每天的進度區塊也一起改了`,
+    tq_title:d=>`${d} 的題目`, tq_none:"這天還沒有題目。每週一早上會自動出好整週的題。", tq_official:"這天用你的官方題本：計時做完，整份模考的話把分數記到下面的「模考成績」。", tq_rest:"這天休息。",
+    tq_vocab:"今天的單字", tq_play:"▶ 播放", tq_stop:"■ 停止", tq_script:"看原文", tq_submit:"交卷", tq_score:(a,b)=>`答對 ${a} / ${b}`, tq_done:"已完成", tq_left:n=>`還有 ${n} 題沒作答`, tq_redo:"重做一次",
+    tq_ans:"正解", tq_why:"解析", tq_review:"本週單字複習：選出正確的中文意思", tq_no_voice:"這台裝置沒有英文語音，請到系統設定加一個英文（美國）語音。", tq_listen_hint:"先看題目和選項，再按播放。只能聽一次最接近考試。", tq_part2:"聽完問句和三個回答，選最適合的一個。",
+    tq_go:"做題 →", tq_hide_zh:"遮住中文", tq_show_zh:"顯示中文",
+    nav_toeic:"多益", tc_setup:"建立多益計劃", tc_setup_sub:"填好考試日期和分數，計劃會從今天排到考試前一天，每天的任務自動出現在每日小卡。", tc_date:"考試日期", tc_target:"目標分數", tc_base:"目前分數", tc_make:"建立計劃",
+    tc_d:n=>n>0?`還有 ${n} 天`:n===0?"今天考試":"已經考完", tc_exam:d=>`考試 ${d}`, tc_best:"最佳模考", tc_none:"還沒有模考", tc_done:(a,b)=>`已完成 ${a} / ${b} 天`, tc_edit:"調整日期與分數", tc_save:"儲存", tc_cancel:"取消",
+    tc_week:"本週任務", tc_plan:"整體計劃", tc_wk:(n,m)=>`第 ${n} / ${m} 週`, tc_ph_base:"打底", tc_ph_strat:"題型策略＋計時", tc_ph_mock:"整份模考", tc_rest:"休息",
+    tc_mock:"模考成績", tc_mock_add:"記錄", tc_l:"聽力", tc_r:"閱讀", tc_total:"總分", tc_gap:n=>n>0?`離目標還差 ${n} 分`:"已達標 🎉", tc_mock_need:"記兩次以上就會畫出分數曲線。",
+    tc_err:"錯題本", tc_err_add:"記一題", tc_part:"Part", tc_why:"原因", tc_note_ph:"題目重點或正確答案的理由", tc_by_part:"各 Part 錯題數", tc_by_why:"錯誤原因", tc_recent:"最近的錯題", tc_err_none:"還沒有錯題紀錄。做完練習就把錯的記下來，每週檢討會告訴你最常錯哪裡。", tc_14:"近 14 天",
+    tc_whys:["單字","文法","沒聽懂","換句話說沒對到","時間不夠","粗心"],
+    tc_t:{diag:"官方題本整份模考（起點，計時 2 小時）＋把分數記下來", eve:"只複習錯題本和單字，早點睡", exam:"多益考試 💪",
+      base:["單字 30＋Part 5 二十題","聽力：YouTube Part 3 兩組＋錯句跟讀｜Part 5 十題","單字 30＋Part 6 兩篇","聽力：YouTube Part 4 兩組＋錯句跟讀｜Part 5 十題","單字 30＋Part 7 單篇 5 篇","官方題本半份（聽力、閱讀輪流）＋檢討","本週單字複習"],
+      strat:["Part 7 多篇 3 組（計時）","聽力：YouTube Part 3、4 先看選項練 3 組｜Part 5 十題","Part 5 難題 30 題（限時 9 分鐘）","聽力：YouTube Part 2 二十五題＋跟讀｜Part 6 一篇","單字 30＋Part 7 單篇計時 8 篇","官方題本半份＋整理錯題","本週單字複習"],
+      mock:["錯題本重做＋Part 5 二十題","官方題本整份模考（計時 2 小時）","單字 30＋Part 7 計時 5 篇","聽力：YouTube 最弱的 Part 兩組｜Part 5 十題","錯題本重做＋Part 6 兩篇","官方題本整份模考（計時 2 小時）",null]},
+
+    tip_toeic:(a,b)=>`多益這週完成 ${a} / ${b} 天的任務。${a<b?"沒做到的那幾天看看是不是課太滿，可以把任務換到空堂多的日子。":"節奏很穩，照這樣繼續。"}`,
     nav_papers:"文獻", pp_add_title:"文獻標題", pp_add_author:"作者（選填）", pp_add_proj:"課程", pp_none_proj:"其他", pp_add_btn:"加入",
     pp_st_reading:"閱讀中", pp_pages:(a,n)=>`${a} / ${n} 頁`, pp_at_only:a=>`讀到第 ${a} 頁`, pp_at_lbl:"讀到第", pp_page_u:"頁", pp_total:"總頁數", pp_bm:"書籤", pp_bm_ph:"讀到哪裡、下次從哪開始", pp_log:"閱讀紀錄", pp_log_row:(a,b)=>`p.${a}→${b}`,
     pp_today:"排進今天", pp_today_on:"今天有排", pp_today_ok:"已排進今天的每日小卡", pp_next:d=>`還沒讀完，已排到 ${d}`, pp_finished:"整篇讀完了 🎉",
@@ -738,6 +784,22 @@ const I18N = {
     gym_logged:"Logged", gym_need:"Enter sets × reps or a weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
     proj_sec:"Projects", cls_edit:"Edit schedule", cls_done:"Done, lock schedule", cls_saved:"Schedule locked", cls_locked:"Locked. Press “Edit schedule” to change it", cls_wd:d=>d,
     proj_rename:"Click to rename", proj_up:"Move up", proj_down:"Move down", proj_dup:"A project with that name already exists", proj_renamed:n=>`Renamed to “${n}”, on every day too`,
+    tq_title:d=>`Questions for ${d}`, tq_none:"No questions for this day yet. A full week is written every Monday morning.", tq_official:"Use the official test book today: do it timed, then log the score under Mock scores.", tq_rest:"Rest day.",
+    tq_vocab:"Today's words", tq_play:"▶ Play", tq_stop:"■ Stop", tq_script:"Show script", tq_submit:"Submit", tq_score:(a,b)=>`${a} of ${b} correct`, tq_done:"Done", tq_left:n=>`${n} still unanswered`, tq_redo:"Redo",
+    tq_ans:"Answer", tq_why:"Why", tq_review:"Week review: pick the right meaning", tq_no_voice:"No English voice on this device. Add an English (US) voice in system settings.", tq_listen_hint:"Read the questions and options first, then press play. Listening once is closest to the real test.", tq_part2:"Listen to the question and three responses, then pick the best one.",
+    tq_go:"Questions →", tq_hide_zh:"Hide meanings", tq_show_zh:"Show meanings",
+    nav_toeic:"TOEIC", tc_setup:"Set up a TOEIC plan", tc_setup_sub:"Enter the test date and scores. The plan runs from today to the day before the test, and each day's task shows on the day cards.", tc_date:"Test date", tc_target:"Target", tc_base:"Current score", tc_make:"Create plan",
+    tc_d:n=>n>0?`${n} days to go`:n===0?"Test day":"Test done", tc_exam:d=>`Test ${d}`, tc_best:"Best mock", tc_none:"No mock yet", tc_done:(a,b)=>`${a} of ${b} days done`, tc_edit:"Change date & scores", tc_save:"Save", tc_cancel:"Cancel",
+    tc_week:"This week", tc_plan:"Whole plan", tc_wk:(n,m)=>`Week ${n} of ${m}`, tc_ph_base:"Foundation", tc_ph_strat:"Strategy + timing", tc_ph_mock:"Full mocks", tc_rest:"Rest",
+    tc_mock:"Mock scores", tc_mock_add:"Log", tc_l:"Listening", tc_r:"Reading", tc_total:"Total", tc_gap:n=>n>0?`${n} to target`:"Target reached 🎉", tc_mock_need:"Log two mocks and a score curve appears.",
+    tc_err:"Error log", tc_err_add:"Log one", tc_part:"Part", tc_why:"Why", tc_note_ph:"Key point, or why the right answer is right", tc_by_part:"Errors by part", tc_by_why:"Why it went wrong", tc_recent:"Recent errors", tc_err_none:"No errors logged yet. Log what you miss after each practice; the weekly review will show where you slip most.", tc_14:"last 14 days",
+    tc_whys:["Vocabulary","Grammar","Didn't catch it","Missed the paraphrase","Ran out of time","Careless"],
+    tc_t:{diag:"Official book full mock (baseline, 2 h timed) + log the score", eve:"Only review the error log and words; sleep early", exam:"TOEIC test day 💪",
+      base:["30 words + 20 Part 5 questions","Listening: 2 YouTube Part 3 sets + shadowing | 10 Part 5","30 words + 2 Part 6 passages","Listening: 2 YouTube Part 4 sets + shadowing | 10 Part 5","30 words + 5 single Part 7 passages","Official book half test (alternate L/R) + review","Week word review"],
+      strat:["3 multi-passage Part 7 sets (timed)","Listening: 3 YouTube Part 3/4 sets, preview options | 10 Part 5","30 hard Part 5 questions in 9 min","Listening: 25 YouTube Part 2 questions + shadowing | 1 Part 6","30 words + 8 timed single Part 7 passages","Official book half test + sort errors","Week word review"],
+      mock:["Redo the error log + 20 Part 5","Official book full mock (2 h timed)","30 words + 5 timed Part 7 passages","Listening: 2 YouTube sets of your weakest part | 10 Part 5","Redo the error log + 2 Part 6 passages","Official book full mock (2 h timed)",null]},
+
+    tip_toeic:(a,b)=>`TOEIC: ${a} of ${b} planned days done this week. ${a<b?"If classes crowded out the missed days, move the task to a lighter day.":"Steady pace, keep it up."}`,
     nav_papers:"Readings", pp_add_title:"Paper title", pp_add_author:"Author (optional)", pp_add_proj:"Course", pp_none_proj:"Other", pp_add_btn:"Add",
     pp_st_reading:"Reading", pp_pages:(a,n)=>`${a} / ${n} pages`, pp_at_only:a=>`at page ${a}`, pp_at_lbl:"At page", pp_page_u:"", pp_total:"Pages", pp_bm:"Bookmark", pp_bm_ph:"Where you stopped, where to start next", pp_log:"Reading log", pp_log_row:(a,b)=>`p.${a}→${b}`,
     pp_today:"Add to today", pp_today_on:"On today", pp_today_ok:"Added to today's card", pp_next:d=>`Not finished, added to ${d}`, pp_finished:"Finished the whole paper 🎉",
@@ -815,6 +877,7 @@ const ICON = {
   style:'<path d="M4 20h16"/><path d="M6 16l6-12 6 12"/><path d="M8.5 11h7"/>',
   theme:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
   pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
+  toeic:'<path d="M4 5h9a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M16 8h4v11h-4"/><path d="M8 10h4M8 13h4"/>',
   papers:'<path d="M5 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H5z"/><path d="M19 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>',
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
   undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
@@ -826,7 +889,7 @@ const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
   calMonth: ymd(new Date()).slice(0,7), calSel: null, gcalMonth: ymd(new Date()).slice(0,7), gcalSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, cm:null, gymAsc:(()=>{ try{ return localStorage.getItem("home.gymAsc")==="1"; }catch(_){ return false; } })(), wpBusy:false, confirmDel:null,
-  tasks:{}, days:{}, expenses:{}, weekly:{}, settings:null, inbox:{}, papers:{}, ppF:{st:"all",proj:"all"}, ppOpen:{}, pgEdit:null, chkOpen:false, volAll:{}, volFix:null, split:null, qc:false, wkRev: mondayOf(new Date()),
+  tasks:{}, days:{}, expenses:{}, weekly:{}, settings:null, inbox:{}, toeic:{}, tcEdit:false, papers:{}, ppF:{st:"all",proj:"all"}, ppOpen:{}, pgEdit:null, chkOpen:false, volAll:{}, volFix:null, split:null, qc:false, wkRev: mondayOf(new Date()),
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
@@ -881,7 +944,7 @@ function dayStats(d){ const all=[...(d.items||[]), ...(d.projects||[]).flatMap(p
 /* undo: remember what a document looked like before each user action (actions within 0.8 s form one step) */
 const undoStack=[]; let undoMute=false, lastUserAt=0, undoGroup=null;
 ["pointerdown","keydown","change"].forEach(t=>document.addEventListener(t, ()=>{ lastUserAt=performance.now(); }, true));
-function cachedDoc(path){ const [c,id]=path.split("/"); if (path==="gym/plan") return S.gymPlan; if (path==="settings/main") return S.settings; const m={tasks:S.tasks,days:S.days,expenses:S.expenses,events:S.events,gymlog:S.gymlog,inbox:S.inbox,papers:S.papers}[c]; return m?m[id]:undefined; }
+function cachedDoc(path){ const [c,id]=path.split("/"); if (path==="gym/plan") return S.gymPlan; if (path==="settings/main") return S.settings; const m={tasks:S.tasks,days:S.days,expenses:S.expenses,events:S.events,gymlog:S.gymlog,inbox:S.inbox,papers:S.papers,toeic:S.toeic}[c]; return m?m[id]:undefined; }
 function recordUndo(path){
   if (undoMute || performance.now()-lastUserAt>1500) return;
   const a=document.activeElement; if (a && a.tagName==="TEXTAREA") return;
@@ -907,13 +970,13 @@ async function flush(path){
     else toast(T("save_fail", e && e.message || e));
   } finally { inflight.delete(path); }
 }
-function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; else if (c==="papers") S.papers[id]=body; }
+function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; else if (c==="papers") S.papers[id]=body; else if (c==="toeic") S.toeic[id]=body; }
 async function remove(path){
   if (path.startsWith("events/")){ const e=cachedDoc(path)||pending.get(path); if (e&&e.gcalId){ gcQ("home.gcDel", q=>[...q,e.gcalId]); gcSyncSoon(); } }
   if (path.startsWith("tasks/")) gcSyncSoon();
   recordUndo(path);
   pending.delete(path); clearTimeout(timers.get(path));
-  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id]; if (c==="papers") delete S.papers[id];
+  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id]; if (c==="papers") delete S.papers[id]; if (c==="toeic") delete S.toeic[id];
   if (db) { try { await db.doc(path).delete(); } catch(e){ toast(T("del_fail")); } }
 }
 
@@ -937,7 +1000,7 @@ function render(){
   const eb=document.getElementById("editBar"); eb.hidden=!S.edit; eb.textContent=T("edit_hint");
   document.getElementById("pageTitle").innerHTML = S.tab==="home" ? L("app_title") : L("nav_"+S.tab);
   const n=new Date(); document.getElementById("todayLabel").textContent = T("today_label", n.getFullYear(), n.getMonth()+1, n.getDate(), T("wd")[n.getDay()]);
-  v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : S.tab==="papers" ? viewPapers() : viewMoney();
+  v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : S.tab==="papers" ? viewPapers() : S.tab==="toeic" ? viewToeic() : viewMoney();
   injectNotes(v);
   renderHero();
   if (S.tab==="home") positionPop();
@@ -958,7 +1021,7 @@ function renderSide(){
   document.getElementById("sideInner").innerHTML = `
     <div class="brand"><span class="mark">H</span><span class="lbl">${L("app_title")}</span></div>
     <div class="grp"><span class="lbl">${L("grp_pages")}</span></div>
-    ${page("home")}${page("gym")}${page("review")}${page("papers")}${page("money")}
+    ${page("home")}${page("gym")}${page("review")}${page("papers")}${page("toeic")}${page("money")}
     ${S.tab==="home" ? `<div class="grp"><span class="lbl">${L("grp_sections")}</span></div>
       ${sec("s-overview","overview",T("sec_overview"))}${sec("s-tasks","tasks",T("sec_tasks"))}${sec("s-week","week",T("sec_week"))}${sec("s-cal","cal",T("sec_cal"))}` : ""}
     <button class="navb" data-act="undo" title="⌘Z">${svg("undo")}<span class="lbl">${T("undo")}</span><span class="val lbl">⌘Z</span></button>
@@ -1203,6 +1266,121 @@ function ppDay(it){ const x=it.pp && paper(it.pp); if (!x) return "";
 function courseList(){ return [...new Set(classList().map(c=>(c.name||"").trim()).filter(Boolean))]; }
 function ppSave(id, fn){ const x=paper(id); if (!x) return; const c=clone(x); fn(c); save("papers/"+id, c, 600); }
 
+
+/* ---------- TOEIC: settings.toeic {date,target,base,start}; toeic/<id> {type:"mock",date,L,R} | {type:"err",date,part,why,note};
+   a day's task becomes a real item {tc:date} on that day's card only when it is ticked ---------- */
+function tcCfg(){ const c=settings().toeic; return c && c.date ? c : null; }
+function tcDocs(type){ const ids=new Set(Object.keys(S.toeic)); for (const p of pending.keys()) if (p.startsWith("toeic/")) ids.add(p.slice(6)); return [...ids].map(id=>pending.get("toeic/"+id)||S.toeic[id]).filter(x=>x && x.type===type); }
+function tcWeeks(c){ return Math.max(1, Math.ceil(daysBetween(c.start, c.date)/7)); }
+function tcPhase(c, ds){ const W=tcWeeks(c), w=Math.floor(daysBetween(c.start, ds)/7), mockW=W>=6?2:1, baseW=Math.max(1,Math.round((W-mockW)*0.57));
+  return w>=W-mockW ? "mock" : w<baseW ? "base" : "strat"; }
+function tcTask(ds){ const c=tcCfg(); if (!c || ds<c.start || ds>c.date) return null; const t=T("tc_t");
+  if (ds===c.date) return t.exam; if (ds===addDays(c.date,-1)) return t.eve;
+  const wd=(parse(ds).getDay()+6)%7, firstSat=(()=>{ let d=c.start; while (parse(d).getDay()!==6) d=addDays(d,1); return d; })();
+  if (ds===firstSat) return t.diag;
+  return t[tcPhase(c,ds)][wd]; }
+function tcItem(ds){ return (day(ds).items||[]).find(i=>i.tc); }
+function tcSet(ds, on){ const d=dayCopy(ds), i=d.items.findIndex(x=>x.tc);
+  if (on){ if (i<0) d.items.push({id:uid(), t:"📘 "+tcTask(ds), d:true, tc:ds, dn:today()<ds?ds:today(), dc:ds}); else { d.items[i].d=true; d.items[i].dn=today(); d.items[i].dc=ds; } }
+  else if (i>=0) d.items.splice(i,1);
+  save("days/"+ds,d,200); }
+function tcVirtualLi(ds){ const tk=tcTask(ds); if (!tk || tcItem(ds)) return "";
+  return `<li class="item tc-v"><input type="checkbox" data-act="tc-toggle" data-date="${ds}" aria-label="${T("done")}"><span class="t">📘 ${esc(tk)}</span><span class="acts"><button class="ghost mini" data-act="tc-go" data-date="${ds}">${T("tq_go")}</button></span></li>`; }
+function tcDoneCount(c, to){ let a=0,b=0; for (let d=c.start; d<=to && d<c.date; d=addDays(d,1)){ if (!tcTask(d)) continue; b++; const it=tcItem(d); if (it && it.d) a++; } return [a,b]; }
+
+/* ---------- daily questions: toeic/set_<date> {type:"set",date,vocab:[{w,pos,zh,ex}],blocks:[{part,passage?,script?:[[spk,line]],qs:[{q,opts,a,why,tag}]}],ans:{"b-i":n},done,score}
+   written by the Monday run; Sunday's word review is built here from the week's words ---------- */
+const TQ_WHY={vocab:0,grammar:1,listen:2,paraphrase:3,time:4,careless:5};
+function tqSet(ds){ const x=pending.get("toeic/set_"+ds) || S.toeic["set_"+ds]; if (x) return x;
+  if (parse(ds).getDay()!==0 || !tcTask(ds)) return null;
+  const mon=addDays(ds,-6), words=[]; for (let d=mon; d<ds; d=addDays(d,1)){ const st=pending.get("toeic/set_"+d)||S.toeic["set_"+d]; (st&&st.vocab||[]).forEach(v=>words.push(v)); }
+  if (words.length<4) return null;
+  let seed=[...ds].reduce((a,c)=>a*31+c.charCodeAt(0)|0,7); const rnd=()=>((seed=Math.imul(seed^seed>>>15,2246822507)+0x6d2b79f5|0)>>>0)/4294967296;
+  const pick=[...words].sort(()=>rnd()-.5).slice(0,30);
+  return {id:"set_"+ds, type:"set", date:ds, review:true, vocab:[], blocks:pick.map(v=>{ const wrong=words.filter(o=>o.zh!==v.zh).sort(()=>rnd()-.5).slice(0,3).map(o=>o.zh), opts=[v.zh,...wrong].sort(()=>rnd()-.5);
+    return {part:"vocab", qs:[{q:v.w+(v.pos?` (${v.pos})`:""), opts, a:opts.indexOf(v.zh), why:v.ex||"", tag:"vocab"}]}; })}; }
+function tqSave(set){ set.id="set_"+set.date; save("toeic/"+set.id, set, 400); }
+function tqCount(set){ return set.blocks.reduce((n,b)=>n+b.qs.length,0); }
+/* read a script aloud with the device's English voices: two voices for a conversation */
+const TTS={on:false};
+function ttsVoices(){ const v=(window.speechSynthesis&&speechSynthesis.getVoices()||[]).filter(x=>/^en[-_](US|GB|AU|CA)/i.test(x.lang)); const us=v.filter(x=>/US/i.test(x.lang)); return (us.length>=2?us:v); }
+function ttsPlay(script, btn){ if (!window.speechSynthesis){ toast(T("tq_no_voice")); return; } speechSynthesis.cancel(); const vs=ttsVoices(); if (!vs.length){ toast(T("tq_no_voice")); return; }
+  const fem=vs.find(x=>/female|samantha|zira|aria|jenny|allison|ava|susan|karen|victoria|google us english/i.test(x.name))||vs[0], male=vs.find(x=>x!==fem && /male|alex|daniel|david|guy|fred|tom|aaron|google uk english male/i.test(x.name))||vs.find(x=>x!==fem)||vs[0];
+  const who={}; TTS.on=true; if (btn) btn.textContent=T("tq_stop");
+  script.forEach(([spk,line],i)=>{ const u=new SpeechSynthesisUtterance(line); const k=String(spk||"N").toUpperCase(); u.voice = k.startsWith("W")||k.startsWith("F") ? fem : k.startsWith("M") ? male : (who[k]=who[k]||(Object.keys(who).length%2?male:fem));
+    u.lang=u.voice.lang; u.rate=0.95; if (u.voice===fem && fem===male) u.pitch=1.25; if (i===script.length-1) u.onend=()=>{ TTS.on=false; if (btn) btn.textContent=T("tq_play"); }; speechSynthesis.speak(u); }); }
+if (window.speechSynthesis) speechSynthesis.onvoiceschanged=()=>{};
+function viewQuiz(ds){ const tk=tcTask(ds), set=tqSet(ds), c=tcCfg(), W=T("wd");
+  const head=`<div class="tq-h"><h3>${T("tq_title", md(ds)+" "+dow(ds))}</h3><span class="sub">${tk?esc(tk):""}</span></div>`;
+  if (!tk) return head+`<p class="empty mini">${T("tq_rest")}</p>`;
+  if (!set) return head+`<p class="empty mini">${/官方題本|official/i.test(tk)?T("tq_official"):T("tq_none")}</p>`;
+  const ans=set.ans||{}, done=!!set.done, n=tqCount(set), got=Object.keys(ans).length; let k=0;
+  const voc=(set.vocab||[]).length?`<details class="tq-voc" ${done?"":"open"}><summary>${T("tq_vocab")} <span class="cnt">${set.vocab.length}</span></summary>
+    <button class="ghost mini" data-act="tq-zh">${S.tqHideZh?T("tq_show_zh"):T("tq_hide_zh")}</button>
+    <table><tbody>${set.vocab.map(v=>`<tr><td><button class="icon-btn" data-act="tq-say" data-w="${esc(v.w)}" title="🔊">🔊</button><b>${esc(v.w)}</b> <span class="sub">${esc(v.pos||"")}</span></td><td class="${S.tqHideZh?"tq-blur":""}">${esc(v.zh||"")}</td><td class="tq-ex">${esc(v.ex||"")}</td></tr>`).join("")}</tbody></table></details>`:"";
+  const blocks=set.blocks.map((b,bi)=>{ const listen=!!(b.script&&b.script.length);
+    return `<div class="tq-b">${b.part!=="vocab"?`<div class="tq-part">Part ${esc(String(b.part))}</div>`:""}
+      ${listen?`<div class="tq-listen"><button class="ghost mini" data-act="tq-play" data-b="${bi}">${T("tq_play")}</button><span class="sub">${String(b.part)==="2"?T("tq_part2"):T("tq_listen_hint")}</span></div>
+        ${done?`<details class="tq-scr"><summary>${T("tq_script")}</summary>${b.script.map(([sp,l])=>`<p><b>${esc(sp)}:</b> ${esc(l)}</p>`).join("")}</details>`:""}`:""}
+      ${b.passage?`<div class="tq-pass">${esc(b.passage)}</div>`:""}
+      ${b.qs.map((q,qi)=>{ const key=bi+"-"+qi, my=ans[key], ok=my===q.a; k++;
+        return `<div class="tq-q ${done?(ok?"ok":"bad"):""}"><p><b>${k}.</b> ${esc(q.q||"")}</p><div class="tq-opts">${q.opts.map((o,oi)=>`<label class="${done&&oi===q.a?"right":""} ${done&&oi===my&&!ok?"wrong":""}"><input type="radio" name="tq-${ds}-${key}" data-act="tq-pick" data-date="${ds}" data-k="${key}" value="${oi}" ${my===oi?"checked":""} ${done?"disabled":""}> <span>${"ABCD"[oi]}. ${esc(o)}</span></label>`).join("")}</div>
+          ${done&&q.why?`<p class="tq-why"><b>${T("tq_why")}</b> ${esc(q.why)}</p>`:""}</div>`; }).join("")}</div>`; }).join("");
+  return head+voc+(set.review?`<p class="sub">${T("tq_review")}</p>`:"")+blocks+`<div class="tq-foot">${done?`<b class="tq-sc">${T("tq_score",set.score,n)}</b><button class="ghost mini" data-act="tq-redo" data-date="${ds}">${T("tq_redo")}</button>`:`<button class="primary" data-act="tq-submit" data-date="${ds}">${T("tq_submit")}</button>${got<n?`<span class="sub">${T("tq_left",n-got)}</span>`:""}`}</div>`; }
+function tqSubmit(ds){ const set=clone(tqSet(ds)); if (!set) return; const ans=set.ans||{}; let sc=0;
+  set.blocks.forEach((b,bi)=>b.qs.forEach((q,qi)=>{ const my=ans[bi+"-"+qi]; if (my===q.a) sc++; else {
+    const id=uid(), why=TQ_WHY[q.tag]!=null?TQ_WHY[q.tag]:(String(b.part)<"5"?2:1), part=+b.part||5;
+    save("toeic/"+id,{id,type:"err",date:today(),part,why,note:(q.q||"").slice(0,80)+" → "+(q.opts[q.a]||""),at:Date.now(),auto:true},100); } }));
+  set.done=true; set.score=sc; set.at=Date.now(); tqSave(set); if (tcTask(ds)) tcSet(ds,true); render(); toast(T("tq_score",sc,tqCount(set))); }
+function viewToeic(){
+  const c=tcCfg(), t=today();
+  if (!c || S.tcEdit){ const o=settings().toeic||{};
+    return `<section class="block toeic"><div class="card tc-setup"><h3>${c?T("tc_edit"):T("tc_setup")}</h3><p class="sub">${T("tc_setup_sub")}</p>
+      <form class="tc-form" data-act="tc-setup"><label>${T("tc_date")}<input type="date" id="tc-date" value="${esc(o.date||"")}" min="${addDays(t,7)}" required></label>
+      <label>${T("tc_base")}<input type="number" inputmode="numeric" id="tc-base" min="10" max="990" step="5" value="${o.base||780}"></label>
+      <label>${T("tc_target")}<input type="number" inputmode="numeric" id="tc-target" min="10" max="990" step="5" value="${o.target||950}"></label>
+      <button class="primary" type="submit">${c?T("tc_save"):T("tc_make")}</button>${c?`<button class="ghost" type="button" data-act="tc-edit-cancel">${T("tc_cancel")}</button>`:""}</form></div></section>`; }
+  const left=daysBetween(t,c.date), mocks=tcDocs("mock").sort((a,b)=>a.date<b.date?-1:1), best=mocks.reduce((m,x)=>Math.max(m,(+x.L||0)+(+x.R||0)),0);
+  const todayIt=tcItem(t), [da,db0]=tcDoneCount(c, t), db=db0-(tcTask(t)&&!(todayIt&&todayIt.d)?1:0), W=tcWeeks(c), wk=Math.floor(daysBetween(c.start,t)/7)+1;
+  const mon=mondayOf(parse(t)), week=Array.from({length:7},(_,i)=>addDays(mon,i));
+  const wkRow=ds=>{ const tk=tcTask(ds), it=tcItem(ds), past=ds<t; if (!tk) return `<li class="tc-day rest ${ds===t?"today":""}"><span class="tc-dd">${md(ds)} ${dow(ds)}</span><span class="sub">${ds<c.start||ds>c.date?"":T("tc_rest")}</span></li>`;
+    return `<li class="tc-day ${ds===t?"today":""} ${it&&it.d?"done":past?"miss":""} ${(S.tcDay||t)===ds?"sel":""}"><button class="linkish tc-dd" data-act="tc-day" data-date="${ds}">${md(ds)} ${dow(ds)}</button><label><input type="checkbox" data-act="tc-toggle" data-date="${ds}" ${it&&it.d?"checked":""}> <span>${esc(tk)}</span></label></li>`; };
+  const weeks=Array.from({length:W},(_,i)=>{ const a=addDays(c.start,i*7), b=addDays(a,6)<c.date?addDays(a,6):c.date; let n=0,k=0; for (let d=a; d<=b; d=addDays(d,1)){ if (tcTask(d)){ n++; const it=tcItem(d); if (it&&it.d) k++; } }
+    return `<li class="${i+1===wk?"cur":""}"><b>${T("tc_wk",i+1,W)}</b><span class="sub">${md(a)}–${md(b)}</span><span class="tc-ph ${tcPhase(c,a)}">${T("tc_ph_"+tcPhase(c,a))}</span><span class="tc-wn">${k}/${n}</span></li>`; }).join("");
+  // mock curve
+  const curve=(()=>{ if (mocks.length<2) return `<p class="empty mini">${T("tc_mock_need")}</p>`;
+    const Wd=520,H=160,L0=40,R0=12,Tp=14,B=24, tot=mocks.map(m=>(+m.L||0)+(+m.R||0)), mn=Math.min(...tot, c.base||990)-20, mx=Math.max(...tot, c.target)+20;
+    const d0=parse(mocks[0].date).getTime(), d1=Math.max(d0+1, parse(mocks[mocks.length-1].date).getTime()), X=d=>L0+(parse(d).getTime()-d0)/(d1-d0)*(Wd-L0-R0), Y=v=>Tp+(1-(v-mn)/(mx-mn))*(H-Tp-B);
+    return `<svg class="tc-curve" viewBox="0 0 ${Wd} ${H}" role="img" aria-label="${T("tc_mock")}"><line class="tgt" x1="${L0}" x2="${Wd-R0}" y1="${Y(c.target)}" y2="${Y(c.target)}"/><text class="ax" x="${L0-6}" y="${Y(c.target)+4}" text-anchor="end">${c.target}</text>
+      <polyline class="ln" points="${mocks.map((m,i)=>X(m.date)+","+Y(tot[i])).join(" ")}"/>${mocks.map((m,i)=>`<circle class="pt" cx="${X(m.date)}" cy="${Y(tot[i])}" r="3.5"><title>${md(m.date)} ${tot[i]}（${T("tc_l")} ${m.L} / ${T("tc_r")} ${m.R}）</title></circle><text class="ax" x="${X(m.date)}" y="${Y(tot[i])-8}" text-anchor="middle">${tot[i]}</text>`).join("")}
+      <text class="ax" x="${L0}" y="${H-6}">${md(mocks[0].date)}</text><text class="ax" x="${Wd-R0}" y="${H-6}" text-anchor="end">${md(mocks[mocks.length-1].date)}</text></svg>`; })();
+  // errors
+  const errs=tcDocs("err").sort((a,b)=>(b.at||0)-(a.at||0)), since=addDays(t,-13), whys=T("tc_whys");
+  const bars=(keys,label,get)=>{ const all=keys.map(k=>[k, errs.filter(e=>get(e)===k).length, errs.filter(e=>get(e)===k && e.date>=since).length]), mx=Math.max(1,...all.map(x=>x[1]));
+    return `<div class="tc-bars"><h4>${label}</h4>${all.map(([k,n,r])=>`<div class="tc-bar"><span>${esc(String(k))}</span><i><b style="width:${n/mx*100}%"></b></i><em>${n}${r?` <small>(${T("tc_14")} ${r})</small>`:""}</em></div>`).join("")}</div>`; };
+  return `<section class="block toeic">
+    <div class="tc-head card"><div class="tc-big"><b>${T("tc_d",left)}</b><span class="sub">${T("tc_exam",md(c.date)+" "+dow(c.date))}</span></div>
+      <div class="tc-st"><span class="sub">${T("tc_base")}</span><b>${c.base||"—"}</b></div><div class="tc-st"><span class="sub">${T("tc_target")}</span><b>${c.target}</b></div>
+      <div class="tc-st"><span class="sub">${T("tc_best")}</span><b>${best||"—"}</b>${best?`<span class="sub">${T("tc_gap",c.target-best)}</span>`:""}</div>
+      <div class="tc-st"><span class="sub">${wk>=1&&wk<=W?T("tc_wk",wk,W):""}</span><b>${T("tc_done",da,db)}</b></div>
+      <button class="icon-btn tc-edit" data-act="tc-edit" title="${T("tc_edit")}">✎</button></div>
+    <div class="card tq" id="tq">${viewQuiz(S.tcDay||t)}</div>
+    <div class="tc-grid">
+      <div class="card"><h3>${T("tc_week")}</h3><ul class="tc-week">${week.map(wkRow).join("")}</ul></div>
+      <div class="card"><h3>${T("tc_mock")}</h3>${curve}
+        <form class="tc-form" data-act="tc-mock"><input type="date" id="tcm-date" value="${t}" aria-label="${T("tc_date")}"><input type="number" inputmode="numeric" id="tcm-l" min="5" max="495" step="5" placeholder="${T("tc_l")}" aria-label="${T("tc_l")}"><input type="number" inputmode="numeric" id="tcm-r" min="5" max="495" step="5" placeholder="${T("tc_r")}" aria-label="${T("tc_r")}"><button class="primary" type="submit">${T("tc_mock_add")}</button></form>
+        ${mocks.length?`<table class="tc-mt"><tbody>${[...mocks].reverse().map(m=>`<tr><td>${md(m.date)}</td><td>${T("tc_l")} ${m.L}</td><td>${T("tc_r")} ${m.R}</td><td><b>${(+m.L||0)+(+m.R||0)}</b></td><td><button class="icon-btn" data-act="tc-del" data-id="${m.id}" title="${T("del")}">✕</button></td></tr>`).join("")}</tbody></table>`:""}</div>
+      <div class="card tc-errs"><h3>${T("tc_err")}</h3>
+        <form class="tc-form" data-act="tc-err"><select id="tce-part" aria-label="${T("tc_part")}">${[1,2,3,4,5,6,7].map(n=>`<option value="${n}" ${String(S.tcLastPart||7)===String(n)?"selected":""}>Part ${n}</option>`).join("")}</select>
+          <select id="tce-why" aria-label="${T("tc_why")}">${whys.map((w,i)=>`<option value="${i}">${esc(w)}</option>`).join("")}</select>
+          <input type="text" id="tce-note" placeholder="${T("tc_note_ph")}" autocomplete="off" aria-label="${T("tc_note_ph")}"><button class="primary" type="submit">${T("tc_err_add")}</button></form>
+        ${errs.length?`<div class="tc-stats">${bars([1,2,3,4,5,6,7].map(n=>"Part "+n),T("tc_by_part"),e=>"Part "+e.part)}${bars(whys,T("tc_by_why"),e=>whys[+e.why])}</div>
+          <h4>${T("tc_recent")}</h4><ul class="tc-el">${errs.slice(0,10).map(e=>`<li><span class="tc-ep">P${e.part}</span><span class="tc-ew">${esc(whys[+e.why]||"")}</span><span class="t">${esc(e.note||"")}</span><span class="sub">${md(e.date)}</span><button class="icon-btn" data-act="tc-del" data-id="${e.id}" title="${T("del")}">✕</button></li>`).join("")}</ul>`
+          :`<p class="empty mini">${T("tc_err_none")}</p>`}</div>
+      <details class="card tc-plan"><summary><h3>${T("tc_plan")}</h3></summary><ul class="tc-wks">${weeks}</ul></details>
+    </div></section>`;
+}
+
 /* ---------- today's top 3 ---------- */
 function refKey(r){ return r.task ? "t:"+r.task : `d:${r.date}:${r.pi}:${r.id}`; }
 function topList(){ return (day(today()).top||[]); }
@@ -1363,6 +1541,8 @@ function weekTips(mon){
       let busyM=0, cur=null; for (const [a,b] of iv){ if (!cur||a>cur[1]){ if (cur) busyM+=cur[1]-cur[0]; cur=[a,b]; } else cur[1]=Math.max(cur[1],b); } if (cur) busyM+=cur[1]-cur[0];
       return {...x, free:e0-s0-busyM}; }).filter(x=>x && x.free<180).sort((a,b)=>a.free-b.free)[0];
     if (tight) tips.push(T("tip_tight", W(tight.d), hrs(tight.free), tight.n)); }
+  // 7c. TOEIC plan days done this week
+  if (tcCfg()){ let a=0,b=0; days7.forEach(d=>{ if (d>=today() || !tcTask(d)) return; b++; const it=tcItem(d); if (it&&it.d) a++; }); if (b) tips.push(T("tip_toeic",a,b)); }
   // 8. few daily reviews
   const rv=days7.filter(d=>hasDay(d)&&((day(d).review||{}).done||(day(d).review||{}).improve)).length; if (tot && rv<3) tips.push(T("tip_review", rv));
   if (!tips.length) tips.push(tot ? T("tip_good", Math.round(wr*100)) : T("tip_empty"));
@@ -1444,7 +1624,7 @@ function viewWeek(){
     const topCar=myCar.filter(c=>!c.proj);
     return `<div class="day ${td?"today":""}" data-day="${date}">
       <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}${dayFreeBadge(date)}</div>
-      ${dayClassChips(date)}<div class="day-body" data-keep-y="${date}"><ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}</ul>${addForm(date)}
+      ${dayClassChips(date)}<div class="day-body" data-keep-y="${date}"><ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}${tcVirtualLi(date)}</ul>${addForm(date)}
       ${projs}</div>
       <div class="day-foot">
         <select data-act="proj-add" data-date="${date}" aria-label="${T("add_proj")}"><option value="">${T("add_proj")}</option>${projOpts.filter(p=>!names.has(p)).map(p=>`<option>${esc(p)}</option>`).join("")}<option value="__new">${T("new_proj")}</option></select>
@@ -2241,6 +2421,15 @@ document.addEventListener("submit", e=>{
     const d=dayCopy(m.date||f.dataset.date), name=f.dataset.proj; let list=d.items;
     if (name){ let p=d.projects.find(x=>x.name===name); if(!p){ p={name,open:true,items:[]}; d.projects.push(p); } list=p.items; }
     const it={id:uid(), t:inp.value.trim()||t, d:false}; if (m.k) it.k=m.k; if (m.k==="tb") it.rows=newRows(); list.push(it); save("days/"+d.date, d, 300); inp.value=""; if (m.date) toast(T("sl_added_to", md(m.date))); clearSlash(f); render();
+  } else if (act==="tc-setup"){
+    const date=document.getElementById("tc-date").value; if (!date) return; const st=clone(settings()), o=st.toeic||{};
+    st.toeic={...o, date, base:+document.getElementById("tc-base").value||null, target:+document.getElementById("tc-target").value||950, start:o.start||today()}; S.tcEdit=false; save("settings/main",st,50); render();
+  } else if (act==="tc-mock"){
+    const L=+document.getElementById("tcm-l").value, R=+document.getElementById("tcm-r").value, date=document.getElementById("tcm-date").value||today(); if (!L||!R) return;
+    const id=uid(); save("toeic/"+id,{id,type:"mock",date,L,R,at:Date.now()},50); render();
+  } else if (act==="tc-err"){
+    const part=+document.getElementById("tce-part").value, why=+document.getElementById("tce-why").value, n=document.getElementById("tce-note"); S.tcLastPart=part;
+    const id=uid(); save("toeic/"+id,{id,type:"err",date:today(),part,why,note:n.value.trim(),at:Date.now()},50); n.value=""; render(); document.getElementById("tce-note")?.focus();
   } else if (act==="pp-add"){
     const ti=document.getElementById("pp-title"), title=ti.value.trim(); if (!title) return; const au=document.getElementById("pp-author"), pj=document.getElementById("pp-proj").value;
     const id=uid(); S.ppLast=pj; save("papers/"+id, {id, title, author:au.value.trim(), proj:pj, status:"todo", note:"", link:"", createdAt:Date.now()}, 50); ti.value=""; au.value=""; render(); document.getElementById("pp-title")?.focus();
@@ -2315,6 +2504,16 @@ document.addEventListener("click", e=>{
   else if (act==="gym-ex-del"){ planEdit((pl,r)=>{ const g=r.groups.find(g=>g.id===b.dataset.g); g.ex=g.ex.filter(x=>x.id!==b.dataset.x); }); }
   else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
   else if (act==="gc-allow"){ gcAllow(); }
+  else if (act==="tc-day"){ S.tcDay=b.dataset.date; render(); document.getElementById("tq")?.scrollIntoView({block:"start"}); }
+  else if (act==="tc-go"){ S.tcDay=b.dataset.date; setTab("toeic"); }
+  else if (act==="tq-zh"){ S.tqHideZh=!S.tqHideZh; render(); }
+  else if (act==="tq-say"){ ttsPlay([["W",b.dataset.w]]); }
+  else if (act==="tq-play"){ if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; b.textContent=T("tq_play"); return; } const set=tqSet(S.tcDay||today()); const bl=set&&set.blocks[+b.dataset.b]; if (bl) ttsPlay(bl.script,b); }
+  else if (act==="tq-submit"){ tqSubmit(b.dataset.date); }
+  else if (act==="tq-redo"){ const set=clone(tqSet(b.dataset.date)); set.done=false; set.ans={}; delete set.score; tqSave(set); render(); }
+  else if (act==="tc-edit"){ S.tcEdit=true; render(); }
+  else if (act==="tc-edit-cancel"){ S.tcEdit=false; render(); }
+  else if (act==="tc-del"){ const k="tc:"+b.dataset.id; if (S.confirmDel===k){ S.confirmDel=null; remove("toeic/"+b.dataset.id); } else { S.confirmDel=k; toast(T("confirm_del")); setTimeout(()=>{ if (S.confirmDel===k) S.confirmDel=null; },3000); } render(); }
   else if (act==="pp-today"){ if (ppAddToDay(b.dataset.id, today())) toast(T("pp_today_ok")); render(); }
   else if (act==="pp-f"){ S.ppF={...S.ppF, [b.dataset.k]:b.dataset.v}; render(); }
   else if (act==="pp-st"){ ppSave(b.dataset.id, x=>{ x.status=PP_ST[(PP_ST.indexOf(x.status||"todo")+1)%PP_ST.length]; }); render(); }
@@ -2422,6 +2621,9 @@ document.addEventListener("click", e=>{
 document.addEventListener("change", e=>{
   const el=e.target, act=el.dataset.act;
   if (act==="task-toggle"){ const t={...task(el.dataset.id), done:el.checked, doneAt:el.checked?Date.now():null}; save("tasks/"+t.id,t,50); render(); }
+  else if (act==="tc-toggle"){ tcSet(el.dataset.date, el.checked); render(); }
+  else if (act==="tq-pick"){ const set=clone(tqSet(el.dataset.date)); if (!set || set.done) return; set.ans={...(set.ans||{}), [el.dataset.k]:+el.value}; tqSave(set); const f=document.querySelector(".tq-foot .sub"), n=tqCount(set)-Object.keys(set.ans).length; if (f) f.textContent=n?T("tq_left",n):""; }
+  else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).tc){ tcSet(el.dataset.date, false); render(); }
   else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked;
     // dc = the card it was checked on. Only an item checked on a later day's card (a carried item) shows up on that card too.
     // The calendar records it on that card's date (not the clock's), so checking the 11/10 card after midnight still counts for 11/10.
@@ -2681,6 +2883,7 @@ function banner(msg){ const b=document.getElementById("banner"); b.textContent=m
   const fail=k=>e=>{ waiting.delete(k); if (e.code!=="revoked") banner(T("disconnected",e.code)); };
   const sub=(name)=>db.collection(name).onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S[name]=o; done(name,snap); softRender(); }, fail(name));
   sub("tasks"); sub("days"); sub("expenses"); sub("events"); sub("gymlog"); sub("inbox");
+  db.collection("toeic").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.toeic=o; softRender(); }, ()=>{});
   db.collection("papers").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.papers=o; softRender(); }, ()=>{});
   // Claude's Monday suggestions (written by the scheduled run, read-only here)
   db.collection("weekly").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.weekly=o; softRender(); }, ()=>{});
