@@ -708,7 +708,7 @@ const I18N = {
     proj_sec:"專案", cls_edit:"編輯課表", cls_done:"完成，鎖定課表", cls_saved:"課表已鎖定", cls_locked:"已鎖定，按「編輯課表」才能修改", cls_wd:d=>`週${d}`,
     proj_rename:"點一下改名稱", proj_up:"往上移", proj_down:"往下移", proj_dup:"已經有同名的專案了", proj_renamed:n=>`已改名為「${n}」，每天的進度區塊也一起改了`,
     tq_title:d=>`${d} 的題目`, tq_none:"這天還沒有題目。每週一早上會自動出好整週的題。", tq_official:"這天用你的官方題本：計時做完，整份模考的話把分數記到下面的「模考成績」。", tq_rest:"這天休息。",
-    tq_vocab:"今天的單字", tq_play:"▶ 播放", tq_stop:"■ 停止", tq_script:"看原文", tq_submit:"交卷", tq_score:(a,b)=>`答對 ${a} / ${b}`, tq_done:"已完成", tq_left:n=>`還有 ${n} 題沒作答`, tq_redo:"重做一次",
+    tq_vocab:"今天的單字", tq_jump:"跳到題目 ↓", tq_play:"▶ 播放", tq_stop:"■ 停止", tq_script:"看原文", tq_submit:"交卷", tq_score:(a,b)=>`答對 ${a} / ${b}`, tq_done:"已完成", tq_left:n=>`還有 ${n} 題沒作答`, tq_redo:"重做一次",
     tq_ans:"正解", tq_why:"解析", tq_review:"本週單字複習：選出正確的中文意思", tq_no_voice:"這台裝置沒有英文語音，請到系統設定加一個英文（美國）語音。", tq_listen_hint:"先看題目和選項，再按播放。只能聽一次最接近考試。", tq_part2:"聽完問句和三個回答，選最適合的一個。",
     tq_go:"做題 →", tq_hide_zh:"遮住中文", tq_show_zh:"顯示中文",
     nav_speak:"口說", sk_intro:"每天約 15 分鐘，從對稿唸開始熟悉英語口說，主題輪流是求職和日常對話。稿子由 Claude 每週一寫好，週一到週五各一篇，週六重練本週最弱的一篇，週日休息。", sk_start:"開始練口說",
@@ -821,7 +821,7 @@ const I18N = {
     proj_sec:"Projects", cls_edit:"Edit schedule", cls_done:"Done, lock schedule", cls_saved:"Schedule locked", cls_locked:"Locked. Press “Edit schedule” to change it", cls_wd:d=>d,
     proj_rename:"Click to rename", proj_up:"Move up", proj_down:"Move down", proj_dup:"A project with that name already exists", proj_renamed:n=>`Renamed to “${n}”, on every day too`,
     tq_title:d=>`Questions for ${d}`, tq_none:"No questions for this day yet. A full week is written every Monday morning.", tq_official:"Use the official test book today: do it timed, then log the score under Mock scores.", tq_rest:"Rest day.",
-    tq_vocab:"Today's words", tq_play:"▶ Play", tq_stop:"■ Stop", tq_script:"Show script", tq_submit:"Submit", tq_score:(a,b)=>`${a} of ${b} correct`, tq_done:"Done", tq_left:n=>`${n} still unanswered`, tq_redo:"Redo",
+    tq_vocab:"Today's words", tq_jump:"Go to questions ↓", tq_play:"▶ Play", tq_stop:"■ Stop", tq_script:"Show script", tq_submit:"Submit", tq_score:(a,b)=>`${a} of ${b} correct`, tq_done:"Done", tq_left:n=>`${n} still unanswered`, tq_redo:"Redo",
     tq_ans:"Answer", tq_why:"Why", tq_review:"Week review: pick the right meaning", tq_no_voice:"No English voice on this device. Add an English (US) voice in system settings.", tq_listen_hint:"Read the questions and options first, then press play. Listening once is closest to the real test.", tq_part2:"Listen to the question and three responses, then pick the best one.",
     tq_go:"Questions →", tq_hide_zh:"Hide meanings", tq_show_zh:"Show meanings",
     nav_speak:"Speaking", sk_intro:"About 15 minutes a day, starting with reading a script aloud. Claude writes the scripts every Monday: one for each weekday, Saturday redoes the week's weakest one, Sunday is off.", sk_start:"Start speaking practice",
@@ -1474,11 +1474,11 @@ function ttsPlay(script, btn, rate, onend){ if (!window.speechSynthesis){ toast(
     u.lang=u.voice.lang; u.rate=rate||0.95; if (u.voice===fem && fem===male) u.pitch=1.25; if (i===script.length-1) u.onend=()=>{ TTS.on=false; if (btn) btn.textContent=T("tq_play"); if (onend) onend(); }; speechSynthesis.speak(u); }); }
 if (window.speechSynthesis) speechSynthesis.onvoiceschanged=()=>{};
 function viewQuiz(ds){ const tk=tcTask(ds), set=tqSet(ds), c=tcCfg(), W=T("wd");
-  const head=`<div class="tq-h"><h3>${T("tq_title", md(ds)+" "+dow(ds))}</h3><span class="sub">${tk?esc(tk):""}</span></div>`;
+  const head=`<div class="tq-h"><h3>${T("tq_title", md(ds)+" "+dow(ds))}</h3><span class="sub">${tk?esc(tk):""}</span>${set&&(set.vocab||[]).length&&(set.blocks||[]).length?`<button class="ghost mini" data-act="tq-jump">${T("tq_jump")}</button>`:""}</div>`;
   if (!tk) return head+`<p class="empty mini">${T("tq_rest")}</p>`;
   if (!set) return head+`<p class="empty mini">${/官方題本|official/i.test(tk)?T("tq_official"):T("tq_none")}</p>`;
   const ans=set.ans||{}, done=!!set.done, n=tqCount(set), got=Object.keys(ans).length; let k=0;
-  const voc=(set.vocab||[]).length?`<details class="tq-voc" ${done?"":"open"}><summary>${T("tq_vocab")} <span class="cnt">${set.vocab.length}</span></summary>
+  const voc=(set.vocab||[]).length?`<details class="tq-voc" ${done||matchMedia("(max-width:700px)").matches?"":"open"}><summary>${T("tq_vocab")} <span class="cnt">${set.vocab.length}</span></summary>
     <button class="ghost mini" data-act="tq-zh">${S.tqHideZh?T("tq_show_zh"):T("tq_hide_zh")}</button>
     <table><tbody>${set.vocab.map(v=>`<tr><td><button class="icon-btn" data-act="tq-say" data-w="${esc(v.w)}" title="🔊">🔊</button><b>${esc(v.w)}</b> <span class="sub">${esc(v.pos||"")}</span></td><td class="${S.tqHideZh?"tq-blur":""}">${esc(v.zh||"")}</td><td class="tq-ex">${esc(v.ex||"")}</td></tr>`).join("")}</tbody></table></details>`:"";
   const blocks=set.blocks.map((b,bi)=>{ const listen=!!(b.script&&b.script.length);
@@ -2681,6 +2681,7 @@ document.addEventListener("click", e=>{
   else if (act==="sk-rec"){ spRec(b.dataset.date, b.dataset.day); }
   else if (act==="sk-stop"){ spStop(); }
   else if (act==="sk-replay"){ if (SP.url){ new Audio(SP.url).play().catch(()=>{}); } }
+  else if (act==="tq-jump"){ document.querySelector("#tq .tq-b")?.scrollIntoView({block:"start",behavior:"smooth"}); }
   else if (act==="tq-zh"){ S.tqHideZh=!S.tqHideZh; render(); }
   else if (act==="tq-say"){ ttsPlay([["W",b.dataset.w]]); }
   else if (act==="tq-play"){ if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; b.textContent=T("tq_play"); return; } const set=tqSet(S.tcDay||today()); const bl=set&&set.blocks[+b.dataset.b]; if (bl) ttsPlay(bl.script,b); }
