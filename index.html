@@ -1364,8 +1364,8 @@ async function gcTodoSync(m){
   const want=gcTodoWant(), from=addDays(today(),-14); let n=0;
   try{
     for (const [key,w] of Object.entries(want)){
-      const sig=w.date+"|"+w.s; if (sent[key] && sent[key].sig===sig) continue;
-      const id=gcTodoId(key), input={summary:w.s, allDay:true, startTime:w.date+"T00:00:00", endTime:addDays(w.date,1)+"T00:00:00", description:"HOME 待辦"};
+      const sig=w.date+"|"+w.s+"|q"; if (sent[key] && sent[key].sig===sig) continue;
+      const id=gcTodoId(key), input={summary:w.s, allDay:true, startTime:w.date+"T00:00:00", endTime:addDays(w.date,1)+"T00:00:00", description:"HOME 待辦", quiet:true};
       try{ await m.callTool(GC,"update_event",{...input, eventId:id, status:"confirmed"}); }
       catch(x){ if (x.code!=="gone") throw x;
         try{ await m.callTool(GC,"create_event",{...input, id}); }

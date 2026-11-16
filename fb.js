@@ -155,7 +155,7 @@ async function gcFetch(path, opt = {}) {
   return j;
 }
 const enc = encodeURIComponent, cal = id => "/calendars/" + enc(id || "primary");
-function evBody(i) { return { ...(i.id ? { id: i.id } : {}), ...(i.status ? { status: i.status } : {}), summary: i.summary, description: i.description || "HOME",
+function evBody(i) { return { ...(i.id ? { id: i.id } : {}), ...(i.status ? { status: i.status } : {}), ...(i.quiet ? { reminders: { useDefault: false, overrides: [] } } : {}), summary: i.summary, description: i.description || "HOME",
   start: i.allDay ? { date: i.startTime.slice(0, 10) } : { dateTime: i.startTime }, end: i.allDay ? { date: i.endTime.slice(0, 10) } : { dateTime: i.endTime } }; }
 const tz = (() => { const o = -new Date().getTimezoneOffset(), a = Math.abs(o); return (o >= 0 ? "+" : "-") + String(Math.floor(a / 60)).padStart(2, "0") + ":" + String(a % 60).padStart(2, "0"); })();
 const TOOLS = {
