@@ -822,7 +822,7 @@ function undo(){ const g=undoStack.pop(); undoGroup=null; if (!g){ toast(T("undo
   undoMute=true; try { for (const [path,before] of g.before){ if (before==null) remove(path); else save(path, before, 50); } } finally { undoMute=false; }
   render(); toast(T("undo_done")); }
 document.addEventListener("keydown", e=>{ if ((e.metaKey||e.ctrlKey) && !e.shiftKey && (e.key==="z"||e.key==="Z")){ const a=document.activeElement; if (isTyping() || (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.type!=="checkbox")) return; e.preventDefault(); undo(); } });
-function save(path, body, delay=500){ if (path.startsWith("events/")) gcSyncSoon(); recordUndo(path); pending.set(path, body); clearTimeout(timers.get(path)); timers.set(path, setTimeout(()=>flush(path), delay)); }
+function save(path, body, delay=500){ if (/^(events|tasks|days)\//.test(path)) gcSyncSoon(); recordUndo(path); pending.set(path, body); clearTimeout(timers.get(path)); timers.set(path, setTimeout(()=>flush(path), delay)); }
 async function flush(path){
   if (inflight.has(path)) { timers.set(path, setTimeout(()=>flush(path), 300)); return; }
   const body = pending.get(path); if (!body || !db) return;
@@ -840,6 +840,7 @@ async function flush(path){
 function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; }
 async function remove(path){
   if (path.startsWith("events/")){ const e=cachedDoc(path)||pending.get(path); if (e&&e.gcalId){ gcQ("home.gcDel", q=>[...q,e.gcalId]); gcSyncSoon(); } }
+  if (path.startsWith("tasks/")) gcSyncSoon();
   recordUndo(path);
   pending.delete(path); clearTimeout(timers.get(path));
   const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id];
@@ -1342,10 +1343,43 @@ async function gcSync(){
         const cur=ev(e.id); if (gid && cur){ const p="events/"+e.id; pending.set(p,{...cur, gcalId:gid, gcalSig:sig}); clearTimeout(timers.get(p)); timers.set(p, setTimeout(()=>flush(p), 50)); n++; }
       }catch(x){ const k=gcErrKind(x); if (k!=="fail"){ G.err=k; softRender(); return; } }
     }
+    n+=await gcTodoSync(m);
     if (n) { try{ await m.invalidate(GC,"list_events"); }catch(_){} }
   } finally { G.syncing=false; } }
+/* To-dos with a date go to Google Calendar as all-day items, ☐ open / ✓ done.
+   The Google id is made from the item's own id, so every device writes the same event and nothing doubles.
+   home.gcTodo remembers per device what was sent, so only changes are written. */
+function gcTodoId(key){ let a=0x811c9dc5, b=0x01000193^0x5bd1e995; for (let i=0;i<key.length;i++){ const c=key.charCodeAt(i); a=Math.imul(a^c,16777619)>>>0; b=Math.imul(b^c,2246822519)>>>0; } return "hbt"+a.toString(16).padStart(8,"0")+b.toString(16).padStart(8,"0"); }
+function gcTodoWant(){
+  const t=today(), from=addDays(t,-14), to=addDays(t,60), out={};
+  const put=(key,date,title,done)=>{ if (!title||!date||date<from||date>to) return; out[key]={date, s:(done?"✓ ":"☐ ")+title}; };
+  allTasks().forEach(x=>{ if (!x.k && x.due) put("t:"+x.id, x.due, x.title, !!x.done); });
+  allDayKeys().forEach(ds=>{ if (ds<from || ds>to) return; const d=day(ds);
+    const one=(it,proj)=>{ if (it.k || !it.id || !(it.t||"").trim()) return; const when = it.d ? (it.dn||ds) : (ds<t ? t : ds); put("d:"+ds+":"+it.id, when, (proj?proj+"：":"")+it.t.trim(), !!it.d); };
+    (d.items||[]).forEach(it=>one(it,null)); (d.projects||[]).forEach(p=>(p.items||[]).forEach(it=>one(it,p.name))); });
+  return out; }
+async function gcTodoSync(m){
+  let sent; try{ sent=JSON.parse(localStorage.getItem("home.gcTodo")||"{}"); }catch(_){ sent={}; }
+  const keep=()=>{ try{ localStorage.setItem("home.gcTodo", JSON.stringify(sent)); }catch(_){} };
+  const want=gcTodoWant(), from=addDays(today(),-14); let n=0;
+  try{
+    for (const [key,w] of Object.entries(want)){
+      const sig=w.date+"|"+w.s; if (sent[key] && sent[key].sig===sig) continue;
+      const id=gcTodoId(key), input={summary:w.s, allDay:true, startTime:w.date+"T00:00:00", endTime:addDays(w.date,1)+"T00:00:00", description:"HOME 待辦"};
+      try{ await m.callTool(GC,"update_event",{...input, eventId:id, status:"confirmed"}); }
+      catch(x){ if (x.code!=="gone") throw x;
+        try{ await m.callTool(GC,"create_event",{...input, id}); }
+        catch(y){ if (y.code!=="exists") throw y; await m.callTool(GC,"update_event",{...input, eventId:id, status:"confirmed"}); } }
+      sent[key]={sig, date:w.date}; n++; if (n%10===0) keep(); }
+    for (const [key,v] of Object.entries(sent)){
+      if (want[key]) continue;
+      if (v.date>=from){ try{ await m.callTool(GC,"delete_event",{eventId:gcTodoId(key)}); }catch(x){ if (x.code!=="gone") throw x; } n++; }
+      delete sent[key]; }
+  }catch(x){ const k=gcErrKind(x); if (k!=="fail"){ G.err=k; softRender(); } }
+  finally{ keep(); }
+  return n; }
 /* a mark also sent to Google shows once, as the mark */
-function gcDedup(gl, marks){ const ids=new Set(marks.map(x=>x.gid).filter(Boolean)), own=new Set(marks.map(x=>(MARK_ICON[x.kind]||"★")+" "+x.t)); return gl.filter(x=>!ids.has(x.id) && !own.has(x.t)); }
+function gcDedup(gl, marks){ const ids=new Set(marks.map(x=>x.gid).filter(Boolean)), own=new Set(marks.map(x=>(MARK_ICON[x.kind]||"★")+" "+x.t)); return gl.filter(x=>!ids.has(x.id) && !own.has(x.t) && !String(x.id||"").startsWith("hbt")); }
 function gcStatus(){
   if (G.mcp===null || G.err==="off") return "";
   if (G.err==="conn") return `<span class="gc-st warn">${T("gc_conn")}</span>`;
