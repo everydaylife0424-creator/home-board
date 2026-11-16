@@ -5,6 +5,8 @@
   python3 tools/weekly.py write MONDAY tips.json  # save Claude's suggestions to users/<uid>/weekly/<MONDAY>
   python3 tools/weekly.py toeic-dump [MONDAY]     # TOEIC plan tasks for that week (default: this week), errors, mocks, words already used
   python3 tools/weekly.py toeic-write sets.json   # save daily question sets to users/<uid>/toeic/set_<date> (answered sets are kept)
+  python3 tools/weekly.py speak-dump [MONDAY]     # speaking: stage, which weekdays need scripts, last weeks' tries (accuracy, missed words, transcripts)
+  python3 tools/weekly.py speak-write scripts.json  # save speak/<date> scripts, or {"date","fb"} feedback on past ones (practice records are kept)
 
 Needs the env var FIREBASE_SA: the Firebase service-account key JSON (raw or base64).
 Optional HOME_UID to pick the user when the project has more than one.
@@ -159,6 +161,48 @@ def toeic_write(path):
         n += 1; print(f"saved set_{d}: {len(vocab)} words, {sum(len(b['qs']) for b in blocks)} questions")
     print(f"{n} sets written")
 
+SP_MODES = ("read", "retell", "answer", "talk")
+
+def speak_dump(arg=None):
+    u = connect()
+    c = (u.collection("settings").document("main").get().to_dict() or {}).get("speak")
+    if not c or not c.get("start"):
+        print(json.dumps(dict(plan=None, note="Speaking not started yet (settings.speak). Nothing to write."), ensure_ascii=False)); return
+    mon = dt.date.fromisoformat(arg) if arg else monday(dt.datetime.now(TZ).date())
+    docs = {x.id: x.to_dict() for x in u.collection("speak").stream()}
+    stage = int(c.get("stage") or 1)
+    week = [dict(date=(mon + dt.timedelta(days=i)).isoformat(), hasScript=(mon + dt.timedelta(days=i)).isoformat() in docs) for i in range(5)]
+    since = (mon - dt.timedelta(days=21)).isoformat()
+    past = []
+    for d, x in sorted(docs.items()):
+        if d < since or d >= mon.isoformat(): continue
+        past.append(dict(date=d, mode=x.get("mode"), kind=x.get("kind"), title=x.get("title"), hasFeedback=bool(x.get("fb")),
+                         tries=[{k: t.get(k) for k in ("acc", "wpm", "n", "sec", "miss", "said")} for t in (x.get("tries") or [])][-3:]))
+    print(json.dumps(dict(plan=dict(start=c["start"], stage=stage, since=c.get("since")), modeForStage={1: "read", 2: "retell", 3: "answer (job) / talk (conversation)"}[stage],
+                          week=week, past=past, titlesUsed=sorted({x.get("title") for x in docs.values() if x.get("title")})), ensure_ascii=False, indent=1))
+
+def speak_write(path):
+    data = json.load(open(path, encoding="utf-8"))
+    items = data.get("scripts", data) if isinstance(data, dict) else data
+    u = connect(); n = f = 0
+    for it in items:
+        d = dt.date.fromisoformat(it["date"]).isoformat(); ref = u.collection("speak").document(d); old = ref.get(); o = old.to_dict() if old.exists else {}
+        if set(it) <= {"date", "fb"}:
+            if old.exists and it.get("fb"): ref.set({**o, "fb": it["fb"]}); f += 1; print(f"feedback {d}")
+            continue
+        mode = it.get("mode") or "read"
+        if mode not in SP_MODES: print(f"skip {d}: bad mode {mode}"); continue
+        body = {k: it[k] for k in ("title", "kind", "text", "q", "tips", "sample", "turns", "fb") if it.get(k)}
+        if mode in ("read", "retell") and not body.get("text"): print(f"skip {d}: no text"); continue
+        if mode == "answer" and not body.get("q"): print(f"skip {d}: no question"); continue
+        if mode == "talk":
+            body["turns"] = [t for t in body.get("turns", []) if t.get("say")]
+            if not body["turns"]: print(f"skip {d}: no turns"); continue
+        keep = {k: o[k] for k in ("tries", "steps", "done") if k in o}
+        ref.set(dict(id=d, type="script", date=d, mode=mode, by="Claude", at=int(dt.datetime.now().timestamp() * 1000), **body, **keep))
+        n += 1; print(f"saved speak/{d}: {mode} · {body.get('title','')}")
+    print(f"{n} scripts written, {f} feedback notes")
+
 if __name__ == "__main__":
     a = sys.argv[1:]
     if a[:1] == ["dump"]:
@@ -169,5 +213,9 @@ if __name__ == "__main__":
         toeic_dump(a[1] if len(a) > 1 else None)
     elif a[:1] == ["toeic-write"] and len(a) == 2:
         toeic_write(a[1])
+    elif a[:1] == ["speak-dump"]:
+        speak_dump(a[1] if len(a) > 1 else None)
+    elif a[:1] == ["speak-write"] and len(a) == 2:
+        speak_write(a[1])
     else:
         sys.exit(__doc__)
