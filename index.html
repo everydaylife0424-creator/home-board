@@ -228,6 +228,9 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .settings-panel{margin-bottom:16px}
 .settings-panel .prow{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
 .settings-panel .prow span{flex:1;min-width:0}
+.settings-panel .pname{flex:1;min-width:0;border:1px solid transparent;background:transparent;padding:4px 6px;margin-left:-7px;border-radius:6px;font:inherit;color:var(--fg)}
+.settings-panel .pname:hover{border-color:var(--line)}.settings-panel .pname:focus{border-color:var(--accent);background:var(--surface);outline:none}
+.settings-panel .prow .icon-btn:disabled{opacity:.3;cursor:default}
 .settings-panel label.pin{font-size:13px;color:var(--muted);display:flex;gap:4px;align-items:center}
 /* overview strip */
 .overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px 24px;margin-bottom:24px;padding-block:16px;border-block:1px solid var(--line)}
@@ -640,6 +643,7 @@ const I18N = {
     cmp_title:"前後比較", cmp_sub:"每個動作用估計 1RM（e1RM）比較力量，用每週總訓練量比較份量", cmp_ex:"動作", cmp_base:"起點", cmp_now:"最近", cmp_chg:"變化", cmp_none:"計劃開始後累積兩週以上紀錄，這裡就會出現比較。", cmp_wk:"每週總訓練量（kg）", cmp_how:"怎麼算：e1RM = 重量 ×（1 + (次數 + 保留次數) ÷ 30），保留次數 = 10 − RPE；起點取計劃開始前 4 週到第 2 週的最好成績，最近取最後 2 週的最好成績。",
     undo:"復原", undo_done:"已復原", undo_none:"沒有可以復原的動作", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
+    proj_rename:"點一下改名稱", proj_up:"往上移", proj_down:"往下移", proj_dup:"已經有同名的專案了", proj_renamed:n=>`已改名為「${n}」，每天的進度區塊也一起改了`,
     nav_papers:"文獻", pp_add_title:"文獻標題", pp_add_author:"作者（選填）", pp_add_proj:"專案", pp_none_proj:"未分類", pp_add_btn:"加入",
     pp_st_todo:"未讀", pp_st_read:"讀完", pp_st_noted:"已寫筆記", pp_all:"全部", pp_st_tip:"點一下切換：未讀 → 讀完 → 已寫筆記",
     pp_note:"重點筆記", pp_note_ph:"這篇的重點、可以引用的段落、跟你論文的關聯⋯", pp_link:"連結", pp_link_ph:"https://… 或 DOI", pp_empty:"還沒有文獻。在上面輸入標題就能加入。", pp_empty_f:"沒有符合篩選的文獻。",
@@ -712,6 +716,7 @@ const I18N = {
     cmp_title:"Progress: before vs. after", cmp_sub:"Strength is compared by estimated 1RM (e1RM), volume by weekly total", cmp_ex:"Exercise", cmp_base:"Baseline", cmp_now:"Current", cmp_chg:"Change", cmp_none:"The comparison shows up here after two weeks of logging in the program.", cmp_wk:"Weekly volume (kg)", cmp_how:"How: e1RM = weight × (1 + (reps + reps in reserve) ÷ 30), reps in reserve = 10 − RPE. Start = best from 4 weeks before to week 2; latest = best of the last 2 weeks.",
     undo:"Undo", undo_done:"Undone", undo_none:"Nothing to undo", gym_no_history:"Nothing logged yet. Log your sets after training so you can compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
     gym_logged:"Logged", gym_need:"Enter sets × reps or a weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
+    proj_rename:"Click to rename", proj_up:"Move up", proj_down:"Move down", proj_dup:"A project with that name already exists", proj_renamed:n=>`Renamed to “${n}”, on every day too`,
     nav_papers:"Readings", pp_add_title:"Paper title", pp_add_author:"Author (optional)", pp_add_proj:"Project", pp_none_proj:"Unsorted", pp_add_btn:"Add",
     pp_st_todo:"To read", pp_st_read:"Read", pp_st_noted:"Notes written", pp_all:"All", pp_st_tip:"Tap to switch: to read → read → notes written",
     pp_note:"Key notes", pp_note_ph:"Main points, quotable parts, how it ties to your paper…", pp_link:"Link", pp_link_ph:"https://… or DOI", pp_empty:"No readings yet. Type a title above to add one.", pp_empty_f:"Nothing matches this filter.",
@@ -1084,12 +1089,22 @@ function classPanel(){ const cs=[...classList()].sort((a,b)=>((+a.dow+6)%7)-((+b
     <div class="cls-win">${T("cls_win")} <input type="time" data-act="win-f" data-f="s" value="${w.s}" aria-label="${T("cls_win")}"> – <input type="time" data-act="win-f" data-f="e" value="${w.e}" aria-label="${T("cls_win")}"></div>
     ${cs.length?cs.map(c=>`<div class="cls-row">${dsel(c)}<input type="time" data-act="cls-f" data-id="${c.id}" data-f="s" value="${esc(c.s)}" aria-label="start"><span>–</span><input type="time" data-act="cls-f" data-id="${c.id}" data-f="e" value="${esc(c.e)}" aria-label="end"><input type="text" data-act="cls-f" data-id="${c.id}" data-f="name" value="${esc(c.name||"")}" placeholder="${T("cls_name_ph")}" autocomplete="off" aria-label="${T("cls_name_ph")}"><button class="icon-btn" data-act="cls-del" data-id="${c.id}" title="${T("del")}">✕</button></div>`).join(""):`<p class="empty mini">${T("cls_none")}</p>`}
     <button class="ghost mini" data-act="cls-add">＋ ${T("cls_add")}</button></div>`; }
+/* renaming a project renames it everywhere: settings, overview cards, every day's section and the readings list */
+function renameProject(from, to, el){
+  if (!to || to===from){ if (el) el.value=from; return; }
+  if (settings().projects.includes(to)){ if (el) el.value=from; toast(T("proj_dup")); return; }
+  const st=clone(settings()), sw=x=>x===from?to:x;
+  st.projects=st.projects.map(sw); st.pinned=pinned().map(sw); if (st.ovCards) st.ovCards=st.ovCards.map(x=>x==="proj:"+from?"proj:"+to:x);
+  save("settings/main",st,50);
+  allDayKeys().forEach(ds=>{ const d=day(ds); if (!(d.projects||[]).some(p=>p.name===from)) return; const c=dayCopy(ds); c.projects.forEach(p=>{ if (p.name===from) p.name=to; }); save("days/"+ds,c,200); });
+  allPapers().filter(x=>x.proj===from).forEach(x=>save("papers/"+x.id,{...x, proj:to},200));
+  toast(T("proj_renamed",to)); render(); }
 function clsEdit(fn){ const st=clone(settings()); st.classes=[...(st.classes||[])].map(c=>({...c})); fn(st); save("settings/main",st,300); }
 function settingsPanel(){
   const st=settings(), pin=new Set(pinned());
   return `<section class="card settings-panel" id="s-settings"><div class="sec-h"><h2>${L("proj_settings")}</h2><span class="sp"></span><button class="icon-btn" data-act="toggle-settings" aria-label="close">✕</button></div>
     <p class="sub" style="margin:0 0 6px">${L("settings_hint")}</p>
-    ${st.projects.map(p=>`<div class="prow"><span>${esc(p)}</span><label class="pin"><input type="checkbox" data-act="pin" data-name="${esc(p)}" ${pin.has(p)?"checked":""}>${L("pin_lbl")}</label><button class="icon-btn" data-act="proj-remove" data-name="${esc(p)}" title="${T("proj_remove_title")}">✕</button></div>`).join("")}
+    ${st.projects.map((p,i)=>`<div class="prow"><input class="pname" value="${esc(p)}" data-act="proj-rename" data-name="${esc(p)}" aria-label="${T("proj_rename")}" title="${T("proj_rename")}" autocomplete="off"><button class="icon-btn" data-act="proj-move" data-name="${esc(p)}" data-n="-1" title="${T("proj_up")}" ${i?"":"disabled"}>↑</button><button class="icon-btn" data-act="proj-move" data-name="${esc(p)}" data-n="1" title="${T("proj_down")}" ${i<st.projects.length-1?"":"disabled"}>↓</button><label class="pin"><input type="checkbox" data-act="pin" data-name="${esc(p)}" ${pin.has(p)?"checked":""}>${L("pin_lbl")}</label><button class="icon-btn" data-act="proj-remove" data-name="${esc(p)}" title="${T("proj_remove_title")}">✕</button></div>`).join("")}
     <form class="add" data-act="proj-new"><input type="text" id="proj-new" placeholder="${T("proj_new_ph")}" autocomplete="off"></form>
     ${classPanel()}</section>`;
 }
@@ -2323,6 +2338,7 @@ document.addEventListener("click", e=>{
   else if (act==="gcal-sel"){ S.gcalSel = S.gcalSel===b.dataset.date ? null : b.dataset.date; render(); }
   else if (act==="calmonth"){ const n=+b.dataset.n; if(n===0) S.calMonth=today().slice(0,7); else { const d=parse(S.calMonth+"-01"); d.setMonth(d.getMonth()+n); S.calMonth=ymd(d).slice(0,7); } S.calSel=null; render(); }
   else if (act==="cal-sel"){ if (e.target.closest("#calPop") && !e.target.closest(".icon-btn")) return; S.ctx=null; S.calSel = S.calSel===b.dataset.date ? null : b.dataset.date; render(); }
+  else if (act==="proj-move"){ const st=clone(settings()), a=[...st.projects], i=a.indexOf(b.dataset.name), j=i+(+b.dataset.n); if (i<0||j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; st.projects=a; st.pinned=a.filter(p=>pinned().includes(p)); save("settings/main",st,50); render(); }
   else if (act==="proj-remove"){ const st=clone(settings()); st.projects=st.projects.filter(p=>p!==b.dataset.name); st.pinned=pinned().filter(p=>p!==b.dataset.name); save("settings/main",st,50); render(); }
   else if (act==="go-review"){ S.reviewDate=b.dataset.date; setTab("review"); }
   else if (act==="rv-day"){ const n=+b.dataset.n; S.reviewDate=n===0?today():addDays(S.reviewDate,n); render(); }
@@ -2362,6 +2378,7 @@ document.addEventListener("change", e=>{
   else if (el.id==="wpFile" && el.files && el.files[0]){ uploadWp(el.files[0]); }
   else if (act==="pin"){ const st=clone(settings()), s=new Set(pinned()); el.checked?s.add(el.dataset.name):s.delete(el.dataset.name); st.pinned=st.projects.filter(p=>s.has(p)); save("settings/main",st,50); render(); }
   else if (act==="rv-date"){ if (el.value){ S.reviewDate=el.value; render(); } }
+  else if (act==="proj-rename"){ renameProject(el.dataset.name, el.value.trim(), el); }
   else if (act==="pp-field"){ const f=el.dataset.f, v=el.value.trim(); if (f==="title" && !v) return; ppSave(el.dataset.id, x=>{ x[f]=v; }); render(); }
   else if (act==="cls-f"){ const f=el.dataset.f, v=f==="dow"?+el.value:el.value.trim(); clsEdit(st=>{ const c=st.classes.find(c=>c.id===el.dataset.id); if (c) c[f]=v; }); render(); }
   else if (act==="win-f"){ if (!el.value) return; const st=clone(settings()); st.dayWin={...dayWin(), [el.dataset.f]:el.value}; save("settings/main",st,300); render(); }
