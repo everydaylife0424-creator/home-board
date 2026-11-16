@@ -200,6 +200,31 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .progress{height:4px;border-radius:2px;background:var(--calm-soft);overflow:hidden;margin:2px 0 8px}
 .progress i{display:block;height:100%;background:var(--good)}
 .carry-tag{font-size:12px;color:var(--warn-ink);background:var(--warn-soft);border-radius:4px;padding:0 4px;margin-top:3px;white-space:nowrap}
+.papers .pp-add{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px;margin-bottom:12px}
+.papers .pp-add input{flex:1 1 180px;min-width:0}.papers .pp-add #pp-title{flex:3 1 260px}.papers .pp-add select{flex:0 1 auto}
+.pp-f{margin-bottom:8px;flex-wrap:wrap}.pp-f .chip small{color:var(--muted);font-family:var(--f-mono);margin-left:2px}
+.pp-g{margin-top:12px}.pp-g h3{margin:0 0 6px;font-size:15px}.pp-g h3 .cnt{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-weight:400}
+.pp-l{list-style:none;margin:0;padding:0}.pp{border-top:1px solid var(--line);padding:6px 0}.pp:first-child{border-top:0}
+.pp-r{display:flex;align-items:flex-start;gap:8px}.pp-t{flex:1;min-width:0;text-align:left;display:flex;flex-direction:column;gap:2px;padding:4px 0;color:var(--fg);text-decoration:none}
+.pp-t,.pp-t *{text-decoration:none}.pp-t:hover b{text-decoration:underline}.pp-head{margin:0 0 12px}.pp-head b{color:var(--fg);font-weight:500}
+.pp-f .chip[aria-pressed="true"] small{color:inherit;opacity:.85}
+.pp-t b{font-weight:500;overflow-wrap:anywhere}.pp.noted .pp-t b,.pp.read .pp-t b{color:var(--fg)}
+.pp-peek{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-st{flex:none;font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);min-width:66px;cursor:pointer;margin-top:2px}
+.pp-st.read{background:var(--calm-soft);color:var(--fg);border-color:transparent}.pp-st.noted{background:var(--accent-soft);color:var(--accent);border-color:transparent;font-weight:500}
+.pp-body{padding:6px 0 4px 74px}.pp-meta{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;margin-bottom:8px}.pp-meta input:last-child{grid-column:1/-1}
+.pp-nl{font-size:12.5px;color:var(--muted)}.pp-body textarea{width:100%;margin-top:4px}
+.free{margin-left:auto;font-size:12px;color:var(--muted);font-family:var(--f-mono);white-space:nowrap}.free.low{color:var(--hot-ink)}
+.cls-l{display:flex;flex-wrap:wrap;gap:4px;margin:-2px 0 8px}.cls-c{font-size:12px;background:var(--calm-soft);border-radius:5px;padding:1px 6px;color:var(--fg)}.cls-c b{font-family:var(--f-mono);font-weight:500;color:var(--muted)}
+.cls-panel{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}.cls-panel h3{margin:0 0 4px;font-size:15px}.cls-panel .sub{margin:0 0 8px}
+.cls-win{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13.5px;margin-bottom:8px}
+.cls-row{display:flex;align-items:center;gap:6px;padding:4px 0;flex-wrap:wrap}.cls-row input[type=text]{flex:1 1 140px;min-width:0}
+.ex-spark{flex:none;margin-left:6px;vertical-align:middle}.ex-spark polyline{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-linejoin:round}.ex-spark circle{fill:var(--accent)}
+.ex-curve{margin-bottom:10px}.ex-curve .eh-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.ex-curve h4{margin:0}.ex-curve .sub{font-size:12px}
+.ex-curve svg{width:100%;height:auto;max-height:180px;display:block}.ex-curve .gl{stroke:var(--line);stroke-width:1}.ex-curve .ax{fill:var(--muted);font-size:11px;font-family:var(--f-mono)}
+.ex-curve .ln{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round}.ex-curve .pt{fill:var(--surface);stroke:var(--accent);stroke-width:1.5}.ex-curve .pr{fill:var(--accent)}.ex-curve .prl{fill:var(--accent);font-size:10.5px;font-weight:600}
+@media (max-width:700px){.pp-body{padding-left:0}.pp-meta{grid-template-columns:1fr}.ex-spark{display:none}.ex-curve .ax{font-size:15px}.ex-curve .prl{font-size:14px}}
+@media (pointer:coarse){.pp-st{min-height:44px}.pp-t{min-height:44px}}
 .settings-panel{margin-bottom:16px}
 .settings-panel .prow{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
 .settings-panel .prow span{flex:1;min-width:0}
@@ -615,6 +640,14 @@ const I18N = {
     cmp_title:"前後比較", cmp_sub:"每個動作用估計 1RM（e1RM）比較力量，用每週總訓練量比較份量", cmp_ex:"動作", cmp_base:"起點", cmp_now:"最近", cmp_chg:"變化", cmp_none:"計劃開始後累積兩週以上紀錄，這裡就會出現比較。", cmp_wk:"每週總訓練量（kg）", cmp_how:"怎麼算：e1RM = 重量 ×（1 + (次數 + 保留次數) ÷ 30），保留次數 = 10 − RPE；起點取計劃開始前 4 週到第 2 週的最好成績，最近取最後 2 週的最好成績。",
     undo:"復原", undo_done:"已復原", undo_none:"沒有可以復原的動作", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
+    nav_papers:"文獻", pp_add_title:"文獻標題", pp_add_author:"作者（選填）", pp_add_proj:"專案", pp_none_proj:"未分類", pp_add_btn:"加入",
+    pp_st_todo:"未讀", pp_st_read:"讀完", pp_st_noted:"已寫筆記", pp_all:"全部", pp_st_tip:"點一下切換：未讀 → 讀完 → 已寫筆記",
+    pp_note:"重點筆記", pp_note_ph:"這篇的重點、可以引用的段落、跟你論文的關聯⋯", pp_link:"連結", pp_link_ph:"https://… 或 DOI", pp_empty:"還沒有文獻。在上面輸入標題就能加入。", pp_empty_f:"沒有符合篩選的文獻。",
+    pp_count:(a,b,c)=>`未讀 ${a}・讀完 ${b}・已寫筆記 ${c}`, pp_sub:"每篇記讀到哪裡和重點，寫論文時回來找。", pp_open:"開啟",
+    cls_title:"課表", cls_hint:"上課時間會出現在每日小卡上，並從當天的可用時間扣掉。Google 日曆裡有時間的行程也會一起扣。", cls_name_ph:"課名", cls_add:"新增一堂課", cls_win:"每天可安排的時段", cls_none:"還沒有課。",
+    free_left:h=>`今天還剩 ${h}`, free_day:h=>`可用 ${h}`, free_tip:"可用時間 = 每天可安排的時段，扣掉上課和 Google 日曆裡有時間的行程",
+    tip_tight:(d,h,n)=>`${d}扣掉上課和行程只剩 ${h}，卻排了 ${n} 件事。下次這天少排一點，或把幾件挪到空堂多的日子。`,
+    gc_curve:"重量變化", gc_pr:"破紀錄", gc_sum:(a,b,c,n)=>`起點 ${a} → 最新 ${b}（${c}）・破紀錄 ${n} 次`, gc_need:"記錄兩次以上就會畫出曲線。",
     nav_home:"待辦", nav_review:"每日檢討", nav_money:"記帳",
     grp_pages:"頁面", grp_sections:"本頁段落", grp_switch:"切換",
     sec_overview:"總覽", top_title:"今日三件事", top_sub:"先做完這三件，其他的晚點再說", top_empty:"在下面的待辦或任務板按 ☆，挑出今天最重要的三件。", top_full:"今天已經挑滿三件了，先取消一件再加", top_pin:"加到今日三件事", top_unpin:"從今日三件事移除", top_done:"三件都完成了 🎉",
@@ -679,6 +712,14 @@ const I18N = {
     cmp_title:"Progress: before vs. after", cmp_sub:"Strength is compared by estimated 1RM (e1RM), volume by weekly total", cmp_ex:"Exercise", cmp_base:"Baseline", cmp_now:"Current", cmp_chg:"Change", cmp_none:"The comparison shows up here after two weeks of logging in the program.", cmp_wk:"Weekly volume (kg)", cmp_how:"How: e1RM = weight × (1 + (reps + reps in reserve) ÷ 30), reps in reserve = 10 − RPE. Start = best from 4 weeks before to week 2; latest = best of the last 2 weeks.",
     undo:"Undo", undo_done:"Undone", undo_none:"Nothing to undo", gym_no_history:"Nothing logged yet. Log your sets after training so you can compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
     gym_logged:"Logged", gym_need:"Enter sets × reps or a weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
+    nav_papers:"Readings", pp_add_title:"Paper title", pp_add_author:"Author (optional)", pp_add_proj:"Project", pp_none_proj:"Unsorted", pp_add_btn:"Add",
+    pp_st_todo:"To read", pp_st_read:"Read", pp_st_noted:"Notes written", pp_all:"All", pp_st_tip:"Tap to switch: to read → read → notes written",
+    pp_note:"Key notes", pp_note_ph:"Main points, quotable parts, how it ties to your paper…", pp_link:"Link", pp_link_ph:"https://… or DOI", pp_empty:"No readings yet. Type a title above to add one.", pp_empty_f:"Nothing matches this filter.",
+    pp_count:(a,b,c)=>`${a} to read · ${b} read · ${c} with notes`, pp_sub:"Track where you are with each paper and its key points.", pp_open:"Open",
+    cls_title:"Class schedule", cls_hint:"Classes show on the day cards and come off that day's free time. Timed Google Calendar events count too.", cls_name_ph:"Class", cls_add:"Add a class", cls_win:"Hours you plan within each day", cls_none:"No classes yet.",
+    free_left:h=>`${h} left today`, free_day:h=>`${h} free`, free_tip:"Free time = your daily planning hours minus classes and timed Google Calendar events",
+    tip_tight:(d,h,n)=>`${d} had only ${h} free after classes and events, but ${n} items. Plan less that day, or move some to a day with more free time.`,
+    gc_curve:"Weight over time", gc_pr:"PR", gc_sum:(a,b,c,n)=>`Start ${a} → latest ${b} (${c}) · ${n} PRs`, gc_need:"Log it twice and a curve appears.",
     nav_home:"To-dos", nav_review:"Daily review", nav_money:"Expenses",
     grp_pages:"PAGES", grp_sections:"ON THIS PAGE", grp_switch:"SWITCHES",
     sec_overview:"Overview", top_title:"Today's top 3", top_sub:"Finish these first, everything else can wait", top_empty:"Tap ☆ on a to-do or task below to pick today's three most important things.", top_full:"Already three picked today. Remove one first", top_pin:"Add to today's top 3", top_unpin:"Remove from today's top 3", top_done:"All three done 🎉",
@@ -746,6 +787,7 @@ const ICON = {
   style:'<path d="M4 20h16"/><path d="M6 16l6-12 6 12"/><path d="M8.5 11h7"/>',
   theme:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
   pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
+  papers:'<path d="M5 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H5z"/><path d="M19 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>',
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
   undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
   bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
@@ -756,7 +798,7 @@ const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
   calMonth: ymd(new Date()).slice(0,7), calSel: null, gcalMonth: ymd(new Date()).slice(0,7), gcalSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, cm:null, gymAsc:(()=>{ try{ return localStorage.getItem("home.gymAsc")==="1"; }catch(_){ return false; } })(), wpBusy:false, confirmDel:null,
-  tasks:{}, days:{}, expenses:{}, weekly:{}, settings:null, inbox:{}, pgEdit:null, chkOpen:false, volAll:{}, volFix:null, split:null, qc:false, wkRev: mondayOf(new Date()),
+  tasks:{}, days:{}, expenses:{}, weekly:{}, settings:null, inbox:{}, papers:{}, ppF:{st:"all",proj:"all"}, ppOpen:{}, pgEdit:null, chkOpen:false, volAll:{}, volFix:null, split:null, qc:false, wkRev: mondayOf(new Date()),
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
@@ -811,7 +853,7 @@ function dayStats(d){ const all=[...(d.items||[]), ...(d.projects||[]).flatMap(p
 /* undo: remember what a document looked like before each user action (actions within 0.8 s form one step) */
 const undoStack=[]; let undoMute=false, lastUserAt=0, undoGroup=null;
 ["pointerdown","keydown","change"].forEach(t=>document.addEventListener(t, ()=>{ lastUserAt=performance.now(); }, true));
-function cachedDoc(path){ const [c,id]=path.split("/"); if (path==="gym/plan") return S.gymPlan; if (path==="settings/main") return S.settings; const m={tasks:S.tasks,days:S.days,expenses:S.expenses,events:S.events,gymlog:S.gymlog,inbox:S.inbox}[c]; return m?m[id]:undefined; }
+function cachedDoc(path){ const [c,id]=path.split("/"); if (path==="gym/plan") return S.gymPlan; if (path==="settings/main") return S.settings; const m={tasks:S.tasks,days:S.days,expenses:S.expenses,events:S.events,gymlog:S.gymlog,inbox:S.inbox,papers:S.papers}[c]; return m?m[id]:undefined; }
 function recordUndo(path){
   if (undoMute || performance.now()-lastUserAt>1500) return;
   const a=document.activeElement; if (a && a.tagName==="TEXTAREA") return;
@@ -837,13 +879,13 @@ async function flush(path){
     else toast(T("save_fail", e && e.message || e));
   } finally { inflight.delete(path); }
 }
-function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; }
+function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; else if (c==="papers") S.papers[id]=body; }
 async function remove(path){
   if (path.startsWith("events/")){ const e=cachedDoc(path)||pending.get(path); if (e&&e.gcalId){ gcQ("home.gcDel", q=>[...q,e.gcalId]); gcSyncSoon(); } }
   if (path.startsWith("tasks/")) gcSyncSoon();
   recordUndo(path);
   pending.delete(path); clearTimeout(timers.get(path));
-  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id];
+  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id]; if (c==="papers") delete S.papers[id];
   if (db) { try { await db.doc(path).delete(); } catch(e){ toast(T("del_fail")); } }
 }
 
@@ -867,7 +909,7 @@ function render(){
   const eb=document.getElementById("editBar"); eb.hidden=!S.edit; eb.textContent=T("edit_hint");
   document.getElementById("pageTitle").innerHTML = S.tab==="home" ? L("app_title") : L("nav_"+S.tab);
   const n=new Date(); document.getElementById("todayLabel").textContent = T("today_label", n.getFullYear(), n.getMonth()+1, n.getDate(), T("wd")[n.getDay()]);
-  v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : viewMoney();
+  v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : S.tab==="papers" ? viewPapers() : viewMoney();
   injectNotes(v);
   renderHero();
   if (S.tab==="home") positionPop();
@@ -888,7 +930,7 @@ function renderSide(){
   document.getElementById("sideInner").innerHTML = `
     <div class="brand"><span class="mark">H</span><span class="lbl">${L("app_title")}</span></div>
     <div class="grp"><span class="lbl">${L("grp_pages")}</span></div>
-    ${page("home")}${page("gym")}${page("review")}${page("money")}
+    ${page("home")}${page("gym")}${page("review")}${page("papers")}${page("money")}
     ${S.tab==="home" ? `<div class="grp"><span class="lbl">${L("grp_sections")}</span></div>
       ${sec("s-overview","overview",T("sec_overview"))}${sec("s-tasks","tasks",T("sec_tasks"))}${sec("s-week","week",T("sec_week"))}${sec("s-cal","cal",T("sec_cal"))}` : ""}
     <button class="navb" data-act="undo" title="⌘Z">${svg("undo")}<span class="lbl">${T("undo")}</span><span class="val lbl">⌘Z</span></button>
@@ -1015,13 +1057,83 @@ function overview(tasks){
   return `<div class="overview" data-row="ov">${list.map(card).join("") || `<p class="empty mini">${T("cm_row_empty")}</p>`}</div>`;
 }
 
+
+/* ---------- class schedule: settings.classes [{id,name,dow(0=Sun..6),s,e}], settings.dayWin {s,e} ---------- */
+function classList(){ return settings().classes || []; }
+function dayWin(){ const w=settings().dayWin||{}; return {s:w.s||"08:00", e:w.e||"23:00"}; }
+const toMin=hm=>{ const m=String(hm||"").match(/^(\d{1,2}):(\d{2})/); return m? +m[1]*60+ +m[2] : null; };
+function classesOn(ds){ const w=parse(ds).getDay(); return classList().filter(c=>+c.dow===w && toMin(c.s)!=null && toMin(c.e)>toMin(c.s)).sort((a,b)=>toMin(a.s)-toMin(b.s)); }
+function gcTimedOn(ds){ const out=[]; for (const [k,list] of Object.entries(G.data||{})){ if (k.startsWith("holiday")) continue;
+  for (const ev of list){ if (ev.status==="cancelled" || !ev.start?.dateTime || !ev.end?.dateTime || String(ev.id||"").startsWith("hbt")) continue;
+    const a=new Date(ev.start.dateTime), b=new Date(ev.end.dateTime), d0=parse(ds), d1=parse(addDays(ds,1)); if (b<=d0 || a>=d1) continue;
+    out.push([a<d0?0:a.getHours()*60+a.getMinutes(), b>=d1?1440:b.getHours()*60+b.getMinutes()]); } } return out; }
+/* free minutes in the planning window, minus classes and timed Google events; for today, only what is left from now */
+function freeMin(ds){ const w=dayWin(); let s=toMin(w.s), e=toMin(w.e); if (s==null||e==null||e<=s) return null;
+  if (ds===today()){ const n=new Date(); s=Math.max(s, n.getHours()*60+n.getMinutes()); }
+  if (ds<today()) return null; if (e<=s) return 0;
+  const iv=[...classesOn(ds).map(c=>[toMin(c.s),toMin(c.e)]), ...gcTimedOn(ds)].map(([a,b])=>[Math.max(a,s),Math.min(b,e)]).filter(([a,b])=>b>a).sort((x,y)=>x[0]-y[0]);
+  let busy=0, cur=null; for (const [a,b] of iv){ if (!cur || a>cur[1]){ if (cur) busy+=cur[1]-cur[0]; cur=[a,b]; } else cur[1]=Math.max(cur[1],b); } if (cur) busy+=cur[1]-cur[0];
+  return e-s-busy; }
+const hrs=m=>{ const h=Math.floor(m/60), mm=Math.round(m%60); return S.lang==="en" ? (h?h+"h":"")+(mm?(h?" ":"")+mm+"m":(h?"":"0h")) : (h?h+" 小時":"")+(mm?(h?" ":"")+mm+" 分":(h?"":"0 小時")); };
+function dayFreeBadge(ds){ const m=freeMin(ds); if (m==null || (!classList().length && !gcTimedOn(ds).length && !settings().dayWin)) return "";
+  return `<span class="free ${m<180?"low":""}" title="${T("free_tip")}">${ds===today()?T("free_left",hrs(m)):T("free_day",hrs(m))}</span>`; }
+function dayClassChips(ds){ const cs=classesOn(ds); return cs.length?`<div class="cls-l">${cs.map(c=>`<span class="cls-c"><b>${esc(c.s)}–${esc(c.e)}</b> ${esc(c.name||"")}</span>`).join("")}</div>`:""; }
+function classPanel(){ const cs=[...classList()].sort((a,b)=>((+a.dow+6)%7)-((+b.dow+6)%7) || (toMin(a.s)||0)-(toMin(b.s)||0)), w=dayWin(), wd=T("wd");
+  const dsel=(c)=>`<select data-act="cls-f" data-id="${c.id}" data-f="dow" aria-label="${T("cls_title")}">${[1,2,3,4,5,6,0].map(i=>`<option value="${i}" ${+c.dow===i?"selected":""}>${wd[i]}</option>`).join("")}</select>`;
+  return `<div class="cls-panel"><h3>${T("cls_title")}</h3><p class="sub">${T("cls_hint")}</p>
+    <div class="cls-win">${T("cls_win")} <input type="time" data-act="win-f" data-f="s" value="${w.s}" aria-label="${T("cls_win")}"> – <input type="time" data-act="win-f" data-f="e" value="${w.e}" aria-label="${T("cls_win")}"></div>
+    ${cs.length?cs.map(c=>`<div class="cls-row">${dsel(c)}<input type="time" data-act="cls-f" data-id="${c.id}" data-f="s" value="${esc(c.s)}" aria-label="start"><span>–</span><input type="time" data-act="cls-f" data-id="${c.id}" data-f="e" value="${esc(c.e)}" aria-label="end"><input type="text" data-act="cls-f" data-id="${c.id}" data-f="name" value="${esc(c.name||"")}" placeholder="${T("cls_name_ph")}" autocomplete="off" aria-label="${T("cls_name_ph")}"><button class="icon-btn" data-act="cls-del" data-id="${c.id}" title="${T("del")}">✕</button></div>`).join(""):`<p class="empty mini">${T("cls_none")}</p>`}
+    <button class="ghost mini" data-act="cls-add">＋ ${T("cls_add")}</button></div>`; }
+function clsEdit(fn){ const st=clone(settings()); st.classes=[...(st.classes||[])].map(c=>({...c})); fn(st); save("settings/main",st,300); }
 function settingsPanel(){
   const st=settings(), pin=new Set(pinned());
   return `<section class="card settings-panel" id="s-settings"><div class="sec-h"><h2>${L("proj_settings")}</h2><span class="sp"></span><button class="icon-btn" data-act="toggle-settings" aria-label="close">✕</button></div>
     <p class="sub" style="margin:0 0 6px">${L("settings_hint")}</p>
     ${st.projects.map(p=>`<div class="prow"><span>${esc(p)}</span><label class="pin"><input type="checkbox" data-act="pin" data-name="${esc(p)}" ${pin.has(p)?"checked":""}>${L("pin_lbl")}</label><button class="icon-btn" data-act="proj-remove" data-name="${esc(p)}" title="${T("proj_remove_title")}">✕</button></div>`).join("")}
-    <form class="add" data-act="proj-new"><input type="text" id="proj-new" placeholder="${T("proj_new_ph")}" autocomplete="off"></form></section>`;
+    <form class="add" data-act="proj-new"><input type="text" id="proj-new" placeholder="${T("proj_new_ph")}" autocomplete="off"></form>
+    ${classPanel()}</section>`;
 }
+
+
+/* ---------- readings: one doc per paper in papers/<id> ---------- */
+const PP_ST=["todo","read","noted"];
+function paper(id){ return pending.get("papers/"+id) || S.papers[id]; }
+function allPapers(){ const ids=new Set(Object.keys(S.papers)); for (const p of pending.keys()) if (p.startsWith("papers/")) ids.add(p.slice(7)); return [...ids].map(paper).filter(Boolean); }
+function ppLink(u){ u=String(u||"").trim(); if (!u) return ""; if (/^10\.\d{4,}\//.test(u)) return "https://doi.org/"+u; return /^https?:\/\//i.test(u) ? u : ""; }
+function viewPapers(){
+  const all=allPapers(), projs=[...settings().projects], f=S.ppF;
+  const cnt=st=>all.filter(x=>(x.status||"todo")===st).length;
+  const shown=all.filter(x=>(f.st==="all"||(x.status||"todo")===f.st) && (f.proj==="all"||(x.proj||"")===f.proj));
+  const groups=[...projs, ""].map(p=>({p, list:shown.filter(x=>(x.proj||"")===p || (p==="" && x.proj && !projs.includes(x.proj)))
+    .sort((a,b)=>PP_ST.indexOf(a.status||"todo")-PP_ST.indexOf(b.status||"todo") || (b.createdAt||0)-(a.createdAt||0))})).filter(g=>g.list.length);
+  const chip=(k,v,label,n)=>`<button class="chip" data-act="pp-f" data-k="${k}" data-v="${esc(v)}" aria-pressed="${f[k]===v}">${esc(label)}${n!=null?` <small>${n}</small>`:""}</button>`;
+  const row=x=>{ const st=x.status||"todo", op=!!S.ppOpen[x.id], url=ppLink(x.link);
+    return `<li class="pp ${st}">
+      <div class="pp-r"><button class="pp-st ${st}" data-act="pp-st" data-id="${x.id}" title="${T("pp_st_tip")}">${T("pp_st_"+st)}</button>
+        <button class="pp-t linkish" data-act="pp-open" data-id="${x.id}" aria-expanded="${op}"><b>${esc(x.title)}</b>${x.author?`<span class="sub"> · ${esc(x.author)}</span>`:""}${x.note&&!op?`<span class="pp-peek">${esc(x.note.split("\n")[0].slice(0,80))}</span>`:""}</button>
+        ${url?`<a class="icon-btn" href="${esc(url)}" target="_blank" rel="noopener" title="${T("pp_open")}">↗</a>`:""}
+        <button class="icon-btn" data-act="pp-del" data-id="${x.id}" title="${T("del")}">${S.confirmDel==="pp:"+x.id?T("confirm_del"):"✕"}</button></div>
+      ${op?`<div class="pp-body">
+        <div class="pp-meta"><input type="text" value="${esc(x.title)}" data-act="pp-field" data-f="title" data-id="${x.id}" aria-label="${T("pp_add_title")}" autocomplete="off">
+          <input type="text" value="${esc(x.author||"")}" placeholder="${T("pp_add_author")}" data-act="pp-field" data-f="author" data-id="${x.id}" aria-label="${T("pp_add_author")}" autocomplete="off">
+          <select data-act="pp-field" data-f="proj" data-id="${x.id}" aria-label="${T("pp_add_proj")}"><option value="">${T("pp_none_proj")}</option>${projs.map(p=>`<option ${p===x.proj?"selected":""}>${esc(p)}</option>`).join("")}</select>
+          <input type="text" value="${esc(x.link||"")}" placeholder="${T("pp_link_ph")}" data-act="pp-field" data-f="link" data-id="${x.id}" aria-label="${T("pp_link")}" autocomplete="off"></div>
+        <label class="pp-nl">${T("pp_note")}</label><textarea id="ppn-${x.id}" data-act="pp-note" data-id="${x.id}" placeholder="${T("pp_note_ph")}" rows="5">${esc(x.note||"")}</textarea>
+      </div>`:""}</li>`; };
+  return `<section class="block papers">
+    <p class="sub pp-head"><b>${T("pp_count",cnt("todo"),cnt("read"),cnt("noted"))}</b>　${T("pp_sub")}</p>
+    <form class="card pp-add" data-act="pp-add">
+      <input type="text" id="pp-title" placeholder="${T("pp_add_title")}" autocomplete="off" aria-label="${T("pp_add_title")}">
+      <input type="text" id="pp-author" placeholder="${T("pp_add_author")}" autocomplete="off" aria-label="${T("pp_add_author")}">
+      <select id="pp-proj" aria-label="${T("pp_add_proj")}">${projs.map(p=>`<option ${p===(f.proj!=="all"?f.proj:S.ppLast)?"selected":""}>${esc(p)}</option>`).join("")}<option value="">${T("pp_none_proj")}</option></select>
+      <button class="primary" type="submit">${T("pp_add_btn")}</button></form>
+    <div class="chips pp-f">${chip("st","all",T("pp_all"),all.length)}${PP_ST.map(st=>chip("st",st,T("pp_st_"+st),cnt(st))).join("")}</div>
+    <div class="chips pp-f">${chip("proj","all",T("pp_all"))}${projs.map(p=>chip("proj",p,p,all.filter(x=>x.proj===p).length)).join("")}</div>
+    ${groups.length?groups.map(g=>`<div class="card pp-g"><h3>${esc(g.p||T("pp_none_proj"))} <span class="cnt">${g.list.length}</span></h3><ul class="pp-l">${g.list.map(row).join("")}</ul></div>`).join("")
+      :`<p class="empty">${all.length?T("pp_empty_f"):T("pp_empty")}</p>`}
+  </section>`;
+}
+function ppSave(id, fn){ const x=paper(id); if (!x) return; const c=clone(x); fn(c); save("papers/"+id, c, 600); }
 
 /* ---------- today's top 3 ---------- */
 function refKey(r){ return r.task ? "t:"+r.task : `d:${r.date}:${r.pi}:${r.id}`; }
@@ -1177,6 +1289,12 @@ function weekTips(mon){
   // 7. spending jumped
   const spent=(a,b)=>[...new Set([a.slice(0,7), b.slice(0,7)])].flatMap(k=>month(k).entries||[]).filter(e=>e.date>=a&&e.date<=b&&e.type!=="in").reduce((x,e)=>x+(+e.amount||0),0);
   const sNow=spent(mon,sun), sPrev=spent(addDays(mon,-7),addDays(mon,-1)); if (sPrev>0 && sNow>sPrev*1.5 && sNow-sPrev>=1000) tips.push(T("tip_spend", money(sNow), Math.round((sNow/sPrev-1)*100)));
+  // 7b. a day with little free time (classes + events) but a long list
+  if (classList().length){ const tight=st.filter(x=>x.n>=4).map(x=>{ const w=dayWin(), s0=toMin(w.s), e0=toMin(w.e); if (s0==null||e0==null) return null;
+      const iv=[...classesOn(x.d).map(c=>[toMin(c.s),toMin(c.e)]), ...gcTimedOn(x.d)].map(([a,b])=>[Math.max(a,s0),Math.min(b,e0)]).filter(([a,b])=>b>a).sort((p,q)=>p[0]-q[0]);
+      let busyM=0, cur=null; for (const [a,b] of iv){ if (!cur||a>cur[1]){ if (cur) busyM+=cur[1]-cur[0]; cur=[a,b]; } else cur[1]=Math.max(cur[1],b); } if (cur) busyM+=cur[1]-cur[0];
+      return {...x, free:e0-s0-busyM}; }).filter(x=>x && x.free<180).sort((a,b)=>a.free-b.free)[0];
+    if (tight) tips.push(T("tip_tight", W(tight.d), hrs(tight.free), tight.n)); }
   // 8. few daily reviews
   const rv=days7.filter(d=>hasDay(d)&&((day(d).review||{}).done||(day(d).review||{}).improve)).length; if (tot && rv<3) tips.push(T("tip_review", rv));
   if (!tips.length) tips.push(tot ? T("tip_good", Math.round(wr*100)) : T("tip_empty"));
@@ -1257,8 +1375,8 @@ function viewWeek(){
     }).join("");
     const topCar=myCar.filter(c=>!c.proj);
     return `<div class="day ${td?"today":""}" data-day="${date}">
-      <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}</div>
-      <div class="day-body" data-keep-y="${date}"><ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}</ul>${addForm(date)}
+      <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}${dayFreeBadge(date)}</div>
+      ${dayClassChips(date)}<div class="day-body" data-keep-y="${date}"><ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}</ul>${addForm(date)}
       ${projs}</div>
       <div class="day-foot">
         <select data-act="proj-add" data-date="${date}" aria-label="${T("add_proj")}"><option value="">${T("add_proj")}</option>${projOpts.filter(p=>!names.has(p)).map(p=>`<option>${esc(p)}</option>`).join("")}<option value="__new">${T("new_proj")}</option></select>
@@ -1550,6 +1668,29 @@ function gymPlan(){ return pending.get("gym/plan") || S.gymPlan || {routines:[]}
 function gymMonth(m){ return pending.get("gymlog/"+m) || S.gymlog[m] || {month:m, entries:[]}; }
 function gymEntries(){ const ks=new Set(Object.keys(S.gymlog)); for (const p of pending.keys()) if (p.startsWith("gymlog/")) ks.add(p.slice(7)); return [...ks].flatMap(k=>gymMonth(k).entries); }
 function savePlan(pl){ save("gym/plan", pl, 300); }
+
+/* weight per training day for one exercise: heaviest set that day, in the unit used most recently */
+function exSeries(h){ const by={}; let unit="kg";
+  [...h].sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.ts||0)-(b.ts||0)).forEach(e=>{ const w=parseW(e.weight); if (!w || w.bad || !w.kg) return; if (w.unit) unit=w.unit; by[e.date]=Math.max(by[e.date]||0, w.kg); });
+  const pts=Object.keys(by).sort().map(d=>({d, kg:by[d]})); let best=0; pts.forEach((p,i)=>{ p.pr = i>0 && p.kg>best+1e-6; best=Math.max(best,p.kg); });
+  const f=kg=>unit==="lb"?kg/0.4536:kg; pts.forEach(p=>p.v=Math.round(f(p.kg)*10)/10); return {pts, unit:unit==="lb"?"lb":"kg"}; }
+function exSpark(h){ const {pts}=exSeries(h); if (pts.length<2) return ""; const W=56,H=16, mn=Math.min(...pts.map(p=>p.v)), mx=Math.max(...pts.map(p=>p.v)), r=mx-mn||1;
+  const xy=pts.map((p,i)=>[i/(pts.length-1)*(W-4)+2, H-2-(p.v-mn)/r*(H-4)]);
+  return `<svg class="ex-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><polyline points="${xy.map(a=>a.join(",")).join(" ")}"/>${pts.map((p,i)=>p.pr?`<circle cx="${xy[i][0]}" cy="${xy[i][1]}" r="1.8"/>`:"").join("")}</svg>`; }
+function exCurve(h){ const {pts,unit}=exSeries(h); if (pts.length<2) return `<p class="empty mini">${T("gc_need")}</p>`;
+  const W=520,H=150,L=40,R=12,Tp=14,B=24, vs=pts.map(p=>p.v), mn0=Math.min(...vs), mx0=Math.max(...vs), pad=Math.max(1,(mx0-mn0)*0.15), mn=mn0-pad, mx=mx0+pad;
+  const d0=parse(pts[0].d).getTime(), d1=parse(pts[pts.length-1].d).getTime(), span=Math.max(1,d1-d0);
+  const X=d=>L+(parse(d).getTime()-d0)/span*(W-L-R), Y=v=>Tp+(1-(v-mn)/(mx-mn))*(H-Tp-B);
+  const ticks=[mn0, (mn0+mx0)/2, mx0].filter((v,i,a)=>a.indexOf(v)===i);
+  const prs=pts.filter(p=>p.pr).length, first=pts[0].v, last=pts[pts.length-1].v, ch=last-first, chS=(ch>=0?"+":"")+(Math.round(ch*10)/10)+" "+unit;
+  const xl=[pts[0], pts[Math.floor((pts.length-1)/2)], pts[pts.length-1]].filter((p,i,a)=>a.indexOf(p)===i);
+  return `<div class="ex-curve"><div class="eh-h"><h4>${T("gc_curve")}</h4><span class="sub">${T("gc_sum", first+" "+unit, last+" "+unit, chS, prs)}</span></div>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${T("gc_curve")}">
+      ${ticks.map(v=>`<line class="gl" x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}"/><text class="ax" x="${L-6}" y="${Y(v)+4}" text-anchor="end">${Math.round(v*10)/10}</text>`).join("")}
+      ${xl.map(p=>`<text class="ax" x="${X(p.d)}" y="${H-6}" text-anchor="${p===pts[0]?"start":p===pts[pts.length-1]?"end":"middle"}">${md(p.d)}</text>`).join("")}
+      <polyline class="ln" points="${pts.map(p=>X(p.d)+","+Y(p.v)).join(" ")}"/>
+      ${pts.map(p=>`<circle class="${p.pr?"pr":"pt"}" cx="${X(p.d)}" cy="${Y(p.v)}" r="${p.pr?4.5:3}"><title>${md(p.d)} ${p.v} ${unit}${p.pr?" · "+T("gc_pr"):""}</title></circle>${p.pr?`<text class="prl" x="${Math.min(X(p.d), W-R-14)}" y="${Y(p.v)-8}" text-anchor="middle">${T("gc_pr")}</text>`:""}`).join("")}
+    </svg></div>`; }
 function viewGym(){
   const pl=gymPlan(), rs=pl.routines;
   if (!S.gymR || !rs.some(r=>r.id===S.gymR)) S.gymR = rs[0]?.id || null;
@@ -1560,9 +1701,10 @@ function viewGym(){
   const chips=rs.map(x=>`<button class="chip" data-act="gym-r" data-id="${x.id}" data-rt="${x.id}" draggable="true" aria-pressed="${x.id===S.gymR}">${esc(x.name)}</button>`).join("");
   const exRow=(g,x)=>{ const h=hist(x.id), last=h[0], open=!!S.gymOpen[x.id];
     return `<li class="ex ${open?"open":""}" data-lpx="${esc(JSON.stringify({g:g.id,x:x.id}))}">
-      <button class="ex-sum" data-act="gym-open" data-id="${x.id}" aria-expanded="${open}"><span class="tw">▸</span><span class="ex-name">${esc(x.name)}</span>
+      <button class="ex-sum" data-act="gym-open" data-id="${x.id}" aria-expanded="${open}"><span class="tw">▸</span><span class="ex-name">${esc(x.name)}</span>${exSpark(h)}
         ${last?`<span class="ex-target" title="${T("gym_last")} ${md(last.date)}">${esc([last.sets,last.weight].filter(Boolean).join(" · "))}</span>`:""}</button>
       ${open?`<div class="ex-body">
+        ${exCurve(h)}
         <form class="ex-log" data-act="gym-log" data-x="${x.id}" data-name="${esc(x.name)}">
           <input type="date" id="gld-${x.id}" value="${t}" aria-label="${T("gym_date")}" class="gl-date">
           <input type="text" id="gls-${x.id}" placeholder="${T("gym_sets")}" value="${esc(last?.sets||"")}" autocomplete="off">
@@ -2031,6 +2173,9 @@ document.addEventListener("submit", e=>{
     const d=dayCopy(m.date||f.dataset.date), name=f.dataset.proj; let list=d.items;
     if (name){ let p=d.projects.find(x=>x.name===name); if(!p){ p={name,open:true,items:[]}; d.projects.push(p); } list=p.items; }
     const it={id:uid(), t:inp.value.trim()||t, d:false}; if (m.k) it.k=m.k; if (m.k==="tb") it.rows=newRows(); list.push(it); save("days/"+d.date, d, 300); inp.value=""; if (m.date) toast(T("sl_added_to", md(m.date))); clearSlash(f); render();
+  } else if (act==="pp-add"){
+    const ti=document.getElementById("pp-title"), title=ti.value.trim(); if (!title) return; const au=document.getElementById("pp-author"), pj=document.getElementById("pp-proj").value;
+    const id=uid(); S.ppLast=pj; save("papers/"+id, {id, title, author:au.value.trim(), proj:pj, status:"todo", note:"", link:"", createdAt:Date.now()}, 50); ti.value=""; au.value=""; render(); document.getElementById("pp-title")?.focus();
   } else if (act==="proj-new"){
     const inp=f.querySelector("input"), n=inp.value.trim(); if(!n) return;
     const st=clone(settings()); st.pinned=[...pinned()];
@@ -2102,6 +2247,12 @@ document.addEventListener("click", e=>{
   else if (act==="gym-ex-del"){ planEdit((pl,r)=>{ const g=r.groups.find(g=>g.id===b.dataset.g); g.ex=g.ex.filter(x=>x.id!==b.dataset.x); }); }
   else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
   else if (act==="gc-allow"){ gcAllow(); }
+  else if (act==="pp-f"){ S.ppF={...S.ppF, [b.dataset.k]:b.dataset.v}; render(); }
+  else if (act==="pp-st"){ ppSave(b.dataset.id, x=>{ x.status=PP_ST[(PP_ST.indexOf(x.status||"todo")+1)%3]; }); render(); }
+  else if (act==="pp-open"){ S.ppOpen[b.dataset.id]=!S.ppOpen[b.dataset.id]; render(); if (S.ppOpen[b.dataset.id]) setTimeout(()=>{ const t=document.getElementById("ppn-"+b.dataset.id); if (t){ t.focus({preventScroll:true}); t.setSelectionRange(t.value.length,t.value.length); } },0); }
+  else if (act==="pp-del"){ const k="pp:"+b.dataset.id; if (S.confirmDel===k){ S.confirmDel=null; remove("papers/"+b.dataset.id); } else { S.confirmDel=k; setTimeout(()=>{ if (S.confirmDel===k){ S.confirmDel=null; render(); } },3000); } render(); }
+  else if (act==="cls-add"){ clsEdit(st=>{ const last=st.classes[st.classes.length-1]; st.classes.push({id:uid(), name:"", dow:last?last.dow:1, s:"09:10", e:"12:00"}); }); render(); }
+  else if (act==="cls-del"){ clsEdit(st=>{ st.classes=st.classes.filter(c=>c.id!==b.dataset.id); }); render(); }
   else if (act==="gym-sort"){ S.gymAsc=!S.gymAsc; try{ localStorage.setItem("home.gymAsc", S.gymAsc?"1":"0"); }catch(_){} render(); }
   else if (act==="cm-ov-del"){ const st=clone(settings()); st.ovCards=ovCards().filter(x=>x!==b.dataset.id); S.cm=null; save("settings/main",st,50); render(); }
   else if (act==="cm-ov-add"){ const st=clone(settings()); st.ovCards=[...ovCards().filter(x=>x!==b.dataset.id), b.dataset.id]; S.cm=null; save("settings/main",st,50); render(); }
@@ -2211,6 +2362,9 @@ document.addEventListener("change", e=>{
   else if (el.id==="wpFile" && el.files && el.files[0]){ uploadWp(el.files[0]); }
   else if (act==="pin"){ const st=clone(settings()), s=new Set(pinned()); el.checked?s.add(el.dataset.name):s.delete(el.dataset.name); st.pinned=st.projects.filter(p=>s.has(p)); save("settings/main",st,50); render(); }
   else if (act==="rv-date"){ if (el.value){ S.reviewDate=el.value; render(); } }
+  else if (act==="pp-field"){ const f=el.dataset.f, v=el.value.trim(); if (f==="title" && !v) return; ppSave(el.dataset.id, x=>{ x[f]=v; }); render(); }
+  else if (act==="cls-f"){ const f=el.dataset.f, v=f==="dow"?+el.value:el.value.trim(); clsEdit(st=>{ const c=st.classes.find(c=>c.id===el.dataset.id); if (c) c[f]=v; }); render(); }
+  else if (act==="win-f"){ if (!el.value) return; const st=clone(settings()); st.dayWin={...dayWin(), [el.dataset.f]:el.value}; save("settings/main",st,300); render(); }
 });
 function addProj(date,name){ const d=dayCopy(date); if(!d.projects.some(p=>p.name===name)) d.projects.push({name,open:true,items:[]}); save("days/"+date,d,50); render(); setTimeout(()=>{ const i=document.getElementById(`add-${date}-${hash(name)}`); i&&i.focus(); },0); }
 function askNewProject(date, sel){
@@ -2229,6 +2383,7 @@ document.addEventListener("toggle", e=>{
 }, true);
 document.addEventListener("input", e=>{ const el=e.target;
   if (el.dataset.act==="sp-steps" && S.split){ S.split.steps=el.value; refreshSplitPreview(); return; }
+  if (el.dataset.act==="pp-note"){ ppSave(el.dataset.id, x=>{ x.note=el.value; }); return; }
   if (el.dataset.act==="wk-note"){ const d=dayCopy(el.dataset.mon); d.weekNote=el.value; save("days/"+d.date,d,800); } });
 document.addEventListener("change", e=>{ const el=e.target; if (!el.dataset || el.dataset.act!=="ex-rest") return; const v=el.value.trim();
   planEdit((pl,r)=>{ const x=r.groups.find(g=>g.id===el.dataset.g)?.ex.find(x=>x.id===el.dataset.x); if (x){ if (v) x.rest=v; else delete x.rest; } });
@@ -2444,6 +2599,7 @@ function banner(msg){ const b=document.getElementById("banner"); b.textContent=m
   const fail=k=>e=>{ waiting.delete(k); if (e.code!=="revoked") banner(T("disconnected",e.code)); };
   const sub=(name)=>db.collection(name).onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S[name]=o; done(name,snap); softRender(); }, fail(name));
   sub("tasks"); sub("days"); sub("expenses"); sub("events"); sub("gymlog"); sub("inbox");
+  db.collection("papers").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.papers=o; softRender(); }, ()=>{});
   // Claude's Monday suggestions (written by the scheduled run, read-only here)
   db.collection("weekly").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.weekly=o; softRender(); }, ()=>{});
   db.doc("gym/plan").onSnapshot(s=>{ S.gymPlan=s.exists?s.data():null; done("gym",s); softRender(); }, fail("gym"));
