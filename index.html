@@ -260,6 +260,21 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .tc-ph{font-size:11.5px;border-radius:4px;padding:0 5px;background:var(--calm-soft)}.tc-ph.strat{background:var(--warn-soft);color:var(--warn-ink)}.tc-ph.mock{background:var(--hot-soft);color:var(--hot-ink)}
 .item.tc-v .t{color:var(--fg)}
 .item.tc-v .acts{display:flex}
+.sp-head{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end;padding:14px 16px;margin-bottom:12px}
+.sp-head .sp-stg b{display:block;font-size:18px;color:var(--accent)}.sp-next{flex-basis:100%;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.sp-card{padding:16px;margin-bottom:12px}.sp-card h3{margin:0;font-size:16px}.sp-steps{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0;font-size:14px}.sp-steps label{display:flex;gap:6px;align-items:center;min-height:32px}
+.sp-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.sp-text{font-size:17px;line-height:1.75;background:var(--calm-soft);border-radius:8px;padding:12px 14px;margin:8px 0}.sp-text.hide{filter:blur(6px);user-select:none}
+.sp-s{cursor:pointer;border-radius:4px}.sp-s:hover{background:rgba(127,127,127,.15)}.sp-s.on{background:var(--warn-soft)}
+.sp-w.miss{color:var(--hot-ink);background:var(--hot-soft);border-radius:3px;text-decoration:underline wavy}
+.sp-live{font-size:14px;color:var(--muted);min-height:20px;margin:6px 0}.sp-res{font-size:15px;margin:8px 0}.sp-res b{color:var(--accent)}
+.sp-timer{font-family:var(--f-mono);font-size:22px;font-weight:600}.sp-q{font-size:17px;font-weight:600;margin:8px 0}.sp-tips{font-size:14px;color:var(--muted);margin:4px 0 8px 18px}
+.sp-fb{border-left:3px solid var(--accent);padding:6px 10px;font-size:14px;margin:8px 0}
+.sp-hist{list-style:none;margin:0;padding:0;font-size:14px}.sp-hist li{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--line)}.sp-hist li:last-child{border:0}.sp-hist .t{flex:1;min-width:0}
+.sp-body{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:16px;align-items:start}.sp-how{background:var(--calm-soft);border-radius:8px;padding:10px 12px;font-size:13.5px;position:sticky;top:12px}.sp-how h4{margin:0 0 6px;font-size:14px}.sp-how ol{margin:0;padding-left:18px;display:grid;gap:4px}.sp-done{margin:8px 0 0;font-weight:600;color:var(--accent)}
+@media (max-width:900px){.sp-body{grid-template-columns:1fr}.sp-how{position:static;order:-1}}
+.sp-why{font-size:13.5px;color:var(--muted)}.sp-why summary{cursor:pointer;min-height:32px;display:flex;align-items:center}
+
 @media (max-width:700px){.tq-voc tr{display:grid;grid-template-columns:auto 1fr;gap:0 8px}.tq-voc tr td{border:0;align-self:center}.tq-voc tr{border-bottom:1px solid var(--line);padding:4px 0}.tq-voc tr td.tq-ex{grid-column:1/-1;padding-top:0}.tc-stats{grid-template-columns:1fr}.tc-big b{font-size:22px}}
 @media (pointer:coarse){.tc-day label input{width:22px;height:22px}}
 .tq{margin-bottom:12px;padding:16px}.tq-h{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:8px}.tq-h h3{margin:0;font-size:16px}
@@ -696,6 +711,27 @@ const I18N = {
     tq_vocab:"今天的單字", tq_play:"▶ 播放", tq_stop:"■ 停止", tq_script:"看原文", tq_submit:"交卷", tq_score:(a,b)=>`答對 ${a} / ${b}`, tq_done:"已完成", tq_left:n=>`還有 ${n} 題沒作答`, tq_redo:"重做一次",
     tq_ans:"正解", tq_why:"解析", tq_review:"本週單字複習：選出正確的中文意思", tq_no_voice:"這台裝置沒有英文語音，請到系統設定加一個英文（美國）語音。", tq_listen_hint:"先看題目和選項，再按播放。只能聽一次最接近考試。", tq_part2:"聽完問句和三個回答，選最適合的一個。",
     tq_go:"做題 →", tq_hide_zh:"遮住中文", tq_show_zh:"顯示中文",
+    nav_speak:"口說", sk_intro:"每天約 15 分鐘，從對稿唸開始熟悉英語口說，主題輪流是求職和日常對話。稿子由 Claude 每週一寫好，週一到週五各一篇，週六重練本週最弱的一篇，週日休息。", sk_start:"開始練口說",
+    sk_stage:n=>["","第一階段：對稿唸","第二階段：用自己的話講","第三階段：面試與對話"][n]||"", sk_stage_how:n=>["","照稿聽、跟著唸、不看稿跟讀，最後錄音比對。","先唸熟稿子，再不看稿重講：4 分鐘、3 分鐘、2 分鐘各一次。","面試題用 STAR 講 2 分鐘；日常對話和對方一來一回。"][n]||"",
+    sk_next:n=>n===1?"最近 5 次錄音平均正確率 ≥ 95%，就可以進入第二階段":n===2?"最近 5 次 2 分鐘重講都講到 220 字以上（約每分鐘 110 字），就可以進入第三階段":"", sk_go_next:"進入下一階段", sk_go_prev:"回上一階段",
+    sk_streak:"連續練習", sk_days:n=>`${n} 天`, sk_week:"本週", sk_acc:"平均正確率", sk_wpm:"平均語速", sk_wpm_u:"字／分",
+    sk_task:t=>`口說：${t}`, sk_task_sat:"口說：重練本週最弱的一篇", sk_go:"練習 →", sk_none:"這天還沒有稿子。Claude 每週一早上會寫好這週的稿子。",
+    sk_steps:["看稿聽一遍","看稿跟著唸","不看稿跟讀","錄音比對"], sk_play:"▶ 全文", sk_slow:"慢速", sk_tap:"點句子可以只聽那一句，跟讀時一句一句來。",
+    sk_rec:"🎙 開始錄音比對", sk_rec_free:"🎙 開始錄音", sk_stop:"■ 停止", sk_listening:"正在聽…唸完按停止", sk_no_sr:"這個瀏覽器不支援語音辨識，只能錄音回放。iPhone、iPad 請用 Safari 開。",
+    sk_mic_fail:"無法使用麥克風，請到設定允許。", sk_result:(a,w)=>`正確率 ${a}%｜語速 ${w} 字／分`, sk_result_free:(n,w)=>`講了 ${n} 字｜語速 ${w} 字／分`, sk_missed:"漏掉或唸錯：", sk_said:"辨識到你說的：", sk_replay:"▶ 聽自己的錄音",
+    sk_show_text:"看稿", sk_hide_text:"遮住稿子", sk_timer:"計時", sk_q:"題目", sk_tips:"提示", sk_sample:"參考答案", sk_fb:"Claude 的回饋",
+    sk_hist:"最近的紀錄", sk_hist_none:"還沒有錄音紀錄。", sk_week_list:"本週稿子", sk_rest:"休息", sk_why:"這樣練的依據",
+    sk_how:"怎麼練、怎樣算完成", sk_kind:{job:"求職",talk:"日常對話"},
+    sk_how_read:["按「▶ 全文」看著稿子聽一遍。不熟的句子點一下，單獨重聽。","看著稿子，跟著聲音一起唸，盡量對上速度和語調。","把稿子遮起來或不看，聽一句、慢半拍跟著唸（shadowing）。卡住就點那句重來。","按「🎙 開始錄音比對」，看著稿子完整唸一遍，唸完按停止。紅色的字是漏掉或唸錯的，可以再錄一次。"],
+    sk_done_read:"完成：錄音比對做完一次就算今天完成，正確率多少都算。前三步做完就打勾，按「▶ 全文」會自動勾第一步。",
+    sk_how_retell:["先按「▶ 全文」看稿聽一遍、跟著唸一遍。","按「遮住稿子」，選 4:00，開始錄音，用自己的話把內容講出來，不用逐字一樣。","再選 3:00、2:00 各講一次，同樣內容講得更快更順。"],
+    sk_done_retell:"完成：至少錄完一次重講就算今天完成。三次都做最好。",
+    sk_how_answer:["讀題目和提示，想 30 秒，不寫稿。","按「🎙 開始錄音」講 2 分鐘：情境、任務、行動、結果（STAR）。","講完看參考答案，挑一兩句好用的句子再講一次。"],
+    sk_done_answer:"完成：錄完一次回答就算今天完成。",
+    sk_how_talk:["按「▶ 對方說」聽對方的話，稿子可以先遮住。","聽完馬上用英文回應，像真的在聊天，不求完美。","按「🎙 開始錄音」後整段對話一句一句來：聽一句、回一句，講完按停止。"],
+    sk_done_talk:"完成：錄完一整段對話就算今天完成。卡住可以看提示再接下去。",
+    sk_partner:"▶ 對方說", sk_partner_n:(i,n)=>`第 ${i} / ${n} 句`, sk_partner_again:"再聽一次",
+    sk_why_txt:"跟讀（shadowing）能改善發音和流暢度（Kadota 2019；Hamada 2016）。重複講同一段、時間一次比一次短的 4/3/2 練法能提升流暢度（Maurice 1983；Nation 1989）。錄音後比對自己漏掉的字，是讓你注意到差距（Schmidt 1990 注意假說）。順序從對稿、到半開放、再到自由回答，對應 Nation 的流暢練習原則。",
     nav_toeic:"多益", tc_setup:"建立多益計劃", tc_setup_sub:"填好考試日期和分數，計劃會從今天排到考試前一天，每天的任務自動出現在每日小卡。", tc_date:"考試日期", tc_target:"目標分數", tc_base:"目前分數", tc_make:"建立計劃",
     tc_d:n=>n>0?`還有 ${n} 天`:n===0?"今天考試":"已經考完", tc_exam:d=>`考試 ${d}`, tc_best:"最佳模考", tc_none:"還沒有模考", tc_done:(a,b)=>`已完成 ${a} / ${b} 天`, tc_edit:"調整日期與分數", tc_save:"儲存", tc_cancel:"取消",
     tc_week:"本週任務", tc_plan:"整體計劃", tc_wk:(n,m)=>`第 ${n} / ${m} 週`, tc_ph_base:"打底", tc_ph_strat:"題型策略＋計時", tc_ph_mock:"整份模考", tc_rest:"休息",
@@ -788,6 +824,27 @@ const I18N = {
     tq_vocab:"Today's words", tq_play:"▶ Play", tq_stop:"■ Stop", tq_script:"Show script", tq_submit:"Submit", tq_score:(a,b)=>`${a} of ${b} correct`, tq_done:"Done", tq_left:n=>`${n} still unanswered`, tq_redo:"Redo",
     tq_ans:"Answer", tq_why:"Why", tq_review:"Week review: pick the right meaning", tq_no_voice:"No English voice on this device. Add an English (US) voice in system settings.", tq_listen_hint:"Read the questions and options first, then press play. Listening once is closest to the real test.", tq_part2:"Listen to the question and three responses, then pick the best one.",
     tq_go:"Questions →", tq_hide_zh:"Hide meanings", tq_show_zh:"Show meanings",
+    nav_speak:"Speaking", sk_intro:"About 15 minutes a day, starting with reading a script aloud. Claude writes the scripts every Monday: one for each weekday, Saturday redoes the week's weakest one, Sunday is off.", sk_start:"Start speaking practice",
+    sk_stage:n=>["","Stage 1: read the script","Stage 2: say it your way","Stage 3: interviews & conversation"][n]||"", sk_stage_how:n=>["","Listen with the script, read along, shadow without it, then record and compare.","Learn the script, then retell it without looking: 4, 3 and 2 minutes.","Interview answers with STAR; real back-and-forth conversations."][n]||"",
+    sk_next:n=>n===1?"When your last 5 recordings average 95%+ accuracy, move to stage 2":n===2?"When your last 5 two-minute retells reach 220+ words (about 110 wpm), move to stage 3":"", sk_go_next:"Next stage", sk_go_prev:"Previous stage",
+    sk_streak:"Streak", sk_days:n=>`${n} days`, sk_week:"This week", sk_acc:"Avg accuracy", sk_wpm:"Avg pace", sk_wpm_u:"wpm",
+    sk_task:t=>`Speaking: ${t}`, sk_task_sat:"Speaking: redo the week's weakest script", sk_go:"Practice →", sk_none:"No script for this day yet. Claude writes the week's scripts every Monday morning.",
+    sk_steps:["Listen with the script","Read along","Shadow without the script","Record and compare"], sk_play:"▶ All", sk_slow:"Slow", sk_tap:"Tap a sentence to hear just that one.",
+    sk_rec:"🎙 Record and compare", sk_rec_free:"🎙 Record", sk_stop:"■ Stop", sk_listening:"Listening… press stop when done", sk_no_sr:"This browser has no speech recognition, so only playback works. On iPhone/iPad use Safari.",
+    sk_mic_fail:"Can't use the microphone. Allow it in settings.", sk_result:(a,w)=>`Accuracy ${a}% · ${w} wpm`, sk_result_free:(n,w)=>`${n} words · ${w} wpm`, sk_missed:"Missed or misread: ", sk_said:"What I heard: ", sk_replay:"▶ Play my recording",
+    sk_show_text:"Show script", sk_hide_text:"Hide script", sk_timer:"Timer", sk_q:"Question", sk_tips:"Hints", sk_sample:"Sample answer", sk_fb:"Feedback from Claude",
+    sk_hist:"Recent recordings", sk_hist_none:"No recordings yet.", sk_week_list:"This week's scripts", sk_rest:"Rest", sk_why:"Why this works",
+    sk_how:"How to practice, and when it counts", sk_kind:{job:"Job",talk:"Conversation"},
+    sk_how_read:["Press ▶ All and listen while reading. Tap a sentence to replay just that one.","Read along with the voice, matching its pace and tone.","Without looking, shadow a sentence half a beat behind. Tap a sentence to retry.","Press 🎙 Record and compare, read the whole script, then stop. Red words were missed or misread."],
+    sk_done_read:"Done: one record-and-compare counts for the day, whatever the score. Tick the first three as you go; ▶ All ticks step 1.",
+    sk_how_retell:["Listen once with ▶ All and read along once.","Hide the script, pick 4:00, record, and retell it in your own words.","Do it again at 3:00 and 2:00."],
+    sk_done_retell:"Done: at least one recorded retell counts for the day. All three is best.",
+    sk_how_answer:["Read the question and hints; think for 30 seconds without writing.","Record a 2-minute answer: situation, task, action, result (STAR).","Read the sample answer, pick a line or two, and answer again."],
+    sk_done_answer:"Done: one recorded answer counts for the day.",
+    sk_how_talk:["Press ▶ Partner to hear the other person. You can hide the script.","Reply in English right away, like a real chat.","Press 🎙 Record and go line by line: listen, reply, then stop."],
+    sk_done_talk:"Done: one recorded conversation counts for the day.",
+    sk_partner:"▶ Partner", sk_partner_n:(i,n)=>`Line ${i} of ${n}`, sk_partner_again:"Again",
+    sk_why_txt:"Shadowing improves pronunciation and fluency (Kadota 2019; Hamada 2016). Retelling the same content in less time (4/3/2) builds fluency (Maurice 1983; Nation 1989). Comparing your recording with the script makes you notice gaps (Schmidt 1990). The order from scripted to free speech follows Nation's fluency strand.",
     nav_toeic:"TOEIC", tc_setup:"Set up a TOEIC plan", tc_setup_sub:"Enter the test date and scores. The plan runs from today to the day before the test, and each day's task shows on the day cards.", tc_date:"Test date", tc_target:"Target", tc_base:"Current score", tc_make:"Create plan",
     tc_d:n=>n>0?`${n} days to go`:n===0?"Test day":"Test done", tc_exam:d=>`Test ${d}`, tc_best:"Best mock", tc_none:"No mock yet", tc_done:(a,b)=>`${a} of ${b} days done`, tc_edit:"Change date & scores", tc_save:"Save", tc_cancel:"Cancel",
     tc_week:"This week", tc_plan:"Whole plan", tc_wk:(n,m)=>`Week ${n} of ${m}`, tc_ph_base:"Foundation", tc_ph_strat:"Strategy + timing", tc_ph_mock:"Full mocks", tc_rest:"Rest",
@@ -877,6 +934,7 @@ const ICON = {
   style:'<path d="M4 20h16"/><path d="M6 16l6-12 6 12"/><path d="M8.5 11h7"/>',
   theme:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
   pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
+  speak:'<path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/>',
   toeic:'<path d="M4 5h9a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M16 8h4v11h-4"/><path d="M8 10h4M8 13h4"/>',
   papers:'<path d="M5 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H5z"/><path d="M19 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>',
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
@@ -889,7 +947,7 @@ const S = {
   tab:"home", lang:"zh", theme:"system",
   weekStart: mondayOf(new Date()), reviewDate: ymd(new Date()), month: ymd(new Date()).slice(0,7),
   calMonth: ymd(new Date()).slice(0,7), calSel: null, gcalMonth: ymd(new Date()).slice(0,7), gcalSel: null, ctx:null, gymR:null, gymOpen:{}, gymlog:{}, gymPlan:null, events:{}, wpOpen:false, wpAdj:null, cm:null, gymAsc:(()=>{ try{ return localStorage.getItem("home.gymAsc")==="1"; }catch(_){ return false; } })(), wpBusy:false, confirmDel:null,
-  tasks:{}, days:{}, expenses:{}, weekly:{}, settings:null, inbox:{}, toeic:{}, tcEdit:false, papers:{}, ppF:{st:"all",proj:"all"}, ppOpen:{}, pgEdit:null, chkOpen:false, volAll:{}, volFix:null, split:null, qc:false, wkRev: mondayOf(new Date()),
+  tasks:{}, days:{}, expenses:{}, weekly:{}, settings:null, inbox:{}, toeic:{}, tcEdit:false, speak:{}, spDay:null, papers:{}, ppF:{st:"all",proj:"all"}, ppOpen:{}, pgEdit:null, chkOpen:false, volAll:{}, volFix:null, split:null, qc:false, wkRev: mondayOf(new Date()),
   showDone:{}, expType:"out", showSettings:false, edit:false,
 };
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
@@ -944,7 +1002,7 @@ function dayStats(d){ const all=[...(d.items||[]), ...(d.projects||[]).flatMap(p
 /* undo: remember what a document looked like before each user action (actions within 0.8 s form one step) */
 const undoStack=[]; let undoMute=false, lastUserAt=0, undoGroup=null;
 ["pointerdown","keydown","change"].forEach(t=>document.addEventListener(t, ()=>{ lastUserAt=performance.now(); }, true));
-function cachedDoc(path){ const [c,id]=path.split("/"); if (path==="gym/plan") return S.gymPlan; if (path==="settings/main") return S.settings; const m={tasks:S.tasks,days:S.days,expenses:S.expenses,events:S.events,gymlog:S.gymlog,inbox:S.inbox,papers:S.papers,toeic:S.toeic}[c]; return m?m[id]:undefined; }
+function cachedDoc(path){ const [c,id]=path.split("/"); if (path==="gym/plan") return S.gymPlan; if (path==="settings/main") return S.settings; const m={tasks:S.tasks,days:S.days,expenses:S.expenses,events:S.events,gymlog:S.gymlog,inbox:S.inbox,papers:S.papers,toeic:S.toeic,speak:S.speak}[c]; return m?m[id]:undefined; }
 function recordUndo(path){
   if (undoMute || performance.now()-lastUserAt>1500) return;
   const a=document.activeElement; if (a && a.tagName==="TEXTAREA") return;
@@ -970,13 +1028,13 @@ async function flush(path){
     else toast(T("save_fail", e && e.message || e));
   } finally { inflight.delete(path); }
 }
-function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; else if (c==="papers") S.papers[id]=body; else if (c==="toeic") S.toeic[id]=body; }
+function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.tasks[id]=body; else if (c==="days") S.days[id]=body; else if (c==="expenses") S.expenses[id]=body; else if (c==="events") S.events[id]=body; else if (c==="gymlog") S.gymlog[id]=body; else if (path==="gym/plan") S.gymPlan=body; else if (path==="settings/main") S.settings=body; else if (c==="inbox") S.inbox[id]=body; else if (c==="papers") S.papers[id]=body; else if (c==="toeic") S.toeic[id]=body; else if (c==="speak") S.speak[id]=body; }
 async function remove(path){
   if (path.startsWith("events/")){ const e=cachedDoc(path)||pending.get(path); if (e&&e.gcalId){ gcQ("home.gcDel", q=>[...q,e.gcalId]); gcSyncSoon(); } }
   if (path.startsWith("tasks/")) gcSyncSoon();
   recordUndo(path);
   pending.delete(path); clearTimeout(timers.get(path));
-  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id]; if (c==="papers") delete S.papers[id]; if (c==="toeic") delete S.toeic[id];
+  const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id]; if (c==="papers") delete S.papers[id]; if (c==="toeic") delete S.toeic[id]; if (c==="speak") delete S.speak[id];
   if (db) { try { await db.doc(path).delete(); } catch(e){ toast(T("del_fail")); } }
 }
 
@@ -985,7 +1043,7 @@ let composing=false, dirty=false;
 document.addEventListener("compositionstart", ()=>composing=true);
 document.addEventListener("compositionend", ()=>{ composing=false; if (dirty) softRender(); });
 function isTyping(){ const a=document.activeElement; return a && (a.isContentEditable || a.tagName==="TEXTAREA" || (a.tagName==="INPUT" && /text|search|number/.test(a.type))); }
-function softRender(){ if (composing || isTyping()) { dirty=true; return; } render(); }
+function softRender(){ if (composing || isTyping() || SP.rec) { dirty=true; return; } render(); }
 document.addEventListener("focusout", ()=>setTimeout(()=>{ if (dirty && !isTyping() && !composing) render(); },0));
 
 function render(){
@@ -1000,7 +1058,7 @@ function render(){
   const eb=document.getElementById("editBar"); eb.hidden=!S.edit; eb.textContent=T("edit_hint");
   document.getElementById("pageTitle").innerHTML = S.tab==="home" ? L("app_title") : L("nav_"+S.tab);
   const n=new Date(); document.getElementById("todayLabel").textContent = T("today_label", n.getFullYear(), n.getMonth()+1, n.getDate(), T("wd")[n.getDay()]);
-  v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : S.tab==="papers" ? viewPapers() : S.tab==="toeic" ? viewToeic() : viewMoney();
+  v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : S.tab==="papers" ? viewPapers() : S.tab==="toeic" ? viewToeic() : S.tab==="speak" ? viewSpeak() : viewMoney();
   injectNotes(v);
   renderHero();
   if (S.tab==="home") positionPop();
@@ -1021,7 +1079,7 @@ function renderSide(){
   document.getElementById("sideInner").innerHTML = `
     <div class="brand"><span class="mark">H</span><span class="lbl">${L("app_title")}</span></div>
     <div class="grp"><span class="lbl">${L("grp_pages")}</span></div>
-    ${page("home")}${page("gym")}${page("review")}${page("papers")}${page("toeic")}${page("money")}
+    ${page("home")}${page("gym")}${page("review")}${page("papers")}${page("toeic")}${page("speak")}${page("money")}
     ${S.tab==="home" ? `<div class="grp"><span class="lbl">${L("grp_sections")}</span></div>
       ${sec("s-overview","overview",T("sec_overview"))}${sec("s-tasks","tasks",T("sec_tasks"))}${sec("s-week","week",T("sec_week"))}${sec("s-cal","cal",T("sec_cal"))}` : ""}
     <button class="navb" data-act="undo" title="⌘Z">${svg("undo")}<span class="lbl">${T("undo")}</span><span class="val lbl">⌘Z</span></button>
@@ -1288,6 +1346,111 @@ function tcVirtualLi(ds){ const tk=tcTask(ds); if (!tk || tcItem(ds)) return "";
   return `<li class="item tc-v"><input type="checkbox" data-act="tc-toggle" data-date="${ds}" aria-label="${T("done")}"><span class="t">📘 ${esc(tk)}</span><span class="acts"><button class="ghost mini" data-act="tc-go" data-date="${ds}">${T("tq_go")}</button></span></li>`; }
 function tcDoneCount(c, to){ let a=0,b=0; for (let d=c.start; d<=to && d<c.date; d=addDays(d,1)){ if (!tcTask(d)) continue; b++; const it=tcItem(d); if (it && it.d) a++; } return [a,b]; }
 
+
+/* ---------- speaking: settings.speak {start,stage}; speak/<date> {type:"script",date,mode:"read"|"retell"|"answer",title,text,q?,tips?,sample?,fb?,steps:{},tries:[{at,acc,wpm,n,miss,said}],done}
+   scripts are written by the Monday run (tools/weekly.py speak-write); Saturday redoes the week's weakest script; a day's task becomes a real item {sp:date} when done ---------- */
+const SP={rec:null};
+function spCfg(){ const c=settings().speak; return c && c.start ? c : null; }
+function spDoc(ds){ return pending.get("speak/"+ds) || S.speak[ds] || null; }
+function spSrcDate(ds){ const c=spCfg(); if (!c || ds<c.start) return null; const wd=parse(ds).getDay(); if (wd===0) return null;
+  if (wd!==6) return spDoc(ds) ? ds : null;
+  const mon=addDays(ds,-5); let best=null, bv=2; for (let d=mon; d<ds; d=addDays(d,1)){ const x=spDoc(d); if (!x) continue; const v=spScore(x); if (v<bv){ bv=v; best=d; } } return best; }
+function spScore(x){ const t=(x.tries||[]).filter(r=>r.acc!=null); if (t.length) return Math.max(...t.map(r=>r.acc))/100; return (x.tries||[]).length ? 0.9 : 0; }
+function spTask(ds){ const src=spSrcDate(ds); if (!src) return null; return parse(ds).getDay()===6 ? T("sk_task_sat") : T("sk_task", spDoc(src).title||""); }
+function spItem(ds){ return (day(ds).items||[]).find(i=>i.sp); }
+function spSet(ds, on){ const d=dayCopy(ds), i=d.items.findIndex(x=>x.sp);
+  if (on){ if (i<0) d.items.push({id:uid(), t:"🗣 "+spTask(ds), d:true, sp:ds, dn:today()<ds?ds:today(), dc:ds}); else { d.items[i].d=true; d.items[i].dn=today(); d.items[i].dc=ds; } }
+  else if (i>=0) d.items.splice(i,1);
+  save("days/"+ds,d,200); }
+function spVirtualLi(ds){ const tk=spTask(ds); if (!tk || spItem(ds)) return "";
+  return `<li class="item tc-v"><input type="checkbox" data-act="sk-toggle" data-date="${ds}" aria-label="${T("done")}"><span class="t">🗣 ${esc(tk)}</span><span class="acts"><button class="ghost mini" data-act="sk-go" data-date="${ds}">${T("sk_go")}</button></span></li>`; }
+function spSave(x){ save("speak/"+x.date, x, 300); }
+function spWords(t){ return String(t||"").toLowerCase().replace(/[’']/g,"'").replace(/\bcan't\b/g,"cannot").replace(/\bwon't\b/g,"will not").replace(/n't\b/g," not").replace(/'re\b/g," are").replace(/'ve\b/g," have").replace(/'ll\b/g," will").replace(/'m\b/g," am").replace(/'d\b/g," would").replace(/\bcan not\b/g,"cannot").replace(/[^a-z0-9%$ ]+/g," ").split(/\s+/).filter(Boolean); }
+function spSentences(t){ return String(t||"").match(/[^.!?]+[.!?]+["”’)]*\s*|[^.!?]+$/g)||[t]; }
+/* word-level LCS: which script words were said */
+function spCompare(text, said){ const a=spWords(text), b=spWords(said), n=a.length, m=b.length; const L=Array.from({length:n+1},()=>new Uint16Array(m+1));
+  for (let i=n-1;i>=0;i--) for (let j=m-1;j>=0;j--) L[i][j]= a[i]===b[j] ? L[i+1][j+1]+1 : Math.max(L[i+1][j],L[i][j+1]);
+  const ok=new Array(n).fill(false); let i=0,j=0; while(i<n&&j<m){ if (a[i]===b[j]){ ok[i]=true; i++; j++; } else if (L[i+1][j]>=L[i][j+1]) i++; else j++; }
+  return {ok, acc: n?Math.round(L[0][0]/n*100):0, miss:a.filter((w,k)=>!ok[k])}; }
+function spMarked(text, ok){ let k=0; return spSentences(text).map((sen,si)=>`<span class="sp-s" data-act="sk-sen" data-i="${si}">${sen.split(/(\s+)/).map(tok=>{ if (!tok.trim()) return tok; const w=spWords(tok); if (!w.length) return esc(tok); let miss=false; w.forEach(()=>{ if (ok && ok[k]===false) miss=true; k++; }); return miss?`<span class="sp-w miss">${esc(tok)}</span>`:esc(tok); }).join("")}</span>`).join(""); }
+function spStreak(){ let n=0, d=today(); if (!(spItem(d)||{}).d) d=addDays(d,-1); for(;;){ const wd=parse(d).getDay(); if (wd===0){ d=addDays(d,-1); continue; } if ((spItem(d)||{}).d){ n++; d=addDays(d,-1); } else break; if (n>400) break; } return n; }
+function spAllTries(){ const out=[]; Object.keys(S.speak).concat([...pending.keys()].filter(p=>p.startsWith("speak/")).map(p=>p.slice(6))).forEach(id=>{ const x=spDoc(id); if (x&&x.type==="script") (x.tries||[]).forEach(r=>out.push({...r, date:x.date, title:x.title, mode:x.mode})); });
+  const seen=new Set(); return out.filter(r=>{ const k=r.date+r.at; if (seen.has(k)) return false; seen.add(k); return true; }).sort((a,b)=>b.at-a.at); }
+function spCanNext(c){ const tr=spAllTries(); if (c.stage===1){ const r=tr.filter(x=>x.acc!=null).slice(0,5); return r.length>=5 && r.reduce((s,x)=>s+x.acc,0)/5>=95; }
+  if (c.stage===2){ const r=tr.filter(x=>x.mode==="retell" && x.sec && x.sec<=125).slice(0,5); return r.length>=5 && r.every(x=>x.n>=220); } return false; }
+function viewSpeakCard(ds){ const src=spSrcDate(ds), x=src&&spDoc(src), c=spCfg();
+  const head=`<div class="tq-h"><h3>${md(ds)} ${dow(ds)}${x?" · "+esc(x.title||""):""}</h3>${x&&x.kind?`<span class="tc-ph">${esc(T("sk_kind")[x.kind]||"")}</span>`:""}${x&&src!==ds?`<span class="sub">${md(src)} ${dow(src)}</span>`:""}</div>`;
+  if (!x) return head+`<p class="sub">${parse(ds).getDay()===0?T("sk_rest"):T("sk_none")}</p>`;
+  const mode=x.mode||"read", st=x.steps||{}, last=(x.tries||[])[(x.tries||[]).length-1], live=SP.rec&&SP.rec.date===src;
+  const how=`<aside class="sp-how"><h4>${T("sk_how")}</h4><ol>${T("sk_how_"+mode).map(h=>`<li>${esc(h)}</li>`).join("")}</ol><p class="sp-done">${T("sk_done_"+mode)}</p></aside>`;
+  const turns=x.turns||[], ti=SP.turn&&SP.turn.date===src?SP.turn.i:0;
+  const partner=mode==="talk"&&turns.length?`<div class="sp-tools"><button class="ghost mini" data-act="sk-turn" data-date="${src}">${ti>=turns.length?T("sk_partner_again"):T("sk_partner")}</button><span class="sub">${T("sk_partner_n",Math.min(ti+1,turns.length),turns.length)}</span></div>`:"";
+  const steps=mode==="read"?`<div class="sp-steps">${T("sk_steps").map((s,i)=>`<label><input type="checkbox" data-act="sk-step" data-date="${src}" data-day="${ds}" data-i="${i}" ${st[i]?"checked":""}> ${i+1}. ${esc(s)}</label>`).join("")}</div>`:"";
+  const hide=mode!=="read" && !S.spShow;
+  const cmp=mode==="read"&&last&&last.acc!=null&&!live ? spCompare(x.text,last.said||"") : null;
+  const text=x.text?`<div class="sp-text ${hide?"hide":""}">${spMarked(x.text, cmp&&cmp.ok)}</div>`:"";
+  const sr=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
+  const tools=`<div class="sp-tools">${x.text?`<button class="ghost mini" data-act="sk-play" data-date="${src}">${T("sk_play")}</button><button class="ghost mini" data-act="sk-play" data-date="${src}" data-slow="1">${T("sk_slow")}</button>`:""}
+    ${mode!=="read"&&(x.text||(x.turns||[]).length)?`<button class="ghost mini" data-act="sk-show">${S.spShow?T("sk_hide_text"):T("sk_show_text")}</button>`:""}
+    ${live?`<button class="primary" data-act="sk-stop">${T("sk_stop")}</button>`:`<button class="primary" data-act="sk-rec" data-date="${src}" data-day="${ds}">${mode==="read"?T("sk_rec"):T("sk_rec_free")}</button>`}
+    ${mode!=="read"?`<span class="sp-timer" id="sp-timer">${live?"":(mode==="answer"?"2:00":mode==="talk"?"0:00":(S.spLen||4)+":00")}</span>${!live&&mode==="retell"?[4,3,2].map(m=>`<button class="ghost mini" data-act="sk-len" data-m="${m}" ${(S.spLen||4)===m?'aria-pressed="true"':""}>${m}:00</button>`).join(""):""}`:""}
+    ${SP.url&&SP.urlDate===src&&!live?`<button class="ghost mini" data-act="sk-replay">${T("sk_replay")}</button>`:""}</div>
+    ${sr?"":`<p class="sub">${T("sk_no_sr")}</p>`}<div class="sp-live" id="sp-live">${live?T("sk_listening"):""}</div>`;
+  const res=last&&!live?`<div class="sp-res"><b>${last.acc!=null?T("sk_result",last.acc,last.wpm):T("sk_result_free",last.n,last.wpm)}</b>${last.miss&&last.miss.length?`<div class="sub">${T("sk_missed")}${esc(last.miss.slice(0,20).join(", "))}</div>`:""}${last.acc==null&&last.said?`<div class="sub">${T("sk_said")}${esc(last.said)}</div>`:""}</div>`:"";
+  const ans=mode==="answer"?`<div class="sp-q">${esc(x.q||"")}</div>${(x.tips||[]).length?`<ul class="sp-tips">${x.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:""}`:"";
+  const fb=x.fb?`<div class="sp-fb"><b>${T("sk_fb")}</b><br>${esc(x.fb)}</div>`:"";
+  const text2=mode==="talk"?`<div class="sp-text ${hide?"hide":""}">${turns.map((t,i)=>`<p><b>${esc(t.who||"Partner")}:</b> ${esc(t.say)}${t.hint?`<br><span class="sub">↳ ${esc(t.hint)}</span>`:""}</p>`).join("")}</div>`:text;
+  return head+`<div class="sp-body"><div class="sp-main">`+(mode==="read"?`<p class="sub">${T("sk_tap")}</p>`:"")+steps+ans+partner+tools+res+text2+(x.sample?`<details><summary>${T("sk_sample")}</summary><div class="sp-text">${esc(x.sample)}</div></details>`:"")+fb+`</div>${how}</div>`; }
+function viewSpeak(){ const c=spCfg(), t=today();
+  if (!c) return `<section class="block speak"><div class="card sp-card"><h3>${T("nav_speak")}</h3><p>${T("sk_intro")}</p><button class="primary" data-act="sk-start">${T("sk_start")}</button>
+    <details class="sp-why"><summary>${T("sk_why")}</summary><p>${T("sk_why_txt")}</p></details></div></section>`;
+  const tr=spAllTries(), wk=tr.filter(r=>r.date>=mondayOf(new Date())), a7=tr.filter(r=>r.acc!=null).slice(0,7), w7=tr.slice(0,7);
+  const avg=(arr,k)=>arr.length?Math.round(arr.reduce((s,r)=>s+(+r[k]||0),0)/arr.length):"—";
+  const mon=mondayOf(new Date()), week=Array.from({length:7},(_,i)=>addDays(mon,i));
+  const row=ds=>{ const tk=spTask(ds), it=spItem(ds); if (!tk) return `<li class="tc-day rest ${ds===t?"today":""}"><span class="tc-dd">${md(ds)} ${dow(ds)}</span><span class="sub">${parse(ds).getDay()===0?T("sk_rest"):"—"}</span></li>`;
+    return `<li class="tc-day ${ds===t?"today":""} ${it&&it.d?"done":ds<t?"miss":""} ${(S.spDay||t)===ds?"sel":""}"><button class="linkish tc-dd" data-act="sk-day" data-date="${ds}">${md(ds)} ${dow(ds)}</button><label><input type="checkbox" data-act="sk-toggle" data-date="${ds}" ${it&&it.d?"checked":""}> <span>${esc(tk)}</span></label></li>`; };
+  const can=spCanNext(c);
+  return `<section class="block speak">
+    <div class="sp-head card"><div class="sp-stg"><b>${T("sk_stage",c.stage)}</b><span class="sub">${T("sk_stage_how",c.stage)}</span></div>
+      <div class="tc-st"><span class="sub">${T("sk_streak")}</span><b>${T("sk_days",spStreak())}</b></div>
+      <div class="tc-st"><span class="sub">${T("sk_acc")}</span><b>${avg(a7,"acc")}${a7.length?"%":""}</b></div>
+      <div class="tc-st"><span class="sub">${T("sk_wpm")}</span><b>${avg(w7,"wpm")}</b></div>
+      <div class="sp-next">${c.stage<3?`<span>${T("sk_next",c.stage)}</span>`:""}${can?`<button class="primary mini" data-act="sk-stage" data-d="1">${T("sk_go_next")}</button>`:""}${c.stage>1?`<button class="ghost mini" data-act="sk-stage" data-d="-1">${T("sk_go_prev")}</button>`:""}</div></div>
+    <div class="card sp-card" id="spc">${viewSpeakCard(S.spDay||t)}</div>
+    <div class="tc-grid">
+      <div class="card"><h3>${T("sk_week_list")}</h3><ul class="tc-week">${week.map(row).join("")}</ul></div>
+      <div class="card"><h3>${T("sk_hist")}</h3>${tr.length?`<ul class="sp-hist">${tr.slice(0,12).map(r=>`<li><span class="tc-dd">${md(r.date)}</span><span class="t">${esc(r.title||"")}</span><b>${r.acc!=null?r.acc+"%":r.n+" w"}</b><span class="sub">${r.wpm} ${T("sk_wpm_u")}</span></li>`).join("")}</ul>`:`<p class="empty mini">${T("sk_hist_none")}</p>`}
+        <details class="sp-why"><summary>${T("sk_why")}</summary><p>${T("sk_why_txt")}</p></details></div>
+    </div></section>`; }
+function spPlay(ds, slow, only, btn){ const x=spDoc(ds); if (!x||!x.text) return; if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; document.querySelectorAll(".sp-s.on").forEach(e=>e.classList.remove("on")); return; }
+  const sens=spSentences(x.text), list=only!=null?[[only,sens[only]]]:sens.map((s,i)=>[i,s]); let k=0;
+  const next=()=>{ document.querySelectorAll(".sp-s.on").forEach(e=>e.classList.remove("on")); if (k>=list.length){ TTS.on=false; return; } const [i,s]=list[k++]; document.querySelector(`.sp-s[data-i="${i}"]`)?.classList.add("on"); ttsPlay([["W",s]], null, slow?0.75:0.95, next); };
+  next(); if (only==null && x.mode!=="answer"){ const y=clone(x); y.steps={...(y.steps||{}),0:true}; spSave(y); } }
+async function spRec(src, ds){ const x=spDoc(src); if (!x) return; const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; }
+  const R={date:src, day:ds, said:"", t0:Date.now(), chunks:[]}; SP.rec=R; if (SP.url){ URL.revokeObjectURL(SP.url); SP.url=null; }
+  try { R.stream=await navigator.mediaDevices.getUserMedia({audio:true}); if (window.MediaRecorder){ R.mr=new MediaRecorder(R.stream); R.mr.ondataavailable=e=>R.chunks.push(e.data); R.mr.start(); } } catch(e){ if (!SR){ SP.rec=null; toast(T("sk_mic_fail")); return; } }
+  if (SR){ const r=new SR(); R.sr=r; r.lang="en-US"; r.continuous=true; r.interimResults=true; let fin="";
+    r.onresult=e=>{ let interim=""; for (let i=e.resultIndex;i<e.results.length;i++){ const t=e.results[i][0].transcript; if (e.results[i].isFinal) fin+=t+" "; else interim+=t; } R.said=fin; R.interim=interim; const l=document.getElementById("sp-live"); if (l) l.textContent=(fin+interim).slice(-240); };
+    r.onerror=e=>{ if (e.error==="not-allowed") toast(T("sk_mic_fail")); };
+    r.onend=()=>{ if (SP.rec===R && !R.stopping){ try{ r.start(); }catch(e){} } };
+    try { r.start(); } catch(e){} }
+  const mode=x.mode||"read", lim=mode==="answer"?120:mode==="retell"?(S.spLen||4)*60:0;
+  R.tick=setInterval(()=>{ const el=document.getElementById("sp-timer"); const s=Math.floor((Date.now()-R.t0)/1000); if (el){ const v=lim?Math.max(0,lim-s):s; el.textContent=Math.floor(v/60)+":"+String(v%60).padStart(2,"0"); } if (lim && s>=lim) spStop(); },250);
+  render(); }
+function spStop(){ const R=SP.rec; if (!R) return; R.stopping=true; clearInterval(R.tick);
+  const finish=()=>{ if (SP.rec!==R) return; SP.rec=null; const sec=Math.max(1,(Date.now()-R.t0)/1000), said=(R.said+" "+(R.interim||"")).trim();
+    if (R.mr){ try{ const blob=new Blob(R.chunks,{type:R.mr.mimeType||"audio/mp4"}); if (blob.size){ SP.url=URL.createObjectURL(blob); SP.urlDate=R.date; } }catch(e){} }
+    if (R.stream) R.stream.getTracks().forEach(t=>t.stop());
+    const x=clone(spDoc(R.date)); if (!x) return render(); const n=spWords(said).length, wpm=Math.round(n/(sec/60));
+    let tr={at:Date.now(), n, wpm, sec:Math.round(sec), said:said.slice(0,3000)};
+    if ((x.mode||"read")==="read" && said){ const c=spCompare(x.text, said); tr={...tr, acc:c.acc, miss:c.miss.slice(0,40)}; x.steps={...(x.steps||{}),3:true}; }
+    if (said || !(window.SpeechRecognition||window.webkitSpeechRecognition)){ x.tries=[...(x.tries||[]), tr].slice(-30); x.done=true; spSave(x); if (spTask(R.day)) spSet(R.day,true); }
+    render(); };
+  if (R.mr && R.mr.state!=="inactive"){ R.mr.onstop=()=>setTimeout(finish,300); try{ R.mr.stop(); }catch(e){} }
+  if (R.sr){ R.sr.onend=()=>setTimeout(finish,100); try{ R.sr.stop(); }catch(e){ finish(); } }
+  setTimeout(finish, 1500); }
+
 /* ---------- daily questions: toeic/set_<date> {type:"set",date,vocab:[{w,pos,zh,ex}],blocks:[{part,passage?,script?:[[spk,line]],qs:[{q,opts,a,why,tag}]}],ans:{"b-i":n},done,score}
    written by the Monday run; Sunday's word review is built here from the week's words ---------- */
 const TQ_WHY={vocab:0,grammar:1,listen:2,paraphrase:3,time:4,careless:5};
@@ -1304,11 +1467,11 @@ function tqCount(set){ return set.blocks.reduce((n,b)=>n+b.qs.length,0); }
 /* read a script aloud with the device's English voices: two voices for a conversation */
 const TTS={on:false};
 function ttsVoices(){ const v=(window.speechSynthesis&&speechSynthesis.getVoices()||[]).filter(x=>/^en[-_](US|GB|AU|CA)/i.test(x.lang)); const us=v.filter(x=>/US/i.test(x.lang)); return (us.length>=2?us:v); }
-function ttsPlay(script, btn){ if (!window.speechSynthesis){ toast(T("tq_no_voice")); return; } speechSynthesis.cancel(); const vs=ttsVoices(); if (!vs.length){ toast(T("tq_no_voice")); return; }
+function ttsPlay(script, btn, rate, onend){ if (!window.speechSynthesis){ toast(T("tq_no_voice")); return; } speechSynthesis.cancel(); const vs=ttsVoices(); if (!vs.length){ toast(T("tq_no_voice")); return; }
   const fem=vs.find(x=>/female|samantha|zira|aria|jenny|allison|ava|susan|karen|victoria|google us english/i.test(x.name))||vs[0], male=vs.find(x=>x!==fem && /male|alex|daniel|david|guy|fred|tom|aaron|google uk english male/i.test(x.name))||vs.find(x=>x!==fem)||vs[0];
   const who={}; TTS.on=true; if (btn) btn.textContent=T("tq_stop");
   script.forEach(([spk,line],i)=>{ const u=new SpeechSynthesisUtterance(line); const k=String(spk||"N").toUpperCase(); u.voice = k.startsWith("W")||k.startsWith("F") ? fem : k.startsWith("M") ? male : (who[k]=who[k]||(Object.keys(who).length%2?male:fem));
-    u.lang=u.voice.lang; u.rate=0.95; if (u.voice===fem && fem===male) u.pitch=1.25; if (i===script.length-1) u.onend=()=>{ TTS.on=false; if (btn) btn.textContent=T("tq_play"); }; speechSynthesis.speak(u); }); }
+    u.lang=u.voice.lang; u.rate=rate||0.95; if (u.voice===fem && fem===male) u.pitch=1.25; if (i===script.length-1) u.onend=()=>{ TTS.on=false; if (btn) btn.textContent=T("tq_play"); if (onend) onend(); }; speechSynthesis.speak(u); }); }
 if (window.speechSynthesis) speechSynthesis.onvoiceschanged=()=>{};
 function viewQuiz(ds){ const tk=tcTask(ds), set=tqSet(ds), c=tcCfg(), W=T("wd");
   const head=`<div class="tq-h"><h3>${T("tq_title", md(ds)+" "+dow(ds))}</h3><span class="sub">${tk?esc(tk):""}</span></div>`;
@@ -1624,7 +1787,7 @@ function viewWeek(){
     const topCar=myCar.filter(c=>!c.proj);
     return `<div class="day ${td?"today":""}" data-day="${date}">
       <div class="day-h"><b>${md(date)}</b><span>${dow(date)}</span>${td?`<span class="badge">${L("today_badge")}</span>`:""}${dayFreeBadge(date)}</div>
-      ${dayClassChips(date)}<div class="day-body" data-keep-y="${date}"><ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}${tcVirtualLi(date)}</ul>${addForm(date)}
+      ${dayClassChips(date)}<div class="day-body" data-keep-y="${date}"><ul class="list">${topCar.map(c=>itemLi(c.it,c.date,-1,true)).join("")}${(nn=>(d.items||[]).map((it,i)=>itemLi(it,date,-1,false,nn[i])).join(""))(olNums(d.items||[]))}${tcVirtualLi(date)}${spVirtualLi(date)}</ul>${addForm(date)}
       ${projs}</div>
       <div class="day-foot">
         <select data-act="proj-add" data-date="${date}" aria-label="${T("add_proj")}"><option value="">${T("add_proj")}</option>${projOpts.filter(p=>!names.has(p)).map(p=>`<option>${esc(p)}</option>`).join("")}<option value="__new">${T("new_proj")}</option></select>
@@ -2506,6 +2669,18 @@ document.addEventListener("click", e=>{
   else if (act==="gc-allow"){ gcAllow(); }
   else if (act==="tc-day"){ S.tcDay=b.dataset.date; render(); document.getElementById("tq")?.scrollIntoView({block:"start"}); }
   else if (act==="tc-go"){ S.tcDay=b.dataset.date; setTab("toeic"); }
+  else if (act==="sk-go"){ S.spDay=b.dataset.date; setTab("speak"); }
+  else if (act==="sk-day"){ S.spDay=b.dataset.date; render(); document.getElementById("spc")?.scrollIntoView({block:"start"}); }
+  else if (act==="sk-start"){ const st=clone(settings()); st.speak={start:today(), stage:1}; save("settings/main",st,50); render(); }
+  else if (act==="sk-stage"){ const st=clone(settings()); st.speak={...st.speak, stage:Math.min(3,Math.max(1,(st.speak.stage||1)+(+b.dataset.d))), since:today()}; save("settings/main",st,50); render(); }
+  else if (act==="sk-play"){ spPlay(b.dataset.date, !!b.dataset.slow, null, b); }
+  else if (act==="sk-sen"){ const src=spSrcDate(S.spDay||today()); if (src) { if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; } spPlay(src, false, +b.dataset.i); } }
+  else if (act==="sk-turn"){ const x=spDoc(b.dataset.date); const turns=(x&&x.turns)||[]; if (!turns.length) return; let i=SP.turn&&SP.turn.date===b.dataset.date?SP.turn.i:0; if (i>=turns.length) i=turns.length-1; const t=turns[i]; SP.turn={date:b.dataset.date,i:i+1}; ttsPlay([[t.who&&/^(w|f|she|sarah|emma|anna|lisa|kate|amy)/i.test(t.who)?"W":"M",t.say]]); if (!SP.rec) render(); else { const n=document.querySelector('[data-act=sk-turn]+.sub'); if (n) n.textContent=T("sk_partner_n",Math.min(i+2,turns.length),turns.length); } }
+  else if (act==="sk-show"){ S.spShow=!S.spShow; render(); }
+  else if (act==="sk-len"){ S.spLen=+b.dataset.m; render(); }
+  else if (act==="sk-rec"){ spRec(b.dataset.date, b.dataset.day); }
+  else if (act==="sk-stop"){ spStop(); }
+  else if (act==="sk-replay"){ if (SP.url){ new Audio(SP.url).play().catch(()=>{}); } }
   else if (act==="tq-zh"){ S.tqHideZh=!S.tqHideZh; render(); }
   else if (act==="tq-say"){ ttsPlay([["W",b.dataset.w]]); }
   else if (act==="tq-play"){ if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; b.textContent=T("tq_play"); return; } const set=tqSet(S.tcDay||today()); const bl=set&&set.blocks[+b.dataset.b]; if (bl) ttsPlay(bl.script,b); }
@@ -2622,8 +2797,11 @@ document.addEventListener("change", e=>{
   const el=e.target, act=el.dataset.act;
   if (act==="task-toggle"){ const t={...task(el.dataset.id), done:el.checked, doneAt:el.checked?Date.now():null}; save("tasks/"+t.id,t,50); render(); }
   else if (act==="tc-toggle"){ tcSet(el.dataset.date, el.checked); render(); }
+  else if (act==="sk-toggle"){ spSet(el.dataset.date, el.checked); render(); }
+  else if (act==="sk-step"){ const x=clone(spDoc(el.dataset.date)); if (!x) return; x.steps={...(x.steps||{}), [el.dataset.i]:el.checked}; spSave(x); if ([0,1,2,3].every(i=>x.steps[i]) && spTask(el.dataset.day)) spSet(el.dataset.day,true); render(); }
   else if (act==="tq-pick"){ const set=clone(tqSet(el.dataset.date)); if (!set || set.done) return; set.ans={...(set.ans||{}), [el.dataset.k]:+el.value}; tqSave(set); const f=document.querySelector(".tq-foot .sub"), n=tqCount(set)-Object.keys(set.ans).length; if (f) f.textContent=n?T("tq_left",n):""; }
   else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).tc){ tcSet(el.dataset.date, false); render(); }
+  else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).sp){ spSet(el.dataset.date, false); render(); }
   else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked;
     // dc = the card it was checked on. Only an item checked on a later day's card (a carried item) shows up on that card too.
     // The calendar records it on that card's date (not the clock's), so checking the 11/10 card after midnight still counts for 11/10.
@@ -2883,6 +3061,7 @@ function banner(msg){ const b=document.getElementById("banner"); b.textContent=m
   const fail=k=>e=>{ waiting.delete(k); if (e.code!=="revoked") banner(T("disconnected",e.code)); };
   const sub=(name)=>db.collection(name).onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S[name]=o; done(name,snap); softRender(); }, fail(name));
   sub("tasks"); sub("days"); sub("expenses"); sub("events"); sub("gymlog"); sub("inbox");
+  db.collection("speak").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.speak=o; softRender(); }, ()=>{});
   db.collection("toeic").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.toeic=o; softRender(); }, ()=>{});
   db.collection("papers").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.papers=o; softRender(); }, ()=>{});
   // Claude's Monday suggestions (written by the scheduled run, read-only here)
