@@ -100,6 +100,7 @@ section.block{margin-bottom:32px;scroll-margin-top:calc(16px + env(safe-area-ins
 .ghost{border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--muted)}
 .ghost:hover{color:var(--fg);border-color:var(--muted)}
 /* urgency board */
+.col.daily .dot{background:var(--accent)}.dl-sub{margin:-4px 0 8px;font-size:12px}.col.daily .t[contenteditable]{outline:none;border-radius:4px}.col.daily .t[contenteditable]:focus{background:var(--calm-soft)}.dl-tag{color:var(--muted);font-size:12px;margin-left:4px}.item.dl-v .t{color:var(--muted)}
 .board{display:grid;grid-template-columns:repeat(var(--ncol,3),minmax(0,1fr));gap:16px}
 @media (min-width:861px){.board[style*="--ncol:4"],.board[style*="--ncol:5"],.board[style*="--ncol:6"]{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
 .col.custom .dot{background:var(--muted)}
@@ -780,7 +781,7 @@ const I18N = {
     wd:["日","一","二","三","四","五","六"], dow:w=>"週"+w, wd_mon_first:["一","二","三","四","五","六","日"],
     today_label:(y,m,d,w)=>`${y}/${m}/${d} 週${w}`,
     tasks_sub:"依急迫程度分類 · 可拖曳換欄",
-    empty_col:"沒有項目，拖曳或在下方新增",
+    empty_col:"沒有項目，拖曳或在下方新增", dl_title:"每日進度", dl_sub:p=>`每天自動放進日卡的「${p}」，勾選代表今天更新過了`, dl_empty:"還沒有每日項目，在下方新增", dl_up:"往上移",
     add_enter:"＋ 新增（Enter）", due_title:"截止日（可留空）",
     show_done:(show,n)=>`${show?"隱藏":"顯示"}已完成 ${n} 項`,
     late:"過期 ", move_to:n=>`移到「${n}」`, del:"刪除", done:"完成",
@@ -902,7 +903,7 @@ const I18N = {
     wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], dow:w=>w, wd_mon_first:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
     today_label:(y,m,d,w)=>`${w}, ${m}/${d}/${y}`,
     tasks_sub:"Sorted by urgency · drag to move",
-    empty_col:"Nothing here. Drag a task in or add one below.",
+    empty_col:"Nothing here. Drag a task in or add one below.", dl_title:"Daily updates", dl_sub:p=>`Added to the "${p}" section of each day card. Tick it once you've updated it today.`, dl_empty:"No daily items yet. Add one below.", dl_up:"Move up",
     add_enter:"+ Add (Enter)", due_title:"Due date (optional)",
     show_done:(show,n)=>`${show?"Hide":"Show"} ${n} done`,
     late:"Late ", move_to:n=>`Move to “${n}”`, del:"Delete", done:"Done",
@@ -1131,6 +1132,15 @@ function dueBadge(due){
   return `<span class="due ${diff<=2?"soon":""}" title="${esc(due)}">${diff<0?T("late"):""}${md(due)}</span>`;
 }
 /* ---------- cards: which ones show, kept in settings/main ---------- */
+/* daily list: settings.dailyList [{id,t}] shows up every day (today onward) in the 其他 section of the day card; ticking it writes a real item {dl:id} */
+const DL_PROJ="其他";
+function dlList(){ return settings().dailyList||[]; }
+function dlSave(list){ const st=clone(settings()); st.dailyList=list; save("settings/main",st,50); }
+function dlDone(ds,id){ return ((day(ds).projects||[]).find(p=>p.name===DL_PROJ)?.items||[]).find(i=>i.dl===id); }
+function dlSet(ds,id,on){ const x=dlList().find(i=>i.id===id); const d=dayCopy(ds); let p=d.projects.find(q=>q.name===DL_PROJ);
+  if (on){ if (!p){ p={name:DL_PROJ,open:true,items:[]}; d.projects.push(p); } if (!p.items.some(i=>i.dl===id) && x) p.items.push({id:uid(), t:x.t, d:true, dn:today()<ds?ds:today(), dc:ds, dl:id}); }
+  else if (p) p.items=p.items.filter(i=>i.dl!==id);
+  save("days/"+ds,d,200); }
 function bucketList(){ const b=settings().buckets; return (b&&b.length)?b:BUCKETS.map(id=>({id})); }
 function bName(b){ return b.name || T("b_"+b.id); }
 function ovDefault(){ return ["today","week",...pinned().map(p=>"proj:"+p),"due","carry"]; }
@@ -1148,6 +1158,12 @@ function dayCards(){ const st=settings().dayCards; if(!st || !st.list || !st.lis
   return list.slice(0,DAY_MAX); }
 function saveDayCards(list){ const st=clone(settings()); list=[...new Set(list)].sort(); if(list.length>DAY_MAX) list=list.slice(-DAY_MAX);
   st.dayCards = list.length?{list, at:today()}:null; save("settings/main",st,50); render(); }
+function viewDailyCol(){ const t=today(), L_=dlList(), k=L_.filter(x=>dlDone(t,x.id)).length;
+  return `<div class="col daily" data-daily="1"><div class="col-h"><span class="dot"></span><b>${L("dl_title")}</b><span class="n">${L_.length?`${k}/${L_.length}`:""}</span></div>
+    <p class="sub dl-sub">${T("dl_sub",DL_PROJ)}</p>
+    <ul class="list">${L_.map((x,i)=>`<li class="item ${dlDone(t,x.id)?"done":""}"><input type="checkbox" data-act="dl-toggle" data-date="${t}" data-id="${x.id}" ${dlDone(t,x.id)?"checked":""} aria-label="${T("done")}"><span class="t" contenteditable="plaintext-only" spellcheck="false" data-act="dl-edit" data-id="${x.id}">${esc(x.t)}</span>
+      <span class="acts">${i?`<button class="icon-btn" data-act="dl-move" data-id="${x.id}" data-n="-1" title="${T("dl_up")}">↑</button>`:""}<button class="icon-btn" data-act="dl-del" data-id="${x.id}" title="${T("del")}">✕</button></span></li>`).join("")||`<li class="empty mini">${T("dl_empty")}</li>`}</ul>
+    <form class="add" data-act="dl-add"><input type="text" id="add-dl" placeholder="${T("add_enter")}" autocomplete="off"></form></div>`; }
 function viewHome(){
   const every = allTasks().sort((a,b)=>(a.done-b.done)||((a.due||"9999")<(b.due||"9999")?-1:(a.due||"9999")>(b.due||"9999")?1:0)||(a.createdAt||0)-(b.createdAt||0));
   const tasks = every.filter(t=>!t.k);
@@ -1183,7 +1199,7 @@ function viewHome(){
     ${S.split?splitDialog():""}
     <section class="block" id="s-tasks">
       <div class="sec-h"><h2>${L("sec_tasks")}</h2><span class="sub">${L("tasks_sub")}</span></div>
-      <div class="board" style="--ncol:${bl.length}">${cols}</div>
+      <div class="board" style="--ncol:${bl.length+1}">${cols}${viewDailyCol()}</div>
     </section>
     ${viewWeek()}
     ${viewDoneCalendar(tasks)}`;
@@ -1202,8 +1218,8 @@ function doneOn(date){ const out=[];
 function carried(withDone){
   const t=today(), out=[];
   for (let i=14;i>=1;i--){ const ds=addDays(t,-i); if(!hasDay(ds)) continue; const d=day(ds);
-    (d.items||[]).forEach(it=>{ if(!it.k && (!it.d || (withDone && it.dn===t))) out.push({date:ds, pi:-1, it, proj:null}); });
-    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(!it.k && (!it.d || (withDone && it.dn===t))) out.push({date:ds, pi, it, proj:p.name}); })); }
+    (d.items||[]).forEach(it=>{ if(!it.k && !it.dl && (!it.d || (withDone && it.dn===t))) out.push({date:ds, pi:-1, it, proj:null}); });
+    (d.projects||[]).forEach((p,pi)=>p.items.forEach(it=>{ if(!it.k && !it.dl && (!it.d || (withDone && it.dn===t))) out.push({date:ds, pi, it, proj:p.name}); })); }
   return out;
 }
 
@@ -1865,14 +1881,15 @@ function viewWeek(){
     const secs=(d.projects||[]).map((p,pi)=>({name:p.name,pi,p}));
     const names=new Set(secs.map(s=>s.name));
     if (date>=t) pins.forEach(n=>{ if(!names.has(n)){ names.add(n); secs.push({name:n,pi:null}); } });
+    const dls=date>=t?dlList():[]; if (dls.length && !names.has(DL_PROJ)){ names.add(DL_PROJ); secs.push({name:DL_PROJ,pi:null}); }
     myCar.forEach(c=>{ if(c.proj && !names.has(c.proj)){ names.add(c.proj); secs.push({name:c.proj,pi:null}); } });
     const projs=secs.map(s=>{
-      const own=s.p?s.p.items:[], extra=myCar.filter(c=>c.proj===s.name);
-      const n=own.filter(i=>!i.k).length+extra.length, k=own.filter(i=>i.d).length+extra.filter(c=>c.it.d).length;
+      const own=s.p?s.p.items:[], extra=myCar.filter(c=>c.proj===s.name), vdl=s.name===DL_PROJ?dls.filter(x=>!own.some(i=>i.dl===x.id)):[];
+      const n=own.filter(i=>!i.k).length+extra.length+vdl.length, k=own.filter(i=>i.d).length+extra.filter(c=>c.it.d).length;
       const open=s.p ? s.p.open!==false : (date===t || extra.length>0);
       return `<details class="proj ${s.p?"":"virtual"}" ${open?"open":""} data-date="${date}" ${s.p?`data-pi="${s.pi}"`:""}>
         <summary data-name="${esc(s.name)}">${esc(T("prog",s.name))} <span class="cnt">${k}/${n}</span>${s.p?`<button class="icon-btn" data-act="proj-del" data-date="${date}" data-pi="${s.pi}" title="${T("remove_block")}">✕</button>`:""}</summary>
-        <div class="inner">${n?`<div class="progress"><i style="width:${k/n*100}%"></i></div>`:""}<ul class="list">${extra.map(c=>itemLi(c.it,c.date,c.pi,true)).join("")}${(nn=>own.map((it,i)=>itemLi(it,date,s.pi,false,nn[i])).join(""))(olNums(own))}</ul>${addForm(date,s.name)}</div>
+        <div class="inner">${n?`<div class="progress"><i style="width:${k/n*100}%"></i></div>`:""}<ul class="list">${extra.map(c=>itemLi(c.it,c.date,c.pi,true)).join("")}${(nn=>own.map((it,i)=>itemLi(it,date,s.pi,false,nn[i])).join(""))(olNums(own))}${vdl.map(x=>`<li class="item dl-v"><input type="checkbox" data-act="dl-toggle" data-date="${date}" data-id="${x.id}" aria-label="${T("done")}"><span class="t">${esc(x.t)}</span><span class="dl-tag" title="${esc(T("dl_title"))}">↻</span></li>`).join("")}</ul>${addForm(date,s.name)}</div>
       </details>`;
     }).join("");
     const topCar=myCar.filter(c=>!c.proj);
@@ -2648,6 +2665,7 @@ function setTab(t){ S.tab=t; lsSet("home.tab",t); render._scrolled=false; setSid
 
 document.addEventListener("submit", e=>{
   const f=e.target; e.preventDefault(); const act=f.dataset.act;
+  if (act==="dl-add"){ const inp=f.querySelector("input"), v=inp.value.trim(); if (!v) return; dlSave([...dlList(), {id:uid(), t:v}]); inp.value=""; render(); setTimeout(()=>document.getElementById("add-dl")?.focus(),0); return; }
   if (act==="task-add"){
     const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"), title=inp.value.trim(), m=slashMode(f); if (!title && m.k!=="tb") return;
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:due.value||today(),title,kind:m.mark},50); inp.value=""; due.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
@@ -2759,6 +2777,8 @@ document.addEventListener("click", e=>{
   else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
   else if (act==="gc-allow"){ gcAllow(); }
   else if (act==="tc-day"){ S.tcDay=b.dataset.date; render(); document.getElementById("tq")?.scrollIntoView({block:"start"}); }
+  else if (act==="dl-del"){ dlSave(dlList().filter(x=>x.id!==b.dataset.id)); render(); }
+  else if (act==="dl-move"){ const a=[...dlList()], i=a.findIndex(x=>x.id===b.dataset.id), j=i+(+b.dataset.n); if (i<0||j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; dlSave(a); render(); }
   else if (act==="tc-go"){ S.tcDay=b.dataset.date; setTab("toeic"); }
   else if (act==="er-go"){ setTab("toeic"); setTimeout(()=>document.getElementById("er")?.scrollIntoView({block:"start",behavior:"smooth"}),50); }
   else if (act==="er-self"){ erGrade(b.dataset.id, b.dataset.ok==="1", null); render(); }
@@ -2901,6 +2921,8 @@ document.addEventListener("change", e=>{
   else if (act==="tq-pick"){ const set=clone(tqSet(el.dataset.date)); if (!set || set.done) return; set.ans={...(set.ans||{}), [el.dataset.k]:+el.value}; tqSave(set); const f=document.querySelector(".tq-foot .sub"), n=tqCount(set)-Object.keys(set.ans).length; if (f) f.textContent=n?T("tq_left",n):""; }
   else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).tc){ tcSet(el.dataset.date, false); render(); }
   else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).sp){ spSet(el.dataset.date, false); render(); }
+  else if (act==="dl-toggle"){ dlSet(el.dataset.date, el.dataset.id, el.checked); render(); }
+  else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).dl){ dlSet(el.dataset.date, listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id).dl, false); render(); }
   else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked;
     // dc = the card it was checked on. Only an item checked on a later day's card (a carried item) shows up on that card too.
     // The calendar records it on that card's date (not the clock's), so checking the 11/10 card after midnight still counts for 11/10.
@@ -2961,6 +2983,10 @@ document.addEventListener("input", e=>{
 
 /* edit mode: save a changed label to settings.texts[lang][key] */
 document.addEventListener("keydown", e=>{ const el=e.target; if (el.dataset && el.dataset.tk && el.isContentEditable && e.key==="Enter" && !e.isComposing){ e.preventDefault(); el.blur(); } });
+document.addEventListener("focusout", e=>{ const el=e.target; if (!el.dataset || el.dataset.act!=="dl-edit") return;
+  const v=el.textContent.replace(/\s+/g," ").trim(), a=dlList().map(x=>({...x})), x=a.find(i=>i.id===el.dataset.id); if (!x) return;
+  if (!v){ el.textContent=x.t; return; } if (v!==x.t){ x.t=v; dlSave(a); } });
+document.addEventListener("keydown", e=>{ const el=e.target; if (el && el.dataset && el.dataset.act==="dl-edit" && e.key==="Enter" && !e.isComposing){ e.preventDefault(); el.blur(); } });
 document.addEventListener("focusout", e=>{
   const el=e.target; if (!el.dataset || !el.dataset.tk || !el.isContentEditable) return;
   const k=el.dataset.tk, v=el.textContent.replace(/[<>"&]/g,"").replace(/\s+/g," ").trim();
