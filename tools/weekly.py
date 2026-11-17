@@ -102,9 +102,9 @@ def write(mon, path):
 
 # ---- TOEIC: keep these tables in step with tc_t in index.html (zh) ----
 TC_T = dict(
-    base=["單字 30＋Part 5 二十題", "聽力：YouTube Part 3 兩組＋錯句跟讀｜Part 5 十題", "單字 30＋Part 6 兩篇", "聽力：YouTube Part 4 兩組＋錯句跟讀｜Part 5 十題", "單字 30＋Part 7 單篇 5 篇", "官方題本半份（聽力、閱讀輪流）＋檢討", "本週單字複習"],
-    strat=["Part 7 多篇 3 組（計時）", "聽力：YouTube Part 3、4 先看選項練 3 組｜Part 5 十題", "Part 5 難題 30 題（限時 9 分鐘）", "聽力：YouTube Part 2 二十五題＋跟讀｜Part 6 一篇", "單字 30＋Part 7 單篇計時 8 篇", "官方題本半份＋整理錯題", "本週單字複習"],
-    mock=["錯題本重做＋Part 5 二十題", "官方題本整份模考（計時 2 小時）", "單字 30＋Part 7 計時 5 篇", "聽力：YouTube 最弱的 Part 兩組｜Part 5 十題", "錯題本重做＋Part 6 兩篇", "官方題本整份模考（計時 2 小時）", None],
+    base=["單字 30＋Part 5 二十題", "聽力：YouTube Part 3 兩組＋錯句跟讀｜Part 5 十題｜單字 10", "單字 30＋Part 6 兩篇", "聽力：YouTube Part 4 兩組＋錯句跟讀｜Part 5 十題｜單字 10", "單字 30＋Part 7 單篇 5 篇", "官方題本半份（聽力、閱讀輪流）＋檢討", "本週單字複習"],
+    strat=["Part 7 多篇 3 組（計時）", "聽力：YouTube Part 3、4 先看選項練 3 組｜Part 5 十題｜單字 10", "Part 5 難題 30 題（限時 9 分鐘）", "聽力：YouTube Part 2 二十五題＋跟讀｜Part 6 一篇｜單字 10", "單字 30＋Part 7 單篇計時 8 篇", "官方題本半份＋整理錯題", "本週單字複習"],
+    mock=["錯題本重做＋Part 5 二十題", "官方題本整份模考（計時 2 小時）", "單字 30＋Part 7 計時 5 篇", "聽力：YouTube 最弱的 Part 兩組｜Part 5 十題｜單字 10", "錯題本重做＋Part 6 兩篇", "官方題本整份模考（計時 2 小時）", None],
     diag="官方題本整份模考（起點，計時 2 小時）＋把分數記下來", eve="只複習錯題本和單字，早點睡", exam="多益考試 💪")
 WHYS = ["單字", "文法", "沒聽懂", "換句話說沒對到", "時間不夠", "粗心"]
 
@@ -142,7 +142,8 @@ def toeic_dump(arg=None):
                            recent=[dict(date=x.get("date"), part=x.get("part"), why=WHYS[int(x.get("why") or 0)], note=x.get("note")) for x in errs[-25:]]),
                mocks=sorted([dict(date=x.get("date"), L=x.get("L"), R=x.get("R")) for x in docs if x.get("type") == "mock"], key=lambda x: x["date"]),
                setScores=[dict(date=d, score=s.get("score"), of=sum(len(b.get("qs", [])) for b in s.get("blocks", []))) for d, s in sorted(sets.items()) if s.get("done")],
-               wordsUsed=sorted({v.get("w") for s in sets.values() for v in s.get("vocab", []) if v.get("w")}))
+               wordsUsed=sorted({v.get("w") for s in sets.values() for v in s.get("vocab", []) if v.get("w")}),
+               listenUsed=[dict(date=d, **v) for d, s in sorted(sets.items()) for v in s.get("listen", [])])
     print(json.dumps(out, ensure_ascii=False, indent=1))
 
 def toeic_write(path):
@@ -156,11 +157,13 @@ def toeic_write(path):
             qs = [q for q in b.get("qs", []) if q.get("q") is not None and isinstance(q.get("opts"), list) and 2 <= len(q["opts"]) <= 4 and isinstance(q.get("a"), int) and 0 <= q["a"] < len(q["opts"])]
             if qs: blocks.append({**{k: b[k] for k in ("part", "passage", "script") if b.get(k)}, "qs": qs})
         vocab = [v for v in st.get("vocab", []) if v.get("w") and v.get("zh")]
-        if not blocks and not vocab: print(f"skip {d}: nothing valid"); continue
+        listen = [{k: str(v[k]) for k in ("title", "url", "note") if v.get(k)} for v in st.get("listen", [])
+                  if re.match(r"https://(www\.youtube\.com/watch\?v=|youtu\.be/)[\w-]{11}", v.get("url") or "")]
+        if not blocks and not vocab and not listen: print(f"skip {d}: nothing valid"); continue
         ref = u.collection("toeic").document("set_" + d); old = ref.get()
         if old.exists and old.to_dict().get("done"): print(f"keep {d}: already answered"); continue
-        ref.set(dict(id="set_" + d, type="set", date=d, vocab=vocab, blocks=blocks, ans={}, done=False, by="Claude", at=int(dt.datetime.now().timestamp() * 1000)))
-        n += 1; print(f"saved set_{d}: {len(vocab)} words, {sum(len(b['qs']) for b in blocks)} questions")
+        ref.set(dict(id="set_" + d, type="set", date=d, vocab=vocab, listen=listen, blocks=blocks, ans={}, done=False, by="Claude", at=int(dt.datetime.now().timestamp() * 1000)))
+        n += 1; print(f"saved set_{d}: {len(vocab)} words, {len(listen)} videos, {sum(len(b['qs']) for b in blocks)} questions")
     print(f"{n} sets written")
 
 SP_MODES = ("read", "retell", "answer", "talk")
