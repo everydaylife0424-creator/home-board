@@ -729,7 +729,7 @@ const I18N = {
     sk_adv_slow:w=>`語速 ${w} 字／分，偏慢。對話自然的範圍約 120–150，先把熟的句子唸得連貫，不要一個字一個字唸。`, sk_adv_fast:w=>`語速 ${w} 字／分，偏快。放慢到 130–150，把每個字的字尾唸清楚，正確率通常會上來。`, sk_adv_pace_ok:w=>`語速 ${w} 字／分，落在對話自然的範圍（120–150）。`,
     sk_adv_up:(a,b)=>`正確率從 ${a}% 進步到 ${b}%。`, sk_adv_down:(a,b)=>`正確率 ${a}% → ${b}%，下降了。先回到上面最弱的句子，一句一句練順再整段錄。`, sk_adv_same:"正確率和上次一樣。",
     sk_adv_fill:n=>`用了 ${n} 次 um、like、so 這類填充詞。想不到字時，停頓一下比填充詞自然。`, sk_adv_short:"這次講得比較短。試著多加一個例子或細節，講滿時間。",
-    sk_voice:"範本聲音", sk_voice_try:"試聽", sk_voice_how:"聲音太像機器？下載更自然的聲音",
+    sk_voice:"範本聲音", sk_voice_natural:"這篇稿子用的是預錄的自然人聲；上面選的聲音只用在單字發音和沒有音檔的稿子。", sk_voice_try:"試聽", sk_voice_how:"聲音太像機器？下載更自然的聲音",
     sk_voice_how_txt:"範本聲音用的是裝置內建的英文語音。iPhone、iPad：設定 → 輔助使用 → 朗讀內容 → 聲音 → 英文，下載標示「高音質」的聲音（最自然，其次是「增強音質」），例如 Ava、Zoe、Evan。Mac：系統設定 → 輔助使用 → 朗讀內容 → 系統聲音 → 管理聲音。下載完重開 app，在上面選標有 ★★ 的聲音。每台裝置要各自下載、各自選。",
     sk_hist:"最近的紀錄", sk_hist_none:"還沒有錄音紀錄。", sk_week_list:"本週稿子", sk_rest:"休息", sk_why:"這樣練的依據",
     sk_how:"怎麼練、怎樣算完成", sk_kind:{job:"求職",talk:"日常對話"},
@@ -851,7 +851,7 @@ const I18N = {
     sk_adv_slow:w=>`${w} wpm is slow. Aim for 120–150 by reading phrases, not single words.`, sk_adv_fast:w=>`${w} wpm is fast. Slow to 130–150 and finish each word.`, sk_adv_pace_ok:w=>`${w} wpm is a natural pace (120–150).`,
     sk_adv_up:(a,b)=>`Accuracy up from ${a}% to ${b}%.`, sk_adv_down:(a,b)=>`Accuracy ${a}% → ${b}%. Go back to the weakest sentences first.`, sk_adv_same:"Same accuracy as last time.",
     sk_adv_fill:n=>`${n} fillers (um, like, so). A short pause sounds better.`, sk_adv_short:"That was short. Add one more example or detail.",
-    sk_voice:"Voice", sk_voice_try:"Try", sk_voice_how:"Voice sounds robotic? Get a better one",
+    sk_voice:"Voice", sk_voice_natural:"This script uses a pre-recorded natural voice; the voice above is only for single words and scripts without audio.", sk_voice_try:"Try", sk_voice_how:"Voice sounds robotic? Get a better one",
     sk_voice_how_txt:"The app uses your device's built-in English voices. iPhone/iPad: Settings → Accessibility → Spoken Content → Voices → English, download an Enhanced or Premium voice such as Ava, Zoe or Evan. Mac: System Settings → Accessibility → Spoken Content → System Voice → Manage Voices. Then reopen the app and pick a ★ voice here. Each device needs its own download.",
     sk_hist:"Recent recordings", sk_hist_none:"No recordings yet.", sk_week_list:"This week's scripts", sk_rest:"Rest", sk_why:"Why this works",
     sk_how:"How to practice, and when it counts", sk_kind:{job:"Job",talk:"Conversation"},
@@ -1421,7 +1421,7 @@ function spAllTries(){ const out=[]; Object.keys(S.speak).concat([...pending.key
   const seen=new Set(); return out.filter(r=>{ const k=r.date+r.at; if (seen.has(k)) return false; seen.add(k); return true; }).sort((a,b)=>b.at-a.at); }
 function spCanNext(c){ const tr=spAllTries(); if (c.stage===1){ const r=tr.filter(x=>x.acc!=null).slice(0,5); return r.length>=5 && r.reduce((s,x)=>s+x.acc,0)/5>=95; }
   if (c.stage===2){ const r=tr.filter(x=>x.mode==="retell" && x.sec && x.sec<=125).slice(0,5); return r.length>=5 && r.every(x=>x.n>=220); } return false; }
-function viewSpeakCard(ds){ const src=spSrcDate(ds), x=src&&spDoc(src), c=spCfg();
+function viewSpeakCard(ds){ const src=spSrcDate(ds), x=src&&spDoc(src), c=spCfg(); if (src) spAudio(src);
   const head=`<div class="tq-h"><h3>${md(ds)} ${dow(ds)}${x?" · "+esc(x.title||""):""}</h3>${x&&x.kind?`<span class="tc-ph">${esc(T("sk_kind")[x.kind]||"")}</span>`:""}${x&&src!==ds?`<span class="sub">${md(src)} ${dow(src)}</span>`:""}</div>`;
   if (!x) return head+`<p class="sub">${parse(ds).getDay()===0?T("sk_rest"):T("sk_none")}</p>`;
   const mode=x.mode||"read", st=x.steps||{}, last=(x.tries||[])[(x.tries||[]).length-1], live=SP.rec&&SP.rec.date===src;
@@ -1462,18 +1462,26 @@ function viewSpeak(){ const c=spCfg(), t=today();
       <div class="sp-next">${c.stage<3?`<span>${T("sk_next",c.stage)}</span>`:""}${can?`<button class="primary mini" data-act="sk-stage" data-d="1">${T("sk_go_next")}</button>`:""}${c.stage>1?`<button class="ghost mini" data-act="sk-stage" data-d="-1">${T("sk_go_prev")}</button>`:""}</div></div>
     <div class="card sp-card" id="spc">${viewSpeakCard(S.spDay||t)}</div>
     <div class="card sp-voice"><label>${T("sk_voice")} <select data-act="sk-voice">${ttsVoices().map(v=>`<option value="${esc(v.name)}" ${ttsPick()[0]===v?"selected":""}>${esc(v.name)}${ttsScore(v)>=120?" ★★":ttsScore(v)>=100?" ★":""}</option>`).join("")||`<option>${T("tq_no_voice")}</option>`}</select></label><button class="ghost mini" data-act="sk-voice-try">${T("sk_voice_try")}</button>
+      ${(()=>{ const src=spSrcDate(S.spDay||t), au=src&&spAudio(src); return au?`<span class="sub">${T("sk_voice_natural")}</span>`:""; })()}
       <details class="sp-why"><summary>${T("sk_voice_how")}</summary><p>${T("sk_voice_how_txt")}</p></details></div>
     <div class="tc-grid">
       <div class="card"><h3>${T("sk_week_list")}</h3><ul class="tc-week">${week.map(row).join("")}</ul></div>
       <div class="card"><h3>${T("sk_hist")}</h3>${tr.length?`<ul class="sp-hist">${tr.slice(0,12).map(r=>`<li><span class="tc-dd">${md(r.date)}</span><span class="t">${esc(r.title||"")}</span><b>${r.acc!=null?r.acc+"%":r.n+" w"}</b><span class="sub">${r.wpm} ${T("sk_wpm_u")}</span></li>`).join("")}</ul>`:`<p class="empty mini">${T("sk_hist_none")}</p>`}
         <details class="sp-why"><summary>${T("sk_why")}</summary><p>${T("sk_why_txt")}</p></details></div>
     </div></section>`; }
-function spPlay(ds, slow, only, btn){ const x=spDoc(ds); if (!x||!x.text) return; if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; document.querySelectorAll(".sp-s.on").forEach(e=>e.classList.remove("on")); return; }
-  const sens=spSentences(x.text), list=only!=null?[[only,sens[only]]]:sens.map((s,i)=>[i,s]); let k=0;
-  const next=()=>{ document.querySelectorAll(".sp-s.on").forEach(e=>e.classList.remove("on")); if (k>=list.length){ TTS.on=false; return; } const [i,s]=list[k++]; document.querySelector(`.sp-s[data-i="${i}"]`)?.classList.add("on"); ttsPlay([["W",s]], null, slow?0.75:0.95, next); };
+/* natural voice: speakaudio/<date> {sens:[base64 mp3 per sentence], turns:[...], voice} recorded by the Monday run; device voice is the fallback */
+SP.aud={};
+function spAudio(date){ if (date in SP.aud) return SP.aud[date]; SP.aud[date]=null; if (!db) return null;
+  try { let un=null; un=db.doc("speakaudio/"+date).onSnapshot(sn=>{ const had=!!SP.aud[date]; SP.aud[date]=sn.exists?sn.data():null; if (sn.exists && !had && S.tab==="speak") setTimeout(softRender,0); if (sn.exists || !sn.metadata.fromCache){ if (un) un(); un=()=>{}; } }, ()=>{}); } catch(e){} return null; }
+function spClip(b64, rate, onend){ const a=new Audio("data:audio/mpeg;base64,"+b64); a.playbackRate=rate||1; a.preservesPitch=true; SP.player=a; a.onended=()=>{ if (SP.player===a){ SP.player=null; onend&&onend(); } }; a.play().catch(()=>{ SP.player=null; onend&&onend(); }); }
+function spStopAll(){ if (window.speechSynthesis) speechSynthesis.cancel(); if (SP.player){ const a=SP.player; SP.player=null; a.pause(); } TTS.on=false; document.querySelectorAll(".sp-s.on").forEach(e=>e.classList.remove("on")); }
+function spPlay(ds, slow, only, btn){ const x=spDoc(ds); if (!x||!x.text) return; if (TTS.on){ spStopAll(); return; }
+  const sens=spSentences(x.text), list=only!=null?[[only,sens[only]]]:sens.map((s,i)=>[i,s]); let k=0; const au=spAudio(ds), clips=au&&Array.isArray(au.sens)&&au.sens.length===sens.length?au.sens:null; TTS.on=true;
+  const next=()=>{ document.querySelectorAll(".sp-s.on").forEach(e=>e.classList.remove("on")); if (k>=list.length || !TTS.on){ TTS.on=false; return; } const [i,s]=list[k++]; document.querySelector(`.sp-s[data-i="${i}"]`)?.classList.add("on");
+    if (clips && clips[i]) spClip(clips[i], slow?0.8:1, next); else { ttsPlay([["W",s]], null, slow?0.75:0.95, next); TTS.on=true; } };
   next(); if (only==null && x.mode!=="answer"){ const y=clone(x); y.steps={...(y.steps||{}),0:true}; spSave(y); } }
 async function spRec(src, ds){ const x=spDoc(src); if (!x) return; const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; }
+  if (TTS.on) spStopAll();
   const R={date:src, day:ds, said:"", t0:Date.now(), chunks:[]}; SP.rec=R; if (SP.url){ URL.revokeObjectURL(SP.url); SP.url=null; }
   try { R.stream=await navigator.mediaDevices.getUserMedia({audio:true}); if (window.MediaRecorder){ R.mr=new MediaRecorder(R.stream); R.mr.ondataavailable=e=>R.chunks.push(e.data); R.mr.start(); } } catch(e){ if (!SR){ SP.rec=null; toast(T("sk_mic_fail")); return; } }
   if (SR){ const r=new SR(); R.sr=r; r.lang="en-US"; r.continuous=true; r.interimResults=true; let fin="";
@@ -2729,8 +2737,8 @@ document.addEventListener("click", e=>{
   else if (act==="sk-start"){ const st=clone(settings()); st.speak={start:today(), stage:1}; save("settings/main",st,50); render(); }
   else if (act==="sk-stage"){ const st=clone(settings()); st.speak={...st.speak, stage:Math.min(3,Math.max(1,(st.speak.stage||1)+(+b.dataset.d))), since:today()}; save("settings/main",st,50); render(); }
   else if (act==="sk-play"){ spPlay(b.dataset.date, !!b.dataset.slow, null, b); }
-  else if (act==="sk-sen"){ const src=spSrcDate(S.spDay||today()); if (src) { if (TTS.on){ speechSynthesis.cancel(); TTS.on=false; } spPlay(src, false, +b.dataset.i); } }
-  else if (act==="sk-turn"){ const x=spDoc(b.dataset.date); const turns=(x&&x.turns)||[]; if (!turns.length) return; let i=SP.turn&&SP.turn.date===b.dataset.date?SP.turn.i:0; if (i>=turns.length) i=turns.length-1; const t=turns[i]; SP.turn={date:b.dataset.date,i:i+1}; ttsPlay([[t.who&&/^(w|f|she|sarah|emma|anna|lisa|kate|amy)/i.test(t.who)?"W":"M",t.say]]); if (!SP.rec) render(); else { const n=document.querySelector('[data-act=sk-turn]+.sub'); if (n) n.textContent=T("sk_partner_n",Math.min(i+2,turns.length),turns.length); } }
+  else if (act==="sk-sen"){ const src=spSrcDate(S.spDay||today()); if (src) { spStopAll(); spPlay(src, false, +b.dataset.i); } }
+  else if (act==="sk-turn"){ const x=spDoc(b.dataset.date); const turns=(x&&x.turns)||[]; if (!turns.length) return; let i=SP.turn&&SP.turn.date===b.dataset.date?SP.turn.i:0; if (i>=turns.length) i=turns.length-1; const t=turns[i]; SP.turn={date:b.dataset.date,i:i+1}; spStopAll(); const au=spAudio(b.dataset.date); if (au && au.turns && au.turns[i]) spClip(au.turns[i]); else ttsPlay([[t.who&&/^(w|f|she|sarah|emma|anna|lisa|kate|amy)/i.test(t.who)?"W":"M",t.say]]); if (!SP.rec) render(); else { const n=document.querySelector('[data-act=sk-turn]+.sub'); if (n) n.textContent=T("sk_partner_n",Math.min(i+2,turns.length),turns.length); } }
   else if (act==="sk-show"){ S.spShow=!S.spShow; render(); }
   else if (act==="sk-len"){ S.spLen=+b.dataset.m; render(); }
   else if (act==="sk-rec"){ spRec(b.dataset.date, b.dataset.day); }

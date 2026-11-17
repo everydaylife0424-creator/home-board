@@ -6,13 +6,15 @@
   python3 tools/weekly.py toeic-dump [MONDAY]     # TOEIC plan tasks for that week (default: this week), errors, mocks, words already used
   python3 tools/weekly.py toeic-write sets.json   # save daily question sets to users/<uid>/toeic/set_<date> (answered sets are kept)
   python3 tools/weekly.py speak-dump [MONDAY]     # speaking: stage, which weekdays need scripts, last weeks' tries (accuracy, missed words, transcripts)
+  python3 tools/weekly.py speak-audio-todo [--all] > todo.json   # scripts that still need natural-voice audio (sentences split like the app)
+  python3 tools/weekly.py speak-audio-write audio.json          # save tools/tts.py output to speakaudio/<date>
   python3 tools/weekly.py speak-write scripts.json  # save speak/<date> scripts, or {"date","fb"} feedback on past ones (practice records are kept)
 
 Needs the env var FIREBASE_SA: the Firebase service-account key JSON (raw or base64).
 Optional HOME_UID to pick the user when the project has more than one.
 The page (index.html) shows users/<uid>/weekly/<monday>.tips in the weekly review.
 """
-import base64, datetime as dt, json, os, subprocess, sys
+import base64, datetime as dt, json, os, re, subprocess, sys
 
 def ensure_sdk():
     try:
@@ -203,6 +205,31 @@ def speak_write(path):
         n += 1; print(f"saved speak/{d}: {mode} · {body.get('title','')}")
     print(f"{n} scripts written, {f} feedback notes")
 
+SENT = re.compile(r'[^.!?]+[.!?]+["\u201d\u2019)]*\s*|[^.!?]+$')
+
+def speak_audio_todo(all_=False):
+    u = connect(); today = dt.datetime.now(TZ).date().isoformat()
+    have = {d.id for d in u.collection("speakaudio").stream()}
+    out = []
+    for d in u.collection("speak").stream():
+        x = d.to_dict()
+        if x.get("type") != "script" or (d.id in have and not all_) or (d.id < today and not all_): continue
+        it = dict(date=d.id)
+        if x.get("text") and x.get("mode") in ("read", "retell", None): it["sens"] = SENT.findall(x["text"]) or [x["text"]]
+        if x.get("turns"): it["turns"] = [dict(who=t.get("who", ""), say=t.get("say", "")) for t in x["turns"]]
+        if len(it) > 1: out.append(it)
+    print(json.dumps(out, ensure_ascii=False, indent=1))
+
+def speak_audio_write(path):
+    u = connect(); n = 0
+    for it in json.load(open(path)):
+        body = {k: it[k] for k in ("sens", "turns", "voice") if it.get(k)}
+        size = len(json.dumps(body))
+        if size > 950_000: print(f"skip {it['date']}: {size} bytes is too big for one document"); continue
+        u.collection("speakaudio").document(it["date"]).set(dict(date=it["date"], at=int(dt.datetime.now().timestamp() * 1000), **body)); n += 1
+        print(f"saved speakaudio/{it['date']}: {len(body.get('sens', []))} sentences, {len(body.get('turns', []))} turns, {size // 1024} KB")
+    print(f"{n} audio docs written")
+
 if __name__ == "__main__":
     a = sys.argv[1:]
     if a[:1] == ["dump"]:
@@ -213,6 +240,10 @@ if __name__ == "__main__":
         toeic_dump(a[1] if len(a) > 1 else None)
     elif a[:1] == ["toeic-write"] and len(a) == 2:
         toeic_write(a[1])
+    elif a[:1] == ["speak-audio-todo"]:
+        speak_audio_todo("--all" in a)
+    elif a[:1] == ["speak-audio-write"] and len(a) == 2:
+        speak_audio_write(a[1])
     elif a[:1] == ["speak-dump"]:
         speak_dump(a[1] if len(a) > 1 else None)
     elif a[:1] == ["speak-write"] and len(a) == 2:
