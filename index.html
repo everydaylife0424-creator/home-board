@@ -282,6 +282,7 @@ details.proj.virtual summary{color:var(--muted);font-weight:400}
 .tq{margin-bottom:12px;padding:16px}.tq-h{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:8px}.tq-h h3{margin:0;font-size:16px}
 .tq-voc{margin:6px 0 12px}.tq-voc summary{cursor:pointer;font-weight:600;font-size:14px;min-height:36px;display:flex;align-items:center;gap:6px}.tq-voc table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}.tq-voc td{padding:4px 6px;border-bottom:1px solid var(--line);vertical-align:top}.tq-voc td:first-child{white-space:nowrap}.tq-ex{color:var(--muted);font-size:13px}
 .tq-blur{filter:blur(5px);cursor:pointer}.tq-blur:hover{filter:none}
+.tq-yt{background:var(--calm-soft);border-radius:8px;padding:10px 12px;margin:8px 0}.tq-yt p{margin:4px 0}.tq-yt a{color:var(--accent);font-weight:600}
 .tq-b{border-top:1px solid var(--line);padding:10px 0}.tq-part{font-family:var(--f-mono);font-size:12px;color:var(--accent);margin-bottom:4px}.tq-pass{white-space:pre-wrap;background:var(--calm-soft);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.6;margin-bottom:8px}
 .tq-listen{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}.tq-scr{font-size:13.5px;margin-bottom:6px}.tq-scr summary{cursor:pointer;color:var(--muted)}.tq-scr p{margin:2px 0}
 .tq-q{margin:6px 0 10px}.tq-q p{margin:0 0 4px}.tq-opts{display:grid;gap:2px}.tq-opts label{display:flex;gap:8px;align-items:flex-start;padding:5px 8px;border-radius:6px;cursor:pointer}.tq-opts label:hover{background:var(--calm-soft)}
@@ -710,7 +711,7 @@ const I18N = {
     proj_sec:"專案", cls_edit:"編輯課表", cls_done:"完成，鎖定課表", cls_saved:"課表已鎖定", cls_locked:"已鎖定，按「編輯課表」才能修改", cls_wd:d=>`週${d}`,
     proj_rename:"點一下改名稱", proj_up:"往上移", proj_down:"往下移", proj_dup:"已經有同名的專案了", proj_renamed:n=>`已改名為「${n}」，每天的進度區塊也一起改了`,
     tq_title:d=>`${d} 的題目`, tq_none:"這天還沒有題目。每週一早上會自動出好整週的題。", tq_official:"這天用你的官方題本：計時做完，整份模考的話把分數記到下面的「模考成績」。", tq_rest:"這天休息。",
-    tq_vocab:"今天的單字", tq_jump:"跳到題目 ↓", tq_play:"▶ 播放", tq_stop:"■ 停止", tq_script:"看原文", tq_submit:"交卷", tq_score:(a,b)=>`答對 ${a} / ${b}`, tq_done:"已完成", tq_left:n=>`還有 ${n} 題沒作答`, tq_redo:"重做一次",
+    tq_vocab:"今天的單字", tq_yt:"今天的聽力影片", tq_yt_how:"先暫停看題目和選項再播，每組只聽一次就作答；對完答案，把聽錯的句子倒回去跟著唸三遍。", tq_jump:"跳到題目 ↓", tq_play:"▶ 播放", tq_stop:"■ 停止", tq_script:"看原文", tq_submit:"交卷", tq_score:(a,b)=>`答對 ${a} / ${b}`, tq_done:"已完成", tq_left:n=>`還有 ${n} 題沒作答`, tq_redo:"重做一次",
     tq_ans:"正解", tq_why:"解析", tq_review:"本週單字複習：選出正確的中文意思", tq_no_voice:"這台裝置沒有英文語音，請到系統設定加一個英文（美國）語音。", tq_listen_hint:"先看題目和選項，再按播放。只能聽一次最接近考試。", tq_part2:"聽完問句和三個回答，選最適合的一個。",
     tq_go:"做題 →", tq_hide_zh:"遮住中文", tq_show_zh:"顯示中文",
     nav_speak:"口說", sk_intro:"每天約 15 分鐘，從對稿唸開始熟悉英語口說，主題輪流是求職和日常對話。稿子由 Claude 每週一寫好，週一到週五各一篇，週六重練本週最弱的一篇，週日休息。", sk_start:"開始練口說",
@@ -750,9 +751,9 @@ const I18N = {
     tc_err:"錯題本", tc_err_add:"記一題", tc_part:"Part", tc_why:"原因", tc_note_ph:"題目重點或正確答案的理由", tc_by_part:"各 Part 錯題數", tc_by_why:"錯誤原因", tc_recent:"最近的錯題", tc_err_none:"還沒有錯題紀錄。做完練習就把錯的記下來，每週檢討會告訴你最常錯哪裡。", tc_14:"近 14 天",
     tc_whys:["單字","文法","沒聽懂","換句話說沒對到","時間不夠","粗心"],
     tc_t:{diag:"官方題本整份模考（起點，計時 2 小時）＋把分數記下來", eve:"只複習錯題本和單字，早點睡", exam:"多益考試 💪",
-      base:["單字 30＋Part 5 二十題","聽力：YouTube Part 3 兩組＋錯句跟讀｜Part 5 十題","單字 30＋Part 6 兩篇","聽力：YouTube Part 4 兩組＋錯句跟讀｜Part 5 十題","單字 30＋Part 7 單篇 5 篇","官方題本半份（聽力、閱讀輪流）＋檢討","本週單字複習"],
-      strat:["Part 7 多篇 3 組（計時）","聽力：YouTube Part 3、4 先看選項練 3 組｜Part 5 十題","Part 5 難題 30 題（限時 9 分鐘）","聽力：YouTube Part 2 二十五題＋跟讀｜Part 6 一篇","單字 30＋Part 7 單篇計時 8 篇","官方題本半份＋整理錯題","本週單字複習"],
-      mock:["錯題本重做＋Part 5 二十題","官方題本整份模考（計時 2 小時）","單字 30＋Part 7 計時 5 篇","聽力：YouTube 最弱的 Part 兩組｜Part 5 十題","錯題本重做＋Part 6 兩篇","官方題本整份模考（計時 2 小時）",null]},
+      base:["單字 30＋Part 5 二十題","聽力：YouTube Part 3 兩組＋錯句跟讀｜Part 5 十題｜單字 10","單字 30＋Part 6 兩篇","聽力：YouTube Part 4 兩組＋錯句跟讀｜Part 5 十題｜單字 10","單字 30＋Part 7 單篇 5 篇","官方題本半份（聽力、閱讀輪流）＋檢討","本週單字複習"],
+      strat:["Part 7 多篇 3 組（計時）","聽力：YouTube Part 3、4 先看選項練 3 組｜Part 5 十題｜單字 10","Part 5 難題 30 題（限時 9 分鐘）","聽力：YouTube Part 2 二十五題＋跟讀｜Part 6 一篇｜單字 10","單字 30＋Part 7 單篇計時 8 篇","官方題本半份＋整理錯題","本週單字複習"],
+      mock:["錯題本重做＋Part 5 二十題","官方題本整份模考（計時 2 小時）","單字 30＋Part 7 計時 5 篇","聽力：YouTube 最弱的 Part 兩組｜Part 5 十題｜單字 10","錯題本重做＋Part 6 兩篇","官方題本整份模考（計時 2 小時）",null]},
 
     tip_toeic:(a,b)=>`多益這週完成 ${a} / ${b} 天的任務。${a<b?"沒做到的那幾天看看是不是課太滿，可以把任務換到空堂多的日子。":"節奏很穩，照這樣繼續。"}`,
     nav_papers:"文獻", pp_add_title:"文獻標題", pp_add_author:"作者（選填）", pp_add_proj:"課程", pp_none_proj:"其他", pp_add_btn:"加入",
@@ -832,7 +833,7 @@ const I18N = {
     proj_sec:"Projects", cls_edit:"Edit schedule", cls_done:"Done, lock schedule", cls_saved:"Schedule locked", cls_locked:"Locked. Press “Edit schedule” to change it", cls_wd:d=>d,
     proj_rename:"Click to rename", proj_up:"Move up", proj_down:"Move down", proj_dup:"A project with that name already exists", proj_renamed:n=>`Renamed to “${n}”, on every day too`,
     tq_title:d=>`Questions for ${d}`, tq_none:"No questions for this day yet. A full week is written every Monday morning.", tq_official:"Use the official test book today: do it timed, then log the score under Mock scores.", tq_rest:"Rest day.",
-    tq_vocab:"Today's words", tq_jump:"Go to questions ↓", tq_play:"▶ Play", tq_stop:"■ Stop", tq_script:"Show script", tq_submit:"Submit", tq_score:(a,b)=>`${a} of ${b} correct`, tq_done:"Done", tq_left:n=>`${n} still unanswered`, tq_redo:"Redo",
+    tq_vocab:"Today's words", tq_yt:"Today's listening videos", tq_yt_how:"Pause to read the questions first, listen once per set, then answer. After checking, rewind the sentences you missed and shadow each three times.", tq_jump:"Go to questions ↓", tq_play:"▶ Play", tq_stop:"■ Stop", tq_script:"Show script", tq_submit:"Submit", tq_score:(a,b)=>`${a} of ${b} correct`, tq_done:"Done", tq_left:n=>`${n} still unanswered`, tq_redo:"Redo",
     tq_ans:"Answer", tq_why:"Why", tq_review:"Week review: pick the right meaning", tq_no_voice:"No English voice on this device. Add an English (US) voice in system settings.", tq_listen_hint:"Read the questions and options first, then press play. Listening once is closest to the real test.", tq_part2:"Listen to the question and three responses, then pick the best one.",
     tq_go:"Questions →", tq_hide_zh:"Hide meanings", tq_show_zh:"Show meanings",
     nav_speak:"Speaking", sk_intro:"About 15 minutes a day, starting with reading a script aloud. Claude writes the scripts every Monday: one for each weekday, Saturday redoes the week's weakest one, Sunday is off.", sk_start:"Start speaking practice",
@@ -872,9 +873,9 @@ const I18N = {
     tc_err:"Error log", tc_err_add:"Log one", tc_part:"Part", tc_why:"Why", tc_note_ph:"Key point, or why the right answer is right", tc_by_part:"Errors by part", tc_by_why:"Why it went wrong", tc_recent:"Recent errors", tc_err_none:"No errors logged yet. Log what you miss after each practice; the weekly review will show where you slip most.", tc_14:"last 14 days",
     tc_whys:["Vocabulary","Grammar","Didn't catch it","Missed the paraphrase","Ran out of time","Careless"],
     tc_t:{diag:"Official book full mock (baseline, 2 h timed) + log the score", eve:"Only review the error log and words; sleep early", exam:"TOEIC test day 💪",
-      base:["30 words + 20 Part 5 questions","Listening: 2 YouTube Part 3 sets + shadowing | 10 Part 5","30 words + 2 Part 6 passages","Listening: 2 YouTube Part 4 sets + shadowing | 10 Part 5","30 words + 5 single Part 7 passages","Official book half test (alternate L/R) + review","Week word review"],
-      strat:["3 multi-passage Part 7 sets (timed)","Listening: 3 YouTube Part 3/4 sets, preview options | 10 Part 5","30 hard Part 5 questions in 9 min","Listening: 25 YouTube Part 2 questions + shadowing | 1 Part 6","30 words + 8 timed single Part 7 passages","Official book half test + sort errors","Week word review"],
-      mock:["Redo the error log + 20 Part 5","Official book full mock (2 h timed)","30 words + 5 timed Part 7 passages","Listening: 2 YouTube sets of your weakest part | 10 Part 5","Redo the error log + 2 Part 6 passages","Official book full mock (2 h timed)",null]},
+      base:["30 words + 20 Part 5 questions","Listening: 2 YouTube Part 3 sets + shadowing | 10 Part 5 | 10 words","30 words + 2 Part 6 passages","Listening: 2 YouTube Part 4 sets + shadowing | 10 Part 5 | 10 words","30 words + 5 single Part 7 passages","Official book half test (alternate L/R) + review","Week word review"],
+      strat:["3 multi-passage Part 7 sets (timed)","Listening: 3 YouTube Part 3/4 sets, preview options | 10 Part 5 | 10 words","30 hard Part 5 questions in 9 min","Listening: 25 YouTube Part 2 questions + shadowing | 1 Part 6 | 10 words","30 words + 8 timed single Part 7 passages","Official book half test + sort errors","Week word review"],
+      mock:["Redo the error log + 20 Part 5","Official book full mock (2 h timed)","30 words + 5 timed Part 7 passages","Listening: 2 YouTube sets of your weakest part | 10 Part 5 | 10 words","Redo the error log + 2 Part 6 passages","Official book full mock (2 h timed)",null]},
 
     tip_toeic:(a,b)=>`TOEIC: ${a} of ${b} planned days done this week. ${a<b?"If classes crowded out the missed days, move the task to a lighter day.":"Steady pace, keep it up."}`,
     nav_papers:"Readings", pp_add_title:"Paper title", pp_add_author:"Author (optional)", pp_add_proj:"Course", pp_none_proj:"Other", pp_add_btn:"Add",
@@ -1542,7 +1543,9 @@ function viewQuiz(ds){ const tk=tcTask(ds), set=tqSet(ds), c=tcCfg(), W=T("wd");
   const voc=(set.vocab||[]).length?`<details class="tq-voc" ${done||matchMedia("(max-width:700px)").matches?"":"open"}><summary>${T("tq_vocab")} <span class="cnt">${set.vocab.length}</span></summary>
     <button class="ghost mini" data-act="tq-zh">${S.tqHideZh?T("tq_show_zh"):T("tq_hide_zh")}</button>
     <table><tbody>${set.vocab.map(v=>`<tr><td><button class="icon-btn" data-act="tq-say" data-w="${esc(v.w)}" title="🔊">🔊</button><b>${esc(v.w)}</b> <span class="sub">${esc(v.pos||"")}</span></td><td class="${S.tqHideZh?"tq-blur":""}">${esc(v.zh||"")}</td><td class="tq-ex">${esc(v.ex||"")}</td></tr>`).join("")}</tbody></table></details>`:"";
-  const blocks=set.blocks.map((b,bi)=>{ const listen=!!(b.script&&b.script.length);
+  const yt=(set.listen||[]).filter(v=>/^https:\/\/(www\.youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}/.test(v.url||""));
+  const lis=yt.length?`<div class="tq-yt"><b>${T("tq_yt")}</b>${yt.map(v=>`<p><a href="${esc(v.url)}" target="_blank" rel="noopener">▶ ${esc(v.title||v.url)}</a>${v.note?`<span class="sub"> ${esc(v.note)}</span>`:""}</p>`).join("")}<p class="sub">${T("tq_yt_how")}</p></div>`:"";
+  const blocks=(set.blocks||[]).map((b,bi)=>{ const listen=!!(b.script&&b.script.length);
     return `<div class="tq-b">${b.part!=="vocab"?`<div class="tq-part">Part ${esc(String(b.part))}</div>`:""}
       ${listen?`<div class="tq-listen"><button class="ghost mini" data-act="tq-play" data-b="${bi}">${T("tq_play")}</button><span class="sub">${String(b.part)==="2"?T("tq_part2"):T("tq_listen_hint")}</span></div>
         ${done?`<details class="tq-scr"><summary>${T("tq_script")}</summary>${b.script.map(([sp,l])=>`<p><b>${esc(sp)}:</b> ${esc(l)}</p>`).join("")}</details>`:""}`:""}
@@ -1550,7 +1553,7 @@ function viewQuiz(ds){ const tk=tcTask(ds), set=tqSet(ds), c=tcCfg(), W=T("wd");
       ${b.qs.map((q,qi)=>{ const key=bi+"-"+qi, my=ans[key], ok=my===q.a; k++;
         return `<div class="tq-q ${done?(ok?"ok":"bad"):""}"><p><b>${k}.</b> ${esc(q.q||"")}</p><div class="tq-opts">${q.opts.map((o,oi)=>`<label class="${done&&oi===q.a?"right":""} ${done&&oi===my&&!ok?"wrong":""}"><input type="radio" name="tq-${ds}-${key}" data-act="tq-pick" data-date="${ds}" data-k="${key}" value="${oi}" ${my===oi?"checked":""} ${done?"disabled":""}> <span>${"ABCD"[oi]}. ${esc(o)}</span></label>`).join("")}</div>
           ${done&&q.why?`<p class="tq-why"><b>${T("tq_why")}</b> ${esc(q.why)}</p>`:""}</div>`; }).join("")}</div>`; }).join("");
-  return head+voc+(set.review?`<p class="sub">${T("tq_review")}</p>`:"")+blocks+`<div class="tq-foot">${done?`<b class="tq-sc">${T("tq_score",set.score,n)}</b><button class="ghost mini" data-act="tq-redo" data-date="${ds}">${T("tq_redo")}</button>`:`<button class="primary" data-act="tq-submit" data-date="${ds}">${T("tq_submit")}</button>${got<n?`<span class="sub">${T("tq_left",n-got)}</span>`:""}`}</div>`; }
+  return head+lis+voc+(set.review?`<p class="sub">${T("tq_review")}</p>`:"")+blocks+`<div class="tq-foot">${done?`<b class="tq-sc">${T("tq_score",set.score,n)}</b><button class="ghost mini" data-act="tq-redo" data-date="${ds}">${T("tq_redo")}</button>`:`<button class="primary" data-act="tq-submit" data-date="${ds}">${T("tq_submit")}</button>${got<n?`<span class="sub">${T("tq_left",n-got)}</span>`:""}`}</div>`; }
 function tqSubmit(ds){ const set=clone(tqSet(ds)); if (!set) return; const ans=set.ans||{}; let sc=0;
   set.blocks.forEach((b,bi)=>b.qs.forEach((q,qi)=>{ const my=ans[bi+"-"+qi]; if (my===q.a) sc++; else {
     const id=uid(), why=TQ_WHY[q.tag]!=null?TQ_WHY[q.tag]:(String(b.part)<"5"?2:1), part=+b.part||5;
