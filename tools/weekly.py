@@ -155,7 +155,7 @@ def toeic_write(path):
         blocks = []
         for b in st.get("blocks", []):
             qs = [q for q in b.get("qs", []) if q.get("q") is not None and isinstance(q.get("opts"), list) and 2 <= len(q["opts"]) <= 4 and isinstance(q.get("a"), int) and 0 <= q["a"] < len(q["opts"])]
-            if qs: blocks.append({**{k: b[k] for k in ("part", "passage", "script") if b.get(k)}, "qs": qs})
+            if qs: blocks.append({**{k: b[k] for k in ("part", "passage", "pzh", "script") if b.get(k)}, "qs": qs})
         vocab = [v for v in st.get("vocab", []) if v.get("w") and v.get("zh")]
         listen = [{k: str(v[k]) for k in ("title", "url", "note") if v.get(k)} for v in st.get("listen", [])
                   if re.match(r"https://(www\.youtube\.com/watch\?v=|youtu\.be/)[\w-]{11}", v.get("url") or "")]
