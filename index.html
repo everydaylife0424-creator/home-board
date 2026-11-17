@@ -781,7 +781,7 @@ const I18N = {
     wd:["日","一","二","三","四","五","六"], dow:w=>"週"+w, wd_mon_first:["一","二","三","四","五","六","日"],
     today_label:(y,m,d,w)=>`${y}/${m}/${d} 週${w}`,
     tasks_sub:"依急迫程度分類 · 可拖曳換欄",
-    empty_col:"沒有項目，拖曳或在下方新增", dl_title:"每日進度", dl_sub:p=>`每天自動放進日卡的「${p}」，勾選代表今天更新過了`, dl_empty:"還沒有每日項目，在下方新增", dl_up:"往上移",
+    empty_col:"沒有項目，拖曳或在下方新增", dl_title:"每日進度", dl_sub:p=>`每天自動放進日卡的「${p}」，勾選代表今天更新過了`, dl_empty:"還沒有每日項目，在下方新增", dl_up:"往上移", dl_down:"往下移", moved_to:n=>`已移到「${n}」`,
     add_enter:"＋ 新增（Enter）", due_title:"截止日（可留空）",
     show_done:(show,n)=>`${show?"隱藏":"顯示"}已完成 ${n} 項`,
     late:"過期 ", move_to:n=>`移到「${n}」`, del:"刪除", done:"完成",
@@ -903,7 +903,7 @@ const I18N = {
     wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], dow:w=>w, wd_mon_first:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
     today_label:(y,m,d,w)=>`${w}, ${m}/${d}/${y}`,
     tasks_sub:"Sorted by urgency · drag to move",
-    empty_col:"Nothing here. Drag a task in or add one below.", dl_title:"Daily updates", dl_sub:p=>`Added to the "${p}" section of each day card. Tick it once you've updated it today.`, dl_empty:"No daily items yet. Add one below.", dl_up:"Move up",
+    empty_col:"Nothing here. Drag a task in or add one below.", dl_title:"Daily updates", dl_sub:p=>`Added to the "${p}" section of each day card. Tick it once you've updated it today.`, dl_empty:"No daily items yet. Add one below.", dl_up:"Move up", dl_down:"Move down", moved_to:n=>`Moved to "${n}"`,
     add_enter:"+ Add (Enter)", due_title:"Due date (optional)",
     show_done:(show,n)=>`${show?"Hide":"Show"} ${n} done`,
     late:"Late ", move_to:n=>`Move to “${n}”`, del:"Delete", done:"Done",
@@ -1161,8 +1161,8 @@ function saveDayCards(list){ const st=clone(settings()); list=[...new Set(list)]
 function viewDailyCol(){ const t=today(), L_=dlList(), k=L_.filter(x=>dlDone(t,x.id)).length;
   return `<div class="col daily" data-daily="1"><div class="col-h"><span class="dot"></span><b>${L("dl_title")}</b><span class="n">${L_.length?`${k}/${L_.length}`:""}</span></div>
     <p class="sub dl-sub">${T("dl_sub",DL_PROJ)}</p>
-    <ul class="list">${L_.map((x,i)=>`<li class="item ${dlDone(t,x.id)?"done":""}"><input type="checkbox" data-act="dl-toggle" data-date="${t}" data-id="${x.id}" ${dlDone(t,x.id)?"checked":""} aria-label="${T("done")}"><span class="t" contenteditable="plaintext-only" spellcheck="false" data-act="dl-edit" data-id="${x.id}">${esc(x.t)}</span>
-      <span class="acts">${i?`<button class="icon-btn" data-act="dl-move" data-id="${x.id}" data-n="-1" title="${T("dl_up")}">↑</button>`:""}<button class="icon-btn" data-act="dl-del" data-id="${x.id}" title="${T("del")}">✕</button></span></li>`).join("")||`<li class="empty mini">${T("dl_empty")}</li>`}</ul>
+    <ul class="list">${L_.map((x,i)=>`<li class="item ${dlDone(t,x.id)?"done":""}" draggable="true" data-dl="${x.id}"><input type="checkbox" data-act="dl-toggle" data-date="${t}" data-id="${x.id}" ${dlDone(t,x.id)?"checked":""} aria-label="${T("done")}"><span class="t">${esc(x.t)}</span>
+      <span class="acts"><button class="icon-btn" data-act="dl-del" data-id="${x.id}" title="${T("del")}">✕</button></span></li>`).join("")||`<li class="empty mini">${T("dl_empty")}</li>`}</ul>
     <form class="add" data-act="dl-add"><input type="text" id="add-dl" placeholder="${T("add_enter")}" autocomplete="off"></form></div>`; }
 function viewHome(){
   const every = allTasks().sort((a,b)=>(a.done-b.done)||((a.due||"9999")<(b.due||"9999")?-1:(a.due||"9999")>(b.due||"9999")?1:0)||(a.createdAt||0)-(b.createdAt||0));
@@ -1847,7 +1847,8 @@ function startInlineEdit(el, ref){
     el.removeEventListener("keydown",kd); el.removeEventListener("blur",bl);
     const v=el.textContent.replace(/\s+/g," ").trim();
     if (!keep || !v || v===old){ el.textContent=old; setTimeout(()=>{ if(!isTyping()) render(); },0); return; }
-    if (ref.task){ const t=task(ref.task); if (t) save("tasks/"+t.id,{...t,title:v},50); }
+    if (ref.dl){ dlSave(dlList().map(x=>x.id===ref.dl?{...x,t:v}:x)); }
+    else if (ref.task){ const t=task(ref.task); if (t) save("tasks/"+t.id,{...t,title:v},50); }
     else { const d=dayCopy(ref.date), it=listOf(d,+ref.pi).find(i=>i.id===ref.id); if (it){ it.t=v; save("days/"+d.date,d,100); } }
     toast(T("edit_done")); setTimeout(()=>{ if(!isTyping()) render(); },0); };
   const kd=e=>{ if (e.isComposing) return; if (e.key==="Enter"){ e.preventDefault(); finish(true); } else if (e.key==="Escape"){ e.preventDefault(); finish(false); } };
@@ -2665,7 +2666,7 @@ function setTab(t){ S.tab=t; lsSet("home.tab",t); render._scrolled=false; setSid
 
 document.addEventListener("submit", e=>{
   const f=e.target; e.preventDefault(); const act=f.dataset.act;
-  if (act==="dl-add"){ const inp=f.querySelector("input"), v=inp.value.trim(); if (!v) return; dlSave([...dlList(), {id:uid(), t:v}]); inp.value=""; render(); setTimeout(()=>document.getElementById("add-dl")?.focus(),0); return; }
+  if (act==="dl-add"){ const inp=f.querySelector("input"), v=inp.value.trim(); if (!v) return; dlSave([...dlList(), {id:uid(), t:v}]); inp.value=""; render(); if (inp.id==="add-dl") setTimeout(()=>document.getElementById("add-dl")?.focus(),0); else { S.cm=null; renderCm(); } return; }
   if (act==="task-add"){
     const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"), title=inp.value.trim(), m=slashMode(f); if (!title && m.k!=="tb") return;
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:due.value||today(),title,kind:m.mark},50); inp.value=""; due.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
@@ -2853,6 +2854,7 @@ document.addEventListener("click", e=>{
   else if (act==="tb-addcol"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.rows=(x.rows||newRows()).map(r=>({...r, c:[...r.c, ""]})); }); }
   else if (act==="tb-delcol"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.rows=(x.rows||[]).map(r=>({...r, c:r.c.slice(0,-1)})); }); }
   else if (act==="tb-delrow"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.rows=(x.rows||[]).filter((_,i)=>i!==+b.dataset.ri); }); }
+  else if (act==="cm-edit" && b.dataset.dl){ const el=document.querySelector(`li[data-dl="${b.dataset.dl}"] .t`); if (el) setTimeout(()=>startInlineEdit(el,{dl:b.dataset.dl}),0); }
   else if (act==="cm-edit"){ const ds=b.dataset, li = ds.task ? document.querySelector(`li[data-task="${ds.task}"]`) : document.querySelector(`[data-act="it-del"][data-date="${ds.date}"][data-pi="${ds.pi}"][data-id="${ds.id}"]`)?.closest("li");
     const el=li && li.querySelector(".t"); if (!el) return;
     setTimeout(()=>startInlineEdit(el, ds.task?{task:ds.task}:{date:ds.date,pi:ds.pi,id:ds.id}),0); }
@@ -2983,10 +2985,6 @@ document.addEventListener("input", e=>{
 
 /* edit mode: save a changed label to settings.texts[lang][key] */
 document.addEventListener("keydown", e=>{ const el=e.target; if (el.dataset && el.dataset.tk && el.isContentEditable && e.key==="Enter" && !e.isComposing){ e.preventDefault(); el.blur(); } });
-document.addEventListener("focusout", e=>{ const el=e.target; if (!el.dataset || el.dataset.act!=="dl-edit") return;
-  const v=el.textContent.replace(/\s+/g," ").trim(), a=dlList().map(x=>({...x})), x=a.find(i=>i.id===el.dataset.id); if (!x) return;
-  if (!v){ el.textContent=x.t; return; } if (v!==x.t){ x.t=v; dlSave(a); } });
-document.addEventListener("keydown", e=>{ const el=e.target; if (el && el.dataset && el.dataset.act==="dl-edit" && e.key==="Enter" && !e.isComposing){ e.preventDefault(); el.blur(); } });
 document.addEventListener("focusout", e=>{
   const el=e.target; if (!el.dataset || !el.dataset.tk || !el.isContentEditable) return;
   const k=el.dataset.tk, v=el.textContent.replace(/[<>"&]/g,"").replace(/\s+/g," ").trim();
@@ -3076,6 +3074,11 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
     const shown=new Set(ovCards()), miss=ovAll().filter(x=>!shown.has(x));
     h+=`<div class="ctx-h">${T("cm_add_card")}</div>` + (miss.length?miss.map(x=>btn("cm-ov-add","＋ "+esc(ovLabel(x)),`data-id="${esc(x)}"`)).join(""):`<p class="empty mini">${T("cm_all_shown")}</p>`);
     if (settings().ovCards) h+=btn("cm-ov-reset",T("cm_reset")); }
+  else if (c.row==="dl"){ const a=dlList(), i=a.findIndex(x=>x.id===c.dl), x=a[i];
+    if (x){ h+=btn("cm-edit",`✎ ${T("cm_edit_item", esc(x.t))}`,`data-dl="${x.id}"`);
+      if (i>0) h+=btn("dl-move",`↑ ${T("dl_up")}`,`data-id="${x.id}" data-n="-1"`); if (i<a.length-1) h+=btn("dl-move",`↓ ${T("dl_down")}`,`data-id="${x.id}" data-n="1"`);
+      h+=btn("dl-del",`✕ ${T("cm_del_item", esc(x.t))}`,`data-id="${x.id}"`)+`<div class="ctx-sep"></div>`; }
+    h+=`<div class="ctx-h">${T("cm_add_item")}</div><form class="add" data-act="dl-add"><input type="text" id="cm-dl" placeholder="${T("add_enter")}" autocomplete="off"></form>`; }
   else if (c.row==="col"){
     if (c.task){ const tk=task(c.task); if (tk) h+=btn("cm-edit",`✎ ${T("cm_edit_item", esc(tk.title))}`,`data-task="${tk.id}"`); }
     if (c.task){ const tk=task(c.task); if (tk) h+=btn("task-del",`✕ ${T("cm_del_item", esc(tk.title))}`,`data-id="${tk.id}"`); }
@@ -3139,9 +3142,10 @@ document.addEventListener("contextmenu", e=>{
   const t=e.target; if (!t.closest || S.tab!=="home" || S.edit) return;
   if (t.closest("#s-cal") || t.closest("#cmenu") || t.closest("input,textarea,select,[contenteditable]")) return;
   let row=null, id=null;
-  const ov=t.closest(".ov[data-card]"), col=t.closest(".col[data-bucket]"), dy=t.closest(".day[data-day]");
+  const ov=t.closest(".ov[data-card]"), col=t.closest(".col[data-bucket]"), dy=t.closest(".day[data-day]"), dlc=t.closest(".col.daily");
   let extra={};
-  if (ov){ row="ov"; id=ov.dataset.card; } else if (t.closest("#s-overview")) row="ov";
+  if (dlc){ row="dl"; const li=t.closest("li[data-dl]"); if (li) extra={dl:li.dataset.dl}; }
+  else if (ov){ row="ov"; id=ov.dataset.card; } else if (t.closest("#s-overview")) row="ov";
   else if (col){ row="col"; id=col.dataset.bucket; const li=t.closest("li[data-task]"); if (li) extra={task:li.dataset.task}; } else if (t.closest("#s-tasks")) row="col";
   else if (dy){ row="day"; id=dy.dataset.day;
     const li=t.closest("li.item"), del=li&&li.querySelector('[data-act="it-del"]'), sec=t.closest("details.proj");
@@ -3165,11 +3169,20 @@ document.addEventListener("drop", e=>{ const c=rtDrag && e.target.closest && e.t
   const pl=clone(gymPlan()), rs=pl.routines, i=rs.findIndex(r=>r.id===from); if(i<0) return; const [m]=rs.splice(i,1);
   let j=rs.findIndex(r=>r.id===to); if(j<0) return; if(side==="r") j++; rs.splice(j,0,m); savePlan(pl); render(); });
 document.addEventListener("dragend", ()=>{ rtDrag=null; rtClear(); });
+let dlDrag=null;
+document.addEventListener("dragstart", e=>{ const li=e.target.closest&&e.target.closest("[data-dl]"); if(!li) return; dlDrag=li.dataset.dl; e.dataTransfer.effectAllowed="move"; try{e.dataTransfer.setData("text/plain",dlDrag);}catch(_){} });
 document.addEventListener("dragstart", e=>{ const li=e.target.closest&&e.target.closest("[data-task]"); if(!li) return; dragId=li.dataset.task; e.dataTransfer.effectAllowed="move"; try{e.dataTransfer.setData("text/plain",dragId);}catch(_){} });
-document.addEventListener("dragover", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(!c||!dragId) return; e.preventDefault(); document.querySelectorAll(".col.drop").forEach(x=>x!==c&&x.classList.remove("drop")); c.classList.add("drop"); });
+document.addEventListener("dragover", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(!c||!(dragId||dlDrag)) return; e.preventDefault(); document.querySelectorAll(".col.drop").forEach(x=>x!==c&&x.classList.remove("drop")); c.classList.add("drop"); });
 document.addEventListener("dragleave", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(c && !c.contains(e.relatedTarget)) c.classList.remove("drop"); });
-document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(!c||!dragId) return; e.preventDefault(); const t=task(dragId); if(t && t.bucket!==c.dataset.bucket) save("tasks/"+t.id,{...t,bucket:c.dataset.bucket},50); dragId=null; render(); });
-document.addEventListener("dragend", ()=>{ dragId=null; document.querySelectorAll(".col.drop").forEach(x=>x.classList.remove("drop")); });
+document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(!c||!dlDrag) return; e.preventDefault(); const a=[...dlList()], x=a.find(i=>i.id===dlDrag); dlDrag=null; c.classList.remove("drop"); if (!x) return;
+  if (c.classList.contains("daily")){ const over=e.target.closest("li[data-dl]"), rest=a.filter(i=>i.id!==x.id); let k=over?rest.findIndex(i=>i.id===over.dataset.dl):rest.length;
+    if (over && k>=0){ const r=over.getBoundingClientRect(); if (e.clientY>r.top+r.height/2) k++; } else k=rest.length; rest.splice(k,0,x); dlSave(rest); }
+  else if (c.dataset.bucket){ const id=uid(); save("tasks/"+id,{id,title:x.t,bucket:c.dataset.bucket,done:false,due:null,createdAt:Date.now()},50); dlSave(a.filter(i=>i.id!==x.id)); toast(T("moved_to",bName(bucketList().find(b=>b.id===c.dataset.bucket)||{id:c.dataset.bucket}))); }
+  render(); });
+document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(!c||!dragId) return; e.preventDefault();
+  if (c.classList.contains("daily")){ const t=task(dragId); dragId=null; c.classList.remove("drop"); if (t && !t.k){ dlSave([...dlList(), {id:uid(), t:t.title}]); remove("tasks/"+t.id); toast(T("moved_to",T("dl_title"))); } render(); return; }
+  if (!c.dataset.bucket){ dragId=null; return; } const t=task(dragId); if(t && t.bucket!==c.dataset.bucket) save("tasks/"+t.id,{...t,bucket:c.dataset.bucket},50); dragId=null; render(); });
+document.addEventListener("dragend", ()=>{ dragId=null; dlDrag=null; document.querySelectorAll(".col.drop").forEach(x=>x.classList.remove("drop")); });
 
 /* ---------- boot ---------- */
 PHONE.addEventListener?.("change", ()=>render());
