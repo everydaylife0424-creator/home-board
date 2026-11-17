@@ -730,7 +730,7 @@ const I18N = {
     sk_adv_up:(a,b)=>`正確率從 ${a}% 進步到 ${b}%。`, sk_adv_down:(a,b)=>`正確率 ${a}% → ${b}%，下降了。先回到上面最弱的句子，一句一句練順再整段錄。`, sk_adv_same:"正確率和上次一樣。",
     sk_adv_fill:n=>`用了 ${n} 次 um、like、so 這類填充詞。想不到字時，停頓一下比填充詞自然。`, sk_adv_short:"這次講得比較短。試著多加一個例子或細節，講滿時間。",
     sk_voice:"範本聲音", sk_voice_try:"試聽", sk_voice_how:"聲音太像機器？下載更自然的聲音",
-    sk_voice_how_txt:"範本聲音用的是裝置內建的英文語音。iPhone、iPad：設定 → 輔助使用 → 朗讀內容 → 聲音 → 英文，下載標示「高品質」或「加強版」的聲音，例如 Ava、Zoe、Evan。Mac：系統設定 → 輔助使用 → 朗讀內容 → 系統聲音 → 管理聲音。下載完重開 app，在上面選標有 ★ 的聲音。每台裝置要各自下載、各自選。",
+    sk_voice_how_txt:"範本聲音用的是裝置內建的英文語音。iPhone、iPad：設定 → 輔助使用 → 朗讀內容 → 聲音 → 英文，下載標示「高音質」的聲音（最自然，其次是「增強音質」），例如 Ava、Zoe、Evan。Mac：系統設定 → 輔助使用 → 朗讀內容 → 系統聲音 → 管理聲音。下載完重開 app，在上面選標有 ★★ 的聲音。每台裝置要各自下載、各自選。",
     sk_hist:"最近的紀錄", sk_hist_none:"還沒有錄音紀錄。", sk_week_list:"本週稿子", sk_rest:"休息", sk_why:"這樣練的依據",
     sk_how:"怎麼練、怎樣算完成", sk_kind:{job:"求職",talk:"日常對話"},
     sk_how_read:["按「▶ 全文」看著稿子聽一遍。不熟的句子點一下，單獨重聽。","看著稿子，跟著聲音一起唸，盡量對上速度和語調。","把稿子遮起來或不看，聽一句、慢半拍跟著唸（shadowing）。卡住就點那句重來。","按「🎙 開始錄音比對」，看著稿子完整唸一遍，唸完按停止。紅色的字是漏掉或唸錯的，可以再錄一次。"],
@@ -1461,7 +1461,7 @@ function viewSpeak(){ const c=spCfg(), t=today();
       <div class="tc-st"><span class="sub">${T("sk_wpm")}</span><b>${avg(w7,"wpm")}</b></div>
       <div class="sp-next">${c.stage<3?`<span>${T("sk_next",c.stage)}</span>`:""}${can?`<button class="primary mini" data-act="sk-stage" data-d="1">${T("sk_go_next")}</button>`:""}${c.stage>1?`<button class="ghost mini" data-act="sk-stage" data-d="-1">${T("sk_go_prev")}</button>`:""}</div></div>
     <div class="card sp-card" id="spc">${viewSpeakCard(S.spDay||t)}</div>
-    <div class="card sp-voice"><label>${T("sk_voice")} <select data-act="sk-voice">${ttsVoices().map(v=>`<option value="${esc(v.name)}" ${ttsPick()[0]===v?"selected":""}>${esc(v.name)}${ttsScore(v)>=100?" ★":""}</option>`).join("")||`<option>${T("tq_no_voice")}</option>`}</select></label><button class="ghost mini" data-act="sk-voice-try">${T("sk_voice_try")}</button>
+    <div class="card sp-voice"><label>${T("sk_voice")} <select data-act="sk-voice">${ttsVoices().map(v=>`<option value="${esc(v.name)}" ${ttsPick()[0]===v?"selected":""}>${esc(v.name)}${ttsScore(v)>=120?" ★★":ttsScore(v)>=100?" ★":""}</option>`).join("")||`<option>${T("tq_no_voice")}</option>`}</select></label><button class="ghost mini" data-act="sk-voice-try">${T("sk_voice_try")}</button>
       <details class="sp-why"><summary>${T("sk_voice_how")}</summary><p>${T("sk_voice_how_txt")}</p></details></div>
     <div class="tc-grid">
       <div class="card"><h3>${T("sk_week_list")}</h3><ul class="tc-week">${week.map(row).join("")}</ul></div>
@@ -1513,7 +1513,7 @@ function tqCount(set){ return set.blocks.reduce((n,b)=>n+b.qs.length,0); }
 /* read a script aloud with the device's English voices: two voices for a conversation */
 const TTS={on:false};
 /* rank English voices: downloaded premium/enhanced/neural voices first, Apple novelty voices last */
-function ttsScore(v){ const n=v.name; let s=0; if (/premium|enhanced|neural|natural|online|高級|加強|優化|高品質/i.test(n)) s+=100;
+function ttsScore(v){ const n=v.name; let s=0; if (/premium|高音質|高級|高品質|neural|natural|online/i.test(n)) s+=120; else if (/enhanced|增強|加強|優化/i.test(n)) s+=100;
   if (/\b(ava|zoe|evan|nathan|joelle|noelle|samantha|allison|susan|tom|jenny|aria|guy|michelle|emma|brian|andrew|christopher|eric|google us english)\b/i.test(n)) s+=40;
   if (/albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|ralph|kathy|princess|grandma|grandpa|rocko|shelley|flo|eddy|reed|sandy/i.test(n)) s-=200;
   if (/US/i.test(v.lang)) s+=10; return s; }
