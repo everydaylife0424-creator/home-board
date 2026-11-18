@@ -75,7 +75,7 @@ def dump(arg=None):
     for m in {mon.strftime("%Y-%m"), sun.strftime("%Y-%m")}:
         g = u.collection("gymlog").document(m).get()
         if g.exists:
-            gym += [dict(date=e.get("date"), ex=e.get("exName"), sets=e.get("sets"), weight=e.get("weight"), rpe=e.get("rpe")) for e in g.to_dict().get("entries", []) if inwk(e.get("date"))]
+            gym += [dict(date=e.get("date"), ex=e.get("exName"), sets=e.get("sets"), weight=e.get("weight"), rpe=e.get("rpe")) for e in g.to_dict().get("entries", []) if inwk(e.get("date")) and not e.get("base")]
     plan = (u.collection("gym").document("plan").get().to_dict() or {})
     spend = []
     for m in {mon.strftime("%Y-%m"), sun.strftime("%Y-%m")}:
