@@ -602,6 +602,8 @@ input.mv{border:1px solid var(--line);border-radius:6px;background:var(--bg);fon
 .chip-add{margin:0}.chip-add input{width:10em}
 .gym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start}
 .gcard{padding:12px 16px}
+.exc-paste{margin-top:8px;border:1px dashed var(--accent);color:var(--accent);width:100%;justify-content:center}
+.exc-bar{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:8px 12px;border:1px dashed var(--accent);border-radius:8px;font-size:14px}
 .g-h{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:4px}
 .g-h h3{margin:0;font-size:15px}
 .g-h .cnt{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
@@ -2447,17 +2449,20 @@ function viewGym(){
   const ibad=Object.keys(issues), exInfo={}; rs.forEach(rt=>rt.groups.forEach(g=>g.ex.forEach(x=>exInfo[x.id]={r:rt,g,x})));
   const issueBox = ibad.length ? `<div class="chk card"><div class="sec-h"><b>${T("chk_title",ibad.length)}</b><span class="sp"></span><button class="ghost mini" data-act="chk-toggle">${S.chkOpen?T("chk_close"):T("chk_open")}</button></div>
     ${S.chkOpen?`<ul class="list">${all.filter(e=>issues[e.id]).sort((a,b)=>a.date<b.date?1:-1).map(e=>{ const inf=exInfo[e.exId]; return `<li class="item"><button class="linkish" data-act="chk-go" data-r="${inf?inf.r.id:""}" data-x="${e.exId}">${esc(T("chk_where", inf?inf.r.name:"?", inf?inf.g.name:"?", inf?inf.x.name:e.exName, md(e.date)))}</button>${fixForm(e)}</li>`; }).join("")}</ul>`:""}</div>` : "";
+  const clip=S.exClip;
   const groups = r ? r.groups.map(g=>`<div class="card gcard">
       <div class="g-h"><h3 data-cmr="${esc(JSON.stringify({k:"group",id:g.id}))}">${esc(g.name)}</h3><span class="cnt">${g.ex.length}</span><span class="sp"></span><button class="${S.confirmDel==="g:"+g.id?"ghost mini":"icon-btn"}" data-act="gym-g-del" data-g="${g.id}" title="${T("del")}">${S.confirmDel==="g:"+g.id?T("confirm_del"):"✕"}</button></div>
       <ul class="exl">${g.ex.map(x=>exRow(g,x)).join("")}</ul>
       ${volBlock(g, all, issues)}
       <form class="add" data-act="gym-ex-add" data-g="${g.id}"><input type="text" id="gx-${g.id}" placeholder="${T("gym_add_ex")}" autocomplete="off"></form>
+      ${clip?`<button class="ghost mini exc-paste" data-act="exc-paste" data-g="${g.id}">⎘ ${T("exc_paste_here")}</button>`:""}
     </div>`).join("") : "";
+  const clipBar = clip ? `<div class="exc-bar"><span>${T(clip.cut?"exc_cut_on":"exc_copy_on", esc(clip.name))}</span><span class="sp"></span><button class="ghost mini" data-act="exc-clear">${T("exc_clear")}</button></div>` : "";
   return `<div class="gym-top">
       <div class="chips">${chips}<form class="add chip-add" data-act="gym-r-add"><input type="text" id="gym-r-new" placeholder="${T("gym_add_routine")}" autocomplete="off"></form></div>
       <span class="sub">${T("gym_today_count",todayN)}</span>
     </div>
-    ${issueBox}
+    ${issueBox}${clipBar}
     ${r?`<div class="sec-h"><h2 data-cmr="${esc(JSON.stringify({k:"routine",id:r.id}))}">${esc(r.name)}</h2><span class="sub">${L("gym_sub")}</span><span class="sp"></span>
         <button class="ghost mini" data-act="gym-r-del" data-id="${r.id}">${S.confirmDel===r.id?T("confirm_del"):T("gym_del_routine")}</button></div>
       <div class="gym-grid">${groups}
