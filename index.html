@@ -23,6 +23,7 @@ if (/\.github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname)) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
+.g-h h3[data-cmr],.sec-h h2[data-cmr]{border-radius:4px;cursor:text}.g-h h3[data-cmr]:hover,.sec-h h2[data-cmr]:hover{background:var(--calm-soft)}
 .cmr-in{font:inherit;color:inherit;border:1px solid var(--accent);border-radius:4px;background:var(--surface);padding:1px 4px;min-width:6em;max-width:100%}
 .gl-cell{display:inline-block;min-width:1.5em;border-radius:3px;outline:none;cursor:text}.gl-cell:hover{background:var(--calm-soft)}.gl-cell:focus{background:var(--surface);box-shadow:0 0 0 1px var(--accent)}.ex-ren input{font:inherit;width:100%;padding:2px 6px;border:1px solid var(--accent);border-radius:6px;background:var(--surface);color:inherit}
 
@@ -2279,12 +2280,13 @@ const CMR={
   ib:{get:a=>(pending.get("inbox/"+a.id)||S.inbox[a.id])?.t, set:(a,v)=>{ const x=pending.get("inbox/"+a.id)||S.inbox[a.id]; if (x) save("inbox/"+a.id,{...x,t:v},50); }, del:a=>remove("inbox/"+a.id)},
   tcerr:{get:a=>tcDocs("err").find(e=>e.id===a.id)?.note||"", set:(a,v)=>{ const e=tcDocs("err").find(e=>e.id===a.id); if (e) save("toeic/"+e.id,{...e,note:v},50); }, del:a=>remove("toeic/"+a.id), empty:true},
 };
-function cmrEdit(key){ const el=[...document.querySelectorAll("[data-cmr]")].find(e=>e.dataset.cmr===key); let a; try{ a=JSON.parse(key); }catch(_){ return; } const h=CMR[a.k]; if (!el || !h) return;
+const cmrSame=key=>[...document.querySelectorAll("[data-cmr]")].filter(e=>e.dataset.cmr===key);
+function cmrEdit(key, idx){ const els=cmrSame(key), el=els[idx??cmrEdit.idx??0]||els[0]; cmrEdit.idx=null; let a; try{ a=JSON.parse(key); }catch(_){ return; } const h=CMR[a.k]; if (!el || !h) return;
   const inp=document.createElement("input"); inp.type="text"; inp.className="cmr-in"; inp.value=h.get(a)||""; inp.setAttribute("autocomplete","off"); el.style.display="none"; el.after(inp); inp.focus(); inp.select();
   let done=false; const fin=keep=>{ if (done) return; done=true; const v=inp.value.replace(/\s+/g," ").trim(); if (keep && (v||h.empty) && v!==(h.get(a)||"")){ h.set(a,v); toast(T("edit_done")); } inp.remove(); el.style.display=""; render(); };
   inp.addEventListener("keydown",e=>{ if (e.isComposing) return; if (e.key==="Enter"){ e.preventDefault(); fin(true); } else if (e.key==="Escape"){ e.preventDefault(); fin(false); } });
   inp.addEventListener("blur",()=>fin(true)); inp.addEventListener("click",e=>e.stopPropagation()); inp.addEventListener("pointerdown",e=>e.stopPropagation()); }
-document.addEventListener("contextmenu", e=>{ const el=e.target.closest && e.target.closest("[data-cmr]"); if (!el || S.edit) return; let a; try{ a=JSON.parse(el.dataset.cmr); }catch(_){ return; } if (!CMR[a.k]) return;
+document.addEventListener("contextmenu", e=>{ const el=e.target.closest && e.target.closest("[data-cmr]"); if (!el || S.edit) return; cmrEdit.idx=cmrSame(el.dataset.cmr).indexOf(el); let a; try{ a=JSON.parse(el.dataset.cmr); }catch(_){ return; } if (!CMR[a.k]) return;
   e.preventDefault(); e.stopImmediatePropagation(); S.cm={row:"cmr", key:el.dataset.cmr, k:a.k, title:(CMR[a.k].get(a)||""), x:e.clientX, y:e.clientY}; renderCm(); }, true);
 function gymPlan(){ return pending.get("gym/plan") || S.gymPlan || {routines:[]}; }
 function gymMonth(m){ return pending.get("gymlog/"+m) || S.gymlog[m] || {month:m, entries:[]}; }
@@ -2366,7 +2368,7 @@ function viewGym(){
       <span class="sub">${T("gym_today_count",todayN)}</span>
     </div>
     ${issueBox}
-    ${r?`<div class="sec-h"><h2>${esc(r.name)}</h2><span class="sub">${L("gym_sub")}</span><span class="sp"></span>
+    ${r?`<div class="sec-h"><h2 data-cmr="${esc(JSON.stringify({k:"routine",id:r.id}))}">${esc(r.name)}</h2><span class="sub">${L("gym_sub")}</span><span class="sp"></span>
         <button class="ghost mini" data-act="gym-r-del" data-id="${r.id}">${S.confirmDel===r.id?T("confirm_del"):T("gym_del_routine")}</button></div>
       <div class="gym-grid">${groups}
         <div class="card gcard ghost-card"><form class="add" data-act="gym-g-add"><input type="text" id="gym-g-new" placeholder="${T("gym_add_group")}" autocomplete="off"></form>
@@ -3328,6 +3330,8 @@ document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closes
   if (!c.dataset.bucket){ dragId=null; return; } const t=task(dragId); if(t && t.bucket!==c.dataset.bucket) save("tasks/"+t.id,{...t,bucket:c.dataset.bucket},50); dragId=null; render(); });
 document.addEventListener("dragend", ()=>{ dragId=null; dlDrag=null; document.querySelectorAll(".col.drop").forEach(x=>x.classList.remove("drop")); });
 
+// double-click any named thing (group, routine, event, note…) to rename it in place, same as right-click → 編輯
+document.addEventListener("dblclick", e=>{ const el=e.target.closest&&e.target.closest("[data-cmr]"); if (!el || S.edit) return; let a; try{ a=JSON.parse(el.dataset.cmr); }catch(_){ return; } if (!CMR[a.k] || !CMR[a.k].set) return; e.preventDefault(); getSelection()?.removeAllRanges(); cmrEdit(el.dataset.cmr, cmrSame(el.dataset.cmr).indexOf(el)); });
 /* ---------- boot ---------- */
 PHONE.addEventListener?.("change", ()=>render());
 render();
