@@ -694,6 +694,57 @@ html:root[data-style="atelier"][data-theme="dark"]{
 @keyframes tick{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
 input[type=checkbox]:checked{animation:tick .22s cubic-bezier(.3,.7,.4,1)}
 .item.done .t{transition:color .2s}
+
+/* deadlines card + timeline row */
+.today-row{display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:16px;align-items:start}
+@media (max-width:1000px){.today-row{grid-template-columns:1fr}}
+.cd-card h2,.tl-card h2{font-size:17px}
+.cd-add{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0 2px}.cd-add input[type=text]{flex:1 1 160px;min-width:0}.cd-add input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--surface);color:var(--fg)}
+@media (pointer:coarse){.cd-add input{font-size:16px}}
+.cd-hint{font-size:12px;margin:2px 0 12px}
+.cd-next{background:var(--fg);color:var(--bg);border-radius:10px;padding:14px 16px;margin:0 0 12px}.cd-next .sub{color:color-mix(in srgb,var(--bg) 65%,transparent);font-size:12.5px}
+.cd-next.over{background:var(--hot)}.cd-big{font:500 22px/1.3 var(--f-mono)}.cd-tt{display:flex;gap:8px;align-items:center;margin:6px 0 2px;font-size:15px}.cd-tt input{width:18px;height:18px;accent-color:var(--bg)}
+.cd-over{margin-top:10px;font-size:13px}.cd-over summary{cursor:pointer;color:var(--hot);padding:4px 0}
+.cd-card h4{font-size:12.5px;color:var(--muted);font-weight:500;margin:0 0 4px}
+.cd-list .item{gap:10px}.cd-dt{font:12px var(--f-mono);color:var(--muted);white-space:nowrap}.cd-n{margin-left:auto;font:12px var(--f-mono);white-space:nowrap;color:var(--muted)}.cd-n.over{color:var(--hot)}
+.tl{position:relative;margin-top:8px}.tl-hrs,.tl-lane{display:grid;grid-template-columns:44px 1fr;align-items:center}
+.tl-hrs .tl-track{height:18px}.tl-hrs span{position:absolute;transform:translateX(-50%);font:11px var(--f-mono);color:var(--muted);top:0}
+.tl-lane{height:36px;border-top:1px dashed var(--line)}.tl-lane b{font-size:12px;font-weight:500;color:var(--muted)}
+.tl-track{position:relative;height:100%}
+.tl-b{position:absolute;top:6px;height:24px;border-radius:12px;font-size:12px;line-height:24px;padding:0 8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;box-sizing:border-box;background:var(--fg);color:var(--bg)}
+.tl-b span{display:block;overflow:hidden;text-overflow:ellipsis}.tl-b.ev{background:var(--accent);color:#fff}.tl-b.free{background:transparent;border:1px dashed var(--good);color:var(--good);line-height:22px}.tl-b.past{opacity:.45}
+.tl-nowwrap{position:absolute;left:44px;right:0;top:0;bottom:0;pointer-events:none}.tl-now{position:absolute;top:16px;bottom:0;width:2px;background:var(--hot)}.tl-now span{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:var(--hot);color:#fff;font:600 10.5px/16px var(--f-mono);padding:0 5px;border-radius:8px}
+@media (max-width:700px){.tl-hrs span:nth-child(even){display:none}}
+/* header extras */
+header.top .hx{display:flex;gap:6px 14px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}.hx-sum b{color:var(--fg);font-weight:600}.hx-sum u{text-decoration-color:var(--warn);text-underline-offset:3px}
+.hx-wx{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 12px;white-space:nowrap}
+header.top .hx-tools{margin-left:auto;display:flex;gap:8px;align-items:center;align-self:center}
+.hx-search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;min-height:36px}
+.hx-search svg,.hx-bell svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hx-search kbd{font:11px var(--f-mono);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+@media (max-width:700px){.hx-search .lbl,.hx-search kbd{display:none}}
+.hx-bellw{position:relative}.hx-bell{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--fg);display:grid;place-items:center;cursor:pointer;position:relative}
+.hx-bell .b{position:absolute;top:-4px;right:-4px;background:var(--hot);color:#fff;font:600 10.5px/17px var(--f-mono);min-width:17px;border-radius:9px;text-align:center;padding:0 3px}
+.nf-pop{position:absolute;right:0;top:46px;width:min(340px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 36px var(--shade);z-index:40;padding:6px;max-height:60vh;overflow:auto}
+.nf-h{padding:8px 10px;font-size:14px}.nf-i{display:flex;gap:10px;width:100%;text-align:left;border:0;background:none;color:var(--fg);font:inherit;font-size:13.5px;padding:9px 10px;border-radius:8px;cursor:pointer}.nf-i:hover{background:var(--calm-soft)}
+.nf-i.new{background:var(--accent-soft)}.nf-i .s{display:block;color:var(--muted);font-size:12px}.nf-i .ic{width:20px;text-align:center}
+.navb{position:relative}.nbadge{position:absolute;left:30px;top:4px;background:var(--hot);color:#fff;font:600 10px/15px var(--f-mono);min-width:15px;border-radius:8px;text-align:center;padding:0 3px}
+/* search */
+.sk{position:fixed;inset:0;background:var(--scrim);z-index:90;display:grid;place-items:start center;padding:12vh 16px 0}
+.sk-box{width:min(620px,100%);background:var(--surface);border-radius:14px;box-shadow:0 20px 60px var(--shade);overflow:hidden}
+.sk-box input{width:100%;box-sizing:border-box;border:0;border-bottom:1px solid var(--line);padding:16px 18px;font:inherit;font-size:17px;background:transparent;color:var(--fg);outline:none}
+.sk-res{max-height:55vh;overflow:auto;padding:4px 0 8px}.sk-g{padding:8px 18px 2px;font-size:11.5px;color:var(--muted)}
+.sk-i{display:flex;gap:10px;width:100%;border:0;background:none;color:var(--fg);font:inherit;font-size:14px;padding:8px 18px;text-align:left;cursor:pointer}.sk-i .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sk-i small{margin-left:auto;color:var(--muted);font:12px var(--f-mono);white-space:nowrap}
+.sk-i.on,.sk-i:hover{background:var(--accent-soft)}.sk-res .empty{padding:10px 18px}
+.sk-flash{animation:skf 1.4s ease}@keyframes skf{0%,40%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
+/* overview trend */
+.ov-spark{display:inline-block;vertical-align:middle;margin-left:8px}.ov-spark .ln{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-linejoin:round}.ov-spark circle{fill:var(--accent)}
+.ov-d{font:12px var(--f-mono);margin-left:6px;color:var(--muted)}.ov-d.up{color:var(--good)}.ov-d.down{color:var(--hot)}
+/* 7-day load strip */
+.ld{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px;width:max-content;max-width:100%;overflow-x:auto;margin:0 0 12px}
+.ld-d{border:0;background:none;color:var(--fg);font:inherit;font-size:12.5px;padding:6px 12px;border-radius:999px;min-width:58px;cursor:pointer;min-height:40px}.ld-d.on{background:var(--fg);color:var(--bg)}
+.ld-d i{display:block;height:3px;border-radius:2px;background:var(--calm-soft);margin-top:4px;overflow:hidden}.ld-d i::before{content:"";display:block;height:100%;width:var(--w);background:var(--good)}
+.ld-d.mid i::before{background:var(--warn)}.ld-d.hi i::before{background:var(--hot)}.ld-d.on i{background:color-mix(in srgb,var(--bg) 30%,transparent)}
 /* motion: page entrance (title rises from a mask, cards rise in turn), numbers count up, bars fill, curves draw, theme switch spreads as a circle */
 .fx-mask{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em}.fx-mask>span{display:inline-block}
 #view.fx-wait{opacity:0}
@@ -710,6 +761,8 @@ html.fx-vt::view-transition-old(root),html.fx-vt::view-transition-new(root){anim
   <header class="top">
     <h1 id="pageTitle">HOME</h1>
     <div class="sub" id="todayLabel"></div>
+    <div class="hx" id="hdrX"></div>
+    <div class="hx-tools" id="hdrTools"></div>
   </header>
   <div id="editBar" class="banner edit-bar" hidden></div>
   <div id="banner" class="banner" hidden></div>
@@ -797,7 +850,7 @@ const I18N = {
     free_left:h=>`今天還剩 ${h}`, free_day:h=>`可用 ${h}`, free_tip:"可用時間 = 每天可安排的時段，扣掉上課和 Google 日曆裡有時間的行程",
     tip_tight:(d,h,n)=>`${d}扣掉上課和行程只剩 ${h}，卻排了 ${n} 件事。下次這天少排一點，或把幾件挪到空堂多的日子。`,
     gc_curve:"重量變化", gc_pr:"破紀錄", gc_sum:(a,b,c,n)=>`起點 ${a} → 最新 ${b}（${c}）・破紀錄 ${n} 次`, gc_need:"記錄兩次以上就會畫出曲線。",
-    nav_home:"待辦", nav_review:"每日檢討", nav_money:"記帳",
+    nav_home:"待辦", nav_review:"每週回顧", nav_money:"記帳",
     grp_pages:"頁面", grp_sections:"本頁段落", grp_switch:"切換",
     sec_overview:"總覽", top_title:"今日三件事", top_sub:"先做完這三件，其他的晚點再說", top_empty:"在下面的待辦或任務板按 ☆，挑出今天最重要的三件。", top_full:"今天已經挑滿三件了，先取消一件再加", top_pin:"加到今日三件事", top_unpin:"從今日三件事移除", top_done:"三件都完成了 🎉",
     ib_title:"想法收集箱", ib_sub:"先記下來，晚點再分類", ib_ph:"想到什麼就打，按 Enter", ib_empty:"目前沒有想法。隨時按 N 或左側「收集想法」都能快速記下。", ib_today:"→ 今天", ib_board:"→ 任務板", ib_today_t:"放進今天的待辦", ib_board_t:"放進任務板第一欄", ib_btn:"收集想法", ib_saved:"已收進想法收集箱", ib_moved:"已移過去",
@@ -820,6 +873,13 @@ const I18N = {
     carry_from:d=>`從 ${d} 延續`,
     todo_ph:"＋ To-do", prog:n=>`${n}進度`, remove_block:"移除此區塊",
     add_proj:"＋ 專案進度", new_proj:"新增專案…", new_proj_ph:"專案名稱，Enter 確認",
+    cd_title:"截止倒數", cd_n:n=>`${n} 件`, cd_ph:"事件，例：社群網路期末報告", cd_add:"加入", cd_hint:"會放進「如鯁在喉」和月曆。做完後，月曆上會從截止日移到你完成的那天。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:d=>`已加到如鯁在喉和月曆（${d}）`, cd_src:"截止倒數",
+    tl_title:"今天的時間軸", tl_sub:(a,b)=>`${a}–${b} · 課表和 Google 日曆行程，綠框是還空著的時間`, tl_cls:"課", tl_ev:"行程", tl_free:"空檔", tl_empty:"還沒有今天的課或 Google 日曆行程。在「專案設定」加課表，或連接 Google 日曆就會出現。",
+    sum_left:n=>`今天還剩 ${n} 件`, sum_cls:s=>`下一堂課 ${s}`, sum_tmr:n=>`${n} 件明天截止`,
+    wx_clear:"晴", wx_partly:"晴時多雲", wx_cloudy:"陰", wx_fog:"霧", wx_rain:p=>`降雨 ${p}%`, wx_snow:"雪", wx_storm:"雷雨", wx_umb:"記得帶傘", wx_src:"台北天氣（Open-Meteo）",
+    nf_title:"通知", nf_none:"目前沒有通知", nf_over:n=>`${n} 件已逾期`, nf_today:t=>`今天截止：${t}`, nf_tmr:t=>`明天截止：${t}`, nf_reg:(d,m)=>`多益報名剩 ${d} 天（到 ${m}）`, nf_err:n=>`${n} 題錯題今天要複習`, nf_ai:"這週 Claude 的建議到了",
+    sk_btn:"搜尋", sk_ph:"搜尋待辦、文獻、紀錄、頁面…", sk_hint:"輸入關鍵字，↑↓ 選擇，Enter 打開，Esc 關閉", sk_none:"找不到符合的項目", sk_pages:"頁面", sk_tasks:"任務板", sk_days:"日卡", sk_cal:"月曆標記",
+    ld_tip:(n,h,d)=>`${n} 件待辦 · 課和行程 ${h} · ${d} 個截止`, nb_tip:n=>`${n} 件逾期或今天截止`, ov_vs_yday:n=>`跟昨天比（昨天完成 ${n} 件）`, ov_vs_lw:n=>`跟上週同一天比（上週到這天完成 ${n} 件）`, pop_old_review:"當天的檢討（舊紀錄）",
     write_review:"寫檢討", today_badge:"今天",
     settings_hint:"勾選「每天自動出現」的專案，每一天都會自動有這個進度區塊，不用再手動建立。",
     pin_lbl:"每天自動出現", proj_remove_title:"從清單移除（不影響已記錄的內容）", proj_new_ph:"＋ 新增專案（Enter）",
@@ -919,7 +979,7 @@ const I18N = {
     free_left:h=>`${h} left today`, free_day:h=>`${h} free`, free_tip:"Free time = your daily planning hours minus classes and timed Google Calendar events",
     tip_tight:(d,h,n)=>`${d} had only ${h} free after classes and events, but ${n} items. Plan less that day, or move some to a day with more free time.`,
     gc_curve:"Weight over time", gc_pr:"PR", gc_sum:(a,b,c,n)=>`Start ${a} → latest ${b} (${c}) · ${n} PRs`, gc_need:"Log it twice and a curve appears.",
-    nav_home:"To-dos", nav_review:"Daily review", nav_money:"Expenses",
+    nav_home:"To-dos", nav_review:"Weekly review", nav_money:"Expenses",
     grp_pages:"PAGES", grp_sections:"ON THIS PAGE", grp_switch:"SWITCHES",
     sec_overview:"Overview", top_title:"Today's top 3", top_sub:"Finish these first, everything else can wait", top_empty:"Tap ☆ on a to-do or task below to pick today's three most important things.", top_full:"Already three picked today. Remove one first", top_pin:"Add to today's top 3", top_unpin:"Remove from today's top 3", top_done:"All three done 🎉",
     ib_title:"Idea inbox", ib_sub:"Capture now, sort later", ib_ph:"Type anything, press Enter", ib_empty:"No ideas yet. Press N or use “Capture idea” in the sidebar any time.", ib_today:"→ Today", ib_board:"→ Board", ib_today_t:"Move to today's to-dos", ib_board_t:"Move to the first board column", ib_btn:"Capture idea", ib_saved:"Saved to the idea inbox", ib_moved:"Moved",
@@ -942,6 +1002,13 @@ const I18N = {
     carry_from:d=>`Carried from ${d}`,
     todo_ph:"+ To-do", prog:n=>`${n} progress`, remove_block:"Remove section",
     add_proj:"+ Project section", new_proj:"New project…", new_proj_ph:"Project name, press Enter",
+    cd_title:"Deadlines", cd_n:n=>`${n}`, cd_ph:"Event, e.g. final report", cd_add:"Add", cd_hint:"Goes into 如鯁在喉 and the calendar. Once done, it moves on the calendar from the deadline to the day you finished.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:d=>`Added to 如鯁在喉 and the calendar (${d})`, cd_src:"Deadline",
+    tl_title:"Today's timeline", tl_sub:(a,b)=>`${a}–${b} · classes and Google Calendar events; green boxes are free time`, tl_cls:"Class", tl_ev:"Events", tl_free:"Free", tl_empty:"No classes or Google events today. Add your timetable in Project settings or connect Google Calendar.",
+    sum_left:n=>`${n} left today`, sum_cls:s=>`next class ${s}`, sum_tmr:n=>`${n} due tomorrow`,
+    wx_clear:"Clear", wx_partly:"Partly cloudy", wx_cloudy:"Cloudy", wx_fog:"Fog", wx_rain:p=>`rain ${p}%`, wx_snow:"Snow", wx_storm:"Storms", wx_umb:"bring an umbrella", wx_src:"Taipei weather (Open-Meteo)",
+    nf_title:"Notifications", nf_none:"Nothing new", nf_over:n=>`${n} overdue`, nf_today:t=>`Due today: ${t}`, nf_tmr:t=>`Due tomorrow: ${t}`, nf_reg:(d,m)=>`TOEIC registration closes in ${d} days (${m})`, nf_err:n=>`${n} mistakes to review today`, nf_ai:"Claude's tips for this week are in",
+    sk_btn:"Search", sk_ph:"Search to-dos, papers, records, pages…", sk_hint:"Type to search, ↑↓ to pick, Enter to open, Esc to close", sk_none:"No matches", sk_pages:"Pages", sk_tasks:"Task board", sk_days:"Day cards", sk_cal:"Calendar marks",
+    ld_tip:(n,h,d)=>`${n} to-dos · classes & events ${h} · ${d} deadlines`, nb_tip:n=>`${n} overdue or due today`, ov_vs_yday:n=>`vs yesterday (${n} done)`, ov_vs_lw:n=>`vs last week by this day (${n} done)`, pop_old_review:"That day's review (old)",
     write_review:"Review", today_badge:"Today",
     settings_hint:"Projects marked “Show every day” get their own section on every day automatically.",
     pin_lbl:"Show every day", proj_remove_title:"Remove from list (keeps what you already logged)", proj_new_ph:"+ New project (Enter)",
@@ -991,6 +1058,8 @@ const ICON = {
   papers:'<path d="M5 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H5z"/><path d="M19 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>',
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
   undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+  search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
   bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
   out:'<path d="M14 5H6v14h8M10 12h10M17 9l3 3-3 3"/>',
 };
@@ -1163,7 +1232,7 @@ function render(){
   const n=new Date(); document.getElementById("todayLabel").textContent = T("today_label", n.getFullYear(), n.getMonth()+1, n.getDate(), T("wd")[n.getDay()]);
   v.innerHTML = S.tab==="home" ? viewHome() : S.tab==="review" ? viewReview() : S.tab==="gym" ? viewGym() : S.tab==="papers" ? viewPapers() : S.tab==="toeic" ? viewToeic() : S.tab==="speak" ? viewSpeak() : viewMoney();
   injectNotes(v);
-  renderHero();
+  renderHero(); renderHdr();
   if (S.tab==="home") positionPop();
   if (!S.cm) renderCm();
   document.querySelectorAll("[data-keep-scroll]").forEach(el=>{ if (sx[el.dataset.keepScroll]!=null) el.scrollLeft=sx[el.dataset.keepScroll]; });
@@ -1177,7 +1246,7 @@ function render(){
 
 /* ---------- left rail ---------- */
 function renderSide(){
-  const page = k => `<button class="navb" data-act="nav" data-tab="${k}" ${S.tab===k?'aria-current="page"':""}>${svg(k)}<span class="lbl">${L("nav_"+k)}</span></button>`;
+  const nb=navBadge(), page = k => `<button class="navb" data-act="nav" data-tab="${k}" ${S.tab===k?'aria-current="page"':""}>${svg(k)}<span class="lbl">${L("nav_"+k)}</span>${k==="home"&&nb?`<span class="nbadge" title="${T("nb_tip",nb)}">${nb}</span>`:""}</button>`;
   const sec = (id, icon, label) => `<button class="navb sec" data-act="jump" data-to="${id}">${svg(icon)}<span class="lbl">${label}</span></button>`;
   const themeName = T("theme_"+S.theme);
   document.getElementById("sideInner").innerHTML = `
@@ -1275,6 +1344,7 @@ function viewHome(){
   /* on a phone the cards fill the first screen, so today's three comes first */
   return `${PHONE.matches?focusSec+ovSec:ovSec}
     ${dw===0||dw===1?`<button class="wk-ready" data-act="wk-open">${T("wk_ready")}</button>`:""}
+    <section class="block today-row" id="s-today">${viewDeadlineCard()}${viewTimeline()}</section>
     ${PHONE.matches?"":focusSec}
     ${S.showSettings?settingsPanel():""}
     ${S.split?splitDialog():""}
@@ -1304,6 +1374,8 @@ function carried(withDone){
   return out;
 }
 
+function ovSpark(v){ const W=64,H=18, mx=Math.max(1,...v), X=i=>(i*(W-4)/(v.length-1)+2).toFixed(1), Y=x=>(H-2-(x/mx)*(H-4)).toFixed(1);
+  return `<svg class="ov-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><polyline class="ln" points="${v.map((x,i)=>X(i)+","+Y(x)).join(" ")}"/><circle cx="${X(v.length-1)}" cy="${Y(v[v.length-1])}" r="2"/></svg>`; }
 function overview(tasks){
   const t=today(), ts=dayStats(day(t)), car=carried();
   const wk=Array.from({length:7},(_,i)=>addDays(mondayOf(new Date()),i));
@@ -1314,14 +1386,19 @@ function overview(tasks){
   const bar=(k,n)=>`<div class="progress"><i style="width:${n?k/n*100:0}%"></i></div>`;
   const tn=ts.n+car.length, tk=ts.k;
   const projStat=name=>{ let n=0,k=0; wk.forEach(ds=>{ if(!hasDay(ds)) return; (day(ds).projects||[]).forEach(p=>{ if(p.name!==name) return; n+=p.items.filter(i=>!i.k).length; k+=p.items.filter(i=>i.d).length; }); }); return {n,k}; };
-  const card=id=>{
-    if (id==="today") return `<div class="ov ${tn&&tk===tn?"ok":""}" data-card="today"><div class="k">${L("ov_today")}</div><div class="v">${tk}<small>/${tn}</small></div>${bar(tk,tn)}</div>`;
-    if (id==="week") return `<div class="ov" data-card="week"><div class="k">${L("ov_week")}</div><div class="v">${wk_}<small>/${wn}</small></div>${bar(wk_,wn)}</div>`;
+  const trend={}, card=id=>{
+    if (id==="today") return `<div class="ov ${tn&&tk===tn?"ok":""}" data-card="today"><div class="k">${L("ov_today")}</div><div class="v">${tk}<small>/${tn}</small>${trend.today}</div>${bar(tk,tn)}</div>`;
+    if (id==="week") return `<div class="ov" data-card="week"><div class="k">${L("ov_week")}</div><div class="v">${wk_}<small>/${wn}</small>${trend.week}</div>${bar(wk_,wn)}</div>`;
     if (id==="due") return `<div class="ov ${overdue?"alert":""}" data-card="due"><div class="k">${L("ov_due")}</div><div class="v">${overdue}<small> / ${soon}</small></div></div>`;
     if (id==="carry") return `<div class="ov ${car.length?"alert":""}" data-card="carry"><div class="k">${L("ov_carry")}</div><div class="v">${car.length}<small>${T("unit_items")}</small></div></div>`;
     if (id.startsWith("proj:")){ const nm=id.slice(5), st=per[nm]||projStat(nm); return `<div class="ov" data-card="${esc(id)}"><div class="k">${esc(T("ov_proj",nm))}</div><div class="v">${st.k}<small>/${st.n}</small></div>${bar(st.k,st.n)}</div>`; }
     return ""; };
   const list=ovCards();
+  // trends: done per day for the last 7 days, done per week for the last 8 weeks; compare with yesterday / last week at the same point
+  const kOf=ds=>hasDay(ds)?dayStats(day(ds)).k:0, d7=Array.from({length:7},(_,i)=>kOf(addDays(t,i-6))), mon=mondayOf(new Date()), wi=daysBetween(mon,t);
+  const wkK=(m,upto)=>{ let k=0; for (let i=0;i<=upto;i++) k+=kOf(addDays(m,i)); return k; }, w8=Array.from({length:8},(_,i)=>wkK(addDays(mon,(i-7)*7), i===7?wi:6)), lastSame=wkK(addDays(mon,-7),wi);
+  const delta=(a,b,lbl)=>{ const d=a-b; return `<span class="ov-d ${d>0?"up":d<0?"down":""}" title="${esc(lbl)}">${d>0?"▲":d<0?"▼":"＝"}${d?Math.abs(d):""}</span>`; };
+  trend.today=`${delta(d7[6],d7[5],T("ov_vs_yday",d7[5]))}${ovSpark(d7)}`; trend.week=`${delta(w8[7],lastSame,T("ov_vs_lw",lastSame))}${ovSpark(w8)}`;
   return `<div class="overview" data-row="ov">${list.map(card).join("") || `<p class="empty mini">${T("cm_row_empty")}</p>`}</div>`;
 }
 
@@ -1981,13 +2058,14 @@ function viewWeek(){
       ${projs}</div>
       <div class="day-foot">
         <select data-act="proj-add" data-date="${date}" aria-label="${T("add_proj")}"><option value="">${T("add_proj")}</option>${projOpts.filter(p=>!names.has(p)).map(p=>`<option>${esc(p)}</option>`).join("")}<option value="__new">${T("new_proj")}</option></select>
-        <button class="ghost mini" data-act="go-review" data-date="${date}">${L("write_review")}</button>
+
       </div>
     </div>`;
   }).join("");
   return `<section class="block" id="s-week">
       <div class="sec-h"><h2>${L("week_title", md(days[0]), md(days[days.length-1]))}</h2><span class="sp"></span>
         <button class="ghost" data-act="days" data-n="-1" aria-label="${T("prev_day")}">←</button><button class="ghost" data-act="days" data-n="0">${T("today")}</button><button class="ghost" data-act="days" data-n="1" aria-label="${T("next_day")}">→</button></div>
+      ${viewLoadStrip()}
       ${car.some(c=>!c.it.d)?`<p class="sub" style="margin:-4px 0 10px">${L("carry_note")}</p>`:""}
       <div class="week with-busy" data-keep-scroll="week" tabindex="0">${busyCol}${dayCols}</div>
     </section>`;
@@ -2007,6 +2085,7 @@ function doneByDate(tasks){
 function marksByDate(tasks){
   const by={}; const push=(ds,x)=>(by[ds]=by[ds]||[]).push(x);
   allEvents().forEach(e=>push(e.date, {t:e.title, kind:e.kind, id:e.id, gid:e.gcalId, drag:{k:"ev",id:e.id}}));
+  (tasks||[]).forEach(x=>{ if (x.cal && x.due && !x.done) push(x.due, {t:x.title, kind:"deadline", task:x.id}); });
   return by;
 }
 const dragAttr = d => `draggable="true" data-drag="${esc(JSON.stringify(d))}"`;
@@ -2115,7 +2194,7 @@ function viewDoneCalendar(tasks){
   gcWatch(cells[0], addDays(cells[cells.length-1],1));
   const total=Object.entries(by).filter(([k])=>k.startsWith(S.calMonth)).reduce((s,[,v])=>s+v.length,0);
   const sel=S.calSel;
-  const pill = x => `<span class="mark ${x.kind}" ${dragAttr(x.drag)} title="${esc(markLabel(x.kind)+" · "+x.t)}">${MARK_ICON[x.kind]||"★"} ${esc(x.t)}</span>`;
+  const pill = x => `<span class="mark ${x.kind}" ${x.drag?dragAttr(x.drag):""} title="${esc(markLabel(x.kind)+" · "+x.t)}">${MARK_ICON[x.kind]||"★"} ${esc(x.t)}</span>`;
   return `<section class="block" id="s-cal">
     <div class="sec-h"><h2>${L("sec_cal")} · ${T("cal_title",y,m)}</h2><span class="sub">${T("cal_month_total",total)}</span>${gcStatus()}<span class="sp"></span>
       <button class="ghost" data-act="calmonth" data-n="-1" aria-label="${T("prev_month")}">←</button><button class="ghost" data-act="calmonth" data-n="0">${T("this_month")}</button><button class="ghost" data-act="calmonth" data-n="1" aria-label="${T("next_month")}">→</button></div>
@@ -2140,14 +2219,13 @@ function calDetail(sel, list, marks, gl=[]){
   return `<div class="cal-pop" id="calPop" role="dialog" aria-label="${md(sel)}">
     <div class="pop-h"><b>${md(sel)} ${dow(sel)}</b>${d.mood?`<span class="pop-mood">${T("mood_label")} ${d.mood}/5</span>`:""}<span class="sp"></span><button class="icon-btn" data-act="cal-sel" data-date="${sel}" aria-label="close">✕</button></div>
     <div class="pop-body">
-      ${marks.length?`<ul class="list">${marks.map(x=>`<li class="item"><span class="mark ${x.kind}">${MARK_ICON[x.kind]||"★"}</span><span class="t" ${x.id&&ev(x.id)?`data-cmr="${esc(JSON.stringify({k:"ev",id:x.id}))}"`:""}>${esc(x.t)}</span>${mv(x.drag)}<button class="icon-btn" data-act="ev-del" data-id="${x.id}" title="${T("del")}">✕</button></li>`).join("")}</ul>`:""}
+      ${marks.length?`<ul class="list">${marks.map(x=>x.task?`<li class="item"><span class="mark ${x.kind}">${MARK_ICON[x.kind]||"★"}</span><span class="t">${esc(x.t)}</span><span class="src">${T("cd_src")}</span></li>`:`<li class="item"><span class="mark ${x.kind}">${MARK_ICON[x.kind]||"★"}</span><span class="t" ${x.id&&ev(x.id)?`data-cmr="${esc(JSON.stringify({k:"ev",id:x.id}))}"`:""}>${esc(x.t)}</span>${mv(x.drag)}<button class="icon-btn" data-act="ev-del" data-id="${x.id}" title="${T("del")}">✕</button></li>`).join("")}</ul>`:""}
       ${gl.length?`<h4>${T("gc_title")}</h4><ul class="list">${gl.map(x=>`<li class="item"><span class="gev ${x.kind}">${x.tm||T("gc_allday")}</span><span class="t">${esc(x.t)}</span>${x.link?`<a class="src" href="${esc(x.link)}" target="_blank" rel="noopener">${T("gc_open")} ↗</a>`:""}</li>`).join("")}</ul>`:""}
       <h4>${T("cal_detail",md(sel))}${st.n?` <span class="sub">· ${T("day_done",st.k,st.n)}</span>`:""}</h4>
       ${list.length?`<ul class="list">${list.map(x=>`<li class="item"><span class="t">✓ ${esc(x.t)}</span><span class="src">${esc(x.src)}</span>${mv(x.drag)}</li>`).join("")}</ul>`:`<p class="empty mini">${T("cal_empty_day")}</p>`}
-      <h4>${T("nav_review")}</h4>
-      ${snip.length?snip.map(([k,v])=>`<p class="pop-rv"><small>${T(k)}</small>${esc(v.length>120?v.slice(0,120)+"…":v)}</p>`).join(""):`<p class="empty mini">${T("pop_no_review")}</p>`}
+      ${snip.length?`<h4>${T("pop_old_review")}</h4>`+snip.map(([k,v])=>`<p class="pop-rv"><small>${T(k)}</small>${esc(v.length>120?v.slice(0,120)+"…":v)}</p>`).join(""):""}
     </div>
-    <div class="pop-foot"><button class="ghost" data-act="pop-mark" data-kind="deadline" data-date="${sel}" title="${T("ctx_deadline")}">⚑</button><button class="ghost" data-act="pop-mark" data-kind="event" data-date="${sel}" title="${T("ctx_event")}">★</button><span class="sp"></span><button class="primary" data-act="go-review" data-date="${sel}">${T("pop_open_review")} →</button></div>
+    <div class="pop-foot"><button class="ghost" data-act="pop-mark" data-kind="deadline" data-date="${sel}" title="${T("ctx_deadline")}">⚑</button><button class="ghost" data-act="pop-mark" data-kind="event" data-date="${sel}" title="${T("ctx_event")}">★</button></div>
   </div>`;
 }
 /* right-click a date: mark a deadline or key event */
@@ -2240,6 +2318,7 @@ document.addEventListener("keydown", e=>{ if (e.key==="Escape" && lp) lpEnd(fals
 
 /* whole-day events ("busy"): the day has only this one thing, so its day card is hidden and the calendar shows the event */
 const MARK_ICON={deadline:"⚑", event:"★", busy:"◆"};
+document.addEventListener("click", e=>{ if (S.bell && !e.target.closest(".hx-bellw")){ S.bell=false; renderHdr(); } });
 function markLabel(k){ return k==="deadline"?T("k_deadline"):k==="busy"?T("k_busy"):T("k_event"); }
 function busyDays(){ const m={}; allEvents().forEach(e=>{ if (e.kind==="busy") (m[e.date]=m[e.date]||[]).push(e); }); return m; }
 function moveTo(d, date){
@@ -2698,29 +2777,7 @@ async function uploadWp(file){
 }
 
 /* ---------- REVIEW ---------- */
-function viewReview(){
-  const date=S.reviewDate, d=day(date), r=d.review||{}, st=dayStats(d);
-  const field=(key,big)=>`<div class="field"><label for="rv-${key}">${L("f_"+key)}<small>${L("f_"+key+"_h")}</small></label><textarea id="rv-${key}" data-act="rv" data-key="${key}" class="${big?"big":""}">${esc(r[key]||"")}</textarea></div>`;
-  const hist=allDayKeys().map(day).filter(x=>x.review && Object.values(x.review).some(v=>v && v.trim())).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);
-  return `${viewWeekReview()}<div class="review-grid">
-    <div class="card">
-      <div class="sec-h"><div class="daynav">
-        <button class="ghost" data-act="rv-day" data-n="-1" aria-label="${T("prev_day")}">←</button>
-        <input type="date" id="rv-date" value="${date}" data-act="rv-date">
-        <button class="ghost" data-act="rv-day" data-n="1" aria-label="${T("next_day")}">→</button>
-        <button class="ghost" data-act="rv-day" data-n="0">${T("today")}</button></div><span class="sp"></span><span class="saved" id="savedNote"></span></div>
-      <p class="sub" style="margin:0 0 14px">${T("day_done",st.k,st.n)}</p>
-      <div class="field"><label>${L("mood_label")}</label><div class="mood">${T("moods").map((l,i)=>`<button data-act="mood" data-n="${i+1}" aria-pressed="${d.mood===i+1}">${i+1} ${l}</button>`).join("")}</div></div>
-      ${field("done")}${field("improve")}${field("tomorrow")}
-      <button class="ghost" data-act="push-tomorrow" style="margin:-6px 0 14px">${T("push_btn",md(addDays(date,1)))}</button>
-      ${field("free",true)}
-    </div>
-    <div>
-      <div class="sec-h"><h2>${L("hist_title")}</h2></div>
-      <div class="hist">${hist.length? hist.map(x=>`<button class="h" data-act="rv-open" data-date="${x.date}"><div class="d">${x.date} ${dow(x.date)}${x.mood?T("hist_mood",x.mood):""}</div><div class="x">${esc(x.review.done||x.review.free||x.review.improve||x.review.tomorrow)}</div></button>`).join("") : `<p class="empty">${T("hist_empty")}</p>`}</div>
-    </div>
-  </div>`;
-}
+function viewReview(){ return viewWeekReview(); } // daily writing removed 2026-11-20 (Adam has no time); old reviews stay in the data
 
 /* ---------- MONEY ---------- */
 function viewMoney(){
@@ -2808,6 +2865,9 @@ function setTab(t){ FX.enter=true; S.tab=t; lsSet("home.tab",t); render._scrolle
 document.addEventListener("submit", e=>{
   const f=e.target; e.preventDefault(); const act=f.dataset.act;
   if (act==="dl-add"){ const inp=f.querySelector("input"), v=inp.value.trim(); if (!v) return; dlSave([...dlList(), {id:uid(), t:v}]); inp.value=""; render(); if (inp.id==="add-dl") setTimeout(()=>document.getElementById("add-dl")?.focus(),0); else { S.cm=null; renderCm(); } return; }
+  if (act==="cd-add"){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), title=ti.value.replace(/\s+/g," ").trim(), due=di.value;
+    if (!title || !due){ toast(T("cd_need")); (title?di:ti).focus(); return; }
+    const id=uid(); save("tasks/"+id,{id,title,bucket:nagBucket(),done:false,due,cal:true,createdAt:Date.now()},50); ti.value=""; di.value=""; toast(T("cd_ok",md(due))); render(); return; }
   if (act==="task-add"){
     const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"), title=inp.value.trim(), m=slashMode(f); if (!title && m.k!=="tb") return;
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:due.value||today(),title,kind:m.mark},50); inp.value=""; due.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
@@ -3022,6 +3082,11 @@ document.addEventListener("click", e=>{
   else if (act==="pg-del"){ if (S.confirmDel!=="pg"){ S.confirmDel="pg"; render(); return; } S.confirmDel=null; const pl=clone(gymPlan()); delete pl.program; savePlan(pl); S.pgEdit=null; render(); }
   else if (act==="split-open"){ const t=task(b.dataset.id); if (!t||!t.due){ toast(T("sp_need_due")); return; } const st=today()<t.due?today():t.due; S.split={id:t.id, steps:T("sp_default"), start:st}; render(); setTimeout(()=>document.getElementById("sp-steps")?.focus(),0); }
   else if (act==="split-cancel"){ S.split=null; render(); }
+  else if (act==="sk-open"){ skOpen(); }
+  else if (act==="bell"){ const ns=notifs(), seen=seenSet(); S.bell=!S.bell; if (S.bell){ S.bellNew=ns.filter(x=>!seen.has(x.k)).map(x=>x.k); lsSet("home.seen", JSON.stringify([...new Set([...seen, ...ns.map(x=>x.k)])].slice(-300))); } renderHdr(); }
+  else if (act==="nf-go"){ S.bell=false; const g=b.dataset.go; if (g==="cd"){ if (S.tab!=="home") setTab("home"); else renderHdr(); setTimeout(()=>document.getElementById("s-today")?.scrollIntoView({behavior:"smooth",block:"start"}),60); } else if (g==="review"){ S.wkRev=mondayOf(new Date()); setTab("review"); } else setTab(g); }
+  else if (act==="ld-go"){ const ds=b.dataset.date, dc=dayCards(); if (!dc.includes(ds)){ const off=daysBetween(dc[Math.min(1,dc.length-1)], ds); saveDayCards(dc.map(d=>addDays(d,off))); }
+    setTimeout(()=>{ const c=document.querySelector(`.day[data-day="${ds}"]`), w=document.querySelector(".week"); if (c&&w){ w.scrollTo({left:Math.max(0,c.offsetLeft-w.offsetLeft-8), behavior:RM.matches?"auto":"smooth"}); c.classList.add("sk-flash"); setTimeout(()=>c.classList.remove("sk-flash"),1400); } },60); }
   else if (act==="wk-open"){ S.wkRev=mondayOf(addDays(today(), new Date().getDay()===1?-7:0)); setTab("review"); }
   else if (act==="wk-nav"){ const n=+b.dataset.n; S.wkRev = n===0 ? mondayOf(new Date()) : addDays(S.wkRev, 7*n); render(); }
   else if (act==="kid-del"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ x.kids=(x.kids||[]).filter(c=>c.id!==b.dataset.kid); }); }
@@ -3357,6 +3422,123 @@ document.addEventListener("dragend", ()=>{ dragId=null; dlDrag=null; document.qu
 
 // double-click any named thing (group, routine, event, note…) to rename it in place, same as right-click → 編輯
 document.addEventListener("dblclick", e=>{ const el=e.target.closest&&e.target.closest("[data-cmr]"); if (!el || S.edit) return; let a; try{ a=JSON.parse(el.dataset.cmr); }catch(_){ return; } if (!CMR[a.k] || !CMR[a.k].set) return; e.preventDefault(); getSelection()?.removeAllRanges(); cmrEdit(el.dataset.cmr, cmrSame(el.dataset.cmr).indexOf(el)); });
+/* ---------- deadlines: quick add (→ 如鯁在喉 + calendar), countdown card ---------- */
+// open board tasks with a due date + ⚑ deadline marks; overdue ones first
+function deadlines(){ const t=today(), out=[];
+  allTasks().forEach(x=>{ if (!x.k && !x.done && x.due) out.push({t:x.title, date:x.due, task:x.id}); });
+  allEvents().forEach(e=>{ if (e.kind==="deadline" && e.date>=t) out.push({t:e.title, date:e.date, ev:e.id}); });
+  return out.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0); }
+function nagBucket(){ const bl=bucketList(); return (bl.find(b=>b.id==="nagging")||bl.find(b=>/如鯁/.test(b.name||""))||bl[1]||bl[0]).id; }
+// time left until the end of the due day, in words
+function cdText(ds){ const end=parse(addDays(ds,1)), ms=end-new Date(); if (ms<=0) return T("cd_over", Math.max(1,daysBetween(ds,today()))); const h=Math.floor(ms/36e5);
+  if (ds===today()) return T("cd_today", h); const d=daysBetween(today(),ds); return d<=2 ? T("cd_dh", d, h-d*24) : T("cd_d", d); }
+function viewDeadlineCard(){ const list=deadlines(), t=today(), over=list.filter(x=>x.date<t), up=list.filter(x=>x.date>=t), nx=up[0], rest=up.slice(1,5);
+  const row=x=>`<li class="item"><span class="cd-dt">${md(x.date)} ${dow(x.date)}</span><span class="t">${esc(x.t)}</span><span class="cd-n ${x.date<t?"over":""}" data-cd="${x.date}">${cdText(x.date)}</span></li>`;
+  return `<div class="card cd-card">
+    <div class="sec-h"><h2>${L("cd_title")}</h2><span class="sub">${list.length?T("cd_n",list.length):""}</span></div>
+    <form class="cd-add" data-act="cd-add"><input type="text" id="cd-t" placeholder="${T("cd_ph")}" autocomplete="off" aria-label="${T("cd_ph")}"><input type="date" id="cd-d" aria-label="${T("due_title")}" min="${t}"><button class="primary mini" type="submit">${T("cd_add")}</button></form>
+    <p class="sub cd-hint">${T("cd_hint")}</p>
+    ${nx?`<div class="cd-next ${nx.date<t?"over":""}"><div class="cd-big" data-cd="${nx.date}">${cdText(nx.date)}</div><div class="cd-tt">${nx.task?`<input type="checkbox" data-act="task-toggle" data-id="${nx.task}" aria-label="${T("done")}">`:""}<b>${esc(nx.t)}</b></div><div class="sub">${md(nx.date)} ${dow(nx.date)}${nx.ev?" · ⚑ "+T("k_deadline"):""}</div></div>
+      ${rest.length?`<h4>${T("cd_then")}</h4><ul class="list cd-list">${rest.map(row).join("")}</ul>`:""}`:`<p class="empty mini">${T("cd_empty")}</p>`}
+    ${over.length?`<details class="cd-over"><summary>⚠ ${T("nf_over",over.length)}</summary><ul class="list cd-list">${over.map(row).join("")}</ul></details>`:""}
+  </div>`; }
+
+/* ---------- today's timeline: classes, timed Google events, free gaps, a "now" line ---------- */
+function gcTimedList(ds){ const out=[]; for (const [k,list] of Object.entries(G.data||{})){ if (k.startsWith("holiday")) continue;
+  for (const ev of list){ if (ev.status==="cancelled" || !ev.start?.dateTime || !ev.end?.dateTime || String(ev.id||"").startsWith("hbt")) continue;
+    const a=new Date(ev.start.dateTime), b=new Date(ev.end.dateTime), d0=parse(ds), d1=parse(addDays(ds,1)); if (b<=d0 || a>=d1) continue;
+    out.push({t:ev.summary||T("gc_untitled"), a:a<d0?0:a.getHours()*60+a.getMinutes(), b:b>=d1?1440:b.getHours()*60+b.getMinutes()}); } } return out.sort((x,y)=>x.a-y.a); }
+const hm=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+function viewTimeline(){ const t=today(), w=dayWin(), S0=Math.floor(toMin(w.s)/60)*60, E0=Math.ceil(toMin(w.e)/60)*60, span=E0-S0;
+  const cls=classesOn(t).map(c=>({t:c.name||T("cls_title"), a:toMin(c.s), b:toMin(c.e)})), evs=gcTimedList(t), n=new Date(), now=n.getHours()*60+n.getMinutes();
+  const busy=[...cls,...evs].map(x=>[x.a,x.b]).sort((a,b)=>a[0]-b[0]), free=[]; let cur=Math.max(S0, now);
+  for (const [a,b] of busy){ if (a-cur>=30) free.push({a:cur,b:a}); cur=Math.max(cur,b); } if (E0-cur>=30) free.push({a:cur,b:E0});
+  const pos=m=>((Math.min(Math.max(m,S0),E0)-S0)/span*100).toFixed(2), blk=(x,cls_,label)=>{ const l=pos(x.a), wd=Math.max(0.8,pos(x.b)-l); return `<div class="tl-b ${cls_} ${x.b<=now?"past":""}" style="left:${l}%;width:${wd}%" title="${esc(hm(x.a)+"–"+hm(x.b)+" "+label)}"><span>${wd>=5?esc(label):""}</span></div>`; };
+  const hours=[]; for (let h=S0; h<E0; h+=60) hours.push(`<span style="left:${pos(h)}%">${String(h/60).padStart(2,"0")}</span>`);
+  const lane=(name,items)=>`<div class="tl-lane"><b>${name}</b><div class="tl-track">${items}</div></div>`;
+  const empty=!cls.length && !evs.length;
+  return `<div class="card tl-card">
+    <div class="sec-h"><h2>${L("tl_title")}</h2><span class="sub">${T("tl_sub",hm(S0),hm(E0))}</span></div>
+    <div class="tl" data-s="${S0}" data-e="${E0}"><div class="tl-hrs"><b></b><div class="tl-track">${hours.join("")}</div></div>
+      ${lane(T("tl_cls"), cls.map(x=>blk(x,"cls",x.t)).join(""))}
+      ${lane(T("tl_ev"), evs.map(x=>blk(x,"ev",x.t)).join(""))}
+      ${lane(T("tl_free"), free.map(x=>blk(x,"free",hrs(x.b-x.a))).join(""))}
+      ${now>=S0&&now<=E0?`<div class="tl-nowwrap"><div class="tl-now" id="tlNow" style="left:${pos(now)}%"><span>${hm(now)}</span></div></div>`:""}
+    </div>
+    ${empty?`<p class="empty mini">${T("tl_empty")}</p>`:""}
+  </div>`; }
+// keep the countdowns and the now line moving without re-rendering
+setInterval(()=>{ document.querySelectorAll("[data-cd]").forEach(el=>{ el.textContent=cdText(el.dataset.cd); });
+  const nl=document.getElementById("tlNow"), tl=nl&&nl.closest(".tl"); if (tl){ const n=new Date(), m=n.getHours()*60+n.getMinutes(), s=+tl.dataset.s, e=+tl.dataset.e; nl.style.left=((Math.min(Math.max(m,s),e)-s)/(e-s)*100).toFixed(2)+"%"; nl.firstChild.textContent=hm(m); } }, 30000);
+
+/* ---------- header: today summary + weather (home), search + bell (every page) ---------- */
+function hdrSummary(){ const t=today(), ts=dayStats(day(t)), car=carried(), left=Math.max(0, ts.n+car.length-ts.k), n=new Date(), now=n.getHours()*60+n.getMinutes();
+  const nc=classesOn(t).find(c=>toMin(c.s)>now), tm=deadlines().filter(x=>x.date===addDays(t,1)).length, parts=[T("sum_left",left)];
+  if (nc) parts.push(T("sum_cls", `<b>${nc.s} ${esc(nc.name||"")}</b>`)); if (tm) parts.push(`<u>${T("sum_tmr",tm)}</u>`);
+  return `<div class="hx-sum">${parts.join(" · ")}</div>`; }
+const WX={lat:25.03, lon:121.56};
+function wxData(){ let c=null; try{ c=JSON.parse(localStorage.getItem("home.wx")||"null"); }catch(_){}
+  if ((!c || Date.now()-c.at>30*60e3) && !wxData.busy && navigator.onLine!==false){ wxData.busy=true;
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${WX.lat}&longitude=${WX.lon}&current=temperature_2m,weather_code&daily=precipitation_probability_max,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTaipei&forecast_days=1`)
+      .then(r=>r.ok?r.json():null).then(j=>{ wxData.busy=false; if (!j||!j.current) return; lsSet("home.wx", JSON.stringify({at:Date.now(), t:Math.round(j.current.temperature_2m), c:j.current.weather_code, p:j.daily?.precipitation_probability_max?.[0], hi:Math.round(j.daily?.temperature_2m_max?.[0]), lo:Math.round(j.daily?.temperature_2m_min?.[0])})); if (S.tab==="home") softRender(); })
+      .catch(()=>{ wxData.busy=false; }); }
+  return c; }
+function wxChip(){ const c=wxData(); if (!c) return ""; const k=c.c, ic=k===0?"☀":k<=2?"🌤":k===3?"☁":k<=48?"🌫":k<=67||(k>=80&&k<=82)?"🌧":k<=77||k===85||k===86?"🌨":"⛈";
+  const lbl=T("wx_"+(k===0?"clear":k<=2?"partly":k===3?"cloudy":k<=48?"fog":k<=67||(k>=80&&k<=82)?"rain":k<=77||k===85||k===86?"snow":"storm"));
+  return `<span class="hx-wx" title="${T("wx_src")}">${ic} ${c.t}° ${lbl} · ${c.lo}–${c.hi}° · ${T("wx_rain",c.p??0)}${(c.p??0)>=50?" · "+T("wx_umb"):""}</span>`; }
+
+/* notifications: computed from what's already here; a key once opened counts as read */
+function notifs(){ const t=today(), out=[], dl=deadlines(), over=dl.filter(x=>x.date<t), td=dl.filter(x=>x.date===t), tm=dl.filter(x=>x.date===addDays(t,1));
+  if (over.length) out.push({k:"over:"+t+":"+over.length, ic:"⚠", t:T("nf_over",over.length), s:over.slice(0,3).map(x=>x.t).join("、"), go:"cd"});
+  td.forEach(x=>out.push({k:"td:"+(x.task||x.ev), ic:"⏰", t:T("nf_today",x.t), go:"cd"}));
+  tm.forEach(x=>out.push({k:"tm:"+(x.task||x.ev), ic:"📌", t:T("nf_tmr",x.t), go:"cd"}));
+  const c=tcCfg(); if (c && c.regTo && !c.regDone){ const d=daysBetween(t,c.regTo); if (d>=0 && d<=7) out.push({k:"reg:"+t, ic:"📝", t:T("nf_reg",d,md(c.regTo)), go:"toeic"}); }
+  try{ const n=erDue(t).length; if (n) out.push({k:"er:"+t, ic:"🔁", t:T("nf_err",n), go:"toeic"}); }catch(_){}
+  const mon=mondayOf(new Date()), ai=(S.weekly||{})[mon]; if (ai && ai.tips && ai.tips.length) out.push({k:"ai:"+mon, ic:"✦", t:T("nf_ai"), go:"review"});
+  return out; }
+function seenSet(){ try{ return new Set(JSON.parse(localStorage.getItem("home.seen")||"[]")); }catch(_){ return new Set(); } }
+function hdrTools(){ const ns=notifs(), seen=seenSet(), unread=ns.filter(x=>!seen.has(x.k)).length;
+  return `<button class="hx-search" data-act="sk-open" aria-label="${T("sk_ph")}">${svg("search")}<span class="lbl">${T("sk_btn")}</span><kbd>⌘K</kbd></button>
+    <span class="hx-bellw"><button class="hx-bell" data-act="bell" aria-expanded="${!!S.bell}" aria-label="${T("nf_title")}">${svg("bell")}${unread?`<span class="b">${unread}</span>`:""}</button>
+    ${S.bell?`<div class="nf-pop" role="dialog" aria-label="${T("nf_title")}"><div class="nf-h"><b>${T("nf_title")}</b></div>${ns.length?ns.map(x=>`<button class="nf-i ${seen.has(x.k)&&!S.bellNew?.includes(x.k)?"":"new"}" data-act="nf-go" data-go="${x.go}"><span class="ic">${x.ic}</span><span><span class="t">${esc(x.t)}</span>${x.s?`<span class="s">${esc(x.s)}</span>`:""}</span></button>`).join(""):`<p class="empty mini">${T("nf_none")}</p>`}</div>`:""}</span>`; }
+function renderHdr(){ const x=document.getElementById("hdrX"), tl=document.getElementById("hdrTools"); if (!x||!tl) return;
+  x.innerHTML = S.tab==="home" ? hdrSummary()+wxChip() : ""; tl.innerHTML=hdrTools(); }
+function navBadge(){ const t=today(); return deadlines().filter(x=>x.task && x.date<=t).length; }
+
+/* ---------- ⌘K search ---------- */
+function skItems(q){ q=q.trim().toLowerCase(); const out=[], has=s=>String(s||"").toLowerCase().includes(q); if (!q) return out;
+  ["home","gym","review","papers","toeic","speak","money"].forEach(k=>{ const n=T("nav_"+k); if (has(n)||has(k)) out.push({g:T("sk_pages"), t:"↪ "+n, s:"", go:{tab:k}}); });
+  allTasks().forEach(x=>{ if (!x.k && has(x.title)) out.push({g:T("sk_tasks"), t:(x.done?"✓ ":"☐ ")+x.title, s:x.due?md(x.due):"", go:{tab:"home", task:x.id}}); });
+  allDayKeys().sort().reverse().forEach(ds=>{ const d=day(ds); [...(d.items||[]).map(i=>[i,""]), ...(d.projects||[]).flatMap(p=>p.items.map(i=>[i,p.name]))].forEach(([i,p])=>{ if (!i.k && i.t && has(i.t)) out.push({g:T("sk_days"), t:(i.d?"✓ ":"☐ ")+i.t, s:md(ds)+(p?" "+p:""), go:{tab:"home", date:ds}}); }); });
+  allPapers().forEach(x=>{ if (has(x.title)||has(x.author)) out.push({g:T("nav_papers"), t:"📄 "+x.title, s:x.author||"", go:{tab:"papers"}}); });
+  allEvents().forEach(e=>{ if (has(e.title)) out.push({g:T("sk_cal"), t:(MARK_ICON[e.kind]||"★")+" "+e.title, s:md(e.date), go:{tab:"home", date:e.date}}); });
+  inboxList().forEach(x=>{ if (has(x.t)) out.push({g:T("ib_title"), t:"💡 "+x.t, s:"", go:{tab:"home", el:"s-focus"}}); });
+  gymPlan().routines.forEach(r=>r.groups.forEach(g=>g.ex.forEach(x=>{ if (has(x.name)) out.push({g:T("nav_gym"), t:"🏋 "+x.name, s:r.name, go:{tab:"gym", r:r.id, x:x.id}}); })));
+  const seen=new Set(); return out.filter(x=>{ const k=x.g+x.t+x.s; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0,40); }
+const SK={el:null, list:[], i:0};
+function skOpen(){ if (SK.el) return; const d=document.createElement("div"); d.className="sk"; d.innerHTML=`<div class="sk-box" role="dialog" aria-label="${T("sk_ph")}"><input type="search" id="skIn" placeholder="${T("sk_ph")}" autocomplete="off"><div class="sk-res" id="skRes"><p class="empty mini">${T("sk_hint")}</p></div></div>`;
+  document.body.appendChild(d); SK.el=d; SK.list=[]; SK.i=0; const inp=d.querySelector("#skIn"); inp.focus();
+  inp.addEventListener("input", ()=>{ SK.list=skItems(inp.value); SK.i=0; skDraw(); });
+  inp.addEventListener("keydown", e=>{ if (e.isComposing) return; if (e.key==="ArrowDown"){ e.preventDefault(); SK.i=Math.min(SK.list.length-1,SK.i+1); skDraw(); } else if (e.key==="ArrowUp"){ e.preventDefault(); SK.i=Math.max(0,SK.i-1); skDraw(); } else if (e.key==="Enter"){ e.preventDefault(); if (SK.list[SK.i]) skGo(SK.list[SK.i].go); } else if (e.key==="Escape"){ e.preventDefault(); skClose(); } });
+  d.addEventListener("pointerdown", e=>{ if (e.target===d) skClose(); });
+  d.addEventListener("click", e=>{ const b=e.target.closest("[data-sk]"); if (b) skGo(SK.list[+b.dataset.sk].go); }); }
+function skDraw(){ const r=SK.el&&SK.el.querySelector("#skRes"); if (!r) return; let g=null;
+  r.innerHTML = SK.list.length ? SK.list.map((x,i)=>{ const h=x.g!==g?`<div class="sk-g">${esc(x.g)}</div>`:""; g=x.g; return h+`<button class="sk-i ${i===SK.i?"on":""}" data-sk="${i}"><span class="t">${esc(x.t)}</span><small>${esc(x.s)}</small></button>`; }).join("") : `<p class="empty mini">${T("sk_none")}</p>`;
+  r.querySelector(".sk-i.on")?.scrollIntoView({block:"nearest"}); }
+function skClose(){ if (SK.el){ SK.el.remove(); SK.el=null; } }
+function skGo(go){ skClose(); if (go.r){ S.gymR=go.r; S.gymOpen[go.x]=true; } if (go.date){ S.calSel=go.date; S.calMonth=go.date.slice(0,7); }
+  if (S.tab!==go.tab) setTab(go.tab); else render();
+  setTimeout(()=>{ const el = go.task ? document.querySelector(`[data-task="${go.task}"]`) : go.date ? document.getElementById("s-cal") : go.x ? document.querySelector(`[data-act="gym-open"][data-id="${go.x}"]`) : go.el ? document.getElementById(go.el) : null;
+    if (el){ el.scrollIntoView({behavior:RM.matches?"auto":"smooth", block:"center"}); el.classList.add("sk-flash"); setTimeout(()=>el.classList.remove("sk-flash"),1600); } }, 80); }
+document.addEventListener("keydown", e=>{ if ((e.metaKey||e.ctrlKey) && !e.altKey && (e.key==="k"||e.key==="K")){ e.preventDefault(); SK.el?skClose():skOpen(); } });
+
+/* ---------- 7-day load strip above the day cards ---------- */
+function viewLoadStrip(){ const t=today(), w=dayWin(), win=Math.max(60,(toMin(w.e)||1380)-(toMin(w.s)||480)), dl=deadlines();
+  const days=Array.from({length:7},(_,i)=>addDays(t,i));
+  return `<div class="ld" role="list">${days.map(ds=>{ const st=hasDay(ds)?dayStats(day(ds)):{n:0,k:0}, cm=classesOn(ds).reduce((s,c)=>s+toMin(c.e)-toMin(c.s),0)+gcTimedList(ds).reduce((s,x)=>s+x.b-x.a,0), dn=dl.filter(x=>x.date===ds).length;
+      const load=Math.min(100, Math.round((cm + (st.n-st.k)*30 + dn*60)/win*100)), lv=load>=75?"hi":load>=45?"mid":"lo";
+      return `<button class="ld-d ${ds===t?"on":""} ${lv}" role="listitem" data-act="ld-go" data-date="${ds}" title="${esc(T("ld_tip", st.n-st.k, hrs(cm), dn))}"><span>${T("wd")[parse(ds).getDay()]} ${parse(ds).getDate()}</span><i style="--w:${Math.max(4,load)}%"></i></button>`; }).join("")}</div>`; }
+
 /* ---------- boot ---------- */
 PHONE.addEventListener?.("change", ()=>render());
 render();
