@@ -2614,6 +2614,26 @@ function migrateGym(){
         if (gymEntries().some(x=>!x.base && x.exId===e.exId && x.date>=e.date)) return;
         e.date=first[e.routineId]; ch=true; });
       if (ch) save("gymlog/2026-11",{...nov, month:"2026-11"},200); } }
+    // 2026-11-20: Adam was busy and moved the cycle again, to start Sat 11/21 (weeks Sat–Fri, ends Fri 1/29).
+    // Same steps as fix13: back up to gym/backup-20261120, keep real records as they are (e.g. the 11/17 push session stays as a
+    // pre-cycle record), move each remaining starting record to its routine's first day in the new cycle, relabel the running weeks.
+    { const pa=pending.get("gym/plan")||gymPlan(), pga=pa.program; if (pa.routines && pa.routines.length && pga && pga.start==="2026-11-17" && !pa.fix14){
+      const nov=clone(gymMonth("2026-11"));
+      save("gym/backup-20261120",{at:Date.now(), note:"before moving the cycle start from 11/17 to 11/21", plan:clone(pa), nov:clone(nov.entries||[])},200);
+      const npg={...pga, start:"2026-11-21"}, c=clone(pa); c.program=npg;
+      if (npg.mv) npg.mv=Object.fromEntries(Object.entries(npg.mv).filter(([from])=>from>=npg.start));
+      const run=c.routines.find(r=>r.id==="run10");
+      if (run){ const WD={"週日":0,"週一":1,"週二":2,"週三":3,"週四":4,"週五":5,"週六":6}, fmt=d=>+d.slice(5,7)+"/"+(+d.slice(8,10));
+        run.groups.forEach((g,i)=>{ const ds=[]; for (let k=0;k<7;k++){ const d=addDays(npg.start,i*7+k); if (npg.days[String(parse(d).getDay())]==="run10") ds.push(d); }
+          if (ds.length && /^W\d+（/.test(g.name)) g.name=g.name.replace(/（.*）/,"（"+ds.map(fmt).join("、")+"）");
+          const pos=x=>{ const w=WD[(x.name.match(/^週./)||[""])[0]]; const j=ds.findIndex(d=>parse(d).getDay()===w); return j<0?99:j; };
+          g.ex=[...g.ex].sort((a,b)=>pos(a)-pos(b)); }); }
+      c.fix14=true; save("gym/plan",c,200);
+      const first={}; for (let i=0;i<7;i++){ const d=addDays(npg.start,i), r=npg.days[String(parse(d).getDay())]; if (r && !first[r]) first[r]=d; }
+      let ch=false; (nov.entries||[]).forEach(e=>{ if (!e.base || !first[e.routineId] || e.date===first[e.routineId]) return;
+        if (gymEntries().some(x=>!x.base && x.exId===e.exId && x.date>=e.date)) return;
+        e.date=first[e.routineId]; ch=true; });
+      if (ch) save("gymlog/2026-11",{...nov, month:"2026-11"},200); } }
   } finally { undoMute=false; } }
 
 function planEdit(fn){ const pl=clone(gymPlan()); const r=pl.routines.find(x=>x.id===S.gymR); fn(pl,r); savePlan(pl); render(); }
