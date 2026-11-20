@@ -692,7 +692,11 @@ html:root[data-style="atelier"][data-theme="dark"]{
 @keyframes tick{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
 input[type=checkbox]:checked{animation:tick .22s cubic-bezier(.3,.7,.4,1)}
 .item.done .t{transition:color .2s}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* motion: page entrance (title rises from a mask, cards rise in turn), numbers count up, bars fill, curves draw, theme switch spreads as a circle */
+.fx-mask{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em}.fx-mask>span{display:inline-block}
+#view.fx-wait{opacity:0}
+html.fx-vt::view-transition-old(root),html.fx-vt::view-transition-new(root){animation:none;mix-blend-mode:normal}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}#view.fx-wait{opacity:1}}
 </style>
 
 <aside class="side" id="side" aria-label="目錄"><div class="side-scroll" id="sideInner"></div></aside>
@@ -1026,6 +1030,57 @@ function dow(s){ return T("dow", T("wd")[parse(s).getDay()]); }
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 function esc(s){ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function money(n){ return (n<0?"-$":"$")+Math.abs(Math.round(n)).toLocaleString("zh-TW"); }
+/* ---------- motion ---------- */
+const RM=matchMedia("(prefers-reduced-motion:reduce)"), EASE="cubic-bezier(.2,.75,.25,1)";
+const FX={enter:false, boot:true, t:0, t0:0};
+// Plays once when a page is opened (and once after the first data load), never on the many re-renders in between.
+function fxAfterRender(v){
+  if (RM.matches || !v.animate){ FX.boot=FX.enter=false; v.classList.remove("fx-wait"); return; }
+  if (FX.boot){
+    if (!S.settingsSeen) return;
+    v.classList.add("fx-wait"); const now=Date.now(); if (!FX.t0) FX.t0=now;
+    clearTimeout(FX.t); FX.t=setTimeout(()=>{ FX.boot=FX.enter=false; v.classList.remove("fx-wait"); try{ fxEnter(v); }catch(e){} }, now-FX.t0>900?0:160);
+    return; }
+  if (FX.enter){ FX.enter=false; try{ fxEnter(v); }catch(e){} }
+}
+function fxEnter(v){
+  const h=document.getElementById("pageTitle");
+  if (h && !S.edit && !h.querySelector(".fx-mask")){ h.innerHTML=`<span class="fx-mask"><span>${h.innerHTML}</span></span>`; h.firstChild.firstChild.animate([{transform:"translateY(105%)"},{transform:"none"}],{duration:620,easing:EASE}); }
+  const vh=innerHeight, C=[...v.querySelectorAll(".block > *, .card, .ov, .day")], set=new Set(C);
+  const leaf=C.filter(el=>{ for (const o of el.querySelectorAll(".block > *, .card, .ov, .day")) if (set.has(o)) return false; return true; });
+  let i=0; leaf.forEach(el=>{ const r=el.getBoundingClientRect(); if (r.top>vh || r.bottom<0 || !r.height) return; el.animate([{opacity:0,transform:"translateY(14px)"},{opacity:1,transform:"none"}],{duration:520,delay:Math.min(i++,16)*40,easing:EASE,fill:"backwards"}); });
+  v.querySelectorAll(".ov .v, .stat .v, .tc-big b").forEach(el=>fxCount(el,120));
+  v.querySelectorAll(".progress i").forEach(el=>{ const w=el.style.width; if (w && w!=="0%") el.animate([{width:"0%"},{width:w}],{duration:800,delay:200,easing:EASE,fill:"backwards"}); });
+  // curves draw themselves the first time they scroll into view
+  const io=window.IntersectionObserver && new IntersectionObserver(es=>es.forEach(e=>{ if (e.isIntersecting){ io.unobserve(e.target); fxDraw(e.target); } }),{threshold:.35});
+  v.querySelectorAll("svg").forEach(g=>{ if (!g.querySelector(".ln, .ex-spark polyline") && !g.matches(".ex-spark")) return; if (io){ g.style.visibility="hidden"; io.observe(g); } else fxDraw(g); });
+  setTimeout(()=>io && io.disconnect(), 60000);
+}
+function fxDraw(g){
+  g.style.visibility="";
+  g.querySelectorAll(".ln, polyline").forEach(p=>{ let L=0; try{ L=p.getTotalLength(); }catch(e){} if (!L) return; p.style.strokeDasharray=L; const a=p.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:950,delay:80,easing:EASE,fill:"backwards"}); a.onfinish=a.oncancel=()=>{ p.style.strokeDasharray=""; }; });
+  g.querySelectorAll(".pt, .pr, .prl, circle").forEach(c=>c.animate([{opacity:0},{opacity:1}],{duration:300,delay:750,fill:"backwards"}));
+}
+// Counts the first number inside el from 0 up to its value (keeps decimals, commas, units around it).
+function fxCount(el, delay){
+  const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT); let n; while ((n=w.nextNode()) && !/\d/.test(n.data));
+  if (!n) return; const m=n.data.match(/-?\d[\d,]*(?:\.\d+)?/); if (!m) return;
+  const to=parseFloat(m[0].replace(/,/g,"")); if (!isFinite(to) || !to) return;
+  const dec=(m[0].split(".")[1]||"").length, comma=m[0].includes(","), pre=n.data.slice(0,m.index), post=n.data.slice(m.index+m[0].length), fin=n.data;
+  const fmt=x=>{ let s=x.toFixed(dec); if (comma){ const [a,b]=s.split("."); s=a.replace(/\B(?=(\d{3})+(?!\d))/g,",")+(b?"."+b:""); } return pre+s+post; };
+  const D=850, t0=performance.now()+delay; n.data=fmt(0);
+  const step=t=>{ if (!n.isConnected) return; const p=Math.min(1,Math.max(0,(t-t0)/D)); if (p>=1){ n.data=fin; return; } n.data=fmt(to*(1-Math.pow(1-p,3))); requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+// Theme / style switch spreads from the button as a growing circle (where the browser supports view transitions).
+function fxTheme(btn, apply){
+  if (RM.matches || !document.startViewTransition || !btn){ apply(); return; }
+  const r=btn.getBoundingClientRect(), x=r.left+r.width/2, y=r.top+r.height/2, R=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y)), de=document.documentElement;
+  de.classList.add("fx-vt");
+  let vt; try{ vt=document.startViewTransition(apply); }catch(e){ de.classList.remove("fx-vt"); apply(); return; }
+  vt.ready.then(()=>de.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${R}px at ${x}px ${y}px)`]},{duration:620,easing:"cubic-bezier(.4,0,.2,1)",pseudoElement:"::view-transition-new(root)"})).catch(()=>{});
+  vt.finished.finally(()=>de.classList.remove("fx-vt"));
+}
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("on"),1800); }
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 function hash(s){ let h=0; for (const c of s) h=(h*31+c.codePointAt(0))>>>0; return h.toString(36); }
@@ -1114,6 +1169,7 @@ function render(){
   document.getElementById("sideInner").scrollTop = ss;
   v.style.minHeight=""; if (Math.abs(window.scrollY-wy)>1) window.scrollTo(0,wy);
   if (fid){ const el=document.getElementById(fid); if (el){ el.focus({preventScroll:true}); if (sel && "setSelectionRange" in el) try{ el.setSelectionRange(sel[0],sel[1]); }catch(e){} } }
+  fxAfterRender(v);
   if (S.tab==="home" && !render._scrolled){ render._scrolled=true; const t=document.querySelector(".day.today"), w=document.querySelector(".week"); if (t&&w) w.scrollLeft=Math.max(0,t.offsetLeft-w.offsetLeft-8); }
 }
 
@@ -2724,7 +2780,7 @@ function saveSubs(fn){ const st=clone(settings()); st.subs=fn([...(st.subs||[])]
 /* ---------- mutations ---------- */
 function dayCopy(date){ const d=clone(day(date)); d.date=date; d.items=d.items||[]; d.projects=d.projects||[]; d.review=d.review||{}; return d; }
 function listOf(d,pi){ return pi<0 ? d.items : d.projects[pi].items; }
-function setTab(t){ S.tab=t; lsSet("home.tab",t); render._scrolled=false; setSide(false); render(); window.scrollTo({top:0}); }
+function setTab(t){ FX.enter=true; S.tab=t; lsSet("home.tab",t); render._scrolled=false; setSide(false); window.scrollTo({top:0}); render(); window.scrollTo({top:0}); }
 
 document.addEventListener("submit", e=>{
   const f=e.target; e.preventDefault(); const act=f.dataset.act;
@@ -2912,8 +2968,8 @@ document.addEventListener("click", e=>{
   else if (act==="signout"){ if (window.HOME_ACCOUNT) window.HOME_ACCOUNT.signOut(); }
   else if (act==="edit"){ S.edit=!S.edit; render(); }
   else if (act==="lang"){ S.lang = S.lang==="zh"?"en":"zh"; lsSet("home.lang",S.lang); render(); }
-  else if (act==="style"){ S.style = STYLES[(STYLES.indexOf(S.style)+1)%STYLES.length]; lsSet("home.style",S.style); applyStyle(); render(); }
-  else if (act==="theme"){ S.theme = {system:"light", light:"dark", dark:"system"}[S.theme]; lsSet("home.theme",S.theme); applyTheme(); render(); }
+  else if (act==="style"){ S.style = STYLES[(STYLES.indexOf(S.style)+1)%STYLES.length]; lsSet("home.style",S.style); fxTheme(b, ()=>{ applyStyle(); render(); }); }
+  else if (act==="theme"){ S.theme = {system:"light", light:"dark", dark:"system"}[S.theme]; lsSet("home.theme",S.theme); fxTheme(b, ()=>{ applyTheme(); render(); }); }
   else if (act==="toggle-settings"){ S.showSettings=!S.showSettings; if (S.tab!=="home"){ S.showSettings=true; S.tab="home"; lsSet("home.tab","home"); } render(); if (S.showSettings){ const el=document.getElementById("s-settings"); el && el.scrollIntoView({block:"start"}); } }
   else if (act==="task-move"){ const t={...task(b.dataset.id), bucket:b.dataset.to}; save("tasks/"+t.id,t,50); render(); }
   else if (act==="task-del"){ remove("tasks/"+b.dataset.id); render(); toast(T("deleted")); }
