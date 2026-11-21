@@ -2937,10 +2937,12 @@ document.addEventListener("submit", e=>{
     if (!title || !due){ toast(T("cd_need")); (title?di:ti).focus(); return; }
     const id=uid(); save("tasks/"+id,{id,title,bucket:nagBucket(),done:false,due,cal:true,createdAt:Date.now()},50); ti.value=""; di.value=""; toast(T("cd_ok",md(due))); render(); return; }
   if (act==="task-add"){
-    const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"), title=inp.value.trim(), m=slashMode(f); if (!title && m.k!=="tb") return;
+    const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"); const sc=[[/^\[\s?\]\s+/,""],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"],[/^>\s+/,"tg"]].find(([re])=>re.test(inp.value)); if (sc){ inp.value=inp.value.replace(sc[0],""); clearSlash(f); if (sc[1]) f.dataset.mode=JSON.stringify({k:sc[1]}); }
+    const title=inp.value.trim(), m=slashMode(f); if (!title && m.k!=="tb") return;
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:due.value||today(),title,kind:m.mark},50); inp.value=""; due.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
     const id=uid(), tk={id, title:inp.value.trim()||title, bucket:m.bucket||f.dataset.bucket, done:false, due:due.value||null, createdAt:Date.now()}; if (m.k){ tk.k=m.k; tk.due=null; if (m.k==="tb") tk.rows=newRows(); } save("tasks/"+id, tk, 50); clearSlash(f);
-    inp.value=""; due.value=""; render();
+    inp.value=""; due.value=""; const bk=f.dataset.bucket, keepK=["ul","ol"].includes(m.k)?m.k:null; render();
+    if (keepK && inp.id==="add-task-"+bk) setTimeout(()=>{ const i=document.getElementById("add-task-"+bk); if (!i) return; setSlash(i.form,{k:keepK},keepK==="ol"?"1. "+T("sl_numbered"):"• "+T("sl_bullet")); i.focus(); },0);
   } else if (act==="ib-add" || act==="qc-add"){
     const inp=f.querySelector("input"), v=inp.value.trim(); if(!v) return; addIdea(v); inp.value=""; if (act==="qc-add"){ closeQc(); toast(T("ib_saved")); } render();
   } else if (act==="split-go"){
@@ -3059,6 +3061,7 @@ document.addEventListener("click", e=>{
   else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
   else if (act==="gc-allow"){ gcAllow(); }
   else if (act==="tc-day"){ S.tcDay=b.dataset.date; render(); document.getElementById("tq")?.scrollIntoView({block:"start"}); }
+  else if (act==="task-kind"){ const t0=task(b.dataset.id); if (t0){ const y={...t0}; if (b.dataset.k){ y.k=b.dataset.k; y.done=false; } else delete y.k; save("tasks/"+y.id,y,50); render(); } }
   else if (act==="dl-kind"){ dlSave(dlList().map(x=>{ if (x.id!==b.dataset.id) return x; const y={...x}; delete y.c; if (b.dataset.k==="ul") delete y.k; else y.k=b.dataset.k; return y; })); render(); }
   else if (act==="dl-del"){ dlSave(dlList().filter(x=>x.id!==b.dataset.id)); render(); }
   else if (act==="dl-move"){ const a=[...dlList()], i=a.findIndex(x=>x.id===b.dataset.id), j=i+(+b.dataset.n); if (i<0||j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; dlSave(a); render(); }
@@ -3396,6 +3399,7 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
     h+=`<div class="ctx-h">${T("cm_add_item")}</div><form class="add" data-act="dl-add"><input type="text" id="cm-dl" placeholder="${T("add_enter")}" autocomplete="off"></form>`; }
   else if (c.row==="col"){
     if (c.task){ const tk=task(c.task); if (tk) h+=btn("cm-edit",`✎ ${T("cm_edit_item", esc(tk.title))}`,`data-task="${tk.id}"`); }
+    if (c.task){ const tk=task(c.task); if (tk && tk.k!=="tb") h+=`<div class="ctx-h">${T("dl_turn")}</div>`+[["","☐ "+T("sl_todo")],["ul","• "+T("sl_bullet")],["ol","1. "+T("sl_numbered")],["tg","▸ "+T("sl_toggle")]].filter(([k])=>k!==(tk.k||"")).map(([k,l])=>btn("task-kind",l,`data-id="${tk.id}" data-k="${k}"`)).join("")+`<div class="ctx-sep"></div>`; }
     if (c.task){ const tk=task(c.task); if (tk) h+=btn("task-del",`✕ ${T("cm_del_item", esc(tk.title))}`,`data-id="${tk.id}"`); }
     if (c.id) h+=`<div class="ctx-h">${T("cm_add_item")}</div><form class="add" data-act="task-add" data-bucket="${esc(c.id)}"><input type="text" id="cm-task" placeholder="${T("add_enter")}" autocomplete="off"><input type="date" id="cm-task-due" title="${T("due_title")}"></form><div class="ctx-sep"></div>`;
     if (c.id){ const b=bucketList().find(x=>x.id===c.id); h+=btn("cm-col-del",`✕ ${T("cm_del_col", b?bName(b):"")}`,`data-id="${esc(c.id)}"`); }
