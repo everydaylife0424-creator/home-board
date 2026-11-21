@@ -892,7 +892,7 @@ const I18N = {
     wd:["日","一","二","三","四","五","六"], dow:w=>"週"+w, wd_mon_first:["一","二","三","四","五","六","日"],
     today_label:(y,m,d,w)=>`${y}/${m}/${d} 週${w}`,
     tasks_sub:"依急迫程度分類 · 可拖曳換欄",
-    empty_col:"沒有項目，拖曳或在下方新增", dl_title:"每日進度", dl_sub:p=>`每天自動放進日卡的「${p}」，勾選代表今天更新過了`, dl_empty:"還沒有每日項目，在下方新增", dl_up:"往上移", dl_down:"往下移", moved_to:n=>`已移到「${n}」`,
+    empty_col:"沒有項目，拖曳或在下方新增", dl_title:"每日進度", dl_sub:p=>`每天自動放進日卡的「${p}」，在日卡上勾選不會影響這裡。輸入 / 可選清單類型`, dl_turn:"轉換成", dl_empty:"還沒有每日項目，在下方新增", dl_up:"往上移", dl_down:"往下移", moved_to:n=>`已移到「${n}」`,
     add_enter:"＋ 新增（Enter）", due_title:"截止日（可留空）",
     show_done:(show,n)=>`${show?"隱藏":"顯示"}已完成 ${n} 項`,
     late:"過期 ", move_to:n=>`移到「${n}」`, del:"刪除", done:"完成",
@@ -1021,7 +1021,7 @@ const I18N = {
     wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], dow:w=>w, wd_mon_first:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
     today_label:(y,m,d,w)=>`${w}, ${m}/${d}/${y}`,
     tasks_sub:"Sorted by urgency · drag to move",
-    empty_col:"Nothing here. Drag a task in or add one below.", dl_title:"Daily updates", dl_sub:p=>`Added to the "${p}" section of each day card. Tick it once you've updated it today.`, dl_empty:"No daily items yet. Add one below.", dl_up:"Move up", dl_down:"Move down", moved_to:n=>`Moved to "${n}"`,
+    empty_col:"Nothing here. Drag a task in or add one below.", dl_title:"Daily updates", dl_sub:p=>`Added to the "${p}" section of each day card; ticking it there doesn't change this list. Type / to pick a list type.`, dl_turn:"Turn into", dl_empty:"No daily items yet. Add one below.", dl_up:"Move up", dl_down:"Move down", moved_to:n=>`Moved to "${n}"`,
     add_enter:"+ Add (Enter)", due_title:"Due date (optional)",
     show_done:(show,n)=>`${show?"Hide":"Show"} ${n} done`,
     late:"Late ", move_to:n=>`Move to “${n}”`, del:"Delete", done:"Done",
@@ -1339,11 +1339,14 @@ function dayCards(){ const st=settings().dayCards; if(!st || !st.list || !st.lis
   return list.slice(0,DAY_MAX); }
 function saveDayCards(list){ const st=clone(settings()); list=[...new Set(list)].sort(); if(list.length>DAY_MAX) list=list.slice(-DAY_MAX);
   st.dayCards = list.length?{list, at:today()}:null; save("settings/main",st,50); render(); }
-function viewDailyCol(){ const t=today(), L_=dlList(), k=L_.filter(x=>dlDone(t,x.id)).length;
-  return `<div class="col daily" data-daily="1"><div class="col-h"><span class="dot"></span><b>${L("dl_title")}</b><span class="n">${L_.length?`${k}/${L_.length}`:""}</span></div>
+/* the card itself is a plain list (bulleted by default, or numbered / to-do via "/"); ticking on a day card never marks it here */
+function dlKind(x){ return x.k||"ul"; }
+function viewDailyCol(){ const L_=dlList(); let n=0;
+  return `<div class="col daily" data-daily="1"><div class="col-h"><span class="dot"></span><b>${L("dl_title")}</b><span class="n">${L_.length||""}</span></div>
     <p class="sub dl-sub">${T("dl_sub",dlProj())}</p>
-    <ul class="list">${L_.map((x,i)=>`<li class="item ${dlDone(t,x.id)?"done":""}" draggable="true" data-dl="${x.id}"><input type="checkbox" data-act="dl-toggle" data-date="${t}" data-id="${x.id}" ${dlDone(t,x.id)?"checked":""} aria-label="${T("done")}"><span class="t">${esc(x.t)}</span>
-      <span class="acts"><button class="icon-btn" data-act="dl-del" data-id="${x.id}" title="${T("del")}">✕</button></span></li>`).join("")||`<li class="empty mini">${T("dl_empty")}</li>`}</ul>
+    <ul class="list">${L_.map((x,i)=>{ const k=dlKind(x); n=k==="ol"?n+1:0; const mk=k==="td"?`<input type="checkbox" data-act="dl-chk" data-id="${x.id}" ${x.c?"checked":""} aria-label="${T("done")}">`:`<span class="bul">${k==="ol"?n+".":"•"}</span>`;
+      return `<li class="item blk k-${k==="td"?"td":k} ${k==="td"&&x.c?"done":""}" draggable="true" data-dl="${x.id}">${mk}<span class="t">${esc(x.t)}</span>
+      <span class="acts"><button class="icon-btn" data-act="dl-del" data-id="${x.id}" title="${T("del")}">✕</button></span></li>`; }).join("")||`<li class="empty mini">${T("dl_empty")}</li>`}</ul>
     <form class="add" data-act="dl-add"><input type="text" id="add-dl" placeholder="${T("add_enter")}" autocomplete="off"></form></div>`; }
 function viewHome(){
   const every = allTasks().sort((a,b)=>(a.done-b.done)||((a.due||"9999")<(b.due||"9999")?-1:(a.due||"9999")>(b.due||"9999")?1:0)||(a.createdAt||0)-(b.createdAt||0));
@@ -2927,7 +2930,9 @@ function setTab(t){ FX.enter=true; S.tab=t; lsSet("home.tab",t); render._scrolle
 
 document.addEventListener("submit", e=>{
   const f=e.target; e.preventDefault(); const act=f.dataset.act;
-  if (act==="dl-add"){ const inp=f.querySelector("input"), v=inp.value.trim(); if (!v) return; dlSave([...dlList(), {id:uid(), t:v}]); inp.value=""; render(); if (inp.id==="add-dl") setTimeout(()=>document.getElementById("add-dl")?.focus(),0); else { S.cm=null; renderCm(); } return; }
+  if (act==="dl-add"){ const inp=f.querySelector("input"); const sc=[[/^\[\s?\]\s+/,"td"],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"]].find(([re])=>re.test(inp.value)); if (sc) inp.value=inp.value.replace(sc[0],"");
+    const m=slashMode(f), v=inp.value.trim(); if (!v) return; const k=sc?sc[1]:(m.k||"ul");
+    S.dlLast=k; dlSave([...dlList(), {id:uid(), t:v, ...(k!=="ul"?{k}:{})}]); inp.value=""; render(); if (inp.id==="add-dl") setTimeout(()=>{ const i=document.getElementById("add-dl"); if (!i) return; const L={ol:"1. "+T("sl_numbered"),td:"☐ "+T("sl_todo")}; if (L[S.dlLast]) setSlash(i.form,{k:S.dlLast},L[S.dlLast]); i.focus(); },0); else { S.cm=null; renderCm(); } return; }
   if (act==="cd-add"){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), title=ti.value.replace(/\s+/g," ").trim(), due=di.value;
     if (!title || !due){ toast(T("cd_need")); (title?di:ti).focus(); return; }
     const id=uid(); save("tasks/"+id,{id,title,bucket:nagBucket(),done:false,due,cal:true,createdAt:Date.now()},50); ti.value=""; di.value=""; toast(T("cd_ok",md(due))); render(); return; }
@@ -3054,6 +3059,7 @@ document.addEventListener("click", e=>{
   else if (act==="gym-log-del"){ const m=clone(gymMonth(b.dataset.month)); m.entries=m.entries.filter(e=>e.id!==b.dataset.id); save("gymlog/"+b.dataset.month,m,50); render(); }
   else if (act==="gc-allow"){ gcAllow(); }
   else if (act==="tc-day"){ S.tcDay=b.dataset.date; render(); document.getElementById("tq")?.scrollIntoView({block:"start"}); }
+  else if (act==="dl-kind"){ dlSave(dlList().map(x=>{ if (x.id!==b.dataset.id) return x; const y={...x}; delete y.c; if (b.dataset.k==="ul") delete y.k; else y.k=b.dataset.k; return y; })); render(); }
   else if (act==="dl-del"){ dlSave(dlList().filter(x=>x.id!==b.dataset.id)); render(); }
   else if (act==="dl-move"){ const a=[...dlList()], i=a.findIndex(x=>x.id===b.dataset.id), j=i+(+b.dataset.n); if (i<0||j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; dlSave(a); render(); }
   else if (act==="tc-go"){ S.tcDay=b.dataset.date; setTab("toeic"); }
@@ -3206,6 +3212,7 @@ document.addEventListener("change", e=>{
   else if (act==="tq-pick"){ const set=clone(tqSet(el.dataset.date)); if (!set || set.done) return; set.ans={...(set.ans||{}), [el.dataset.k]:+el.value}; tqSave(set); const f=document.querySelector(".tq-foot .sub"), n=tqCount(set)-Object.keys(set.ans).length; if (f) f.textContent=n?T("tq_left",n):""; }
   else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).tc){ tcSet(el.dataset.date, false); render(); }
   else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).sp){ spSet(el.dataset.date, false); render(); }
+  else if (act==="dl-chk"){ dlSave(dlList().map(x=>x.id===el.dataset.id?{...x,c:el.checked||undefined}:x)); render(); }
   else if (act==="dl-toggle"){ dlSet(el.dataset.date, el.dataset.id, el.checked); render(); }
   else if (act==="it-toggle" && !el.checked && (listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id)||{}).dl){ dlSet(el.dataset.date, listOf(dayCopy(el.dataset.date),+el.dataset.pi).find(i=>i.id===el.dataset.id).dl, false); render(); }
   else if (act==="it-toggle"){ const d=dayCopy(el.dataset.date), it=listOf(d,+el.dataset.pi).find(i=>i.id===el.dataset.id); it.d=el.checked;
@@ -3329,6 +3336,9 @@ function clearSlash(f){ delete f.dataset.mode; f.querySelector(".sl-chip")?.remo
 function setSlash(f, mode, label){ f.dataset.mode=JSON.stringify(mode); let c=f.querySelector(".sl-chip"); if(!c){ c=document.createElement("button"); c.type="button"; c.className="sl-chip"; c.title=T("sl_clear"); c.addEventListener("click",()=>{ clearSlash(f); f.querySelector("input")?.focus(); }); f.prepend(c); } c.textContent=label+" ✕"; }
 function slashCmds(f){
   const cmds=[], add=(icon,label,kw,run)=>cmds.push({icon,label,kw:(label+" "+kw).toLowerCase(),run});
+  if (f.dataset.act==="dl-add"){ add("•",T("sl_bullet"),"bulleted list bullet 項目符號 xmfh",(f)=>setSlash(f,{k:"ul"},"• "+T("sl_bullet")));
+    add("1.",T("sl_numbered"),"numbered list number 編號 bh",(f)=>setSlash(f,{k:"ol"},"1. "+T("sl_numbered")));
+    add("☐",T("sl_todo"),"todo checkbox 待辦 dd",(f)=>setSlash(f,{k:"td"},"☐ "+T("sl_todo"))); return cmds; }
   add("☐",T("sl_todo"),"todo checkbox 待辦 dd",(f)=>clearSlash(f));
   add("•",T("sl_bullet"),"bulleted list bullet 項目符號 xmfh",(f)=>setSlash(f,{k:"ul"},"• "+T("sl_bullet")));
   add("1.",T("sl_numbered"),"numbered list number 編號 bh",(f)=>setSlash(f,{k:"ol"},"1. "+T("sl_numbered")));
@@ -3343,7 +3353,7 @@ function slashRender(){
   slEl.style.left=Math.max(8,Math.min(r.left, innerWidth-w-8))+"px"; slEl.style.top=(r.bottom+h+8>innerHeight ? Math.max(8,r.top-h-4) : r.bottom+4)+"px";
   slEl.querySelector("button.on")?.scrollIntoView({block:"nearest"}); }
 function slashCheck(inp){
-  const f=inp.form; if (!f || !["it-add","task-add"].includes(f.dataset.act) || inp.type!=="text") { if (SL.inp) slashClose(); return; }
+  const f=inp.form; if (!f || !["it-add","task-add","dl-add"].includes(f.dataset.act) || inp.type!=="text") { if (SL.inp) slashClose(); return; }
   const v=inp.value.slice(0, inp.selectionStart ?? inp.value.length), m=v.match(/(^|\s)[\/／]([^\s\/／]*)$/);
   if (!m){ if (SL.inp) slashClose(); return; }
   const q=m[2].toLowerCase(), all=slashCmds(f);
@@ -3380,6 +3390,7 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
   else if (c.row==="exg"){ if (S.exClip) h+=btn("exc-paste",`⎘ ${T("exc_paste_grp", esc(S.exClip.name))}`,`data-g="${c.g}"`); }
   else if (c.row==="dl"){ const a=dlList(), i=a.findIndex(x=>x.id===c.dl), x=a[i];
     if (x){ h+=btn("cm-edit",`✎ ${T("cm_edit_item", esc(x.t))}`,`data-dl="${x.id}"`);
+      h+=`<div class="ctx-h">${T("dl_turn")}</div>`+[["ul","• "+T("sl_bullet")],["ol","1. "+T("sl_numbered")],["td","☐ "+T("sl_todo")]].filter(([k])=>k!==dlKind(x)).map(([k,l])=>btn("dl-kind",l,`data-id="${x.id}" data-k="${k}"`)).join("")+`<div class="ctx-sep"></div>`;
       if (i>0) h+=btn("dl-move",`↑ ${T("dl_up")}`,`data-id="${x.id}" data-n="-1"`); if (i<a.length-1) h+=btn("dl-move",`↓ ${T("dl_down")}`,`data-id="${x.id}" data-n="1"`);
       h+=btn("dl-del",`✕ ${T("cm_del_item", esc(x.t))}`,`data-id="${x.id}"`)+`<div class="ctx-sep"></div>`; }
     h+=`<div class="ctx-h">${T("cm_add_item")}</div><form class="add" data-act="dl-add"><input type="text" id="cm-dl" placeholder="${T("add_enter")}" autocomplete="off"></form>`; }
