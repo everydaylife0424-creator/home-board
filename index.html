@@ -765,6 +765,8 @@ header.top .hx-tools{margin-left:auto;display:flex;gap:8px;align-items:center;al
 .sk-res{max-height:55vh;overflow:auto;padding:4px 0 8px}.sk-g{padding:8px 18px 2px;font-size:11.5px;color:var(--muted)}
 .sk-i{display:flex;gap:10px;width:100%;border:0;background:none;color:var(--fg);font:inherit;font-size:14px;padding:8px 18px;text-align:left;cursor:pointer}.sk-i .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sk-i small{margin-left:auto;color:var(--muted);font:12px var(--f-mono);white-space:nowrap}
 .sk-i.on,.sk-i:hover{background:var(--accent-soft)}.sk-res .empty{padding:10px 18px}
+.tr-box{padding-bottom:6px}.tr-h{display:flex;align-items:baseline;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}.tr-h .sub{font-size:12px;color:var(--muted)}.tr-h .icon-btn{margin-left:auto}
+.tr-i{display:flex;align-items:center;gap:8px;padding:8px 18px;border-bottom:1px solid var(--line)}.tr-t{flex:1;min-width:0;display:flex;flex-direction:column}.tr-t .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tr-t small{color:var(--muted);font:12px var(--f-mono)}
 .sk-flash{animation:skf 1.4s ease}@keyframes skf{0%,40%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
 /* overview trend */
 .ov-spark{display:inline-block;vertical-align:middle;margin-left:8px}.ov-spark .ln{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-linejoin:round}.ov-spark circle{fill:var(--accent)}
@@ -819,6 +821,8 @@ const I18N = {
     chk_title:n=>`⚠ 有 ${n} 筆紀錄可能有誤`, chk_open:"展開", chk_close:"收起", chk_sets:"組×次看不懂，請寫成像 3×12", chk_no_w:"沒填重量", chk_unit:"重量沒寫單位，先當作 kg", chk_sets_big:n=>`組數 ${n} 偏多`, chk_reps_big:n=>`次數 ${n} 不太合理`, chk_zero:"組數或次數是 0", chk_w_big:n=>`重量 ${n} kg 太重了`, chk_w_zero:"重量是 0", chk_rpe:"RPE 要在 1～10 之間", chk_rest:"休息時間看不懂，請寫成像 90s 或 2m", chk_rest_big:"休息超過 15 分鐘", chk_jump:(a,b)=>`重量從上次的 ${a} 變成 ${b}，差很多`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
     pg_title:"10 週訓練計劃", pg_none:"還沒有設定訓練計劃。", pg_make:"建立 10 週計劃", pg_edit:"編輯計劃", pg_save:"儲存計劃", pg_cancel:"取消", pg_del:"刪除計劃", pg_start:"開始日", pg_weeks:"週數", pg_rest_day:"休息", pg_week:(n,m)=>`第 ${n} / ${m} 週`, pg_before:"還沒開始", pg_after:"已結束", pg_adherence:(a,b)=>`照計劃完成 ${a} / ${b} 次`, pg_range:(a,b)=>`${a} ~ ${b}`, pg_planned:"計劃", pg_missed:"沒練到",
     cmp_title:"前後比較", cmp_sub:"每個動作用估計 1RM（e1RM）比較力量，用每週總訓練量比較份量", cmp_ex:"動作", cmp_base:"起點", cmp_now:"最近", cmp_chg:"變化", cmp_none:"計劃開始後累積兩週以上紀錄，這裡就會出現比較。", cmp_wk:"每週總訓練量（kg）", cmp_how:"怎麼算：e1RM = 重量 ×（1 + (次數 + 保留次數) ÷ 30），保留次數 = 10 − RPE；起點取計劃開始前 4 週到第 2 週的最好成績，最近取最後 2 週的最好成績。",
+    tr_title:"最近刪除", tr_close:"關閉", tr_sub:"刪掉的東西會保留 30 天", tr_empty:"30 天內沒有刪除任何東西", tr_back:"還原", tr_kill:"永久刪除", tr_restored:t=>`已還原「${t}」`, tr_gone:"原本放它的地方已經不在了，沒辦法放回去", tr_exists:"這筆已經在了", tr_untitled:"（沒有標題）", tr_ago:(d,t)=>`${d} ${t} 刪除`,
+    tr_w_tasks:"待辦", tr_w_events:"月曆", tr_w_gymlog:"健身紀錄", tr_w_gym:"健身計劃", tr_w_inbox:"想法收集箱", tr_w_papers:"文獻", tr_w_toeic:"多益", tr_w_speak:"口說", tr_w_money:"記帳", tr_w_settings:"設定", tr_w_day:d=>`${d} 日卡`,
     undo:"復原", undo_done:"已復原", undo_none:"沒有可以復原的動作", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
     gym_logged:"已記錄", gym_need:"至少填組數或重量", gym_empty:"這份課表還沒有動作，先新增一個分組。", gym_none:"還沒有課表，在上方新增第一份。", gym_today_count:n=>`今天記錄了 ${n} 個動作`,
     proj_sec:"專案", cls_edit:"編輯課表", cls_done:"完成，鎖定課表", cls_saved:"課表已鎖定", cls_locked:"已鎖定，按「編輯課表」才能修改", cls_wd:d=>`週${d}`,
@@ -948,6 +952,8 @@ const I18N = {
     chk_title:n=>`⚠ ${n} entries may have mistakes`, chk_open:"Show", chk_close:"Hide", chk_sets:"Can't read sets × reps. Write it like 3×12", chk_no_w:"Weight is missing", chk_unit:"No unit on the weight, so it's treated as kg", chk_sets_big:n=>`${n} sets seems like a lot`, chk_reps_big:n=>`${n} reps looks like a typo`, chk_zero:"Sets or reps is 0", chk_w_big:n=>`${n} kg is very heavy`, chk_w_zero:"Weight is 0", chk_rpe:"RPE should be 1–10", chk_rest:"Can't read the rest time. Write it like 90s or 2m", chk_rest_big:"Rest is longer than 15 minutes", chk_jump:(a,b)=>`Weight went from ${a} to ${b}`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
     pg_title:"10-week training program", pg_none:"No program yet.", pg_make:"Create a 10-week program", pg_edit:"Edit program", pg_save:"Save program", pg_cancel:"Cancel", pg_del:"Delete program", pg_start:"Start date", pg_weeks:"Weeks", pg_rest_day:"Rest day", pg_week:(n,m)=>`Week ${n} of ${m}`, pg_before:"Not started", pg_after:"Finished", pg_adherence:(a,b)=>`${a} of ${b} planned sessions done`, pg_range:(a,b)=>`${a} – ${b}`, pg_planned:"Planned", pg_missed:"Missed",
     cmp_title:"Progress: before vs. after", cmp_sub:"Strength is compared by estimated 1RM (e1RM), volume by weekly total", cmp_ex:"Exercise", cmp_base:"Baseline", cmp_now:"Current", cmp_chg:"Change", cmp_none:"The comparison shows up here after two weeks of logging in the program.", cmp_wk:"Weekly volume (kg)", cmp_how:"How: e1RM = weight × (1 + (reps + reps in reserve) ÷ 30), reps in reserve = 10 − RPE. Start = best from 4 weeks before to week 2; latest = best of the last 2 weeks.",
+    tr_title:"Recently deleted", tr_close:"Close", tr_sub:"Deleted things are kept for 30 days", tr_empty:"Nothing deleted in the last 30 days", tr_back:"Restore", tr_kill:"Delete forever", tr_restored:t=>`Restored “${t}”`, tr_gone:"The place it lived in is gone, so it can't go back", tr_exists:"It's already there", tr_untitled:"(untitled)", tr_ago:(d,t)=>`deleted ${d} ${t}`,
+    tr_w_tasks:"Tasks", tr_w_events:"Calendar", tr_w_gymlog:"Gym log", tr_w_gym:"Workout plan", tr_w_inbox:"Idea inbox", tr_w_papers:"Papers", tr_w_toeic:"TOEIC", tr_w_speak:"Speaking", tr_w_money:"Budget", tr_w_settings:"Settings", tr_w_day:d=>`${d} day card`,
     undo:"Undo", undo_done:"Undone", undo_none:"Nothing to undo", gym_no_history:"Nothing logged yet. Log your sets after training so you can compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
     gym_logged:"Logged", gym_need:"Enter sets × reps or a weight", gym_empty:"No exercises yet. Add a group first.", gym_none:"No routines yet. Add one above.", gym_today_count:n=>`${n} exercises logged today`,
     proj_sec:"Projects", cls_edit:"Edit schedule", cls_done:"Done, lock schedule", cls_saved:"Schedule locked", cls_locked:"Locked. Press “Edit schedule” to change it", cls_wd:d=>d,
@@ -1088,6 +1094,7 @@ const ICON = {
   gear:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
   undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
   search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+  trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',
   bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
   bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
   out:'<path d="M14 5H6v14h8M10 12h10M17 9l3 3-3 3"/>',
@@ -1214,7 +1221,45 @@ function undo(){ const g=undoStack.pop(); undoGroup=null; if (!g){ toast(T("undo
   undoMute=true; try { for (const [path,before] of g.before){ if (before==null) remove(path); else save(path, before, 50); } } finally { undoMute=false; }
   render(); toast(T("undo_done")); }
 document.addEventListener("keydown", e=>{ if ((e.metaKey||e.ctrlKey) && !e.shiftKey && (e.key==="z"||e.key==="Z")){ const a=document.activeElement; if (isTyping() || (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.type!=="checkbox")) return; e.preventDefault(); undo(); } });
-function save(path, body, delay=500){ if (/^(events|tasks|days)\//.test(path)) gcSyncSoon(); recordUndo(path); pending.set(path, body); clearTimeout(timers.get(path)); timers.set(path, setTimeout(()=>flush(path), delay)); }
+/* ---------- 最近刪除: anything the user deletes is kept in trash/<id> for 30 days and can be put back ---------- */
+const TR={q:[], added:new Map(), timer:0, swept:false};
+function trOn(path){ return !undoMute && !TR.mute && performance.now()-lastUserAt<1500 && !/^(trash|weekly)\//.test(path); }
+function trWalk(o, ptr, out, par){
+  if (Array.isArray(o)) o.forEach((e,i)=>{ if (!e || typeof e!=="object") return; const key=typeof e.id==="string"?{i:e.id}:e.name!=null?{name:e.name}:{n:i};
+    const own=typeof e.id==="string" && !e.dl; if (own) out.push({id:e.id, ptr, idx:i, item:e, par}); trWalk(e,[...ptr,key],out, own?e.id:par); });
+  else if (o && typeof o==="object") for (const k of Object.keys(o)) if (o[k] && typeof o[k]==="object") trWalk(o[k],[...ptr,k],out,par); }
+function trDiff(path, before, after){ if (!before || !trOn(path)) return; const b=[], a=[]; trWalk(before,[],b,null); trWalk(after||{},[],a,null);
+  const aIds=new Set(a.map(x=>x.id)), bIds=new Set(b.map(x=>x.id)), gone=new Set(), now=Date.now();
+  a.forEach(x=>{ if (!bIds.has(x.id)) TR.added.set(x.id, now); });
+  b.forEach(x=>{ if (aIds.has(x.id)) return; gone.add(x.id); if (x.par && gone.has(x.par)) return; TR.q.push({path, ptr:x.ptr, idx:x.idx, item:clone(x.item), at:now}); });
+  trSoon(); }
+function trSoon(){ clearTimeout(TR.timer); TR.timer=setTimeout(()=>{ const now=Date.now(), q=TR.q; TR.q=[];
+  q.forEach(x=>{ if (!x.whole && TR.added.get(x.item.id)>=x.at-2000) return; /* moved somewhere else, not deleted */ const id=uid(); TR.mute=true; try{ const doc={id,...x}; save("trash/"+id,doc,50); S.trash={...(S.trash||{}), [id]:doc}; } finally { TR.mute=false; } }); if (q.length){ trDraw(); renderSide && renderSide(); }
+  for (const [k,t] of TR.added) if (now-t>10000) TR.added.delete(k); }, 1600); }
+function trLabel(x){ const it=x.item||{}; const v=it.t??it.title??it.name??it.exName??it.note??(it.amount!=null?`${it.cat||""} ${it.amount}`:null)??(Array.isArray(it.c)?it.c.filter(Boolean).join(" · "):null); return (v&&String(v).trim())||T("tr_untitled"); }
+function trWhere(x){ const [c,id]=x.path.split("/"); const m={tasks:T("tr_w_tasks"),events:T("tr_w_events"),gymlog:T("tr_w_gymlog"),gym:T("tr_w_gym"),inbox:T("tr_w_inbox"),papers:T("tr_w_papers"),toeic:T("tr_w_toeic"),speak:T("tr_w_speak"),expenses:T("tr_w_money"),settings:T("tr_w_settings")};
+  if (c==="days") return T("tr_w_day", md(id)); return m[c]||c; }
+function trList(){ return Object.values(S.trash||{}).filter(x=>x && x.path).sort((a,b)=>(b.at||0)-(a.at||0)); }
+function trRestore(id){ const x=(S.trash||{})[id]; if (!x) return; TR.mute=true;
+  try{ if (x.whole){ if (pending.get(x.path)||cachedDoc(x.path)){ toast(T("tr_exists")); } else save(x.path, x.item, 50); }
+    else { const cur=pending.get(x.path)||cachedDoc(x.path); let d=cur?clone(cur):null, o=d;
+      for (const st of x.ptr||[]){ if (o==null) break; o = typeof st==="string" ? o[st] : Array.isArray(o) ? (st.i!=null?o.find(e=>e&&e.id===st.i):st.name!=null?o.find(e=>e&&e.name===st.name):o[st.n]) : null; }
+      if (!Array.isArray(o)){ toast(T("tr_gone")); return; }
+      if (!o.some(e=>e&&e.id===x.item.id)) o.splice(Math.min(x.idx??o.length, o.length),0,x.item); save(x.path, d, 50); }
+    remove("trash/"+id); delete S.trash[id]; toast(T("tr_restored", trLabel(x))); }
+  finally { TR.mute=false; } trDraw(); render(); }
+function trSweep(){ if (TR.swept || !S.trash) return; TR.swept=true; const old=Date.now()-30*864e5; TR.mute=true; try{ trList().filter(x=>(x.at||0)<old).forEach(x=>remove("trash/"+x.id)); } finally { TR.mute=false; } }
+function trOpen(){ if (TR.el) return; const d=document.createElement("div"); d.className="sk"; d.innerHTML=`<div class="sk-box tr-box" role="dialog" aria-label="${T("tr_title")}"><div class="tr-h"><b>${T("tr_title")}</b><span class="sub">${T("tr_sub")}</span><span class="sp"></span><button class="icon-btn" data-tr="close" title="${T("tr_close")}">✕</button></div><div class="sk-res" id="trRes"></div></div>`;
+  document.body.appendChild(d); TR.el=d; trDraw();
+  d.addEventListener("pointerdown", e=>{ if (e.target===d) trClose(); });
+  d.addEventListener("click", e=>{ const b=e.target.closest("[data-tr]"); if (!b) return; const k=b.dataset.tr;
+    if (k==="close") trClose(); else if (k==="back") trRestore(b.dataset.id);
+    else if (k==="kill"){ TR.mute=true; try{ remove("trash/"+b.dataset.id); } finally { TR.mute=false; } delete S.trash[b.dataset.id]; trDraw(); } }); }
+function trDraw(){ const r=TR.el&&TR.el.querySelector("#trRes"); if (!r) return; const L_=trList();
+  r.innerHTML = L_.length ? L_.map(x=>`<div class="tr-i"><div class="tr-t"><span class="t">${esc(trLabel(x))}</span><small>${esc(trWhere(x))} · ${esc(T("tr_ago", md(new Date(x.at-new Date(x.at).getTimezoneOffset()*6e4).toISOString().slice(0,10)), new Date(x.at).toTimeString().slice(0,5)))}</small></div><button class="ghost mini" data-tr="back" data-id="${x.id}">↺ ${T("tr_back")}</button><button class="icon-btn" data-tr="kill" data-id="${x.id}" title="${T("tr_kill")}">✕</button></div>`).join("") : `<p class="empty mini">${T("tr_empty")}</p>`; }
+function trClose(){ if (TR.el){ TR.el.remove(); TR.el=null; } }
+document.addEventListener("keydown", e=>{ if (e.key==="Escape" && TR.el) trClose(); });
+function save(path, body, delay=500){ if (/^(events|tasks|days)\//.test(path)) gcSyncSoon(); if (!path.startsWith("trash/") && trOn(path)) trDiff(path, pending.has(path)?pending.get(path):cachedDoc(path), body); recordUndo(path); pending.set(path, body); clearTimeout(timers.get(path)); timers.set(path, setTimeout(()=>flush(path), delay)); }
 async function flush(path){
   if (inflight.has(path)) { timers.set(path, setTimeout(()=>flush(path), 300)); return; }
   const body = pending.get(path); if (!body || !db) return;
@@ -1233,6 +1278,7 @@ function setCache(path, body){ const [c,id]=path.split("/"); if (c==="tasks") S.
 async function remove(path){
   if (path.startsWith("events/")){ const e=cachedDoc(path)||pending.get(path); if (e&&e.gcalId){ gcQ("home.gcDel", q=>[...q,e.gcalId]); gcSyncSoon(); } }
   if (path.startsWith("tasks/")) gcSyncSoon();
+  if (trOn(path)){ const was=pending.has(path)?pending.get(path):cachedDoc(path); if (was){ TR.q.push({path, whole:true, item:clone(was), at:Date.now()}); trSoon(); } }
   recordUndo(path);
   pending.delete(path); clearTimeout(timers.get(path));
   const [c,id]=path.split("/"); if (c==="tasks") delete S.tasks[id]; if (c==="events") delete S.events[id]; if (c==="inbox") delete S.inbox[id]; if (c==="papers") delete S.papers[id]; if (c==="toeic") delete S.toeic[id]; if (c==="speak") delete S.speak[id];
@@ -1285,6 +1331,7 @@ function renderSide(){
     ${S.tab==="home" ? `<div class="grp"><span class="lbl">${L("grp_sections")}</span></div>
       ${sec("s-overview","overview",T("sec_overview"))}${sec("s-tasks","tasks",T("sec_tasks"))}${sec("s-week","week",T("sec_week"))}${sec("s-cal","cal",T("sec_cal"))}` : ""}
     <button class="navb" data-act="undo" title="⌘Z">${svg("undo")}<span class="lbl">${T("undo")}</span><span class="val lbl">⌘Z</span></button>
+    <button class="navb" data-act="tr-open">${svg("trash")}<span class="lbl">${T("tr_title")}</span><span class="val lbl">${trList().length||""}</span></button>
     <button class="navb" data-act="qc-open" title="N">${svg("bulb")}<span class="lbl">${T("ib_btn")}</span><span class="val lbl">N</span></button>
     <div class="grp"><span class="lbl">${L("grp_switch")}</span></div>
     <button class="navb" data-act="lang">${svg("lang")}<span class="lbl">${L("lang_btn")}</span></button>
@@ -3152,6 +3199,7 @@ document.addEventListener("click", e=>{
   else if (act==="ib-board"){ const x=inboxList().find(i=>i.id===b.dataset.id); if(!x) return; const id=uid(); save("tasks/"+id,{id,title:x.t,bucket:bucketList()[0].id,done:false,due:null,createdAt:Date.now()},50); remove("inbox/"+x.id); render(); toast(T("ib_moved")); }
   else if (act==="qc-open"){ openQc(); }
   else if (act==="undo"){ undo(); }
+  else if (act==="tr-open"){ trOpen(); }
   else if (act==="vol-fix"){ S.volFix = S.volFix===b.dataset.k ? null : b.dataset.k; render(); }
   else if (act==="vol-all"){ S.volAll[b.dataset.g]=!S.volAll[b.dataset.g]; render(); }
   else if (act==="chk-toggle"){ S.chkOpen=!S.chkOpen; render(); }
@@ -3656,6 +3704,7 @@ function banner(msg){ const b=document.getElementById("banner"); b.textContent=m
   db.collection("toeic").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.toeic=o; softRender(); }, ()=>{});
   db.collection("papers").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.papers=o; softRender(); }, ()=>{});
   // Claude's Monday suggestions (written by the scheduled run, read-only here)
+  db.collection("trash").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.trash=o; trSweep(); trDraw(); softRender(); }, ()=>{});
   db.collection("weekly").onSnapshot(snap=>{ const o={}; snap.docs.forEach(d=>o[d.id]=d.data()); S.weekly=o; softRender(); }, ()=>{});
   db.doc("gym/plan").onSnapshot(s=>{ S.gymPlan=s.exists?s.data():null; done("gym",s); softRender(); }, fail("gym"));
   db.doc("settings/main").onSnapshot(s=>{ S.settings=s.exists?s.data():null; S.settingsSeen=true; done("settings",s); softRender(); }, fail("settings"));
