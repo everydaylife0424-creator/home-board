@@ -767,6 +767,9 @@ header.top .hx-tools{margin-left:auto;display:flex;gap:8px;align-items:center;al
 .sk-i.on,.sk-i:hover{background:var(--accent-soft)}.sk-res .empty{padding:10px 18px}
 .sw-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;padding:10px 14px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;background:var(--surface);font-size:14px}
 .sw-i{flex-wrap:wrap}.sw-acts{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.sw-acts input[type=date]{font:12px var(--f-mono);padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--fg)}
+.pl{margin:16px 0}.pl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:8px}.pl-g .cnt{color:var(--muted);font:12px var(--f-mono)}
+.pl-rows{list-style:none;margin:6px 0 4px;padding:0}.pl-rows li{display:flex;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}.sk-res.pl .pl-rows li{padding:6px 18px}
+.pl-d{flex:0 0 auto;color:var(--muted);font:12px var(--f-mono);min-width:72px}.pl-t{flex:1;min-width:0;overflow-wrap:anywhere}.pl-ok{color:var(--accent);font-size:12px}.pl .muted{color:var(--muted)}
 .tr-box{padding-bottom:6px}.tr-h{display:flex;align-items:baseline;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}.tr-h .sub{font-size:12px;color:var(--muted)}.tr-h .icon-btn{margin-left:auto}
 .tr-i{display:flex;align-items:center;gap:8px;padding:8px 18px;border-bottom:1px solid var(--line)}.tr-t{flex:1;min-width:0;display:flex;flex-direction:column}.tr-t .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tr-t small{color:var(--muted);font:12px var(--f-mono)}
 .sk-flash{animation:skf 1.4s ease}@keyframes skf{0%,40%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
@@ -823,6 +826,7 @@ const I18N = {
     chk_title:n=>`⚠ 有 ${n} 筆紀錄可能有誤`, chk_open:"展開", chk_close:"收起", chk_sets:"組×次看不懂，請寫成像 3×12", chk_no_w:"沒填重量", chk_unit:"重量沒寫單位，先當作 kg", chk_sets_big:n=>`組數 ${n} 偏多`, chk_reps_big:n=>`次數 ${n} 不太合理`, chk_zero:"組數或次數是 0", chk_w_big:n=>`重量 ${n} kg 太重了`, chk_w_zero:"重量是 0", chk_rpe:"RPE 要在 1～10 之間", chk_rest:"休息時間看不懂，請寫成像 90s 或 2m", chk_rest_big:"休息超過 15 分鐘", chk_jump:(a,b)=>`重量從上次的 ${a} 變成 ${b}，差很多`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
     pg_title:"10 週訓練計劃", pg_none:"還沒有設定訓練計劃。", pg_make:"建立 10 週計劃", pg_edit:"編輯計劃", pg_save:"儲存計劃", pg_cancel:"取消", pg_del:"刪除計劃", pg_start:"開始日", pg_weeks:"週數", pg_rest_day:"休息", pg_week:(n,m)=>`第 ${n} / ${m} 週`, pg_before:"還沒開始", pg_after:"已結束", pg_adherence:(a,b)=>`照計劃完成 ${a} / ${b} 次`, pg_range:(a,b)=>`${a} ~ ${b}`, pg_planned:"計劃", pg_missed:"沒練到",
     cmp_title:"前後比較", cmp_sub:"每個動作用估計 1RM（e1RM）比較力量，用每週總訓練量比較份量", cmp_ex:"動作", cmp_base:"起點", cmp_now:"最近", cmp_chg:"變化", cmp_none:"計劃開始後累積兩週以上紀錄，這裡就會出現比較。", cmp_wk:"每週總訓練量（kg）", cmp_how:"怎麼算：e1RM = 重量 ×（1 + (次數 + 保留次數) ÷ 30），保留次數 = 10 − RPE；起點取計劃開始前 4 週到第 2 週的最好成績，最近取最後 2 週的最好成績。",
+    pl_title:"專案進度紀錄", pl_sub:"日卡上每天寫的進度，最近 60 天", pl_empty:"還沒有紀錄。在日卡「其他」那幾列點一下文字，寫下今天的進度，就會出現在這裡。", pl_ticked:"有更新（沒寫內容）", pl_see:"查看進度紀錄", pl_none_one:"這項還沒有寫過進度。",
     sw_bar:n=>`有 ${n} 件待辦已經過期，花一分鐘整理一下`, sw_go:"開始整理", sw_skip:"這週先不要", sw_title:"整理過期待辦", sw_sub:"每件選一個：改日期、拿掉日期、降級、完成或刪掉", sw_was:(d,b)=>`${d} 到期 · ${b}`, sw_date:"改日期", sw_nodue:"拿掉日期", sw_down:"降到不重要", sw_done:"完成", sw_moved:d=>`已改到 ${d}`, sw_clear:"都整理好了，這週不會再跳出來。",
     tr_title:"最近刪除", tr_close:"關閉", tr_sub:"刪掉的東西會保留 30 天", tr_empty:"30 天內沒有刪除任何東西", tr_back:"還原", tr_kill:"永久刪除", tr_restored:t=>`已還原「${t}」`, tr_gone:"原本放它的地方已經不在了，沒辦法放回去", tr_exists:"這筆已經在了", tr_untitled:"（沒有標題）", tr_ago:(d,t)=>`${d} ${t} 刪除`,
     tr_w_tasks:"待辦", tr_w_events:"月曆", tr_w_gymlog:"健身紀錄", tr_w_gym:"健身計劃", tr_w_inbox:"想法收集箱", tr_w_papers:"文獻", tr_w_toeic:"多益", tr_w_speak:"口說", tr_w_money:"記帳", tr_w_settings:"設定", tr_w_day:d=>`${d} 日卡`,
@@ -955,6 +959,7 @@ const I18N = {
     chk_title:n=>`⚠ ${n} entries may have mistakes`, chk_open:"Show", chk_close:"Hide", chk_sets:"Can't read sets × reps. Write it like 3×12", chk_no_w:"Weight is missing", chk_unit:"No unit on the weight, so it's treated as kg", chk_sets_big:n=>`${n} sets seems like a lot`, chk_reps_big:n=>`${n} reps looks like a typo`, chk_zero:"Sets or reps is 0", chk_w_big:n=>`${n} kg is very heavy`, chk_w_zero:"Weight is 0", chk_rpe:"RPE should be 1–10", chk_rest:"Can't read the rest time. Write it like 90s or 2m", chk_rest_big:"Rest is longer than 15 minutes", chk_jump:(a,b)=>`Weight went from ${a} to ${b}`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
     pg_title:"10-week training program", pg_none:"No program yet.", pg_make:"Create a 10-week program", pg_edit:"Edit program", pg_save:"Save program", pg_cancel:"Cancel", pg_del:"Delete program", pg_start:"Start date", pg_weeks:"Weeks", pg_rest_day:"Rest day", pg_week:(n,m)=>`Week ${n} of ${m}`, pg_before:"Not started", pg_after:"Finished", pg_adherence:(a,b)=>`${a} of ${b} planned sessions done`, pg_range:(a,b)=>`${a} – ${b}`, pg_planned:"Planned", pg_missed:"Missed",
     cmp_title:"Progress: before vs. after", cmp_sub:"Strength is compared by estimated 1RM (e1RM), volume by weekly total", cmp_ex:"Exercise", cmp_base:"Baseline", cmp_now:"Current", cmp_chg:"Change", cmp_none:"The comparison shows up here after two weeks of logging in the program.", cmp_wk:"Weekly volume (kg)", cmp_how:"How: e1RM = weight × (1 + (reps + reps in reserve) ÷ 30), reps in reserve = 10 − RPE. Start = best from 4 weeks before to week 2; latest = best of the last 2 weeks.",
+    pl_title:"Project progress log", pl_sub:"What you wrote on day cards, last 60 days", pl_empty:"Nothing yet. Click the text of a daily row on a day card and write today's progress; it shows up here.", pl_ticked:"Updated (no note)", pl_see:"See progress log", pl_none_one:"No progress written for this one yet.",
     sw_bar:n=>`${n} tasks are overdue. Take a minute to sort them out`, sw_go:"Sort them", sw_skip:"Not this week", sw_title:"Sort out overdue tasks", sw_sub:"For each one: new date, no date, move down, done or delete", sw_was:(d,b)=>`due ${d} · ${b}`, sw_date:"New date", sw_nodue:"No date", sw_down:"Move to not important", sw_done:"Done", sw_moved:d=>`Moved to ${d}`, sw_clear:"All sorted. This won't come back this week.",
     tr_title:"Recently deleted", tr_close:"Close", tr_sub:"Deleted things are kept for 30 days", tr_empty:"Nothing deleted in the last 30 days", tr_back:"Restore", tr_kill:"Delete forever", tr_restored:t=>`Restored “${t}”`, tr_gone:"The place it lived in is gone, so it can't go back", tr_exists:"It's already there", tr_untitled:"(untitled)", tr_ago:(d,t)=>`deleted ${d} ${t}`,
     tr_w_tasks:"Tasks", tr_w_events:"Calendar", tr_w_gymlog:"Gym log", tr_w_gym:"Workout plan", tr_w_inbox:"Idea inbox", tr_w_papers:"Papers", tr_w_toeic:"TOEIC", tr_w_speak:"Speaking", tr_w_money:"Budget", tr_w_settings:"Settings", tr_w_day:d=>`${d} day card`,
@@ -1951,6 +1956,23 @@ function splitDialog(){
     </form></div>`; }
 
 /* ---------- weekly review ---------- */
+/* 專案進度紀錄: what was written on day cards for each daily-list item (days/<d>.dlx or the ticked row) and each project section, newest first */
+function progLog(days=60){ const out=new Map(), from=addDays(today(),-days), dp=dlProj(), L_=dlList(), add=(key,label,e)=>{ if (!out.has(key)) out.set(key,{key,label,rows:[]}); out.get(key).rows.push(e); };
+  L_.forEach(x=>out.set("dl:"+x.id,{key:"dl:"+x.id,label:x.t,rows:[]}));
+  Object.keys(S.days).filter(d=>d>=from && d<=today()).sort().reverse().forEach(d=>{ const dd=day(d), sec=(dd.projects||[]);
+    L_.forEach(x=>{ const tick=(sec.find(p=>p.name===dp)?.items||[]).find(i=>i.dl===x.id), txt=(dd.dlx||{})[x.id] ?? tick?.t; if (txt==null) return;
+      const base=x.t.trim(), v=txt.trim(); if (v===base) { if (tick) add("dl:"+x.id,x.t,{d, t:"", done:true}); return; }
+      add("dl:"+x.id,x.t,{d, t:v.startsWith(base)?v.slice(base.length).trim():v, done:!!tick}); });
+    sec.filter(p=>p.name!==dp).forEach(p=>(p.items||[]).forEach(it=>{ if (it.k || it.dl || !it.t || !it.d) return; add("p:"+p.name,p.name,{d:it.dn||d, t:it.t, done:true}); })); });
+  return [...out.values()].filter(g=>g.rows.length).map(g=>({...g, rows:g.rows.sort((a,b)=>a.d<b.d?1:a.d>b.d?-1:0)})); }
+function progRows(g, max){ const r=max?g.rows.slice(0,max):g.rows; return `<ul class="pl-rows">${r.map(e=>`<li><span class="pl-d">${md(e.d)} ${dow(e.d)}</span><span class="pl-t">${e.t?esc(e.t):`<span class="muted">${T("pl_ticked")}</span>`}</span>${e.done?`<span class="pl-ok" title="${T("done")}">✓</span>`:""}</li>`).join("")}</ul>`; }
+function viewProgLog(){ const G=progLog(); S.plOpen=S.plOpen||{};
+  return `<div class="card pl"><div class="rc-h"><h3>${T("pl_title")}</h3><span class="sub">${T("pl_sub")}</span></div>
+    ${G.length?`<div class="pl-grid">${G.map(g=>`<div class="pl-g" id="pl-${esc(g.key.replace(/[^\w-]/g,"_"))}"><b>${esc(g.label)}</b> <span class="cnt">${g.rows.length}</span>${progRows(g, S.plOpen[g.key]?0:5)}${g.rows.length>5?`<button class="ghost mini" data-act="pl-more" data-key="${esc(g.key)}">${S.plOpen[g.key]?T("vol_less"):T("vol_more",g.rows.length)}</button>`:""}</div>`).join("")}</div>`:`<p class="empty mini">${T("pl_empty")}</p>`}</div>`; }
+function plOpenFor(key){ const g=progLog(365).find(x=>x.key===key), x=key.startsWith("dl:")&&dlList().find(i=>"dl:"+i.id===key); const d=document.createElement("div"); d.className="sk";
+  d.innerHTML=`<div class="sk-box tr-box" role="dialog" aria-label="${T("pl_title")}"><div class="tr-h"><b>${esc(g?g.label:(x?x.t:""))}</b><span class="sub">${T("pl_title")}</span><button class="icon-btn" data-pl="close" title="${T("tr_close")}">✕</button></div><div class="sk-res pl">${g?progRows(g,0):`<p class="empty mini">${T("pl_none_one")}</p>`}</div></div>`;
+  document.body.appendChild(d); const close=()=>d.remove(); d.addEventListener("pointerdown", e=>{ if (e.target===d) close(); }); d.querySelector("[data-pl=close]").addEventListener("click", close);
+  document.addEventListener("keydown", function k(e){ if (e.key==="Escape"){ close(); document.removeEventListener("keydown",k); } }); }
 function viewWeekReview(){
   const mon=S.wkRev, days7=Array.from({length:7},(_,i)=>addDays(mon,i)), sun=days7[6], t=today();
   const by=doneByDate(allTasks().filter(x=>!x.k));
@@ -1982,6 +2004,7 @@ function viewWeekReview(){
       <div class="card"><h3>${T("wk_stuck")}</h3>${top.length?`<ul class="list">${top.map(x=>`<li class="item"><span class="t">${esc(x.t)}</span><span class="src">${esc(x.src||md(x.from))}</span><span class="carry-tag">${T("wk_stuck_age",x.age)}</span></li>`).join("")}</ul>`:`<p class="empty mini">${T("wk_none_stuck")}</p>`}</div>
       <div class="card"><h4>${T("wk_reviews")}</h4>${rvs.length?rvs.map(o=>`<button class="h" data-act="rv-open" data-date="${o.d}"><div class="d">${md(o.d)} ${dow(o.d)}</div>${o.r.done?`<div class="x">✓ ${esc(o.r.done.slice(0,80))}</div>`:""}${o.r.improve?`<div class="x imp">↻ ${esc(o.r.improve.slice(0,80))}</div>`:""}</button>`).join(""):`<p class="empty mini">${T("wk_no_review")}</p>`}</div>
     </div>
+    ${viewProgLog()}
     <div class="field"><label for="wk-note">${T("wk_note")}</label><textarea id="wk-note" data-act="wk-note" data-mon="${mon}" placeholder="${T("wk_note_ph")}">${esc(note)}</textarea></div>
   </section>`; }
 
@@ -3204,6 +3227,8 @@ document.addEventListener("click", e=>{
   else if (act==="qc-open"){ openQc(); }
   else if (act==="undo"){ undo(); }
   else if (act==="tr-open"){ trOpen(); }
+  else if (act==="pl-more"){ S.plOpen=S.plOpen||{}; S.plOpen[b.dataset.key]=!S.plOpen[b.dataset.key]; render(); }
+  else if (act==="pl-open"){ plOpenFor(b.dataset.key); }
   else if (act==="sw-open"){ swOpen(); }
   else if (act==="sw-skip"){ lsSet("home.sweep", mondayOf(today())); render(); }
   else if (act==="vol-fix"){ S.volFix = S.volFix===b.dataset.k ? null : b.dataset.k; render(); }
@@ -3446,7 +3471,7 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
       h+=`<div class="ctx-sep"></div>`+btn("gym-ex-del",`✕ ${T("gym_del_ex")}`,d); } }
   else if (c.row==="exg"){ if (S.exClip) h+=btn("exc-paste",`⎘ ${T("exc_paste_grp", esc(S.exClip.name))}`,`data-g="${c.g}"`); }
   else if (c.row==="dl"){ const a=dlList(), i=a.findIndex(x=>x.id===c.dl), x=a[i];
-    if (x){ h+=btn("cm-edit",`✎ ${T("cm_edit_item", esc(x.t))}`,`data-dl="${x.id}"`);
+    if (x){ h+=btn("cm-edit",`✎ ${T("cm_edit_item", esc(x.t))}`,`data-dl="${x.id}"`)+btn("pl-open",`☰ ${T("pl_see")}`,`data-key="dl:${x.id}"`);
       h+=`<div class="ctx-h">${T("dl_turn")}</div>`+[["ul","• "+T("sl_bullet")],["ol","1. "+T("sl_numbered")],["td","☐ "+T("sl_todo")]].filter(([k])=>k!==dlKind(x)).map(([k,l])=>btn("dl-kind",l,`data-id="${x.id}" data-k="${k}"`)).join("")+`<div class="ctx-sep"></div>`;
       if (i>0) h+=btn("dl-move",`↑ ${T("dl_up")}`,`data-id="${x.id}" data-n="-1"`); if (i<a.length-1) h+=btn("dl-move",`↓ ${T("dl_down")}`,`data-id="${x.id}" data-n="1"`);
       h+=btn("dl-del",`✕ ${T("cm_del_item", esc(x.t))}`,`data-id="${x.id}"`)+`<div class="ctx-sep"></div>`; }
@@ -3462,7 +3487,7 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
     if (c.id){ const it=c.item, sec=c.sec;
       if (c.dlv){ const a=dlList(), i=a.findIndex(x=>x.id===c.dlv), x=a[i];
         if (x){ const own=(day(c.id).dlx||{})[x.id]!=null;
-          h+=btn("dl-day-edit",`✎ ${T("dl_day_edit")}`,`data-dl="${x.id}" data-date="${c.id}"`);
+          h+=btn("dl-day-edit",`✎ ${T("dl_day_edit")}`,`data-dl="${x.id}" data-date="${c.id}"`)+btn("pl-open",`☰ ${T("pl_see")}`,`data-key="dl:${x.id}"`);
           if (own) h+=btn("dl-day-reset",`↺ ${T("dl_day_reset", esc(x.t))}`,`data-dl="${x.id}" data-date="${c.id}"`);
           h+=`<div class="ctx-sep"></div><div class="ctx-h">${T("dl_all_h")}</div>`+btn("cm-edit",`✎ ${T("cm_edit_item", esc(x.t))}`,`data-dl="${x.id}" data-date="${c.id}"`);
           if (i>0) h+=btn("dl-move",`↑ ${T("dl_up")}`,`data-id="${x.id}" data-n="-1"`); if (i<a.length-1) h+=btn("dl-move",`↓ ${T("dl_down")}`,`data-id="${x.id}" data-n="1"`);
