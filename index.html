@@ -765,6 +765,8 @@ header.top .hx-tools{margin-left:auto;display:flex;gap:8px;align-items:center;al
 .sk-res{max-height:55vh;overflow:auto;padding:4px 0 8px}.sk-g{padding:8px 18px 2px;font-size:11.5px;color:var(--muted)}
 .sk-i{display:flex;gap:10px;width:100%;border:0;background:none;color:var(--fg);font:inherit;font-size:14px;padding:8px 18px;text-align:left;cursor:pointer}.sk-i .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sk-i small{margin-left:auto;color:var(--muted);font:12px var(--f-mono);white-space:nowrap}
 .sk-i.on,.sk-i:hover{background:var(--accent-soft)}.sk-res .empty{padding:10px 18px}
+.sw-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;padding:10px 14px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;background:var(--surface);font-size:14px}
+.sw-i{flex-wrap:wrap}.sw-acts{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.sw-acts input[type=date]{font:12px var(--f-mono);padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--fg)}
 .tr-box{padding-bottom:6px}.tr-h{display:flex;align-items:baseline;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}.tr-h .sub{font-size:12px;color:var(--muted)}.tr-h .icon-btn{margin-left:auto}
 .tr-i{display:flex;align-items:center;gap:8px;padding:8px 18px;border-bottom:1px solid var(--line)}.tr-t{flex:1;min-width:0;display:flex;flex-direction:column}.tr-t .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tr-t small{color:var(--muted);font:12px var(--f-mono)}
 .sk-flash{animation:skf 1.4s ease}@keyframes skf{0%,40%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
@@ -821,6 +823,7 @@ const I18N = {
     chk_title:n=>`⚠ 有 ${n} 筆紀錄可能有誤`, chk_open:"展開", chk_close:"收起", chk_sets:"組×次看不懂，請寫成像 3×12", chk_no_w:"沒填重量", chk_unit:"重量沒寫單位，先當作 kg", chk_sets_big:n=>`組數 ${n} 偏多`, chk_reps_big:n=>`次數 ${n} 不太合理`, chk_zero:"組數或次數是 0", chk_w_big:n=>`重量 ${n} kg 太重了`, chk_w_zero:"重量是 0", chk_rpe:"RPE 要在 1～10 之間", chk_rest:"休息時間看不懂，請寫成像 90s 或 2m", chk_rest_big:"休息超過 15 分鐘", chk_jump:(a,b)=>`重量從上次的 ${a} 變成 ${b}，差很多`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
     pg_title:"10 週訓練計劃", pg_none:"還沒有設定訓練計劃。", pg_make:"建立 10 週計劃", pg_edit:"編輯計劃", pg_save:"儲存計劃", pg_cancel:"取消", pg_del:"刪除計劃", pg_start:"開始日", pg_weeks:"週數", pg_rest_day:"休息", pg_week:(n,m)=>`第 ${n} / ${m} 週`, pg_before:"還沒開始", pg_after:"已結束", pg_adherence:(a,b)=>`照計劃完成 ${a} / ${b} 次`, pg_range:(a,b)=>`${a} ~ ${b}`, pg_planned:"計劃", pg_missed:"沒練到",
     cmp_title:"前後比較", cmp_sub:"每個動作用估計 1RM（e1RM）比較力量，用每週總訓練量比較份量", cmp_ex:"動作", cmp_base:"起點", cmp_now:"最近", cmp_chg:"變化", cmp_none:"計劃開始後累積兩週以上紀錄，這裡就會出現比較。", cmp_wk:"每週總訓練量（kg）", cmp_how:"怎麼算：e1RM = 重量 ×（1 + (次數 + 保留次數) ÷ 30），保留次數 = 10 − RPE；起點取計劃開始前 4 週到第 2 週的最好成績，最近取最後 2 週的最好成績。",
+    sw_bar:n=>`有 ${n} 件待辦已經過期，花一分鐘整理一下`, sw_go:"開始整理", sw_skip:"這週先不要", sw_title:"整理過期待辦", sw_sub:"每件選一個：改日期、拿掉日期、降級、完成或刪掉", sw_was:(d,b)=>`${d} 到期 · ${b}`, sw_date:"改日期", sw_nodue:"拿掉日期", sw_down:"降到不重要", sw_done:"完成", sw_moved:d=>`已改到 ${d}`, sw_clear:"都整理好了，這週不會再跳出來。",
     tr_title:"最近刪除", tr_close:"關閉", tr_sub:"刪掉的東西會保留 30 天", tr_empty:"30 天內沒有刪除任何東西", tr_back:"還原", tr_kill:"永久刪除", tr_restored:t=>`已還原「${t}」`, tr_gone:"原本放它的地方已經不在了，沒辦法放回去", tr_exists:"這筆已經在了", tr_untitled:"（沒有標題）", tr_ago:(d,t)=>`${d} ${t} 刪除`,
     tr_w_tasks:"待辦", tr_w_events:"月曆", tr_w_gymlog:"健身紀錄", tr_w_gym:"健身計劃", tr_w_inbox:"想法收集箱", tr_w_papers:"文獻", tr_w_toeic:"多益", tr_w_speak:"口說", tr_w_money:"記帳", tr_w_settings:"設定", tr_w_day:d=>`${d} 日卡`,
     undo:"復原", undo_done:"已復原", undo_none:"沒有可以復原的動作", gym_no_history:"還沒有紀錄。練完記一筆，下次就能對照。", gym_last:"上次", gym_del_ex:"刪除這個動作", gym_del_routine:"刪除課表", confirm_del:"再按一次確認刪除",
@@ -952,6 +955,7 @@ const I18N = {
     chk_title:n=>`⚠ ${n} entries may have mistakes`, chk_open:"Show", chk_close:"Hide", chk_sets:"Can't read sets × reps. Write it like 3×12", chk_no_w:"Weight is missing", chk_unit:"No unit on the weight, so it's treated as kg", chk_sets_big:n=>`${n} sets seems like a lot`, chk_reps_big:n=>`${n} reps looks like a typo`, chk_zero:"Sets or reps is 0", chk_w_big:n=>`${n} kg is very heavy`, chk_w_zero:"Weight is 0", chk_rpe:"RPE should be 1–10", chk_rest:"Can't read the rest time. Write it like 90s or 2m", chk_rest_big:"Rest is longer than 15 minutes", chk_jump:(a,b)=>`Weight went from ${a} to ${b}`, chk_where:(r,g,x,d)=>`${r} › ${g} › ${x} · ${d}`,
     pg_title:"10-week training program", pg_none:"No program yet.", pg_make:"Create a 10-week program", pg_edit:"Edit program", pg_save:"Save program", pg_cancel:"Cancel", pg_del:"Delete program", pg_start:"Start date", pg_weeks:"Weeks", pg_rest_day:"Rest day", pg_week:(n,m)=>`Week ${n} of ${m}`, pg_before:"Not started", pg_after:"Finished", pg_adherence:(a,b)=>`${a} of ${b} planned sessions done`, pg_range:(a,b)=>`${a} – ${b}`, pg_planned:"Planned", pg_missed:"Missed",
     cmp_title:"Progress: before vs. after", cmp_sub:"Strength is compared by estimated 1RM (e1RM), volume by weekly total", cmp_ex:"Exercise", cmp_base:"Baseline", cmp_now:"Current", cmp_chg:"Change", cmp_none:"The comparison shows up here after two weeks of logging in the program.", cmp_wk:"Weekly volume (kg)", cmp_how:"How: e1RM = weight × (1 + (reps + reps in reserve) ÷ 30), reps in reserve = 10 − RPE. Start = best from 4 weeks before to week 2; latest = best of the last 2 weeks.",
+    sw_bar:n=>`${n} tasks are overdue. Take a minute to sort them out`, sw_go:"Sort them", sw_skip:"Not this week", sw_title:"Sort out overdue tasks", sw_sub:"For each one: new date, no date, move down, done or delete", sw_was:(d,b)=>`due ${d} · ${b}`, sw_date:"New date", sw_nodue:"No date", sw_down:"Move to not important", sw_done:"Done", sw_moved:d=>`Moved to ${d}`, sw_clear:"All sorted. This won't come back this week.",
     tr_title:"Recently deleted", tr_close:"Close", tr_sub:"Deleted things are kept for 30 days", tr_empty:"Nothing deleted in the last 30 days", tr_back:"Restore", tr_kill:"Delete forever", tr_restored:t=>`Restored “${t}”`, tr_gone:"The place it lived in is gone, so it can't go back", tr_exists:"It's already there", tr_untitled:"(untitled)", tr_ago:(d,t)=>`deleted ${d} ${t}`,
     tr_w_tasks:"Tasks", tr_w_events:"Calendar", tr_w_gymlog:"Gym log", tr_w_gym:"Workout plan", tr_w_inbox:"Idea inbox", tr_w_papers:"Papers", tr_w_toeic:"TOEIC", tr_w_speak:"Speaking", tr_w_money:"Budget", tr_w_settings:"Settings", tr_w_day:d=>`${d} day card`,
     undo:"Undo", undo_done:"Undone", undo_none:"Nothing to undo", gym_no_history:"Nothing logged yet. Log your sets after training so you can compare next time.", gym_last:"Last", gym_del_ex:"Delete exercise", gym_del_routine:"Delete routine", confirm_del:"Click again to delete",
@@ -1423,7 +1427,7 @@ function viewHome(){
   const dw=new Date().getDay();
   const ovSec=`<section class="block" id="s-overview">${overview(tasks)}</section>`, focusSec=`<section class="block focus-row" id="s-focus">${viewTop3()}${viewInbox()}</section>`;
   /* on a phone the cards fill the first screen, so today's three comes first */
-  return `${PHONE.matches?focusSec+ovSec:ovSec}
+  return `${PHONE.matches?focusSec+ovSec:ovSec}${sweepBar()}
     ${dw===0||dw===1?`<button class="wk-ready" data-act="wk-open">${T("wk_ready")}</button>`:""}
     <section class="block today-row" id="s-today">${viewDeadlineCard()}${viewTimeline()}</section>
     ${PHONE.matches?"":focusSec}
@@ -3200,6 +3204,8 @@ document.addEventListener("click", e=>{
   else if (act==="qc-open"){ openQc(); }
   else if (act==="undo"){ undo(); }
   else if (act==="tr-open"){ trOpen(); }
+  else if (act==="sw-open"){ swOpen(); }
+  else if (act==="sw-skip"){ lsSet("home.sweep", mondayOf(today())); render(); }
   else if (act==="vol-fix"){ S.volFix = S.volFix===b.dataset.k ? null : b.dataset.k; render(); }
   else if (act==="vol-all"){ S.volAll[b.dataset.g]=!S.volAll[b.dataset.g]; render(); }
   else if (act==="chk-toggle"){ S.chkOpen=!S.chkOpen; render(); }
@@ -3574,6 +3580,30 @@ function deadlines(){ const t=today(), out=[];
   allTasks().forEach(x=>{ if (!x.k && !x.done && x.due) out.push({t:x.title, date:x.due, task:x.id}); });
   allEvents().forEach(e=>{ if (e.kind==="deadline" && e.date>=t) out.push({t:e.title, date:e.date, ev:e.id}); });
   return out.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0); }
+/* weekly sweep of overdue tasks: once a week, a bar offers a one-minute clean-up (new date / move down / done / delete) */
+function overdueTasks(){ const t=today(); return allTasks().filter(x=>!x.k && !x.done && x.due && x.due<t).sort((a,b)=>a.due<b.due?-1:1); }
+function sweepBar(){ const n=overdueTasks().length; if (!n || lsGet("home.sweep")===mondayOf(today())) return "";
+  return `<div class="sw-bar"><span>${T("sw_bar", n)}</span><span class="sp"></span><button class="primary mini" data-act="sw-open">${T("sw_go")}</button><button class="ghost mini" data-act="sw-skip">${T("sw_skip")}</button></div>`; }
+function laterBucket(){ const bl=bucketList(); return (bl.find(b=>b.id==="later")||bl[bl.length-1]).id; }
+const SW={el:null};
+function swOpen(){ if (SW.el) return; const d=document.createElement("div"); d.className="sk"; d.innerHTML=`<div class="sk-box tr-box" role="dialog" aria-label="${T("sw_title")}"><div class="tr-h"><b>${T("sw_title")}</b><span class="sub">${T("sw_sub")}</span><button class="icon-btn" data-sw="close" title="${T("tr_close")}">✕</button></div><div class="sk-res" id="swRes"></div></div>`;
+  document.body.appendChild(d); SW.el=d; swDraw();
+  d.addEventListener("pointerdown", e=>{ if (e.target===d) swClose(); });
+  d.addEventListener("change", e=>{ const i=e.target.closest("input[data-sw=date]"); if (!i || !i.value) return; const t=task(i.dataset.id); if (t){ save("tasks/"+t.id,{...t,due:i.value},50); toast(T("sw_moved", md(i.value))); swDraw(); render(); } });
+  d.addEventListener("click", e=>{ const b=e.target.closest("button[data-sw]"); if (!b) return; const k=b.dataset.sw, t=b.dataset.id&&task(b.dataset.id);
+    if (k==="close") return swClose();
+    if (!t) return;
+    if (k==="down") save("tasks/"+t.id,{...t,bucket:laterBucket(),due:null},50);
+    else if (k==="done") save("tasks/"+t.id,{...t,done:true,doneAt:Date.now()},50);
+    else if (k==="nodue") save("tasks/"+t.id,{...t,due:null},50);
+    else if (k==="del") remove("tasks/"+t.id);
+    swDraw(); render(); }); }
+function swDraw(){ const r=SW.el&&SW.el.querySelector("#swRes"); if (!r) return; const L_=overdueTasks();
+  if (!L_.length){ lsSet("home.sweep", mondayOf(today())); r.innerHTML=`<p class="empty mini">${T("sw_clear")}</p>`; return; }
+  r.innerHTML=L_.map(x=>`<div class="tr-i sw-i"><div class="tr-t"><span class="t">${esc(x.title)}</span><small>${esc(T("sw_was", md(x.due), bName(bucketList().find(b=>b.id===x.bucket)||bucketList()[0])))}</small></div>
+    <div class="sw-acts"><input type="date" data-sw="date" data-id="${x.id}" aria-label="${T("sw_date")}" title="${T("sw_date")}"><button class="ghost mini" data-sw="nodue" data-id="${x.id}">${T("sw_nodue")}</button><button class="ghost mini" data-sw="down" data-id="${x.id}">${T("sw_down")}</button><button class="ghost mini" data-sw="done" data-id="${x.id}">✓ ${T("sw_done")}</button><button class="icon-btn" data-sw="del" data-id="${x.id}" title="${T("del")}">✕</button></div></div>`).join(""); }
+function swClose(){ if (SW.el){ SW.el.remove(); SW.el=null; render(); } }
+document.addEventListener("keydown", e=>{ if (e.key==="Escape" && SW.el) swClose(); });
 function nagBucket(){ const bl=bucketList(); return (bl.find(b=>b.id==="nagging")||bl.find(b=>/如鯁/.test(b.name||""))||bl[1]||bl[0]).id; }
 // time left until the end of the due day, in words
 function cdText(ds){ const end=parse(addDays(ds,1)), ms=end-new Date(); if (ms<=0) return T("cd_over", Math.max(1,daysBetween(ds,today()))); const h=Math.floor(ms/36e5);
