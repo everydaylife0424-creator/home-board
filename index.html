@@ -732,6 +732,7 @@ input[type=checkbox]:checked{animation:tick .22s cubic-bezier(.3,.7,.4,1)}
 @media (pointer:coarse){.cd-add input{font-size:16px}}
 .cd-hint{font-size:12px;margin:2px 0 12px}.cd-hint.qk-on{color:var(--fg)}.cd-hint.qk-bad{color:var(--muted)}
 .cd-rem{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted);white-space:nowrap;cursor:pointer}.cd-rem input{margin:0}
+.qk-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--calm-soft);border-radius:8px;padding:6px 8px 6px 12px;margin:-4px 0 12px;font-size:13px}.qk-bar span{flex:1 1 140px;min-width:0}.qk-bar a.primary{text-decoration:none;display:inline-flex;align-items:center}
 .qk-sub{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;margin-top:1px}
 @media (pointer:coarse){.cd-rem{min-height:44px}.cd-rem input{width:20px;height:20px}}
 .cd-next{background:var(--fg);color:var(--bg);border-radius:10px;padding:14px 16px;margin:0 0 12px}.cd-next .sub{color:color-mix(in srgb,var(--bg) 65%,transparent);font-size:12.5px}
@@ -918,7 +919,7 @@ const I18N = {
     todo_ph:"＋ To-do", prog:n=>`${n}進度`, remove_block:"移除此區塊",
     add_proj:"＋ 專案進度", new_proj:"新增專案…", new_proj_ph:"專案名稱，Enter 確認",
     cd_title:"快速加入 · 截止倒數", cd_n:n=>`${n} 件`, cd_ph:"例：12/7 19:00 EMBA餐聚（老師生日）", cd_add:"加入", cd_hint:"直接打日期、時間和事情，括號裡是備註。會放進「如鯁在喉」、HOME 月曆和 Google 日曆（iOS 月曆會跟著出現）。",
-    qk_need_t:"還沒寫事情", qk_need_d:"找不到日期：寫 12/7、明天、下週五，或用右邊選日期", qk_note:"備註：", qk_date:"沒寫日期時用這個；有選就以這個為準", qk_rem:"也加到提醒事項", qk_rem_go:"加到 iOS 提醒事項", qk_rem_tip:"用 iPhone／Mac 的捷徑「HOME 提醒」加到提醒事項。第一次要先建好這個捷徑。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:d=>`已加到如鯁在喉和月曆（${d}）`, cd_src:"截止倒數",
+    qk_need_t:"還沒寫事情", qk_need_d:"找不到日期：寫 12/7、明天、下週五，或用右邊選日期", qk_note:"備註：", qk_date:"沒寫日期時用這個；有選就以這個為準", qk_rem:"也加到提醒事項", qk_rem_go:"加到 iOS 提醒事項", qk_added:t=>`已加入「${t}」。按右邊加到提醒事項：`, qk_rem_tip:"用 iPhone／Mac 的捷徑「HOME 提醒」加到提醒事項。第一次要先建好這個捷徑。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:d=>`已加到如鯁在喉和月曆（${d}）`, cd_src:"截止倒數",
     tl_title:"今天的時間軸", tl_sub:(a,b)=>`${a}–${b} · 課表和 Google 日曆行程，綠框是還空著的時間`, tl_cls:"課", tl_ev:"行程", tl_free:"空檔", tl_empty:"還沒有今天的課或 Google 日曆行程。在「專案設定」加課表，或連接 Google 日曆就會出現。",
     sum_left:n=>`今天還剩 ${n} 件`, sum_cls:s=>`下一堂課 ${s}`, sum_tmr:n=>`${n} 件明天截止`,
     wx_clear:"晴", wx_partly:"晴時多雲", wx_cloudy:"陰", wx_fog:"霧", wx_rain:p=>`降雨 ${p}%`, wx_snow:"雪", wx_storm:"雷雨", wx_umb:"記得帶傘", wx_src:"台北天氣（Open-Meteo）",
@@ -1052,7 +1053,7 @@ const I18N = {
     todo_ph:"+ To-do", prog:n=>`${n} progress`, remove_block:"Remove section",
     add_proj:"+ Project section", new_proj:"New project…", new_proj_ph:"Project name, press Enter",
     cd_title:"Quick add · Deadlines", cd_n:n=>`${n}`, cd_ph:"e.g. 12/7 7pm EMBA dinner (teacher's birthday)", cd_add:"Add", cd_hint:"Type a date, time and what it is; brackets become a note. Goes into 如鯁在喉, the HOME calendar and Google Calendar (so iOS Calendar too).",
-    qk_need_t:"Add what it is", qk_need_d:"No date found: write 12/7, tomorrow, next Fri, or pick one on the right", qk_note:"Note: ", qk_date:"Used when the text has no date; if picked, it wins", qk_rem:"Also add to Reminders", qk_rem_go:"Add to iOS Reminders", qk_rem_tip:"Uses the Shortcut 「HOME 提醒」 on iPhone/Mac to add a reminder. Create that Shortcut once first.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:d=>`Added to 如鯁在喉 and the calendar (${d})`, cd_src:"Deadline",
+    qk_need_t:"Add what it is", qk_need_d:"No date found: write 12/7, tomorrow, next Fri, or pick one on the right", qk_note:"Note: ", qk_date:"Used when the text has no date; if picked, it wins", qk_rem:"Also add to Reminders", qk_rem_go:"Add to iOS Reminders", qk_added:t=>`Added “${t}”. Send it to Reminders:`, qk_rem_tip:"Uses the Shortcut 「HOME 提醒」 on iPhone/Mac to add a reminder. Create that Shortcut once first.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:d=>`Added to 如鯁在喉 and the calendar (${d})`, cd_src:"Deadline",
     tl_title:"Today's timeline", tl_sub:(a,b)=>`${a}–${b} · classes and Google Calendar events; green boxes are free time`, tl_cls:"Class", tl_ev:"Events", tl_free:"Free", tl_empty:"No classes or Google events today. Add your timetable in Project settings or connect Google Calendar.",
     sum_left:n=>`${n} left today`, sum_cls:s=>`next class ${s}`, sum_tmr:n=>`${n} due tomorrow`,
     wx_clear:"Clear", wx_partly:"Partly cloudy", wx_cloudy:"Cloudy", wx_fog:"Fog", wx_rain:p=>`rain ${p}%`, wx_snow:"Snow", wx_storm:"Storms", wx_umb:"bring an umbrella", wx_src:"Taipei weather (Open-Meteo)",
@@ -3041,7 +3042,7 @@ document.addEventListener("submit", e=>{
     if (!r.title || !r.date){ toast(T(r.title?"qk_need_d":"cd_need")); (r.title?di:ti).focus(); return; }
     const id=uid(), tk={id,title:r.title,bucket:nagBucket(),done:false,due:r.date,cal:true,qk:true,createdAt:Date.now()}; if (r.time) tk.time=r.time; if (r.end) tk.end=r.end; if (r.note) tk.note=r.note;
     save("tasks/"+id,tk,50); ti.value=""; di.value=""; toast(T("cd_ok",md(r.date)+(r.time?" "+r.time:""))); render();
-    if (document.getElementById("cd-rem")?.checked) qkRemind(tk); return; }
+    clearTimeout(timers.get("tasks/"+id)); flush("tasks/"+id); S.qkLast=document.getElementById("cd-rem")?.checked ? id : null; render(); return; }
   if (act==="task-add"){
     const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"); const sc=[[/^\[\s?\]\s+/,""],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"],[/^>\s+/,"tg"]].find(([re])=>re.test(inp.value)); if (sc){ inp.value=inp.value.replace(sc[0],""); clearSlash(f); if (sc[1]) f.dataset.mode=JSON.stringify({k:sc[1]}); }
     const title=inp.value.trim(), m=slashMode(f); if (!title && m.k!=="tb") return;
@@ -3155,6 +3156,7 @@ document.addEventListener("click", e=>{
   else if (act==="gym-g-del"){ const k="g:"+b.dataset.g, n=gymPlan().routines.find(r=>r.id===S.gymR)?.groups.find(g=>g.id===b.dataset.g)?.ex.length;
     if (n && S.confirmDel!==k){ S.confirmDel=k; toast(T("confirm_del")); setTimeout(()=>{ if (S.confirmDel===k){ S.confirmDel=null; render(); } },3000); render(); }
     else { S.confirmDel=null; planEdit((pl,r)=>{ r.groups=r.groups.filter(g=>g.id!==b.dataset.g); }); } }
+  else if (act==="qk-done"){ setTimeout(()=>{ S.qkLast=null; render(); },300); }
   else if (act==="qk-rem"){ const x=task(b.dataset.id); S.cm=null; renderCm(); if (x) qkRemind(x); }
   else if (act==="cmr-edit"){ const k=b.dataset.key; setTimeout(()=>cmrEdit(k),0); }
   else if (act==="cmr-del"){ let a; try{ a=JSON.parse(b.dataset.key); }catch(_){ return; }
@@ -3677,8 +3679,10 @@ function qkRead(raw, dateIn){ const r=qkParse(raw); if (dateIn) r.date=dateIn; i
 function qkWhen(x){ return x.time ? x.time+(x.end?"–"+x.end:"") : ""; }
 /* iOS Reminders can't be written from a web page; a one-time Shortcut named 「HOME 提醒」 takes three lines (title, date time, note) and adds the reminder */
 const QK_SC="HOME 提醒";
-function qkRemind(x){ const when=(x.due||today())+" "+(x.time||"09:00"), txt=[x.title, when, x.note||""].join("\n");
-  location.href="shortcuts://run-shortcut?name="+encodeURIComponent(QK_SC)+"&input=text&text="+encodeURIComponent(txt); }
+function qkUrl(x){ const when=(x.due||today())+" "+(x.time||"09:00"), txt=[x.title, when, x.note||""].join("\n");
+  return "shortcuts://run-shortcut?name="+encodeURIComponent(QK_SC)+"&input=text&text="+encodeURIComponent(txt); }
+// a real link click: the page itself is never replaced, so nothing unsaved can be lost
+function qkRemind(x){ const a=document.createElement("a"); a.href=qkUrl(x); a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); }
 function qkPreview(){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), pv=document.getElementById("cd-pv"); if (!ti || !pv) return;
   if (!ti.value.trim()){ pv.textContent=T("cd_hint"); pv.classList.remove("qk-on","qk-bad"); return; }
   const r=qkRead(ti.value, di&&di.value); pv.classList.add("qk-on"); pv.classList.toggle("qk-bad", !r.date||!r.title);
@@ -3729,6 +3733,7 @@ function viewDeadlineCard(){ const list=deadlines(), t=today(), over=list.filter
     <form class="cd-add" data-act="cd-add"><input type="text" id="cd-t" placeholder="${T("cd_ph")}" autocomplete="off" aria-label="${T("cd_ph")}"><input type="date" id="cd-d" aria-label="${T("due_title")}" title="${T("qk_date")}"><button class="primary mini" type="submit">${T("cd_add")}</button>
       <label class="cd-rem" title="${esc(T("qk_rem_tip"))}"><input type="checkbox" id="cd-rem" ${lsGet("home.qkRem")==="1"?"checked":""}> ${T("qk_rem")}</label></form>
     <p class="sub cd-hint" id="cd-pv" aria-live="polite">${T("cd_hint")}</p>
+    ${S.qkLast&&task(S.qkLast)?`<div class="qk-bar"><span>${T("qk_added", esc(task(S.qkLast).title))}</span><a class="primary mini" href="${esc(qkUrl(task(S.qkLast)))}" data-act="qk-done">⏰ ${T("qk_rem_go")}</a><button class="icon-btn" data-act="qk-done" title="${T("tr_close")}">✕</button></div>`:""}
     ${up.length?`<ul class="list cd-list">${up.slice(0,6).map(row).join("")}</ul>`:`<p class="empty mini">${T("cd_empty")}</p>`}
     ${over.length?`<details class="cd-over"><summary>⚠ ${T("nf_over",over.length)}</summary><ul class="list cd-list">${over.map(row).join("")}</ul></details>`:""}
   </div>`; }
