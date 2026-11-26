@@ -728,9 +728,12 @@ input[type=checkbox]:checked{animation:tick .22s cubic-bezier(.3,.7,.4,1)}
 .today-row{display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:16px;align-items:start}
 @media (max-width:1000px){.today-row{grid-template-columns:1fr}}
 .cd-card h2,.tl-card h2{font-size:17px}
-.cd-add{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0 2px}.cd-add input[type=text]{flex:1 1 160px;min-width:0}.cd-add input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--surface);color:var(--fg)}
+.cd-add{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0 2px}.cd-add input[type=text]{flex:1 1 100%;min-width:0}.cd-add input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--surface);color:var(--fg)}
 @media (pointer:coarse){.cd-add input{font-size:16px}}
-.cd-hint{font-size:12px;margin:2px 0 12px}
+.cd-hint{font-size:12px;margin:2px 0 12px}.cd-hint.qk-on{color:var(--fg)}.cd-hint.qk-bad{color:var(--muted)}
+.cd-rem{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted);white-space:nowrap;cursor:pointer}.cd-rem input{margin:0}
+.qk-sub{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;margin-top:1px}
+@media (pointer:coarse){.cd-rem{min-height:44px}.cd-rem input{width:20px;height:20px}}
 .cd-next{background:var(--fg);color:var(--bg);border-radius:10px;padding:14px 16px;margin:0 0 12px}.cd-next .sub{color:color-mix(in srgb,var(--bg) 65%,transparent);font-size:12.5px}
 .cd-next.over{background:var(--hot)}.cd-big{font:500 22px/1.3 var(--f-mono)}.cd-tt{display:flex;gap:8px;align-items:center;margin:6px 0 2px;font-size:15px}.cd-tt input{width:18px;height:18px;accent-color:var(--bg)}
 .cd-over{margin-top:10px;font-size:13px}.cd-over summary{cursor:pointer;color:var(--hot);padding:4px 0}
@@ -914,7 +917,8 @@ const I18N = {
     carry_from:d=>`從 ${d} 延續`,
     todo_ph:"＋ To-do", prog:n=>`${n}進度`, remove_block:"移除此區塊",
     add_proj:"＋ 專案進度", new_proj:"新增專案…", new_proj_ph:"專案名稱，Enter 確認",
-    cd_title:"截止倒數", cd_n:n=>`${n} 件`, cd_ph:"事件，例：社群網路期末報告", cd_add:"加入", cd_hint:"會放進「如鯁在喉」和月曆。做完後，月曆上會從截止日移到你完成的那天。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:d=>`已加到如鯁在喉和月曆（${d}）`, cd_src:"截止倒數",
+    cd_title:"快速加入 · 截止倒數", cd_n:n=>`${n} 件`, cd_ph:"例：12/7 19:00 EMBA餐聚（老師生日）", cd_add:"加入", cd_hint:"直接打日期、時間和事情，括號裡是備註。會放進「如鯁在喉」、HOME 月曆和 Google 日曆（iOS 月曆會跟著出現）。",
+    qk_need_t:"還沒寫事情", qk_need_d:"找不到日期：寫 12/7、明天、下週五，或用右邊選日期", qk_note:"備註：", qk_date:"沒寫日期時用這個；有選就以這個為準", qk_rem:"也加到提醒事項", qk_rem_go:"加到 iOS 提醒事項", qk_rem_tip:"用 iPhone／Mac 的捷徑「HOME 提醒」加到提醒事項。第一次要先建好這個捷徑。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:d=>`已加到如鯁在喉和月曆（${d}）`, cd_src:"截止倒數",
     tl_title:"今天的時間軸", tl_sub:(a,b)=>`${a}–${b} · 課表和 Google 日曆行程，綠框是還空著的時間`, tl_cls:"課", tl_ev:"行程", tl_free:"空檔", tl_empty:"還沒有今天的課或 Google 日曆行程。在「專案設定」加課表，或連接 Google 日曆就會出現。",
     sum_left:n=>`今天還剩 ${n} 件`, sum_cls:s=>`下一堂課 ${s}`, sum_tmr:n=>`${n} 件明天截止`,
     wx_clear:"晴", wx_partly:"晴時多雲", wx_cloudy:"陰", wx_fog:"霧", wx_rain:p=>`降雨 ${p}%`, wx_snow:"雪", wx_storm:"雷雨", wx_umb:"記得帶傘", wx_src:"台北天氣（Open-Meteo）",
@@ -1047,7 +1051,8 @@ const I18N = {
     carry_from:d=>`Carried from ${d}`,
     todo_ph:"+ To-do", prog:n=>`${n} progress`, remove_block:"Remove section",
     add_proj:"+ Project section", new_proj:"New project…", new_proj_ph:"Project name, press Enter",
-    cd_title:"Deadlines", cd_n:n=>`${n}`, cd_ph:"Event, e.g. final report", cd_add:"Add", cd_hint:"Goes into 如鯁在喉 and the calendar. Once done, it moves on the calendar from the deadline to the day you finished.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:d=>`Added to 如鯁在喉 and the calendar (${d})`, cd_src:"Deadline",
+    cd_title:"Quick add · Deadlines", cd_n:n=>`${n}`, cd_ph:"e.g. 12/7 7pm EMBA dinner (teacher's birthday)", cd_add:"Add", cd_hint:"Type a date, time and what it is; brackets become a note. Goes into 如鯁在喉, the HOME calendar and Google Calendar (so iOS Calendar too).",
+    qk_need_t:"Add what it is", qk_need_d:"No date found: write 12/7, tomorrow, next Fri, or pick one on the right", qk_note:"Note: ", qk_date:"Used when the text has no date; if picked, it wins", qk_rem:"Also add to Reminders", qk_rem_go:"Add to iOS Reminders", qk_rem_tip:"Uses the Shortcut 「HOME 提醒」 on iPhone/Mac to add a reminder. Create that Shortcut once first.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:d=>`Added to 如鯁在喉 and the calendar (${d})`, cd_src:"Deadline",
     tl_title:"Today's timeline", tl_sub:(a,b)=>`${a}–${b} · classes and Google Calendar events; green boxes are free time`, tl_cls:"Class", tl_ev:"Events", tl_free:"Free", tl_empty:"No classes or Google events today. Add your timetable in Project settings or connect Google Calendar.",
     sum_left:n=>`${n} left today`, sum_cls:s=>`next class ${s}`, sum_tmr:n=>`${n} due tomorrow`,
     wx_clear:"Clear", wx_partly:"Partly cloudy", wx_cloudy:"Cloudy", wx_fog:"Fog", wx_rain:p=>`rain ${p}%`, wx_snow:"Snow", wx_storm:"Storms", wx_umb:"bring an umbrella", wx_src:"Taipei weather (Open-Meteo)",
@@ -1362,10 +1367,10 @@ side.addEventListener("click", e=>{ if (!matchMedia("(hover:hover)").matches && 
 document.addEventListener("pointerdown", e=>{ if (side.classList.contains("open") && !side.contains(e.target) && e.target.id!=="menuBtn" && !e.target.closest("#menuBtn")) setSide(false); });
 
 /* ---------- HOME ---------- */
-function dueBadge(due){
+function dueBadge(due, time){
   if (!due) return "";
   const diff=(parse(due)-parse(today()))/864e5;
-  return `<span class="due ${diff<=2?"soon":""}" title="${esc(due)}">${diff<0?T("late"):""}${md(due)}</span>`;
+  return `<span class="due ${diff<=2?"soon":""}" title="${esc(due)}">${diff<0?T("late"):""}${md(due)}${time?" "+time:""}</span>`;
 }
 /* ---------- cards: which ones show, kept in settings/main ---------- */
 /* daily list: settings.dailyList [{id,t}] shows up every day (today onward) in the 其他 section of the day card; ticking it writes a real item {dl:id} */
@@ -1414,7 +1419,7 @@ function viewHome(){
     const nums=olNums(open), moveBtns=t=>bl.filter(b=>b.id!==bk).map(b=>`<button class="icon-btn" data-act="task-move" data-id="${t.id}" data-to="${b.id}" title="${esc(T("move_to",bName(b)))}">${b.name?esc("→"+b.name.slice(0,2)):T("mv_"+b.id)}</button>`).join("");
     const li = (t,i) => t.k ? blkLi(t,{task:t.id},nums[i],`<span class="acts">${moveBtns(t)}<button class="icon-btn" data-act="task-del" data-id="${t.id}" title="${T("del")}">✕</button></span>`,`draggable="true" data-task="${t.id}"`) : `<li class="item ${t.done?"done":""}" draggable="true" data-task="${t.id}">
         <input type="checkbox" ${t.done?"checked":""} data-act="task-toggle" data-id="${t.id}" aria-label="${T("done")}">
-        <span class="t">${esc(t.title)}</span>${dueBadge(t.due)}
+        <span class="t">${esc(t.title)}${t.note?`<small class="qk-sub">${esc(t.note)}</small>`:""}</span>${dueBadge(t.due, t.time)}
         <span class="acts">${t.done?"":pinBtn({task:t.id})}${t.due&&!t.done?`<button class="icon-btn" data-act="split-open" data-id="${t.id}" title="${T("sp_btn")}">✂</button>`:""}
           ${bl.filter(b=>b.id!==bk).map(b=>`<button class="icon-btn" data-act="task-move" data-id="${t.id}" data-to="${b.id}" title="${esc(T("move_to",bName(b)))}">${b.name?esc("→"+b.name.slice(0,2)):T("mv_"+b.id)}</button>`).join("")}
           <button class="icon-btn" data-act="task-del" data-id="${t.id}" title="${T("del")}">✕</button>
@@ -2195,7 +2200,7 @@ function doneByDate(tasks){
 function marksByDate(tasks){
   const by={}; const push=(ds,x)=>(by[ds]=by[ds]||[]).push(x);
   allEvents().forEach(e=>push(e.date, {t:e.title, kind:e.kind, id:e.id, gid:e.gcalId, drag:{k:"ev",id:e.id}}));
-  (tasks||[]).forEach(x=>{ if (x.cal && x.due && !x.done) push(x.due, {t:x.title, kind:"deadline", task:x.id}); });
+  (tasks||[]).forEach(x=>{ if (x.cal && x.due && !x.done) push(x.due, {t:(x.time?x.time+" ":"")+x.title, kind:x.qk?"event":"deadline", task:x.id}); });
   return by;
 }
 const dragAttr = d => `draggable="true" data-drag="${esc(JSON.stringify(d))}"`;
@@ -2260,8 +2265,9 @@ async function gcSync(){
 function gcTodoId(key){ let a=0x811c9dc5, b=0x01000193^0x5bd1e995; for (let i=0;i<key.length;i++){ const c=key.charCodeAt(i); a=Math.imul(a^c,16777619)>>>0; b=Math.imul(b^c,2246822519)>>>0; } return "hbt"+a.toString(16).padStart(8,"0")+b.toString(16).padStart(8,"0"); }
 function gcTodoWant(){
   const t=today(), from=addDays(t,-14), to=addDays(t,60), out={};
-  const put=(key,date,title,done)=>{ if (!title||!date||date<from||date>to) return; out[key]={date, s:(done?"✓ ":"☐ ")+title}; };
-  allTasks().forEach(x=>{ if (!x.k && x.due) put("t:"+x.id, x.due, x.title, !!x.done); });
+  const put=(key,date,title,done,q)=>{ if (!title||!date||date<from||date>to) return; out[key]={date, s:(done?"✓ ":q?"★ ":"☐ ")+title, ...(q?{q}:{})}; };
+  // quick-add events go with their time, note and alerts (1 day + 1 hour before; all-day: 9:00 the day before)
+  allTasks().forEach(x=>{ if (!x.k && x.due) put("t:"+x.id, x.due, x.title, !!x.done, x.qk ? {time:x.time||"", end:x.end||"", note:x.note||""} : null); });
   allDayKeys().forEach(ds=>{ if (ds<from || ds>to) return; const d=day(ds);
     const one=(it,proj)=>{ if (it.k || !it.id || !(it.t||"").trim()) return; const when = it.d ? (it.dn||ds) : (ds<t ? t : ds); put("d:"+ds+":"+it.id, when, (proj?proj+"：":"")+it.t.trim(), !!it.d); };
     (d.items||[]).forEach(it=>one(it,null)); (d.projects||[]).forEach(p=>(p.items||[]).forEach(it=>one(it,p.name))); });
@@ -2272,8 +2278,10 @@ async function gcTodoSync(m){
   const want=gcTodoWant(), from=addDays(today(),-14); let n=0;
   try{
     for (const [key,w] of Object.entries(want)){
-      const sig=w.date+"|"+w.s+"|q"; if (sent[key] && sent[key].sig===sig) continue;
+      const q=w.q, sig=w.date+"|"+w.s+"|q"+(q?"|"+q.time+"|"+q.end+"|"+q.note:""); if (sent[key] && sent[key].sig===sig) continue;
       const id=gcTodoId(key), input={summary:w.s, allDay:true, startTime:w.date+"T00:00:00", endTime:addDays(w.date,1)+"T00:00:00", description:"HOME 待辦", quiet:true};
+      if (q){ input.description=(q.note?q.note+"\n\n":"")+"HOME"; if (!/^✓/.test(w.s)){ delete input.quiet; input.alerts=q.time?[1440,60]:[900]; }
+        if (q.time){ const e=q.end&&q.end>q.time ? q.end : hm(Math.min(toMin(q.time)+60, 1439)); Object.assign(input,{allDay:false, startTime:w.date+"T"+q.time+":00", endTime:w.date+"T"+e+":00"}); } }
       try{ await m.callTool(GC,"update_event",{...input, eventId:id, status:"confirmed"}); }
       catch(x){ if (x.code!=="gone") throw x;
         try{ await m.callTool(GC,"create_event",{...input, id}); }
@@ -2480,7 +2488,9 @@ function glN(v){ return Math.max(3,[...String(v||"")].reduce((n,c)=>n+(/[\u2e80-
 const itFind=a=>{ const d=day(a.date); const L_=+a.pi<0?(d.items||[]):((d.projects||[])[+a.pi]?.items||[]); return L_.find(i=>i.id===a.id); };
 const itEdit=(a,fn)=>{ const d=dayCopy(a.date), L_=+a.pi<0?d.items:(d.projects[+a.pi]||{}).items; if (!L_) return; const i=L_.findIndex(x=>x.id===a.id); if (i<0) return; fn(L_,i); save("days/"+a.date,d,100); };
 const CMR={
-  task:{get:a=>task(a.id)?.title, set:(a,v)=>{ const t=task(a.id); if (t) save("tasks/"+t.id,{...t,title:v},50); }, del:a=>remove("tasks/"+a.id)},
+  task:{get:a=>{ const t=task(a.id); return t&&t.qk ? qkPhrase(t) : t?.title; }, set:(a,v)=>{ const t=task(a.id); if (!t) return;
+    if (!t.qk) return save("tasks/"+t.id,{...t,title:v},50);
+    const r=qkParse(v), n={...t, title:r.title||t.title, due:r.date||t.due}; delete n.time; delete n.end; delete n.note; if (r.time) n.time=r.time; if (r.end) n.end=r.end; if (r.note) n.note=r.note; save("tasks/"+t.id,n,50); }, del:a=>remove("tasks/"+a.id)},
   it:{get:a=>itFind(a)?.t, set:(a,v)=>itEdit(a,(L_,i)=>{ L_[i]={...L_[i],t:v}; }), del:a=>itEdit(a,(L_,i)=>{ L_.splice(i,1); })},
   routine:{get:a=>gymPlan().routines.find(r=>r.id===a.id)?.name, set:(a,v)=>{ const pl=clone(gymPlan()), r=pl.routines.find(r=>r.id===a.id); if (r){ r.name=v; savePlan(pl); } }},
   group:{get:a=>gymPlan().routines.find(r=>r.id===S.gymR)?.groups.find(g=>g.id===a.id)?.name, set:(a,v)=>planEdit((pl,r)=>{ const g=r.groups.find(g=>g.id===a.id); if (g) g.name=v; }), del:a=>planEdit((pl,r)=>{ r.groups=r.groups.filter(g=>g.id!==a.id); })},
@@ -3027,9 +3037,11 @@ document.addEventListener("submit", e=>{
   if (act==="dl-add"){ const inp=f.querySelector("input"); const sc=[[/^\[\s?\]\s+/,"td"],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"]].find(([re])=>re.test(inp.value)); if (sc) inp.value=inp.value.replace(sc[0],"");
     const m=slashMode(f), v=inp.value.trim(); if (!v) return; const k=sc?sc[1]:(m.k||"ul");
     S.dlLast=k; dlSave([...dlList(), {id:uid(), t:v, ...(k!=="ul"?{k}:{})}]); inp.value=""; render(); if (inp.id==="add-dl") setTimeout(()=>{ const i=document.getElementById("add-dl"); if (!i) return; const L={ol:"1. "+T("sl_numbered"),td:"☐ "+T("sl_todo")}; if (L[S.dlLast]) setSlash(i.form,{k:S.dlLast},L[S.dlLast]); i.focus(); },0); else { S.cm=null; renderCm(); } return; }
-  if (act==="cd-add"){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), title=ti.value.replace(/\s+/g," ").trim(), due=di.value;
-    if (!title || !due){ toast(T("cd_need")); (title?di:ti).focus(); return; }
-    const id=uid(); save("tasks/"+id,{id,title,bucket:nagBucket(),done:false,due,cal:true,createdAt:Date.now()},50); ti.value=""; di.value=""; toast(T("cd_ok",md(due))); render(); return; }
+  if (act==="cd-add"){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), r=qkRead(ti.value, di.value);
+    if (!r.title || !r.date){ toast(T(r.title?"qk_need_d":"cd_need")); (r.title?di:ti).focus(); return; }
+    const id=uid(), tk={id,title:r.title,bucket:nagBucket(),done:false,due:r.date,cal:true,qk:true,createdAt:Date.now()}; if (r.time) tk.time=r.time; if (r.end) tk.end=r.end; if (r.note) tk.note=r.note;
+    save("tasks/"+id,tk,50); ti.value=""; di.value=""; toast(T("cd_ok",md(r.date)+(r.time?" "+r.time:""))); render();
+    if (document.getElementById("cd-rem")?.checked) qkRemind(tk); return; }
   if (act==="task-add"){
     const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"); const sc=[[/^\[\s?\]\s+/,""],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"],[/^>\s+/,"tg"]].find(([re])=>re.test(inp.value)); if (sc){ inp.value=inp.value.replace(sc[0],""); clearSlash(f); if (sc[1]) f.dataset.mode=JSON.stringify({k:sc[1]}); }
     const title=inp.value.trim(), m=slashMode(f); if (!title && m.k!=="tb") return;
@@ -3143,6 +3155,7 @@ document.addEventListener("click", e=>{
   else if (act==="gym-g-del"){ const k="g:"+b.dataset.g, n=gymPlan().routines.find(r=>r.id===S.gymR)?.groups.find(g=>g.id===b.dataset.g)?.ex.length;
     if (n && S.confirmDel!==k){ S.confirmDel=k; toast(T("confirm_del")); setTimeout(()=>{ if (S.confirmDel===k){ S.confirmDel=null; render(); } },3000); render(); }
     else { S.confirmDel=null; planEdit((pl,r)=>{ r.groups=r.groups.filter(g=>g.id!==b.dataset.g); }); } }
+  else if (act==="qk-rem"){ const x=task(b.dataset.id); S.cm=null; renderCm(); if (x) qkRemind(x); }
   else if (act==="cmr-edit"){ const k=b.dataset.key; setTimeout(()=>cmrEdit(k),0); }
   else if (act==="cmr-del"){ let a; try{ a=JSON.parse(b.dataset.key); }catch(_){ return; }
     if (((a.k==="group" && gymPlan().routines.find(r=>r.id===S.gymR)?.groups.find(g=>g.id===a.id)?.ex.length) || a.k==="vol") && S.confirmDel!=="cm:"+b.dataset.key){ const keep=S.cm; S.confirmDel="cm:"+b.dataset.key; setTimeout(()=>{ S.cm=keep; renderCm(); },10); return; }
@@ -3485,6 +3498,7 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
     if (settings().ovCards) h+=btn("cm-ov-reset",T("cm_reset")); }
   else if (c.row==="cmr"){ const t=c.title?`「${esc(c.title.length>18?c.title.slice(0,18)+"…":c.title)}」`:"";
     if (CMR[c.k].set) h+=btn("cmr-edit",`✎ ${T("cmr_edit")}${t}`,`data-key="${esc(c.key)}"`);
+    if (c.k==="task"){ let a={}; try{ a=JSON.parse(c.key); }catch(_){} const x=task(a.id); if (x && x.due && !x.done) h+=btn("qk-rem",`⏰ ${T("qk_rem_go")}`,`data-id="${esc(x.id)}"`); }
     if (c.k==="group" && S.exClip){ let a={}; try{ a=JSON.parse(c.key); }catch(_){} h+=btn("exc-paste",`⎘ ${T("exc_paste_grp", esc(S.exClip.name))}`,`data-g="${esc(a.id||"")}"`); }
     if (CMR[c.k].del) h+=btn("cmr-del",S.confirmDel==="cm:"+c.key?`✕ ${T("confirm_del")}${t}`:`✕ ${T("del")}${t}`,`data-key="${esc(c.key)}"`); }
   else if (c.row==="ex"){ const r=gymPlan().routines.find(x=>x.id===S.gymR), x=r&&r.groups.find(g=>g.id===c.g)?.ex.find(x=>x.id===c.xid);
@@ -3633,6 +3647,45 @@ document.addEventListener("dblclick", e=>{ if (S.edit || !e.target.closest || e.
   const live=document.body.contains(t) ? t : (ref.task ? document.querySelector(`li[data-task="${ref.task}"] .t`) : ref.dl ? document.querySelector(`li[data-dl="${ref.dl}"] .t`) : document.querySelector(`[data-act="it-del"][data-date="${ref.date}"][data-pi="${ref.pi}"][data-id="${ref.id}"]`)?.closest("li")?.querySelector(".t"));
   if (live) startInlineEdit(live, ref); });
 document.addEventListener("dblclick", e=>{ const el=e.target.closest&&e.target.closest("[data-cmr]"); if (!el || S.edit) return; let a; try{ a=JSON.parse(el.dataset.cmr); }catch(_){ return; } if (!CMR[a.k] || !CMR[a.k].set) return; e.preventDefault(); getSelection()?.removeAllRanges(); cmrEdit(el.dataset.cmr, cmrSame(el.dataset.cmr).indexOf(el)); });
+/* ---------- quick add: "12/7 18:30 EMBA餐聚（老師生日）" → date, time, title, note ---------- */
+const QK_WD="日一二三四五六", QK_PM=/^(下午|晚上|傍晚|中午|pm)$/i;
+function qkParse(raw, t0){
+  const z=n=>String(n).padStart(2,"0"), base=t0||today(), b=parse(base); let s=" "+String(raw||"").replace(/\s+/g," ")+" ", date=null, time=null, end=null; const notes=[];
+  s=s.replace(/[（(]([^）)]*)[）)]/g,(m,x)=>{ x=x.trim(); if (!x || /^(週|周|星期|禮拜)?[一二三四五六日天]$|^(mon|tue|wed|thu|fri|sat|sun)\w*\.?$/i.test(x)) return " "; notes.push(x); return " "; });
+  const ok=(y,m,d)=>{ const dt=new Date(y,m-1,d); return dt.getMonth()===m-1 && dt.getDate()===d ? ymd(dt) : null; };
+  const take=(re,f)=>{ if (date) return; const m=s.match(re); if (!m) return; const v=f(m); if (v){ date=v; s=s.replace(m[0]," "); } };
+  take(/(\d{4})\s*[\/\-.年]\s*(\d{1,2})\s*[\/\-.月]\s*(\d{1,2})\s*[日號号]?/, m=>ok(+m[1],+m[2],+m[3]));
+  take(/(?<![\d:：])(\d{1,2})\s*(?:\/|月)\s*(\d{1,2})(?![\d:：])\s*[日號号]?/, m=>{ let v=ok(b.getFullYear(),+m[1],+m[2]); if (v && v<addDays(base,-7)) v=ok(b.getFullYear()+1,+m[1],+m[2]); return v; });
+  take(/(大後天|後天|后天|明天|明日|今天|今日|今晚|tomorrow|today|tonight)/i, m=>{ const w=m[1].toLowerCase(); return addDays(base, /大後/.test(w)?3:/後|后/.test(w)?2:/明|tomorrow/.test(w)?1:0); });
+  take(/(下下|下個?|這個?|这个?|本)?\s*(?:週|周|星期|禮拜|礼拜)([一二三四五六日天])/, m=>{ const wd=m[2]==="天"?0:QK_WD.indexOf(m[2]), cur=b.getDay(), mon=(cur+6)%7;
+    const off=(wd+6)%7-mon; if (!m[1]) return addDays(base, off>=0?off:off+7); const wk=/下下/.test(m[1])?2:/下/.test(m[1])?1:0; return addDays(base, off+7*wk); });
+  if (/今晚|tonight/i.test(raw||"")) time="19:00";
+  const T1=/(上午|早上|中午|下午|晚上|傍晚|凌晨)?\s*(\d{1,2})\s*(?:[:：](\d{2})|[點点時](半|(\d{1,2})\s*分?)?)\s*(am|pm)?/i, T2=/(\d{1,2})(?:[:：](\d{2}))?\s*(am|pm)/i;
+  const hhmm=(ap,h,mi,ap2)=>{ h=+h; mi=+mi||0; const a=ap||ap2||""; if (QK_PM.test(a) && h<12 && !(a==="中午" && h>=11)) h+=12; if (/^(凌晨|am)$/i.test(a) && h===12) h=0; if (!a && h>=1 && h<=6) h+=12; return h<24&&mi<60 ? z(h)+":"+z(mi) : null; };
+  let m=s.match(T1), mm=m&&hhmm(m[1],m[2],m[3]||(m[4]==="半"?30:m[5]),m[6]);
+  if (!mm){ m=s.match(T2); mm=m&&hhmm(null,m[1],m[2],m[3]); }
+  if (mm){ time=mm; const at=s.indexOf(m[0]), rest=s.slice(at+m[0].length), r=rest.match(/^\s*(?:-|~|～|–|—|到|至)\s*/);
+    if (r){ const r2=rest.slice(r[0].length), n=r2.match(new RegExp("^"+T1.source,"i")), nn=n&&hhmm(n[1]||(QK_PM.test(m[1]||"")&&+n[2]<12?m[1]:null),n[2],n[3]||(n[4]==="半"?30:n[5]),n[6]);
+      if (nn){ end=nn; s=s.slice(0,at)+" "+r2.slice(n[0].length); } else s=s.slice(0,at)+" "+rest; } else s=s.slice(0,at)+" "+rest; }
+  const title=s.replace(/\s+/g," ").replace(/^[\s,，、:：\-–—]+|[\s,，、:：\-–—]+$/g,"").trim();
+  return {title, note:notes.join("；"), date, time, end};
+}
+// back to one line, for editing in place
+function qkPhrase(x){ return [x.due?md(x.due):"", x.time?(x.time+(x.end?"-"+x.end:"")):"", (x.title||"")+(x.note?"（"+x.note+"）":"")].filter(Boolean).join(" "); }
+// time-only means today
+function qkRead(raw, dateIn){ const r=qkParse(raw); if (dateIn) r.date=dateIn; if (!r.date && r.time) r.date=today(); return r; }
+function qkWhen(x){ return x.time ? x.time+(x.end?"–"+x.end:"") : ""; }
+/* iOS Reminders can't be written from a web page; a one-time Shortcut named 「HOME 提醒」 takes three lines (title, date time, note) and adds the reminder */
+const QK_SC="HOME 提醒";
+function qkRemind(x){ const when=(x.due||today())+" "+(x.time||"09:00"), txt=[x.title, when, x.note||""].join("\n");
+  location.href="shortcuts://run-shortcut?name="+encodeURIComponent(QK_SC)+"&input=text&text="+encodeURIComponent(txt); }
+function qkPreview(){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), pv=document.getElementById("cd-pv"); if (!ti || !pv) return;
+  if (!ti.value.trim()){ pv.textContent=T("cd_hint"); pv.classList.remove("qk-on","qk-bad"); return; }
+  const r=qkRead(ti.value, di&&di.value); pv.classList.add("qk-on"); pv.classList.toggle("qk-bad", !r.date||!r.title);
+  pv.textContent = !r.title ? T("qk_need_t") : !r.date ? T("qk_need_d") : "→ "+[md(r.date)+" "+dow(r.date)+(r.time?" "+qkWhen(r):""), r.title, r.note?T("qk_note")+r.note:""].filter(Boolean).join(" · "); }
+document.addEventListener("input", e=>{ if (e.target.id==="cd-t" || e.target.id==="cd-d") qkPreview(); });
+document.addEventListener("change", e=>{ if (e.target.id==="cd-d") qkPreview(); if (e.target.id==="cd-rem") lsSet("home.qkRem", e.target.checked?"1":"0"); });
+
 /* ---------- deadlines: quick add (→ 如鯁在喉 + calendar), countdown card ---------- */
 // open board tasks with a due date + ⚑ deadline marks; overdue ones first
 function deadlines(){ const t=today(), out=[];
@@ -3669,12 +3722,14 @@ function cdText(ds){ const end=parse(addDays(ds,1)), ms=end-new Date(); if (ms<=
   if (ds===today()) return T("cd_today", h); const d=daysBetween(today(),ds); return d<=2 ? T("cd_dh", d, h-d*24) : T("cd_d", d); }
 function viewDeadlineCard(){ const list=deadlines(), t=today(), over=list.filter(x=>x.date<t), up=list.filter(x=>x.date>=t), nx=up[0], rest=up.slice(1,5);
   const cmr=x=>x.task?` data-cmr="${esc(JSON.stringify({k:"task",id:x.task}))}"`:x.ev?` data-cmr="${esc(JSON.stringify({k:"ev",id:x.ev}))}"`:"";
-  const row=x=>`<li class="item"><span class="cd-dt">${md(x.date)} ${dow(x.date)}</span><span class="t"${cmr(x)}>${esc(x.t)}</span><span class="cd-n ${x.date<t?"over":""}" data-cd="${x.date}">${cdText(x.date)}</span></li>`;
+  const tk=x=>x.task&&task(x.task), sub=x=>{ const k=tk(x); return k&&(k.time||k.note) ? `<small class="qk-sub">${esc([qkWhen(k), k.note||""].filter(Boolean).join(" · "))}</small>` : ""; };
+  const row=x=>`<li class="item"><span class="cd-dt">${md(x.date)} ${dow(x.date)}</span><span class="t"${cmr(x)}>${esc(x.t)}${sub(x)}</span><span class="cd-n ${x.date<t?"over":""}" data-cd="${x.date}">${cdText(x.date)}</span></li>`;
   return `<div class="card cd-card">
     <div class="sec-h"><h2>${L("cd_title")}</h2><span class="sub">${list.length?T("cd_n",list.length):""}</span></div>
-    <form class="cd-add" data-act="cd-add"><input type="text" id="cd-t" placeholder="${T("cd_ph")}" autocomplete="off" aria-label="${T("cd_ph")}"><input type="date" id="cd-d" aria-label="${T("due_title")}" min="${t}"><button class="primary mini" type="submit">${T("cd_add")}</button></form>
-    <p class="sub cd-hint">${T("cd_hint")}</p>
-    ${nx?`<div class="cd-next ${nx.date<t?"over":""}"><div class="cd-big" data-cd="${nx.date}">${cdText(nx.date)}</div><div class="cd-tt">${nx.task?`<input type="checkbox" data-act="task-toggle" data-id="${nx.task}" aria-label="${T("done")}">`:""}<b${cmr(nx)}>${esc(nx.t)}</b></div><div class="sub">${md(nx.date)} ${dow(nx.date)}${nx.ev?" · ⚑ "+T("k_deadline"):""}</div></div>
+    <form class="cd-add" data-act="cd-add"><input type="text" id="cd-t" placeholder="${T("cd_ph")}" autocomplete="off" aria-label="${T("cd_ph")}"><input type="date" id="cd-d" aria-label="${T("due_title")}" title="${T("qk_date")}"><button class="primary mini" type="submit">${T("cd_add")}</button>
+      <label class="cd-rem" title="${esc(T("qk_rem_tip"))}"><input type="checkbox" id="cd-rem" ${lsGet("home.qkRem")==="1"?"checked":""}> ${T("qk_rem")}</label></form>
+    <p class="sub cd-hint" id="cd-pv" aria-live="polite">${T("cd_hint")}</p>
+    ${nx?`<div class="cd-next ${nx.date<t?"over":""}"><div class="cd-big" data-cd="${nx.date}">${cdText(nx.date)}</div><div class="cd-tt">${nx.task?`<input type="checkbox" data-act="task-toggle" data-id="${nx.task}" aria-label="${T("done")}">`:""}<b${cmr(nx)}>${esc(nx.t)}</b></div><div class="sub">${md(nx.date)} ${dow(nx.date)}${tk(nx)?.time?" "+qkWhen(tk(nx)):""}${tk(nx)?.note?" · "+esc(tk(nx).note):""}${nx.ev?" · ⚑ "+T("k_deadline"):""}</div></div>
       ${rest.length?`<h4>${T("cd_then")}</h4><ul class="list cd-list">${rest.map(row).join("")}</ul>`:""}`:`<p class="empty mini">${T("cd_empty")}</p>`}
     ${over.length?`<details class="cd-over"><summary>⚠ ${T("nf_over",over.length)}</summary><ul class="list cd-list">${over.map(row).join("")}</ul></details>`:""}
   </div>`; }

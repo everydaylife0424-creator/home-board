@@ -155,8 +155,11 @@ async function gcFetch(path, opt = {}) {
   return j;
 }
 const enc = encodeURIComponent, cal = id => "/calendars/" + enc(id || "primary");
-function evBody(i) { return { ...(i.id ? { id: i.id } : {}), ...(i.status ? { status: i.status } : {}), ...(i.quiet ? { reminders: { useDefault: false, overrides: [] } } : {}), summary: i.summary, description: i.description || "HOME",
-  start: i.allDay ? { date: i.startTime.slice(0, 10) } : { dateTime: i.startTime }, end: i.allDay ? { date: i.endTime.slice(0, 10) } : { dateTime: i.endTime } }; }
+function evBody(i) { return { ...(i.id ? { id: i.id } : {}), ...(i.status ? { status: i.status } : {}), ...(i.quiet ? { reminders: { useDefault: false, overrides: [] } } : i.alerts ? { reminders: { useDefault: false, overrides: i.alerts.map(minutes => ({ method: "popup", minutes })) } } : {}), summary: i.summary, description: i.description || "HOME",
+  start: i.allDay ? { date: i.startTime.slice(0, 10) } : { dateTime: withTz(i.startTime) }, end: i.allDay ? { date: i.endTime.slice(0, 10) } : { dateTime: withTz(i.endTime) } }; }
+// a PATCH merges start/end, so clear the other kind when an event switches between all-day and timed
+function patchBody(i) { const b = evBody(i); for (const k of ["start", "end"]) b[k] = i.allDay ? { ...b[k], dateTime: null } : { ...b[k], date: null }; return b; }
+const withTz = t => /([+-]\d\d:\d\d|Z)$/.test(t) ? t : t + tz;
 const tz = (() => { const o = -new Date().getTimezoneOffset(), a = Math.abs(o); return (o >= 0 ? "+" : "-") + String(Math.floor(a / 60)).padStart(2, "0") + ":" + String(a % 60).padStart(2, "0"); })();
 const TOOLS = {
   async list_events(i) {
@@ -165,7 +168,7 @@ const TOOLS = {
     const j = await gcFetch(cal(i.calendarId) + "/events?" + q); return { events: j.items || [] };
   },
   async create_event(i) { return await gcFetch(cal(i.calendarId) + "/events", { method: "POST", body: JSON.stringify(evBody(i)) }); },
-  async update_event(i) { return await gcFetch(cal(i.calendarId) + "/events/" + enc(i.eventId), { method: "PATCH", body: JSON.stringify(evBody(i)) }); },
+  async update_event(i) { return await gcFetch(cal(i.calendarId) + "/events/" + enc(i.eventId), { method: "PATCH", body: JSON.stringify(patchBody(i)) }); },
   async delete_event(i) { return await gcFetch(cal(i.calendarId) + "/events/" + enc(i.eventId), { method: "DELETE" }); },
 };
 const watchers = new Set();
