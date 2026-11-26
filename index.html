@@ -738,7 +738,7 @@ input[type=checkbox]:checked{animation:tick .22s cubic-bezier(.3,.7,.4,1)}
 .cd-next.over{background:var(--hot)}.cd-big{font:500 22px/1.3 var(--f-mono)}.cd-tt{display:flex;gap:8px;align-items:center;margin:6px 0 2px;font-size:15px}.cd-tt input{width:18px;height:18px;accent-color:var(--bg)}
 .cd-over{margin-top:10px;font-size:13px}.cd-over summary{cursor:pointer;color:var(--hot);padding:4px 0}
 .cd-card h4{font-size:12.5px;color:var(--muted);font-weight:500;margin:0 0 4px}
-.cd-list .item{gap:10px}.cd-dt{font:12px var(--f-mono);color:var(--muted);white-space:nowrap}.cd-n{margin-left:auto;font:12px var(--f-mono);white-space:nowrap;color:var(--muted)}.cd-n.over{color:var(--hot)}
+.cd-list .item{gap:10px}.cd-dt{font:12px var(--f-mono);color:var(--muted);white-space:nowrap;min-width:6.4em}.cd-n{margin-left:auto;font:12px var(--f-mono);white-space:nowrap;color:var(--muted)}.cd-n.over{color:var(--hot)}
 .tl{position:relative;margin-top:8px}.tl-hrs,.tl-lane{display:grid;grid-template-columns:44px 1fr;align-items:center}
 .tl-hrs .tl-track{height:18px}.tl-hrs span{position:absolute;transform:translateX(-50%);font:11px var(--f-mono);color:var(--muted);top:0}
 .tl-lane{height:36px;border-top:1px dashed var(--line)}.tl-lane b{font-size:12px;font-weight:500;color:var(--muted)}
@@ -3720,17 +3720,16 @@ function nagBucket(){ const bl=bucketList(); return (bl.find(b=>b.id==="nagging"
 // time left until the end of the due day, in words
 function cdText(ds){ const end=parse(addDays(ds,1)), ms=end-new Date(); if (ms<=0) return T("cd_over", Math.max(1,daysBetween(ds,today()))); const h=Math.floor(ms/36e5);
   if (ds===today()) return T("cd_today", h); const d=daysBetween(today(),ds); return d<=2 ? T("cd_dh", d, h-d*24) : T("cd_d", d); }
-function viewDeadlineCard(){ const list=deadlines(), t=today(), over=list.filter(x=>x.date<t), up=list.filter(x=>x.date>=t), nx=up[0], rest=up.slice(1,5);
+function viewDeadlineCard(){ const list=deadlines(), t=today(), over=list.filter(x=>x.date<t), up=list.filter(x=>x.date>=t);
   const cmr=x=>x.task?` data-cmr="${esc(JSON.stringify({k:"task",id:x.task}))}"`:x.ev?` data-cmr="${esc(JSON.stringify({k:"ev",id:x.ev}))}"`:"";
   const tk=x=>x.task&&task(x.task), sub=x=>{ const k=tk(x); return k&&(k.time||k.note) ? `<small class="qk-sub">${esc([qkWhen(k), k.note||""].filter(Boolean).join(" · "))}</small>` : ""; };
-  const row=x=>`<li class="item"><span class="cd-dt">${md(x.date)} ${dow(x.date)}</span><span class="t"${cmr(x)}>${esc(x.t)}${sub(x)}</span><span class="cd-n ${x.date<t?"over":""}" data-cd="${x.date}">${cdText(x.date)}</span></li>`;
+  const row=x=>`<li class="item">${x.task?`<input type="checkbox" data-act="task-toggle" data-id="${x.task}" aria-label="${T("done")}">`:""}<span class="cd-dt">${md(x.date)} ${dow(x.date)}</span><span class="t"${cmr(x)}>${esc(x.t)}${sub(x)}</span><span class="cd-n ${x.date<t?"over":""}" data-cd="${x.date}">${cdText(x.date)}</span></li>`;
   return `<div class="card cd-card">
     <div class="sec-h"><h2>${L("cd_title")}</h2><span class="sub">${list.length?T("cd_n",list.length):""}</span></div>
     <form class="cd-add" data-act="cd-add"><input type="text" id="cd-t" placeholder="${T("cd_ph")}" autocomplete="off" aria-label="${T("cd_ph")}"><input type="date" id="cd-d" aria-label="${T("due_title")}" title="${T("qk_date")}"><button class="primary mini" type="submit">${T("cd_add")}</button>
       <label class="cd-rem" title="${esc(T("qk_rem_tip"))}"><input type="checkbox" id="cd-rem" ${lsGet("home.qkRem")==="1"?"checked":""}> ${T("qk_rem")}</label></form>
     <p class="sub cd-hint" id="cd-pv" aria-live="polite">${T("cd_hint")}</p>
-    ${nx?`<div class="cd-next ${nx.date<t?"over":""}"><div class="cd-big" data-cd="${nx.date}">${cdText(nx.date)}</div><div class="cd-tt">${nx.task?`<input type="checkbox" data-act="task-toggle" data-id="${nx.task}" aria-label="${T("done")}">`:""}<b${cmr(nx)}>${esc(nx.t)}</b></div><div class="sub">${md(nx.date)} ${dow(nx.date)}${tk(nx)?.time?" "+qkWhen(tk(nx)):""}${tk(nx)?.note?" · "+esc(tk(nx).note):""}${nx.ev?" · ⚑ "+T("k_deadline"):""}</div></div>
-      ${rest.length?`<h4>${T("cd_then")}</h4><ul class="list cd-list">${rest.map(row).join("")}</ul>`:""}`:`<p class="empty mini">${T("cd_empty")}</p>`}
+    ${up.length?`<ul class="list cd-list">${up.slice(0,6).map(row).join("")}</ul>`:`<p class="empty mini">${T("cd_empty")}</p>`}
     ${over.length?`<details class="cd-over"><summary>⚠ ${T("nf_over",over.length)}</summary><ul class="list cd-list">${over.map(row).join("")}</ul></details>`:""}
   </div>`; }
 
