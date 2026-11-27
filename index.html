@@ -1405,9 +1405,9 @@ function saveDayCards(list){ const st=clone(settings()); list=[...new Set(list)]
 /* the card itself is a plain list (bulleted by default, or numbered / to-do via "/"); ticking on a day card never marks it here */
 function dlKind(x){ return x.k||"ul"; }
 function viewDailyCol(){ const L_=dlList(); let n=0;
-  return `<div class="col daily" data-daily="1"><div class="col-h"><span class="dot"></span><b>${L("dl_title")}</b><span class="n">${L_.length||""}</span></div>
+  return `<div class="col daily" data-daily="1"><div class="col-h"><span class="dot"></span><b>${L("dl_title")}</b><span class="n">${L_.filter(x=>x.k!=="hr").length||""}</span></div>
     <p class="sub dl-sub">${T("dl_sub",dlProj())}</p>
-    <ul class="list">${L_.map((x,i)=>{ const k=dlKind(x); n=k==="ol"?n+1:0; const mk=k==="td"?`<input type="checkbox" data-act="dl-chk" data-id="${x.id}" ${x.c?"checked":""} aria-label="${T("done")}">`:`<span class="bul">${k==="ol"?n+".":"•"}</span>`;
+    <ul class="list">${L_.map((x,i)=>{ const k=dlKind(x); if (k==="hr"){ n=0; return `<li class="item blk k-hr" draggable="true" data-dl="${x.id}"><hr><span class="acts"><button class="icon-btn" data-act="dl-del" data-id="${x.id}" title="${T("del")}">✕</button></span></li>`; } n=k==="ol"?n+1:0; const mk=k==="td"?`<input type="checkbox" data-act="dl-chk" data-id="${x.id}" ${x.c?"checked":""} aria-label="${T("done")}">`:`<span class="bul">${k==="ol"?n+".":"•"}</span>`;
       return `<li class="item blk k-${k==="td"?"td":k} ${k==="td"&&x.c?"done":""}" draggable="true" data-dl="${x.id}">${mk}<span class="t">${esc(x.t)}</span>
       <span class="acts"><button class="icon-btn" data-act="dl-del" data-id="${x.id}" title="${T("del")}">✕</button></span></li>`; }).join("")||`<li class="empty mini">${T("dl_empty")}</li>`}</ul>
     <form class="add" data-act="dl-add"><input type="text" id="add-dl" placeholder="${T("add_enter")}" autocomplete="off"></form></div>`; }
@@ -2094,6 +2094,7 @@ function weekTips(mon){
 /* list blocks (bulleted / numbered / toggle) shared by day cards and the task board */
 function blkLi(x, ref, n, acts, extra=""){
   const txt=esc(x.t ?? x.title ?? ""), data=`data-blk="${esc(JSON.stringify(ref))}"`;
+  if (x.k==="hr") return `<li class="item blk k-hr" ${data} ${extra}><hr>${acts}</li>`;
   if (x.k==="tg") return `<li class="item blk k-tg" ${data} ${extra}><details ${x.o?"open":""} data-tg><summary><span class="tw">▸</span><span class="t">${txt}</span>${acts}</summary>
       <ul class="tg-kids">${(x.kids||[]).map(c=>`<li><span class="t">${esc(c.t)}</span><button class="icon-btn" data-act="kid-del" data-kid="${c.id}" title="${T("del")}">✕</button></li>`).join("")}</ul>
       <form class="add tg-add" data-act="kid-add"><input type="text" id="kid-${x.id}" placeholder="${T("sl_kid_ph")}" autocomplete="off"></form></details></li>`;
@@ -2156,7 +2157,7 @@ function viewWeek(){
     const secs=(d.projects||[]).map((p,pi)=>({name:p.name,pi,p}));
     const names=new Set(secs.map(s=>s.name));
     if (date>=t) pins.forEach(n=>{ if(!names.has(n)){ names.add(n); secs.push({name:n,pi:null}); } });
-    const dls=date>=t?dlList():[]; if (dls.length && !names.has(dlProj())){ names.add(dlProj()); secs.push({name:dlProj(),pi:null}); }
+    const dls=date>=t?dlList().filter(x=>x.k!=="hr"):[]; if (dls.length && !names.has(dlProj())){ names.add(dlProj()); secs.push({name:dlProj(),pi:null}); }
     myCar.forEach(c=>{ if(c.proj && !names.has(c.proj)){ names.add(c.proj); secs.push({name:c.proj,pi:null}); } });
     const projs=secs.map(s=>{
       const own=s.p?s.p.items:[], extra=myCar.filter(c=>c.proj===s.name), vdl=s.name===dlProj()?dls.filter(x=>!own.some(i=>i.dl===x.id)):[];
@@ -3033,9 +3034,15 @@ function dayCopy(date){ const d=clone(day(date)); d.date=date; d.items=d.items||
 function listOf(d,pi){ return pi<0 ? d.items : d.projects[pi].items; }
 function setTab(t){ FX.enter=true; S.tab=t; lsSet("home.tab",t); render._scrolled=false; setSide(false); window.scrollTo({top:0}); render(); window.scrollTo({top:0}); }
 
+// "---" + Enter on its own line makes a divider
+const QK_HR=/^\s*(-{3,}|—{2,}|_{3,})\s*$/;
+/* Enter that only confirms an IME candidate (Chinese/Japanese input) must not also submit or finish the edit.
+   Safari sends that Enter after compositionend with isComposing=false but keyCode 229, so check both and a short window after composition ends. */
+let imeEnd=0; window.addEventListener("compositionend", ()=>{ imeEnd=performance.now(); }, true);
+window.addEventListener("keydown", e=>{ if (e.key!=="Enter" && e.keyCode!==229) return; if (e.key==="Enter" && (e.isComposing || e.keyCode===229 || performance.now()-imeEnd<80)){ e.stopImmediatePropagation(); if (!e.isComposing) e.preventDefault(); } }, true);
 document.addEventListener("submit", e=>{
   const f=e.target; e.preventDefault(); const act=f.dataset.act;
-  if (act==="dl-add"){ const inp=f.querySelector("input"); const sc=[[/^\[\s?\]\s+/,"td"],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"]].find(([re])=>re.test(inp.value)); if (sc) inp.value=inp.value.replace(sc[0],"");
+  if (act==="dl-add"){ const inp=f.querySelector("input"); if (QK_HR.test(inp.value)){ dlSave([...dlList(), {id:uid(), t:"", k:"hr"}]); inp.value=""; clearSlash(f); render(); setTimeout(()=>document.getElementById(inp.id)?.focus(),0); return; } const sc=[[/^\[\s?\]\s+/,"td"],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"]].find(([re])=>re.test(inp.value)); if (sc) inp.value=inp.value.replace(sc[0],"");
     const m=slashMode(f), v=inp.value.trim(); if (!v) return; const k=sc?sc[1]:(m.k||"ul");
     S.dlLast=k; dlSave([...dlList(), {id:uid(), t:v, ...(k!=="ul"?{k}:{})}]); inp.value=""; render(); if (inp.id==="add-dl") setTimeout(()=>{ const i=document.getElementById("add-dl"); if (!i) return; const L={ol:"1. "+T("sl_numbered"),td:"☐ "+T("sl_todo")}; if (L[S.dlLast]) setSlash(i.form,{k:S.dlLast},L[S.dlLast]); i.focus(); },0); else { S.cm=null; renderCm(); } return; }
   if (act==="cd-add"){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), r=qkRead(ti.value, di.value);
@@ -3044,7 +3051,8 @@ document.addEventListener("submit", e=>{
     save("tasks/"+id,tk,50); ti.value=""; di.value=""; toast(T("cd_ok",md(r.date)+(r.time?" "+r.time:""))); render();
     clearTimeout(timers.get("tasks/"+id)); flush("tasks/"+id); S.qkLast=document.getElementById("cd-rem")?.checked ? id : null; render(); return; }
   if (act==="task-add"){
-    const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]"); const sc=[[/^\[\s?\]\s+/,""],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"],[/^>\s+/,"tg"]].find(([re])=>re.test(inp.value)); if (sc){ inp.value=inp.value.replace(sc[0],""); clearSlash(f); if (sc[1]) f.dataset.mode=JSON.stringify({k:sc[1]}); }
+    const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]");
+    if (QK_HR.test(inp.value)){ const id=uid(); save("tasks/"+id,{id,title:"",k:"hr",bucket:f.dataset.bucket,done:false,due:null,createdAt:Date.now()},50); inp.value=""; clearSlash(f); render(); setTimeout(()=>document.getElementById(inp.id)?.focus(),0); return; } const sc=[[/^\[\s?\]\s+/,""],[/^[-*•]\s+/,"ul"],[/^\d+[.)]\s+/,"ol"],[/^>\s+/,"tg"]].find(([re])=>re.test(inp.value)); if (sc){ inp.value=inp.value.replace(sc[0],""); clearSlash(f); if (sc[1]) f.dataset.mode=JSON.stringify({k:sc[1]}); }
     const title=inp.value.trim(), m=slashMode(f); if (!title && m.k!=="tb") return;
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:due.value||today(),title,kind:m.mark},50); inp.value=""; due.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
     const id=uid(), tk={id, title:inp.value.trim()||title, bucket:m.bucket||f.dataset.bucket, done:false, due:due.value||null, createdAt:Date.now()}; if (m.k){ tk.k=m.k; tk.due=null; if (m.k==="tb") tk.rows=newRows(); } save("tasks/"+id, tk, 50); clearSlash(f);
@@ -3067,12 +3075,12 @@ document.addEventListener("submit", e=>{
     blkEdit(ref, x=>{ x.kids=[...(x.kids||[]), {id:uid(), t:v}]; x.o=true; });
   } else if (act==="cm-sec-ren"){ const to=(f.querySelector("input").value||"").trim(); S.cm=null; renameProject(f.dataset.name, to); render();
   } else if (act==="it-add"){
-    const inp=f.querySelector("input"), t=inp.value.trim(), m=slashMode(f); if (!t && m.k!=="hr" && m.k!=="tb") return;
+    const inp=f.querySelector("input"), isHr=QK_HR.test(inp.value), t=isHr?"":inp.value.trim(), m=isHr?{k:"hr"}:slashMode(f); if (!t && m.k!=="hr" && m.k!=="tb") return;
     if (m.mark){ const id=uid(); save("events/"+id,{id,date:m.date||f.dataset.date,title:t,kind:m.mark},50); inp.value=""; clearSlash(f); render(); toast(T("sl_marked")); return; }
     if (m.bucket){ const id=uid(); save("tasks/"+id,{id,title:t,bucket:m.bucket,done:false,due:f.dataset.date,createdAt:Date.now()},50); inp.value=""; clearSlash(f); render(); toast(T("sl_to_board")); return; }
     const d=dayCopy(m.date||f.dataset.date), name=f.dataset.proj; let list=d.items;
     if (name){ let p=d.projects.find(x=>x.name===name); if(!p){ p={name,open:true,items:[]}; d.projects.push(p); } list=p.items; }
-    const it={id:uid(), t:inp.value.trim()||t, d:false}; if (m.k) it.k=m.k; if (m.k==="tb") it.rows=newRows(); list.push(it); save("days/"+d.date, d, 300); inp.value=""; if (m.date) toast(T("sl_added_to", md(m.date))); clearSlash(f); render();
+    const it={id:uid(), t:isHr?"":(inp.value.trim()||t), d:false}; if (m.k) it.k=m.k; if (m.k==="tb") it.rows=newRows(); list.push(it); save("days/"+d.date, d, 300); inp.value=""; if (m.date) toast(T("sl_added_to", md(m.date))); clearSlash(f); render();
   } else if (act==="tc-setup"){
     const date=document.getElementById("tc-date").value; if (!date) return; const st=clone(settings()), o=st.toeic||{};
     st.toeic={...o, date, base:+document.getElementById("tc-base").value||null, target:+document.getElementById("tc-target").value||950, regFrom:document.getElementById("tc-reg-from").value||null, regTo:document.getElementById("tc-reg-to").value||null, start:o.start||today()}; S.tcEdit=false; save("settings/main",st,50); render();
