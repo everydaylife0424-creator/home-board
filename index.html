@@ -928,7 +928,7 @@ const I18N = {
     todo_ph:"＋ To-do", prog:n=>`${n}進度`, remove_block:"移除此區塊",
     add_proj:"＋ 專案進度", new_proj:"新增專案…", new_proj_ph:"專案名稱，Enter 確認",
     cd_title:"快速加入 · 截止倒數", cd_n:n=>`${n} 件`, cd_ph:"例：12/7 19:00 EMBA餐聚（老師生日）", cd_add:"加入", cd_hint:"直接打日期、時間和事情，括號裡是備註。十天內的放進「超級逼人」，其他放進「如鯁在喉」，也會加到 HOME 月曆和 Google 日曆（iOS 月曆會跟著出現）。",
-    qk_need_t:"還沒寫事情", qk_need_d:"找不到日期：寫 12/7、明天、下週五，或用右邊選日期", qk_note:"備註：", qk_date:"沒寫日期時用這個；有選就以這個為準", qk_rem:"也加到提醒事項", qk_rem_go:"加到 iOS 提醒事項", qk_added:t=>`已加入「${t}」。按右邊加到提醒事項：`, qk_rem_tip:"用 iPhone／Mac 的捷徑「HOME 提醒」加到提醒事項。第一次要先建好這個捷徑。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:(d,b)=>`已加到${b}和月曆（${d}）`, td_found:d=>`抓到日期 ${d}，已加進截止倒數`, cd_src:"截止倒數",
+    qk_need_t:"還沒寫事情", qk_need_d:"找不到日期：寫 12/7、明天、下週五，或用右邊選日期", qk_note:"備註：", qk_date:"沒寫日期時用這個；有選就以這個為準", qk_rem:"也加到提醒事項", qk_rem_go:"加到 iOS 提醒事項", qk_rem_sent:"已加到 iOS 提醒事項", qk_rem_again:"日期或名稱改了，再加到 iOS 提醒事項", qk_added:t=>`已加入「${t}」。按右邊加到提醒事項：`, qk_rem_tip:"用 iPhone／Mac 的捷徑「HOME 提醒」加到提醒事項。第一次要先建好這個捷徑。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:(d,b)=>`已加到${b}和月曆（${d}）`, td_found:d=>`抓到日期 ${d}，已加進截止倒數`, cd_src:"截止倒數",
     tl_title:"今天的時間軸", tl_sub:(a,b)=>`${a}–${b} · 課表和 Google 日曆行程，綠框是還空著的時間`, tl_cls:"課", tl_ev:"行程", tl_free:"空檔", tl_empty:"還沒有今天的課或 Google 日曆行程。在「專案設定」加課表，或連接 Google 日曆就會出現。",
     sum_left:n=>`今天還剩 ${n} 件`, sum_cls:s=>`下一堂課 ${s}`, sum_tmr:n=>`${n} 件明天截止`,
     wx_clear:"晴", wx_partly:"晴時多雲", wx_cloudy:"陰", wx_fog:"霧", wx_rain:p=>`降雨 ${p}%`, wx_snow:"雪", wx_storm:"雷雨", wx_umb:"記得帶傘", wx_src:"台北天氣（Open-Meteo）",
@@ -1062,7 +1062,7 @@ const I18N = {
     todo_ph:"+ To-do", prog:n=>`${n} progress`, remove_block:"Remove section",
     add_proj:"+ Project section", new_proj:"New project…", new_proj_ph:"Project name, press Enter",
     cd_title:"Quick add · Deadlines", cd_n:n=>`${n}`, cd_ph:"e.g. 12/7 7pm EMBA dinner (teacher's birthday)", cd_add:"Add", cd_hint:"Type a date, time and what it is; brackets become a note. Within 10 days it goes to Super urgent, otherwise Nagging; also the HOME calendar and Google Calendar (so iOS Calendar too).",
-    qk_need_t:"Add what it is", qk_need_d:"No date found: write 12/7, tomorrow, next Fri, or pick one on the right", qk_note:"Note: ", qk_date:"Used when the text has no date; if picked, it wins", qk_rem:"Also add to Reminders", qk_rem_go:"Add to iOS Reminders", qk_added:t=>`Added “${t}”. Send it to Reminders:`, qk_rem_tip:"Uses the Shortcut 「HOME 提醒」 on iPhone/Mac to add a reminder. Create that Shortcut once first.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:(d,b)=>`Added to ${b} and the calendar (${d})`, td_found:d=>`Found date ${d}; added to deadlines`, cd_src:"Deadline",
+    qk_need_t:"Add what it is", qk_need_d:"No date found: write 12/7, tomorrow, next Fri, or pick one on the right", qk_note:"Note: ", qk_date:"Used when the text has no date; if picked, it wins", qk_rem:"Also add to Reminders", qk_rem_go:"Add to iOS Reminders", qk_rem_sent:"Already in iOS Reminders", qk_rem_again:"Changed since; add to iOS Reminders again", qk_added:t=>`Added “${t}”. Send it to Reminders:`, qk_rem_tip:"Uses the Shortcut 「HOME 提醒」 on iPhone/Mac to add a reminder. Create that Shortcut once first.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:(d,b)=>`Added to ${b} and the calendar (${d})`, td_found:d=>`Found date ${d}; added to deadlines`, cd_src:"Deadline",
     tl_title:"Today's timeline", tl_sub:(a,b)=>`${a}–${b} · classes and Google Calendar events; green boxes are free time`, tl_cls:"Class", tl_ev:"Events", tl_free:"Free", tl_empty:"No classes or Google events today. Add your timetable in Project settings or connect Google Calendar.",
     sum_left:n=>`${n} left today`, sum_cls:s=>`next class ${s}`, sum_tmr:n=>`${n} due tomorrow`,
     wx_clear:"Clear", wx_partly:"Partly cloudy", wx_cloudy:"Cloudy", wx_fog:"Fog", wx_rain:p=>`rain ${p}%`, wx_snow:"Snow", wx_storm:"Storms", wx_umb:"bring an umbrella", wx_src:"Taipei weather (Open-Meteo)",
@@ -1380,7 +1380,7 @@ document.addEventListener("pointerdown", e=>{ if (side.classList.contains("open"
 function dueBadge(due, time){
   if (!due) return "";
   const diff=(parse(due)-parse(today()))/864e5;
-  return `<span class="due ${diff<=2?"soon":""}" title="${esc(due)}">${diff<0?T("late"):""}${md(due)}${time?" "+time:""}</span>`;
+  return `<span class="due ${diff<=2?"soon":""}" title="${esc(due)}">${diff<0?T("late"):""}${md(due)} ${dow(due)}${time?" "+time:""}</span>`;
 }
 /* ---------- cards: which ones show, kept in settings/main ---------- */
 /* daily list: settings.dailyList [{id,t}] shows up every day (today onward) in the 其他 section of the day card; ticking it writes a real item {dl:id} */
@@ -3184,7 +3184,7 @@ document.addEventListener("click", e=>{
   else if (act==="gym-g-del"){ const k="g:"+b.dataset.g, n=gymPlan().routines.find(r=>r.id===S.gymR)?.groups.find(g=>g.id===b.dataset.g)?.ex.length;
     if (n && S.confirmDel!==k){ S.confirmDel=k; toast(T("confirm_del")); setTimeout(()=>{ if (S.confirmDel===k){ S.confirmDel=null; render(); } },3000); render(); }
     else { S.confirmDel=null; planEdit((pl,r)=>{ r.groups=r.groups.filter(g=>g.id!==b.dataset.g); }); } }
-  else if (act==="qk-done"){ setTimeout(()=>{ S.qkLast=null; render(); },300); }
+  else if (act==="qk-done"){ if (b.tagName==="A" && S.qkLast) remMark(S.qkLast); setTimeout(()=>{ S.qkLast=null; render(); },300); }
   else if (act==="qk-rem"){ const x=task(b.dataset.id); S.cm=null; renderCm(); if (x) qkRemind(x); }
   else if (act==="cmr-edit"){ const k=b.dataset.key; setTimeout(()=>cmrEdit(k),0); }
   else if (act==="cmr-del"){ let a; try{ a=JSON.parse(b.dataset.key); }catch(_){ return; }
@@ -3528,7 +3528,7 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
     if (settings().ovCards) h+=btn("cm-ov-reset",T("cm_reset")); }
   else if (c.row==="cmr"){ const t=c.title?`「${esc(c.title.length>18?c.title.slice(0,18)+"…":c.title)}」`:"";
     if (CMR[c.k].set) h+=btn("cmr-edit",`✎ ${T("cmr_edit")}${t}`,`data-key="${esc(c.key)}"`);
-    if (c.k==="task"){ let a={}; try{ a=JSON.parse(c.key); }catch(_){} const x=task(a.id); if (x && x.due && !x.done) h+=btn("qk-rem",`⏰ ${T("qk_rem_go")}`,`data-id="${esc(x.id)}"`); }
+    if (c.k==="task"){ let a={}; try{ a=JSON.parse(c.key); }catch(_){} h+=remBtn(task(a.id), btn); }
     if (c.k==="group" && S.exClip){ let a={}; try{ a=JSON.parse(c.key); }catch(_){} h+=btn("exc-paste",`⎘ ${T("exc_paste_grp", esc(S.exClip.name))}`,`data-g="${esc(a.id||"")}"`); }
     if (CMR[c.k].del) h+=btn("cmr-del",S.confirmDel==="cm:"+c.key?`✕ ${T("confirm_del")}${t}`:`✕ ${T("del")}${t}`,`data-key="${esc(c.key)}"`); }
   else if (c.row==="ex"){ const r=gymPlan().routines.find(x=>x.id===S.gymR), x=r&&r.groups.find(g=>g.id===c.g)?.ex.find(x=>x.id===c.xid);
@@ -3547,6 +3547,7 @@ function renderCm(){ const c=S.cm; if(!c){ cmEl.hidden=true; cmEl.innerHTML=""; 
   else if (c.row==="col"){
     if (c.task){ const tk=task(c.task); if (tk && tk.k!=="hr") h+=fmBar({k:"task",id:tk.id}); if (tk) h+=btn("cm-edit",`✎ ${T("cm_edit_item", esc(tk.title))}`,`data-task="${tk.id}"`); }
     if (c.task){ const tk=task(c.task); if (tk && tk.k!=="tb") h+=`<div class="ctx-h">${T("dl_turn")}</div>`+[["","☐ "+T("sl_todo")],["ul","• "+T("sl_bullet")],["ol","1. "+T("sl_numbered")],["tg","▸ "+T("sl_toggle")]].filter(([k])=>k!==(tk.k||"")).map(([k,l])=>btn("task-kind",l,`data-id="${tk.id}" data-k="${k}"`)).join("")+`<div class="ctx-sep"></div>`; }
+    if (c.task){ const r=remBtn(task(c.task), btn); if (r) h+=r+`<div class="ctx-sep"></div>`; }
     if (c.task){ const tk=task(c.task); if (tk) h+=btn("task-del",`✕ ${T("cm_del_item", esc(tk.title))}`,`data-id="${tk.id}"`); }
     if (c.id) h+=`<div class="ctx-h">${T("cm_add_item")}</div><form class="add" data-act="task-add" data-bucket="${esc(c.id)}"><input type="text" id="cm-task" placeholder="${T("add_enter")}" autocomplete="off"><input type="date" id="cm-task-due" title="${T("due_title")}"></form><div class="ctx-sep"></div>`;
     if (c.id){ const b=bucketList().find(x=>x.id===c.id); h+=btn("cm-col-del",`✕ ${T("cm_del_col", b?bName(b):"")}`,`data-id="${esc(c.id)}"`); }
@@ -3711,7 +3712,12 @@ const QK_SC="HOME 提醒";
 function qkUrl(x){ const when=(x.due||today())+" "+(x.time||"09:00"), txt=[x.title, when, x.note||""].join("\n");
   return "shortcuts://run-shortcut?name="+encodeURIComponent(QK_SC)+"&input=text&text="+encodeURIComponent(txt); }
 // a real link click: the page itself is never replaced, so nothing unsaved can be lost
-function qkRemind(x){ const a=document.createElement("a"); a.href=qkUrl(x); a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); }
+/* HOME can't read Reminders, so it remembers what it already sent (x.rem = title|date|time) and doesn't offer it twice */
+function remKey(x){ return [x.title||"", x.due||"", x.time||""].join("|"); }
+function remMark(id){ const x=task(id); if (x && x.rem!==remKey(x)) save("tasks/"+id,{...x,rem:remKey(x)},50); }
+function remBtn(x, btn){ if (!x || !x.due || x.done || x.k) return ""; if (x.rem===remKey(x)) return `<p class="empty mini">✓ ${T("qk_rem_sent")}</p>`;
+  return btn("qk-rem",`⏰ ${T(x.rem?"qk_rem_again":"qk_rem_go")}`,`data-id="${esc(x.id)}"`); }
+function qkRemind(x){ remMark(x.id);  const a=document.createElement("a"); a.href=qkUrl(x); a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); }
 function qkPreview(){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), pv=document.getElementById("cd-pv"); if (!ti || !pv) return;
   if (!ti.value.trim()){ pv.textContent=T("cd_hint"); pv.classList.remove("qk-on","qk-bad"); return; }
   const r=qkRead(ti.value, di&&di.value); pv.classList.add("qk-on"); pv.classList.toggle("qk-bad", !r.date||!r.title);
