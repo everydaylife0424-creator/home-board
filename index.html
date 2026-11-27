@@ -927,8 +927,8 @@ const I18N = {
     carry_from:d=>`從 ${d} 延續`,
     todo_ph:"＋ To-do", prog:n=>`${n}進度`, remove_block:"移除此區塊",
     add_proj:"＋ 專案進度", new_proj:"新增專案…", new_proj_ph:"專案名稱，Enter 確認",
-    cd_title:"快速加入 · 截止倒數", cd_n:n=>`${n} 件`, cd_ph:"例：12/7 19:00 EMBA餐聚（老師生日）", cd_add:"加入", cd_hint:"直接打日期、時間和事情，括號裡是備註。會放進「如鯁在喉」、HOME 月曆和 Google 日曆（iOS 月曆會跟著出現）。",
-    qk_need_t:"還沒寫事情", qk_need_d:"找不到日期：寫 12/7、明天、下週五，或用右邊選日期", qk_note:"備註：", qk_date:"沒寫日期時用這個；有選就以這個為準", qk_rem:"也加到提醒事項", qk_rem_go:"加到 iOS 提醒事項", qk_added:t=>`已加入「${t}」。按右邊加到提醒事項：`, qk_rem_tip:"用 iPhone／Mac 的捷徑「HOME 提醒」加到提醒事項。第一次要先建好這個捷徑。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:d=>`已加到如鯁在喉和月曆（${d}）`, cd_src:"截止倒數",
+    cd_title:"快速加入 · 截止倒數", cd_n:n=>`${n} 件`, cd_ph:"例：12/7 19:00 EMBA餐聚（老師生日）", cd_add:"加入", cd_hint:"直接打日期、時間和事情，括號裡是備註。十天內的放進「超級逼人」，其他放進「如鯁在喉」，也會加到 HOME 月曆和 Google 日曆（iOS 月曆會跟著出現）。",
+    qk_need_t:"還沒寫事情", qk_need_d:"找不到日期：寫 12/7、明天、下週五，或用右邊選日期", qk_note:"備註：", qk_date:"沒寫日期時用這個；有選就以這個為準", qk_rem:"也加到提醒事項", qk_rem_go:"加到 iOS 提醒事項", qk_added:t=>`已加入「${t}」。按右邊加到提醒事項：`, qk_rem_tip:"用 iPhone／Mac 的捷徑「HOME 提醒」加到提醒事項。第一次要先建好這個捷徑。", cd_then:"接著", cd_empty:"目前沒有截止日。在上面輸入事件和日期就能加入。", cd_over:n=>`已逾期 ${n} 天`, cd_today:h=>`今天截止 · 剩 ${h} 小時`, cd_dh:(d,h)=>`還有 ${d} 天 ${h} 小時`, cd_d:d=>`還有 ${d} 天`, cd_need:"請填事件和截止日", cd_ok:(d,b)=>`已加到${b}和月曆（${d}）`, cd_src:"截止倒數",
     tl_title:"今天的時間軸", tl_sub:(a,b)=>`${a}–${b} · 課表和 Google 日曆行程，綠框是還空著的時間`, tl_cls:"課", tl_ev:"行程", tl_free:"空檔", tl_empty:"還沒有今天的課或 Google 日曆行程。在「專案設定」加課表，或連接 Google 日曆就會出現。",
     sum_left:n=>`今天還剩 ${n} 件`, sum_cls:s=>`下一堂課 ${s}`, sum_tmr:n=>`${n} 件明天截止`,
     wx_clear:"晴", wx_partly:"晴時多雲", wx_cloudy:"陰", wx_fog:"霧", wx_rain:p=>`降雨 ${p}%`, wx_snow:"雪", wx_storm:"雷雨", wx_umb:"記得帶傘", wx_src:"台北天氣（Open-Meteo）",
@@ -1061,8 +1061,8 @@ const I18N = {
     carry_from:d=>`Carried from ${d}`,
     todo_ph:"+ To-do", prog:n=>`${n} progress`, remove_block:"Remove section",
     add_proj:"+ Project section", new_proj:"New project…", new_proj_ph:"Project name, press Enter",
-    cd_title:"Quick add · Deadlines", cd_n:n=>`${n}`, cd_ph:"e.g. 12/7 7pm EMBA dinner (teacher's birthday)", cd_add:"Add", cd_hint:"Type a date, time and what it is; brackets become a note. Goes into 如鯁在喉, the HOME calendar and Google Calendar (so iOS Calendar too).",
-    qk_need_t:"Add what it is", qk_need_d:"No date found: write 12/7, tomorrow, next Fri, or pick one on the right", qk_note:"Note: ", qk_date:"Used when the text has no date; if picked, it wins", qk_rem:"Also add to Reminders", qk_rem_go:"Add to iOS Reminders", qk_added:t=>`Added “${t}”. Send it to Reminders:`, qk_rem_tip:"Uses the Shortcut 「HOME 提醒」 on iPhone/Mac to add a reminder. Create that Shortcut once first.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:d=>`Added to 如鯁在喉 and the calendar (${d})`, cd_src:"Deadline",
+    cd_title:"Quick add · Deadlines", cd_n:n=>`${n}`, cd_ph:"e.g. 12/7 7pm EMBA dinner (teacher's birthday)", cd_add:"Add", cd_hint:"Type a date, time and what it is; brackets become a note. Within 10 days it goes to Super urgent, otherwise Nagging; also the HOME calendar and Google Calendar (so iOS Calendar too).",
+    qk_need_t:"Add what it is", qk_need_d:"No date found: write 12/7, tomorrow, next Fri, or pick one on the right", qk_note:"Note: ", qk_date:"Used when the text has no date; if picked, it wins", qk_rem:"Also add to Reminders", qk_rem_go:"Add to iOS Reminders", qk_added:t=>`Added “${t}”. Send it to Reminders:`, qk_rem_tip:"Uses the Shortcut 「HOME 提醒」 on iPhone/Mac to add a reminder. Create that Shortcut once first.", cd_then:"Then", cd_empty:"No deadlines. Type an event and a date above to add one.", cd_over:n=>`${n}d overdue`, cd_today:h=>`Due today · ${h}h left`, cd_dh:(d,h)=>`${d}d ${h}h left`, cd_d:d=>`${d} days left`, cd_need:"Enter an event and a due date", cd_ok:(d,b)=>`Added to ${b} and the calendar (${d})`, cd_src:"Deadline",
     tl_title:"Today's timeline", tl_sub:(a,b)=>`${a}–${b} · classes and Google Calendar events; green boxes are free time`, tl_cls:"Class", tl_ev:"Events", tl_free:"Free", tl_empty:"No classes or Google events today. Add your timetable in Project settings or connect Google Calendar.",
     sum_left:n=>`${n} left today`, sum_cls:s=>`next class ${s}`, sum_tmr:n=>`${n} due tomorrow`,
     wx_clear:"Clear", wx_partly:"Partly cloudy", wx_cloudy:"Cloudy", wx_fog:"Fog", wx_rain:p=>`rain ${p}%`, wx_snow:"Snow", wx_storm:"Storms", wx_umb:"bring an umbrella", wx_src:"Taipei weather (Open-Meteo)",
@@ -1319,7 +1319,7 @@ function softRender(){ if (composing || isTyping() || SP.rec) { dirty=true; retu
 document.addEventListener("focusout", ()=>setTimeout(()=>{ if (dirty && !isTyping() && !composing) render(); },0));
 
 function render(){
-  dirty=false;
+  dirty=false; if (!render._au && Object.keys(S.tasks).length){ render._au=true; setTimeout(()=>{ render._au=false; if (autoUrgent() && !isTyping()) render(); },0); }
   const a=document.activeElement, fid=a && a.id, sel=a && "selectionStart" in a ? [a.selectionStart,a.selectionEnd] : null;
   const sx={}; document.querySelectorAll("[data-keep-scroll]").forEach(el=>sx[el.dataset.keepScroll]=el.scrollLeft);
   const sy={}; document.querySelectorAll("[data-keep-y]").forEach(el=>sy[el.dataset.keepY]=el.scrollTop);
@@ -3067,8 +3067,8 @@ document.addEventListener("submit", e=>{
     S.dlLast=k; dlSave([...dlList(), {id:uid(), t:v, ...(k!=="ul"?{k}:{})}]); inp.value=""; render(); if (inp.id==="add-dl") setTimeout(()=>{ const i=document.getElementById("add-dl"); if (!i) return; const L={ol:"1. "+T("sl_numbered"),td:"☐ "+T("sl_todo")}; if (L[S.dlLast]) setSlash(i.form,{k:S.dlLast},L[S.dlLast]); i.focus(); },0); else { S.cm=null; renderCm(); } return; }
   if (act==="cd-add"){ const ti=document.getElementById("cd-t"), di=document.getElementById("cd-d"), r=qkRead(ti.value, di.value);
     if (!r.title || !r.date){ toast(T(r.title?"qk_need_d":"cd_need")); (r.title?di:ti).focus(); return; }
-    const id=uid(), tk={id,title:r.title,bucket:nagBucket(),done:false,due:r.date,cal:true,qk:true,createdAt:Date.now()}; if (r.time) tk.time=r.time; if (r.end) tk.end=r.end; if (r.note) tk.note=r.note;
-    save("tasks/"+id,tk,50); ti.value=""; di.value=""; toast(T("cd_ok",md(r.date)+(r.time?" "+r.time:""))); render();
+    const id=uid(), tk={id,title:r.title,bucket:urgSoon(r.date)?urgBucket():nagBucket(),done:false,due:r.date,cal:true,qk:true,createdAt:Date.now()}; if (r.time) tk.time=r.time; if (r.end) tk.end=r.end; if (r.note) tk.note=r.note;
+    save("tasks/"+id,tk,50); ti.value=""; di.value=""; toast(T("cd_ok",md(r.date)+(r.time?" "+r.time:""),bName(bucketList().find(b=>b.id===tk.bucket)||{id:tk.bucket}))); render();
     clearTimeout(timers.get("tasks/"+id)); flush("tasks/"+id); S.qkLast=document.getElementById("cd-rem")?.checked ? id : null; render(); return; }
   if (act==="task-add"){
     const inp=f.querySelector("input[type=text]"), due=f.querySelector("input[type=date]");
@@ -3269,7 +3269,7 @@ document.addEventListener("click", e=>{
   else if (act==="style"){ S.style = STYLES[(STYLES.indexOf(S.style)+1)%STYLES.length]; lsSet("home.style",S.style); fxTheme(b, ()=>{ applyStyle(); render(); }); }
   else if (act==="theme"){ S.theme = {system:"light", light:"dark", dark:"system"}[S.theme]; lsSet("home.theme",S.theme); fxTheme(b, ()=>{ applyTheme(); render(); }); }
   else if (act==="toggle-settings"){ S.showSettings=!S.showSettings; if (S.tab!=="home"){ S.showSettings=true; S.tab="home"; lsSet("home.tab","home"); } render(); if (S.showSettings){ const el=document.getElementById("s-settings"); el && el.scrollIntoView({block:"start"}); } }
-  else if (act==="task-move"){ const t={...task(b.dataset.id), bucket:b.dataset.to}; save("tasks/"+t.id,t,50); render(); }
+  else if (act==="task-move"){ const t=mvB(task(b.dataset.id), b.dataset.to); save("tasks/"+t.id,t,50); render(); }
   else if (act==="task-del"){ remove("tasks/"+b.dataset.id); render(); toast(T("deleted")); }
   else if (act==="show-done"){ S.showDone[b.dataset.bucket]=!S.showDone[b.dataset.bucket]; render(); }
   else if (act==="tb-addrow"){ const ref=blkRef(b); if(ref) blkEdit(ref, x=>{ const n=x.rows?.[0]?.c.length||3; x.rows=[...(x.rows||[]), {id:uid(), c:Array(n).fill("")}]; }); }
@@ -3661,7 +3661,7 @@ document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closes
   render(); });
 document.addEventListener("drop", e=>{ const c=e.target.closest&&e.target.closest(".col"); if(!c||!dragId) return; e.preventDefault();
   if (c.classList.contains("daily")){ const t=task(dragId); dragId=null; c.classList.remove("drop"); if (t && !t.k){ dlSave([...dlList(), {id:uid(), t:t.title}]); remove("tasks/"+t.id); toast(T("moved_to",T("dl_title"))); } render(); return; }
-  if (!c.dataset.bucket){ dragId=null; return; } const t=task(dragId); if(t && t.bucket!==c.dataset.bucket) save("tasks/"+t.id,{...t,bucket:c.dataset.bucket},50); dragId=null; render(); });
+  if (!c.dataset.bucket){ dragId=null; return; } const t=task(dragId); if(t && t.bucket!==c.dataset.bucket) save("tasks/"+t.id,mvB(t,c.dataset.bucket),50); dragId=null; render(); });
 document.addEventListener("dragend", ()=>{ dragId=null; dlDrag=null; document.querySelectorAll(".col.drop").forEach(x=>x.classList.remove("drop")); });
 
 // double-click any named thing (group, routine, event, note…) to rename it in place, same as right-click → 編輯
@@ -3749,6 +3749,14 @@ function swDraw(){ const r=SW.el&&SW.el.querySelector("#swRes"); if (!r) return;
     <div class="sw-acts"><input type="date" data-sw="date" data-id="${x.id}" aria-label="${T("sw_date")}" title="${T("sw_date")}"><button class="ghost mini" data-sw="nodue" data-id="${x.id}">${T("sw_nodue")}</button><button class="ghost mini" data-sw="down" data-id="${x.id}">${T("sw_down")}</button><button class="ghost mini" data-sw="done" data-id="${x.id}">✓ ${T("sw_done")}</button><button class="icon-btn" data-sw="del" data-id="${x.id}" title="${T("del")}">✕</button></div></div>`).join(""); }
 function swClose(){ if (SW.el){ SW.el.remove(); SW.el=null; render(); } }
 document.addEventListener("keydown", e=>{ if (e.key==="Escape" && SW.el) swClose(); });
+function urgBucket(){ const bl=bucketList(); return (bl.find(b=>b.id==="urgent")||bl.find(b=>/逼人/.test(b.name||""))||bl[0]).id; }
+/* dated tasks in 如鯁在喉 move to 超級逼人 once the date is 10 days away or less (overdue too); moving one back by hand keeps it there until its date changes (keepB) */
+const URG_DAYS=10;
+function urgSoon(due){ return !!due && due<=addDays(today(),URG_DAYS); }
+function mvB(t,to){ const x={...t,bucket:to}; if (to===nagBucket() && urgSoon(t.due)) x.keepB=t.due; else delete x.keepB; return x; }
+function autoUrgent(){ const nag=nagBucket(), urg=urgBucket(); if (nag===urg) return false; let n=0;
+  allTasks().forEach(t=>{ if (t.done || t.k || t.bucket!==nag || !urgSoon(t.due) || t.keepB===t.due) return; const x={...t,bucket:urg}; delete x.keepB; save("tasks/"+t.id,x,300); n++; });
+  return n>0; }
 function nagBucket(){ const bl=bucketList(); return (bl.find(b=>b.id==="nagging")||bl.find(b=>/如鯁/.test(b.name||""))||bl[1]||bl[0]).id; }
 // time left until the end of the due day, in words
 function cdText(ds){ const end=parse(addDays(ds,1)), ms=end-new Date(); if (ms<=0) return T("cd_over", Math.max(1,daysBetween(ds,today()))); const h=Math.floor(ms/36e5);
