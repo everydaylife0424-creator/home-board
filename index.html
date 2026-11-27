@@ -33,7 +33,7 @@ if (/\.github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname)) {
   --accent:#2f5d8a; --accent-soft:#e6eef6;
   --hot:#c2412d; --hot-soft:#fbe9e5; --warn:#b07a12; --warn-soft:#f8efd9; --hot-ink:#a3301c; --warn-ink:#7f5508; --calm:#7a8288; --calm-soft:#eef0f1;
   --good:#2f7d4f; --good-soft:#e3f1e8; --rail:#eeeeeb; --shade:rgb(0 0 0 / .14); --scrim:rgb(0 0 0 / .28);
-  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-body:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; /* Apple devices use their built-in PingFang (every glyph already there, so text never swaps fonts while typing); others load Noto Sans TC */
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
   --rail-w:60px; --rail-open:236px;
 }
@@ -2154,6 +2154,10 @@ function blkRef(el){ const r=el.closest("[data-blk]"); try{ return r?JSON.parse(
 document.addEventListener("toggle", e=>{ const d=e.target; if (!d.matches || !d.matches("details[data-tg]")) return; const ref=blkRef(d); if(!ref) return;
   const cur = ref.task ? task(ref.task) : listOf(day(ref.date),+ref.pi)?.find(i=>i.id===ref.id); if (!cur || !!cur.o===d.open) return;
   blkEdit(ref, x=>{ x.o=d.open; }); }, true);
+/* open/closed state of sections that only show up virtually (pinned / daily list), per device; real sections keep theirs in days/<d>.projects[].open */
+function projOpenAll(){ try{ return JSON.parse(localStorage.getItem("home.projOpen")||"{}"); }catch(_){ return {}; } }
+function projOpenGet(date,name){ const v=projOpenAll()[date+"|"+name]; return typeof v==="boolean" ? v : null; }
+function projOpenSet(date,name,open){ const o=projOpenAll(), lim=addDays(today(),-14); Object.keys(o).forEach(k=>{ if (k.slice(0,10)<lim) delete o[k]; }); o[date+"|"+name]=open; try{ localStorage.setItem("home.projOpen", JSON.stringify(o)); }catch(_){} }
 function viewWeek(){
   const busy=busyDays(), days0=dayCards(), days=days0.filter(d=>!busy[d]);
   { let last=days0[days0.length-1]; for (let g=0; days.length<days0.length && g<60; g++){ last=addDays(last,1); if (!busy[last]) days.push(last); } }
@@ -2182,7 +2186,7 @@ function viewWeek(){
     const projs=secs.map(s=>{
       const own=s.p?s.p.items:[], extra=myCar.filter(c=>c.proj===s.name), vdl=s.name===dlProj()?dls.filter(x=>!own.some(i=>i.dl===x.id)):[];
       const n=own.filter(i=>!i.k).length+extra.length+vdl.length, k=own.filter(i=>i.d).length+extra.filter(c=>c.it.d).length;
-      const open=s.p ? s.p.open!==false : (date===t || extra.length>0);
+      const vo=projOpenGet(date,s.name), open=s.p ? s.p.open!==false : vo!=null ? vo : (date===t || extra.length>0);
       return `<details class="proj ${s.p?"":"virtual"}" ${open?"open":""} data-date="${date}" ${s.p?`data-pi="${s.pi}"`:""}>
         <summary data-name="${esc(s.name)}">${esc(T("prog",s.name))} <span class="cnt">${k}/${n}</span>${s.p?`<button class="icon-btn" data-act="proj-del" data-date="${date}" data-pi="${s.pi}" title="${T("remove_block")}">✕</button>`:""}</summary>
         <div class="inner">${n?`<div class="progress"><i style="width:${k/n*100}%"></i></div>`:""}<ul class="list">${extra.map(c=>itemLi(c.it,c.date,c.pi,true)).join("")}${(nn=>own.map((it,i)=>itemLi(it,date,s.pi,false,nn[i])).join(""))(olNums(own))}${vdl.map(x=>`<li class="item dl-v${(d.dlx||{})[x.id]!=null?" dl-own":""}" data-dlv="${x.id}"><input type="checkbox" data-act="dl-toggle" data-date="${date}" data-id="${x.id}" aria-label="${T("done")}"><span class="t${fmC(x)}" data-dlday="${date}" title="${esc(T("dl_day_tip"))}">${esc(dlText(date,x.id))}</span><span class="dl-tag" title="${esc(T("dl_title"))}">↻</span></li>`).join("")}</ul>${addForm(date,s.name)}</div>
@@ -3399,6 +3403,7 @@ document.addEventListener("toggle", e=>{ const dt=e.target; if (!dt.matches || !
   try{ const o=JSON.parse(localStorage.getItem("home.setOpen")||"{}"); o[dt.dataset.sec]=dt.open; localStorage.setItem("home.setOpen", JSON.stringify(o)); }catch(_){} }, true);
 document.addEventListener("toggle", e=>{
   const dt=e.target; if (!dt.matches || !dt.matches("details.proj")) return;
+  if (dt.dataset.pi==null){ const nm=dt.querySelector("summary")?.dataset.name; if (nm!=null) projOpenSet(dt.dataset.date, nm, dt.open); return; }
   const d=dayCopy(dt.dataset.date), p=d.projects[+dt.dataset.pi]; if (!p) return;
   if ((p.open!==false)===dt.open) return;
   p.open=dt.open; save("days/"+d.date,d,800);
